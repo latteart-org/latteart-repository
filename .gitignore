@@ -1,0 +1,11 @@
+node_modules
+dist
+logs
+debug.log
+**/*.validator.ts
+/data
+/public
+history-viewer
+snapshot-viewer
+coverage
+licenses*.csv
