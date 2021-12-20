@@ -17,5 +17,13 @@
   },
   "plugins": ["@typescript-eslint"],
   "rules": {},
-  "ignorePatterns": ["**/*.validator.ts"]
+  "ignorePatterns": ["**/*.validator.ts"],
+  "overrides": [
+    {
+      "files": ["**/*/entities/**/*.ts"],
+      "rules": {
+        "@typescript-eslint/no-inferrable-types": "off"
+      }
+    }
+  ]
 }

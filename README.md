@@ -2,7 +2,7 @@
 
 LatteArt Repository is a service that stores test information for LatteArt.
 
- * 日本語版は[README_ja.md](/README_ja.md)を参照して下さい。
+- 日本語版は[README_ja.md](/README_ja.md)を参照して下さい。
 
 ## Project Setup
 
@@ -18,6 +18,7 @@ LatteArt Repository is a service that stores test information for LatteArt.
 ## Build
 
 ### Ready to build
+
 1. Put `history-viewer` and `snapshot-viewer` directories into the root directory of the project.
    ```bash
    latteart-repository
@@ -26,11 +27,12 @@ LatteArt Repository is a service that stores test information for LatteArt.
    ```
 
 ### How to build
+
 1. Go to the root directory of the project.
 1. Execute the following command to create validators.
    ```bash
-   yarn typescript-json-validator src/accessor/test-result/settings/Settings.ts
-   yarn typescript-json-validator src/accessor/test-result/settings/DeviceSettings.ts
+   yarn typescript-json-validator src/lib/settings/Settings.ts
+   yarn typescript-json-validator src/lib/settings/DeviceSettings.ts
    ```
 1. Execute the following command.
    ```bash
@@ -43,8 +45,8 @@ LatteArt Repository is a service that stores test information for LatteArt.
        ├─ latteart-repository # for Mac
        ├─ latteart.config.json # config file
        ├─ latteart.device.config.json # device config file
-       ├─ history-viewer 
-       └─ snapshot-viewer 
+       ├─ history-viewer
+       └─ snapshot-viewer
    ```
 
 ## Watch (for developer)
@@ -54,8 +56,8 @@ Detect the source code changes and rebuild LatteArt Repository.
 1. Go to the root directory of the project.
 1. Execute the following command to create validators.
    ```bash
-   yarn typescript-json-validator src/accessor/test-result/settings/Settings.ts
-   yarn typescript-json-validator src/accessor/test-result/settings/DeviceSettings.ts
+   yarn typescript-json-validator src/lib/settings/Settings.ts
+   yarn typescript-json-validator src/lib/settings/DeviceSettings.ts
    ```
 1. Execute the following command.
    ```bash
@@ -66,8 +68,10 @@ Detect the source code changes and rebuild LatteArt Repository.
 ## Run
 
 ### How to use
+
 1. Execute the `latteart-repository.exe` or `latteart-repository`.
 1. The local server will stand up and wait at `http://127.0.0.1:3002`.
 
 ## License
+
 This software is licensed under the Apache License, Version2.0.

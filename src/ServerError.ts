@@ -35,16 +35,23 @@ export enum ServerErrorCode {
   COMPRESS_NOTE_IMAGE_FAILED = "compress_note_image_failed",
   COMPRESS_TEST_STEP_IMAGE_FAILED = "compress_test_step_image_failed",
   UPDATE_TEST_RESULT_FAILED = "update_test_result_failed",
-  PATCH_SESSION = "patch_session_failed",
-  GET_SESSION = "get_session_failed",
+  PATCH_SESSION_FAILED = "patch_session_failed",
+  GET_SESSION_FAILED = "get_session_failed",
+  GET_SERVERNAME_FAILED = "get_servername_failed",
 }
 
-export interface ServerError {
-  code: string;
-  message: string;
+export interface ServerErrorData {
+  code: ServerErrorCode;
+  message?: string;
   details?: Array<{
     code: string;
     message: string;
     target: string;
   }>;
+}
+
+export class ServerError extends Error {
+  constructor(public statusCode: number, public data?: ServerErrorData) {
+    super(data?.message ?? "");
+  }
 }

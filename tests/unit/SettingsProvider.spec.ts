@@ -1,11 +1,11 @@
-import { SettingsProvider } from "@/accessor/test-result/settings/SettingsProvider";
+import { SettingsProvider } from "@/lib/settings/SettingsProvider";
 import path from "path";
-import { ERR_MSG } from "@/accessor/test-result/Constants";
+import { ERR_MSG } from "@/lib/settings/Constants";
 import {
   RunningMode,
   Locale,
   ScreenDefType,
-} from "@/accessor/test-result/enum/SettingsEnum";
+} from "@/lib/settings/SettingsEnum";
 
 describe("SettingsProvider", () => {
   let settingsProvider: SettingsProvider;
