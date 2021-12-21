@@ -3,3 +3,6 @@ yarn.lock
 api_test.http
 DockerFile
 .dockerignore
+.gitignore
+jest.config.js
+*.png

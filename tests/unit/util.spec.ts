@@ -1,4 +1,4 @@
-import { executeExternalCommand } from "@/accessor/test-result/util";
+import { executeExternalCommand } from "@/lib/settings/util";
 
 describe("util.", () => {
   describe("executeExternalCommand", () => {

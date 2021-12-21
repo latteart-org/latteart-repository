@@ -1,10 +1,7 @@
-import { DeviceSettingsProvider } from "@/accessor/test-result/settings/DeviceSettingsProvider";
+import { DeviceSettingsProvider } from "@/lib/settings/DeviceSettingsProvider";
 import path from "path";
-import {
-  Browser,
-  PlatformName,
-} from "@/accessor/test-result/enum/SettingsEnum";
-import { ERR_MSG } from "@/accessor/test-result/Constants";
+import { Browser, PlatformName } from "@/lib/settings/SettingsEnum";
+import { ERR_MSG } from "@/lib/settings/Constants";
 
 describe("DeviceSettingsProvider", () => {
   let deviceSettingsProvider: DeviceSettingsProvider;

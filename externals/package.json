@@ -2,6 +2,7 @@
   "private": true,
   "dependencies": {
     "jsdoc-api": "6.0.0",
-    "jsdoc-mermaid": "^1.0.0"
+    "jsdoc-mermaid": "^1.0.0",
+    "sqlite3": "^5.0.2"
   }
 }

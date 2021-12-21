@@ -1,0 +1,569 @@
+/**
+ * Copyright 2021 NTT Corporation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import path from "path";
+import fs from "fs-extra";
+import { TimestampService } from "./TimestampService";
+import FileArchiver from "@/lib/FileArchiver";
+import { StaticDirectoryService } from "./StaticDirectoryService";
+import os from "os";
+import { ProgressData, Project } from "@/interfaces/Projects";
+import { TestResultService } from "./TestResultService";
+import { ConfigsService } from "./ConfigsService";
+import { TestStepService } from "./TestStepService";
+import { NotesService } from "./NotesService";
+import { TestPurposeService } from "./TestPurposeService";
+import { ImageFileRepositoryService } from "./ImageFileRepositoryService";
+import { IssueReportService } from "./IssueReportService";
+
+export interface SnapshotFileRepositoryService {
+  write(project: Project): Promise<string>;
+}
+
+export class SnapshotFileRepositoryServiceImpl
+  implements SnapshotFileRepositoryService {
+  constructor(
+    private service: {
+      staticDirectory: StaticDirectoryService;
+      imageFileRepository: ImageFileRepositoryService;
+      timestamp: TimestampService;
+      testResult: TestResultService;
+      testStep: TestStepService;
+      note: NotesService;
+      testPurpose: TestPurposeService;
+      config: ConfigsService;
+      issueReport: IssueReportService;
+      attachedFileRepository: StaticDirectoryService;
+    }
+  ) {}
+
+  public async write(project: Project): Promise<string> {
+    const tmpProjectDirectoryPath = await this.outputProject(project);
+
+    const zipFilePath = await new FileArchiver(tmpProjectDirectoryPath, {
+      deleteSource: true,
+    }).zip();
+
+    const destPath = path.basename(zipFilePath);
+    await this.service.staticDirectory.moveFile(zipFilePath, destPath);
+
+    return this.service.staticDirectory.getFileUrl(destPath);
+  }
+
+  private async outputProject(project: Project) {
+    const timestamp = this.service.timestamp.format("YYYYMMDD_HHmmss");
+
+    const tmpDirPath = await fs.mkdtemp(path.join(os.tmpdir(), "latteart-"));
+
+    const outputDirectoryPath = path.join(tmpDirPath, `snapshot_${timestamp}`);
+
+    await this.writeSnapshot(project, outputDirectoryPath);
+
+    // Report output
+    await this.service.issueReport.writeReport(project, outputDirectoryPath);
+
+    return outputDirectoryPath;
+  }
+
+  private async writeSnapshot(
+    project: Project,
+    outputDirPath: string
+  ): Promise<void> {
+    const stories = await this.buildStoriesForSnapshot(project);
+
+    const projectData = {
+      testMatrices: project.testMatrices,
+      stories,
+      progressDatas: project.progressDatas,
+    };
+
+    // copy contents of "snapshot-viewer"
+    await this.copySnapshotViewer(outputDirPath);
+
+    // copy contents of "history-viewer" (other than index.html)
+    await this.copyHistoryViewer(outputDirPath);
+
+    const destDataDirPath = path.join(outputDirPath, "data");
+
+    // output config file
+    await this.outputConfigFile(destDataDirPath);
+
+    // output project file
+    await this.outputProjectFile(destDataDirPath, projectData);
+
+    for (const story of stories) {
+      if (!story.id) {
+        continue;
+      }
+
+      for (const session of story.sessions) {
+        if (!session.id) {
+          continue;
+        }
+
+        if (session.attachedFiles && session.attachedFiles.length > 0) {
+          await this.copyAttachments(
+            story.id,
+            session.id,
+            session.attachedFiles,
+            destDataDirPath
+          );
+        }
+
+        if (session.testResultFiles && session.testResultFiles.length > 0) {
+          await this.copyTestResult(story.id, session, destDataDirPath);
+        }
+      }
+    }
+  }
+
+  private async copyAttachments(
+    storyId: string,
+    sessionId: string,
+    attachedFiles: {
+      name: string;
+      fileUrl: string;
+    }[],
+    outputDirPath: string
+  ) {
+    const destAttachedFilesDirPath = path.join(
+      outputDirPath,
+      storyId,
+      sessionId,
+      "attached"
+    );
+
+    await fs.promises.mkdir(destAttachedFilesDirPath, { recursive: true });
+
+    for (const attachedFile of attachedFiles) {
+      const attachedFileUrl = attachedFile.fileUrl;
+      const attachedFileName = attachedFileUrl.split("/").slice(-1)[0];
+
+      const attachedFilePath = this.service.attachedFileRepository.getJoinedPath(
+        attachedFileName
+      );
+
+      await fs.copyFile(
+        attachedFilePath,
+        path.join(destAttachedFilesDirPath, attachedFileName)
+      );
+    }
+  }
+
+  private async copyTestResult(
+    storyId: string,
+    session: {
+      id: string;
+      attachedFiles: {
+        name: string;
+        fileUrl: string;
+      }[];
+      doneDate: string;
+      isDone: boolean;
+      issues: {
+        details: string;
+        source: {
+          index: number;
+          type: string;
+        };
+        status: string;
+        ticketId: string;
+        type: string;
+        value: string;
+      }[];
+      memo: string;
+      name: string;
+      testItem: string;
+      testResultFiles?: {
+        name: string;
+        path: string;
+      }[];
+      testerName: string;
+      testingTime: number;
+    },
+    outputDirPath: string
+  ) {
+    const destSessionPath = path.join(outputDirPath, storyId, session.id);
+
+    const testResultIds =
+      session.testResultFiles?.map(({ path: id }) => id) ?? [];
+    if (testResultIds.length === 0) {
+      return;
+    }
+    const testResultId = testResultIds[0];
+    const testStepIds = await this.service.testResult.collectAllTestStepIds(
+      testResultId
+    );
+
+    const destTestResultPath = path.join(destSessionPath, "testResult");
+    await fs.promises.mkdir(destTestResultPath, { recursive: true });
+
+    const testSteps = await Promise.all(
+      testStepIds.map(async (testStepId) => {
+        return this.service.testStep.getTestStep(testStepId);
+      })
+    );
+
+    const history = await Promise.all(
+      testSteps.map(async (testStep, index) => {
+        const operation = {
+          sequence: index + 1,
+          input: testStep.operation.input,
+          type: testStep.operation.type,
+          elementInfo: testStep.operation.elementInfo,
+          title: testStep.operation.title,
+          url: testStep.operation.url,
+          imageFileUrl: path.join(
+            "testResult",
+            path.basename(testStep.operation.imageFileUrl ?? "")
+          ),
+          timestamp: testStep.operation.timestamp,
+          inputElements: testStep.operation.inputElements,
+          windowHandle: testStep.operation.windowHandle,
+          keywordTexts: testStep.operation.keywordTexts,
+        };
+
+        await this.copyScreenshot(
+          testStep.operation.imageFileUrl,
+          destTestResultPath
+        );
+
+        const notes = (
+          await Promise.all(
+            testStep.notices.map(async (noteId) => {
+              const note = await this.service.note.getNote(noteId);
+              return note ? [note] : [];
+            })
+          )
+        ).flat();
+        const notices =
+          (await Promise.all(
+            notes.map(async (note) => {
+              await this.copyScreenshot(note.imageFileUrl, destTestResultPath);
+
+              return {
+                id: note.id,
+                type: note.type,
+                value: note.value,
+                details: note.details,
+                tags: note.tags,
+                imageFileUrl: path.join(
+                  "testResult",
+                  path.basename(note.imageFileUrl ?? "")
+                ),
+                timestamp: this.service.timestamp.unix().toString(),
+              };
+            })
+          )) ?? [];
+
+        const testPurposeId = testStep.intention;
+        const intention = testPurposeId
+          ? (await this.service.testPurpose.getTestPurpose(testPurposeId)) ??
+            null
+          : null;
+
+        return {
+          operation,
+          bugs: [],
+          notices,
+          intention,
+        };
+      })
+    );
+
+    const testResult = await this.service.testResult.getTestResult(
+      testResultId
+    );
+
+    const historyLogData = {
+      history,
+      coverageSources: testResult?.coverageSources ?? [],
+      inputElementInfos: testResult?.inputElementInfos ?? [],
+    };
+
+    // output log file
+    await fs.outputFile(
+      path.join(destTestResultPath, "log.js"),
+      `const historyLog = ${JSON.stringify(historyLogData)}`,
+      { encoding: "utf-8" }
+    );
+
+    // copy index.html of history-viewer
+    await fs.copyFile(
+      path.join("history-viewer", "index.html"),
+      path.join(destSessionPath, "index.html")
+    );
+  }
+
+  private async copyScreenshot(
+    sourceImageFileUrl: string,
+    destDirectoryName: string
+  ) {
+    if (!sourceImageFileUrl) {
+      return;
+    }
+
+    const operationScreenshotFileName = sourceImageFileUrl
+      .split("/")
+      .slice(-1)[0];
+    const sourceScreenshotFilePath = this.service.imageFileRepository.getFilePath(
+      operationScreenshotFileName
+    );
+    const destScreenshotFilePath = path.join(
+      destDirectoryName,
+      path.basename(sourceScreenshotFilePath)
+    );
+    await fs.copyFile(sourceScreenshotFilePath, destScreenshotFilePath);
+  }
+
+  private buildStoriesForSnapshot(project: Project) {
+    return Promise.all(
+      project.stories.map(async (story) => {
+        const sessions = await Promise.all(
+          story.sessions.map(async (session, sessionIndex) => {
+            const sessionIdAlias = `${sessionIndex + 1}`;
+
+            const attachedFiles: {
+              name: string;
+              fileUrl: string;
+            }[] =
+              session.attachedFiles?.map((attachedFile) => {
+                return {
+                  name: attachedFile.name,
+                  fileUrl: `data/${
+                    story.id
+                  }/${sessionIdAlias}/attached/${path.basename(
+                    attachedFile?.fileUrl ?? ""
+                  )}`,
+                };
+              }) ?? [];
+
+            const testResultFiles:
+              | {
+                  name: string;
+                  path: string;
+                }[]
+              | undefined =
+              session.testResultFiles === undefined
+                ? undefined
+                : session.testResultFiles.map((testResultFile) => {
+                    return {
+                      name: testResultFile.name,
+                      path: testResultFile.id,
+                    };
+                  });
+
+            const issues: {
+              type: string;
+              value: string;
+              details: string;
+              status: string;
+              ticketId: string;
+              source: {
+                type: string;
+                index: number;
+              };
+            }[] = session.issues.map((issue) => {
+              return {
+                type: issue.source.type,
+                value: issue.value,
+                details: issue.details,
+                status: issue.status,
+                ticketId: issue.ticketId,
+                source: {
+                  type: issue.source.type,
+                  index: issue.source.index,
+                },
+              };
+            });
+
+            const testPurposeIds = (
+              await Promise.all(
+                testResultFiles?.map(async ({ path: testResultId }) => {
+                  return this.service.testResult.collectAllTestPurposeIds(
+                    testResultId
+                  );
+                }) ?? []
+              )
+            ).flat();
+
+            const intentions: {
+              value: string;
+              details: string;
+            }[] = (
+              await Promise.all(
+                testPurposeIds.map(async (testPurposeId) => {
+                  const testPurpose = await this.service.testPurpose.getTestPurpose(
+                    testPurposeId
+                  );
+
+                  return testPurpose
+                    ? [
+                        {
+                          value: testPurpose.value,
+                          details: testPurpose.details,
+                        },
+                      ]
+                    : [];
+                })
+              )
+            ).flat();
+
+            return {
+              name: session.name,
+              id: sessionIdAlias,
+              isDone: session.isDone,
+              doneDate: session.doneDate,
+              testItem: session.testItem,
+              testerName: session.testerName,
+              memo: session.memo,
+              attachedFiles,
+              testResultFiles,
+              issues,
+              intentions,
+              testingTime: session.testingTime,
+            };
+          })
+        );
+
+        return {
+          id: story.id,
+          status: story.status,
+          sessions,
+        };
+      })
+    );
+  }
+
+  private async copySnapshotViewer(outputDirPath: string) {
+    const viewerTemplatePath = path.join(".", "snapshot-viewer");
+
+    await fs.mkdirp(outputDirPath);
+    await fs.copyFile(
+      path.join(viewerTemplatePath, "index.html"),
+      path.join(outputDirPath, "index.html")
+    );
+    await this.copyViewer(viewerTemplatePath, outputDirPath);
+  }
+
+  private async copyHistoryViewer(outputDirPath: string) {
+    await this.copyViewer(path.join(".", "history-viewer"), outputDirPath);
+  }
+
+  private async copyViewer(viewerTemplatePath: string, outputDirPath: string) {
+    const destCssDirPath = path.join(outputDirPath, "css");
+    await fs.mkdirp(destCssDirPath);
+    const cssFiles = await fs.promises.readdir(
+      path.join(viewerTemplatePath, "css")
+    );
+    for (const cssFile of cssFiles) {
+      await fs.copyFile(
+        path.join(viewerTemplatePath, "css", cssFile),
+        path.join(destCssDirPath, cssFile)
+      );
+    }
+
+    const destFontDirPath = path.join(outputDirPath, "fonts");
+    await fs.mkdirp(destFontDirPath);
+    const fontFiles = await fs.promises.readdir(
+      path.join(viewerTemplatePath, "fonts")
+    );
+    for (const fontFile of fontFiles) {
+      await fs.copyFile(
+        path.join(viewerTemplatePath, "fonts", fontFile),
+        path.join(destFontDirPath, fontFile)
+      );
+    }
+
+    const destJsDirPath = path.join(outputDirPath, "js");
+    await fs.mkdirp(destJsDirPath);
+    const jsFiles = await fs.promises.readdir(
+      path.join(viewerTemplatePath, "js")
+    );
+    for (const jsFile of jsFiles) {
+      await fs.copyFile(
+        path.join(viewerTemplatePath, "js", jsFile),
+        path.join(destJsDirPath, jsFile)
+      );
+    }
+  }
+
+  private async outputConfigFile(outputDirPath: string) {
+    const settingsData = JSON.stringify(
+      await this.service.config.getConfig("")
+    );
+    await fs.outputFile(
+      path.join(outputDirPath, "latteart.config.js"),
+      `const settings = ${settingsData}`,
+      { encoding: "utf-8" }
+    );
+  }
+
+  private async outputProjectFile(
+    outputDirPath: string,
+    projectData: {
+      testMatrices: {
+        id: string;
+        name: string;
+        groups: {
+          id: string;
+          name: string;
+          testTargets: {
+            id: string;
+            name: string;
+            plans: { viewPointId: string; value: number }[];
+          }[];
+        }[];
+        viewPoints: { id: string; name: string }[];
+      }[];
+      stories: {
+        id: string;
+        status: string;
+        sessions: {
+          name: string;
+          id: string;
+          isDone: boolean;
+          doneDate: string;
+          testItem: string;
+          testerName: string;
+          memo: string;
+          attachedFiles: { name: string; fileUrl: string }[];
+          testResultFiles: { name: string; path: string }[] | undefined;
+          issues: {
+            type: string;
+            value: string;
+            details: string;
+            status: string;
+            ticketId: string;
+            source: { type: string; index: number };
+          }[];
+          intentions: {
+            value: string;
+            details: string;
+          }[];
+          testingTime: number;
+        }[];
+      }[];
+      progressDatas: ProgressData[];
+    }
+  ) {
+    await fs.outputFile(
+      path.join(outputDirPath, "project.js"),
+      `const snapshot = ${JSON.stringify(projectData)}`,
+      { encoding: "utf-8" }
+    );
+  }
+}
