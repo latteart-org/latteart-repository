@@ -20,10 +20,10 @@ import { ConfigsService } from "@/services/ConfigsService";
 import { ImageFileRepositoryServiceImpl } from "@/services/ImageFileRepositoryService";
 import { IssueReportOutputServiceImpl } from "@/services/IssueReportOutputService";
 import { IssueReportServiceImpl } from "@/services/IssueReportService";
-import { NotesService } from "@/services/NotesService";
-import { ProjectsService } from "@/services/ProjectsService";
+import { NotesServiceImpl } from "@/services/NotesService";
+import { ProjectsServiceImpl } from "@/services/ProjectsService";
 import { SnapshotFileRepositoryServiceImpl } from "@/services/SnapshotFileRepositoryService";
-import { TestPurposeService } from "@/services/TestPurposeService";
+import { TestPurposeServiceImpl } from "@/services/TestPurposeService";
 import { TestResultServiceImpl } from "@/services/TestResultService";
 import { TestStepServiceImpl } from "@/services/TestStepService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
@@ -36,6 +36,8 @@ import {
 } from "..";
 import { CreateResponse } from "../interfaces/Snapshots";
 import { SnapshotsService } from "../services/SnapshotsService";
+import path from "path";
+import { appRootPath } from "@/common";
 
 @Route("projects/{projectId}/snapshots")
 export class SnapshotsController extends Controller {
@@ -74,12 +76,12 @@ export class SnapshotsController extends Controller {
       testStep: testStepService,
     });
 
-    const noteService = new NotesService({
+    const noteService = new NotesServiceImpl({
       imageFileRepository: imageFileRepositoryService,
       timestamp: timestampService,
     });
 
-    const testPurposeService = new TestPurposeService();
+    const testPurposeService = new TestPurposeServiceImpl();
 
     const issueReportService = new IssueReportServiceImpl({
       issueReportOutput: new IssueReportOutputServiceImpl(),
@@ -101,12 +103,16 @@ export class SnapshotsController extends Controller {
         config: new ConfigsService(),
         issueReport: issueReportService,
         attachedFileRepository: attachedFileDirectoryService,
+      },
+      {
+        snapshotViewer: { path: path.join(appRootPath, "snapshot-viewer") },
+        historyViewer: { path: path.join(appRootPath, "history-viewer") },
       }
     );
 
     return new SnapshotsService({
       snapshotFileRepository: snapshotFileRepositoryService,
-      project: new ProjectsService(
+      project: new ProjectsServiceImpl(
         {
           timestamp: new TimestampServiceImpl(),
         },

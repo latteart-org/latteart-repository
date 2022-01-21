@@ -25,13 +25,13 @@ import {
   UpdateProjectResponse,
   UpdateProjectDto,
 } from "../interfaces/Projects";
-import { ProjectsService } from "../services/ProjectsService";
+import { ProjectsServiceImpl } from "../services/ProjectsService";
 
 @Route("projects")
 export class ProjectsController extends Controller {
   @Get()
   public async list(): Promise<ProjectListResponse[]> {
-    return new ProjectsService(
+    return new ProjectsServiceImpl(
       {
         timestamp: new TimestampServiceImpl(),
       },
@@ -40,9 +40,9 @@ export class ProjectsController extends Controller {
   }
 
   @Post()
-  public async create(): Promise<any> {
+  public async create(): Promise<{ id: string; name: string }> {
     try {
-      return await new ProjectsService(
+      return await new ProjectsServiceImpl(
         {
           timestamp: new TimestampServiceImpl(),
         },
@@ -63,7 +63,7 @@ export class ProjectsController extends Controller {
   @Get("{projectId}")
   public async get(@Path() projectId: string): Promise<GetProjectResponse> {
     try {
-      return await new ProjectsService(
+      return await new ProjectsServiceImpl(
         {
           timestamp: new TimestampServiceImpl(),
         },
@@ -88,7 +88,7 @@ export class ProjectsController extends Controller {
     @Body() requestBody: UpdateProjectDto
   ): Promise<UpdateProjectResponse> {
     try {
-      return await new ProjectsService(
+      return await new ProjectsServiceImpl(
         {
           timestamp: new TimestampServiceImpl(),
         },

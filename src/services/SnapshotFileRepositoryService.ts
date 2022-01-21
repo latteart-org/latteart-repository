@@ -24,8 +24,8 @@ import { ProgressData, Project } from "@/interfaces/Projects";
 import { TestResultService } from "./TestResultService";
 import { ConfigsService } from "./ConfigsService";
 import { TestStepService } from "./TestStepService";
-import { NotesService } from "./NotesService";
-import { TestPurposeService } from "./TestPurposeService";
+import { NotesServiceImpl } from "./NotesService";
+import { TestPurposeServiceImpl } from "./TestPurposeService";
 import { ImageFileRepositoryService } from "./ImageFileRepositoryService";
 import { IssueReportService } from "./IssueReportService";
 
@@ -42,11 +42,19 @@ export class SnapshotFileRepositoryServiceImpl
       timestamp: TimestampService;
       testResult: TestResultService;
       testStep: TestStepService;
-      note: NotesService;
-      testPurpose: TestPurposeService;
+      note: NotesServiceImpl;
+      testPurpose: TestPurposeServiceImpl;
       config: ConfigsService;
       issueReport: IssueReportService;
       attachedFileRepository: StaticDirectoryService;
+    },
+    private template: {
+      snapshotViewer: {
+        path: string;
+      };
+      historyViewer: {
+        path: string;
+      };
     }
   ) {}
 
@@ -255,15 +263,15 @@ export class SnapshotFileRepositoryServiceImpl
               await this.copyScreenshot(note.imageFileUrl, destTestResultPath);
 
               return {
+                sequence: index + 1,
                 id: note.id,
                 type: note.type,
                 value: note.value,
                 details: note.details,
                 tags: note.tags,
-                imageFileUrl: path.join(
-                  "testResult",
-                  path.basename(note.imageFileUrl ?? "")
-                ),
+                imageFileUrl: note.imageFileUrl
+                  ? path.join("testResult", path.basename(note.imageFileUrl))
+                  : "",
                 timestamp: this.service.timestamp.unix().toString(),
               };
             })
@@ -303,7 +311,7 @@ export class SnapshotFileRepositoryServiceImpl
 
     // copy index.html of history-viewer
     await fs.copyFile(
-      path.join("history-viewer", "index.html"),
+      path.join(this.template.historyViewer.path, "index.html"),
       path.join(destSessionPath, "index.html")
     );
   }
@@ -440,8 +448,7 @@ export class SnapshotFileRepositoryServiceImpl
         );
 
         return {
-          id: story.id,
-          status: story.status,
+          ...story,
           sessions,
         };
       })
@@ -449,7 +456,7 @@ export class SnapshotFileRepositoryServiceImpl
   }
 
   private async copySnapshotViewer(outputDirPath: string) {
-    const viewerTemplatePath = path.join(".", "snapshot-viewer");
+    const viewerTemplatePath = this.template.snapshotViewer.path;
 
     await fs.mkdirp(outputDirPath);
     await fs.copyFile(
@@ -460,7 +467,7 @@ export class SnapshotFileRepositoryServiceImpl
   }
 
   private async copyHistoryViewer(outputDirPath: string) {
-    await this.copyViewer(path.join(".", "history-viewer"), outputDirPath);
+    await this.copyViewer(this.template.historyViewer.path, outputDirPath);
   }
 
   private async copyViewer(viewerTemplatePath: string, outputDirPath: string) {
@@ -531,6 +538,9 @@ export class SnapshotFileRepositoryServiceImpl
       }[];
       stories: {
         id: string;
+        testMatrixId: string;
+        testTargetId: string;
+        viewPointId: string;
         status: string;
         sessions: {
           name: string;

@@ -25,7 +25,20 @@ import {
 } from "@/interfaces/Notes";
 import { getRepository } from "typeorm";
 
-export class TestPurposeService {
+export interface TestPurposeService {
+  createTestPurpose(
+    testResultId: string,
+    requestBody: CreateNoteDto
+  ): Promise<CreateNoteResponse>;
+  getTestPurpose(testPurposeId: string): Promise<GetNoteResponse | undefined>;
+  updateTestPurpose(
+    testPurposeId: string,
+    requestBody: UpdateNoteDto
+  ): Promise<UpdateNoteResponse>;
+  deleteTestPurpose(testPurposeId: string): Promise<void>;
+}
+
+export class TestPurposeServiceImpl implements TestPurposeService {
   public async createTestPurpose(
     testResultId: string,
     requestBody: CreateNoteDto

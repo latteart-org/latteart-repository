@@ -35,7 +35,7 @@ export class TestScriptsService {
     console.log(projectId, requestBody);
 
     const testResultIds = (
-      await getRepository(ProjectEntity).findOneOrFail({
+      await getRepository(ProjectEntity).findOneOrFail(projectId, {
         relations: [
           "testMatrices",
           "testMatrices.stories",

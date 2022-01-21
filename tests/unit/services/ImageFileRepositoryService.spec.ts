@@ -25,6 +25,8 @@ describe("ImageFileRepositoryService", () => {
         getFileUrl: jest.fn().mockReturnValue(expectedUrl),
         getJoinedPath: jest.fn(),
         moveFile: jest.fn(),
+        collectFileNames: jest.fn(),
+        collectFilePaths: jest.fn(),
       };
 
       const service = new ImageFileRepositoryServiceImpl({

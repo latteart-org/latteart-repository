@@ -50,7 +50,7 @@ interface TestResult {
         value: string;
         checked: boolean;
         attributes: {
-          anyAttribute: string;
+          [key: string]: string;
         };
       };
       title: string;
@@ -65,9 +65,10 @@ interface TestResult {
         value: string;
         checked: boolean;
         attributes: {
-          anyAttribute: string;
+          [key: string]: string;
         };
       }[];
+      keywordTexts?: string[];
     };
     intention: {
       id: string;
@@ -104,7 +105,7 @@ interface TestResult {
       value: string;
       checked: boolean;
       attributes: {
-        anyAttribute: string;
+        [key: string]: string;
       };
     }[];
   }[];
@@ -118,7 +119,7 @@ interface TestResult {
       value: string;
       checked: boolean;
       attributes: {
-        anyAttribute: string;
+        [key: string]: string;
       };
     };
   }[];

@@ -36,8 +36,8 @@ export class AttachedFileEntity {
   @PrimaryColumn({ name: "name" })
   name!: string;
 
-  @PrimaryColumn({ name: "image_url" })
-  imageUrl!: string;
+  @PrimaryColumn({ name: "file_url" })
+  fileUrl!: string;
 
   @CreateDateColumn()
   createdDate?: Date;

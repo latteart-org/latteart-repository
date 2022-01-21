@@ -19,7 +19,7 @@ import { Controller, Post, Route, Path } from "tsoa";
 import { CompressedImageService } from "../services/CompressedImageService";
 import { CommandExecutionServiceImpl } from "@/services/CommandExecutionService";
 import { TestStepServiceImpl } from "@/services/TestStepService";
-import { NotesService } from "@/services/NotesService";
+import { NotesServiceImpl } from "@/services/NotesService";
 import { ConfigsService } from "@/services/ConfigsService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
 import { ImageFileRepositoryServiceImpl } from "@/services/ImageFileRepositoryService";
@@ -46,7 +46,7 @@ export class CompressedImageController extends Controller {
       timestamp: timestampService,
       config: new ConfigsService(),
     });
-    const noteService = new NotesService({
+    const noteService = new NotesServiceImpl({
       imageFileRepository: imageFileRepositoryService,
       timestamp: timestampService,
     });

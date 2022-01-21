@@ -63,7 +63,7 @@ export default class FileArchiver {
 
     const writeStream = fs.createWriteStream(zipFilePath);
 
-    const archive = archiver("zip", { zlib: { level: 9 } });
+    const archive = archiver("zip", { zlib: { level: 1 } });
 
     archive.pipe(writeStream);
 

@@ -22,14 +22,14 @@ import path from "path";
 import LoggingService from "@/logger/LoggingService";
 import { CommandExecutionService } from "./CommandExecutionService";
 import { TestStepService } from "./TestStepService";
-import { NotesService } from "./NotesService";
+import { NotesServiceImpl } from "./NotesService";
 
 export class CompressedImageService {
   constructor(
     private service: {
       imageFileRepository: ImageFileRepositoryService;
       testStep: TestStepService;
-      note: NotesService;
+      note: NotesServiceImpl;
       commandExecution: CommandExecutionService;
     }
   ) {}

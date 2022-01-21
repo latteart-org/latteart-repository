@@ -17,8 +17,8 @@
 import { Project } from "@/interfaces/Projects";
 import { TestResultService } from "./TestResultService";
 import { TestStepService } from "./TestStepService";
-import { TestPurposeService } from "./TestPurposeService";
-import { NotesService } from "./NotesService";
+import { TestPurposeServiceImpl } from "./TestPurposeService";
+import { NotesServiceImpl } from "./NotesService";
 import { IssueReportOutputService } from "./IssueReportOutputService";
 
 export interface IssueReportService {
@@ -31,8 +31,8 @@ export class IssueReportServiceImpl implements IssueReportService {
       issueReportOutput: IssueReportOutputService;
       testResult: TestResultService;
       testStep: TestStepService;
-      testPurpose: TestPurposeService;
-      note: NotesService;
+      testPurpose: TestPurposeServiceImpl;
+      note: NotesServiceImpl;
     }
   ) {}
 
@@ -55,8 +55,6 @@ export class IssueReportServiceImpl implements IssueReportService {
         const rowSources = groups.flatMap((group) => {
           return group.testTargets.flatMap((testTarget) => {
             return testTarget.plans.flatMap((plan) => {
-              const storyId = `${testMatrix.id}_${plan.viewPointId}_${group.id}_${testTarget.id}`;
-
               const targetViewPoint = testMatrix.viewPoints.find(
                 (viewPoint) => {
                   return viewPoint.id === plan.viewPointId;
@@ -66,7 +64,11 @@ export class IssueReportServiceImpl implements IssueReportService {
               const sessions =
                 project.stories
                   .find((story) => {
-                    return story.id === storyId;
+                    return (
+                      story.testMatrixId === testMatrix.id &&
+                      story.viewPointId === plan.viewPointId &&
+                      story.testTargetId === testTarget.id
+                    );
                   })
                   ?.sessions.flatMap((session, index) => {
                     const testResultFiles = session.testResultFiles ?? [];

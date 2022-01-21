@@ -16,9 +16,13 @@
 
 import path from "path";
 
-export const publicDirPath = "public";
-export const configFilePath = path.resolve(".", "latteart.config.json");
-export const deviceConfigFilePath = path.resolve(
-  ".",
+export const appRootPath = path.relative(
+  process.cwd(),
+  path.dirname(__dirname)
+);
+export const publicDirPath = path.join(appRootPath, "public");
+export const configFilePath = path.join(appRootPath, "latteart.config.json");
+export const deviceConfigFilePath = path.join(
+  appRootPath,
   "latteart.device.config.json"
 );
