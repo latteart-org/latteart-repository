@@ -5480,7 +5480,7 @@ jsdoc-mermaid@^1.0.0:
   dependencies:
     doctrine "^2.0.0"
 
-jsdoc@^3.6.4:
+jsdoc@3.6.7, jsdoc@^3.6.4:
   version "3.6.7"
   resolved "https://registry.yarnpkg.com/jsdoc/-/jsdoc-3.6.7.tgz#00431e376bed7f9de4716c6f15caa80e64492b89"
   integrity sha512-sxKt7h0vzCd+3Y81Ey2qinupL6DpRSZJclS04ugHDNmRUXGzqicMJ6iwayhSA0S0DwwX30c5ozyUthr1QKF6uw==
