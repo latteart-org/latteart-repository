@@ -3,6 +3,7 @@
   "dependencies": {
     "jsdoc-api": "6.0.0",
     "jsdoc-mermaid": "^1.0.0",
+    "jsdoc": "3.6.7",
     "sqlite3": "^5.0.2"
   }
 }
