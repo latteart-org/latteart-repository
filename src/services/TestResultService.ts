@@ -174,10 +174,20 @@ export class TestResultServiceImpl implements TestResultService {
 
   public async collectAllTestStepIds(testResultId: string): Promise<string[]> {
     const testResultEntity = await getRepository(TestResultEntity).findOne(
-      testResultId
+      testResultId,
+      {
+        relations: ["testSteps"],
+      }
     );
 
-    return testResultEntity?.testStepIds ?? [];
+    return (
+      testResultEntity?.testSteps
+        ?.slice()
+        .sort(
+          (testStepA, testStepB) => testStepA.timestamp - testStepB.timestamp
+        )
+        .map((testStep) => testStep.id) ?? []
+    );
   }
 
   public async collectAllTestPurposeIds(
@@ -216,43 +226,47 @@ export class TestResultServiceImpl implements TestResultService {
     testResultEntity: TestResultEntity
   ) {
     const testSteps = await Promise.all(
-      testResultEntity.testSteps?.map(async (testStep) => {
-        const operation = await this.service.testStep.getTestStepOperation(
-          testStep.id
-        );
-        const notes =
-          testStep.notes?.map((note) => {
-            return {
-              id: note.id,
-              type: "notice",
-              value: note.value,
-              details: note.details,
-              tags: note.tags?.map((tag) => tag.name) ?? [],
-              imageFileUrl: note.screenshot?.fileUrl ?? "",
-              timestamp: note.timestamp,
-            };
-          }) ?? [];
+      testResultEntity.testSteps
+        ?.sort(function (first, second) {
+          return first.timestamp - second.timestamp;
+        })
+        .map(async (testStep) => {
+          const operation = await this.service.testStep.getTestStepOperation(
+            testStep.id
+          );
+          const notes =
+            testStep.notes?.map((note) => {
+              return {
+                id: note.id,
+                type: "notice",
+                value: note.value,
+                details: note.details,
+                tags: note.tags?.map((tag) => tag.name) ?? [],
+                imageFileUrl: note.screenshot?.fileUrl ?? "",
+                timestamp: note.timestamp,
+              };
+            }) ?? [];
 
-        const testPurpose = testStep.testPurpose
-          ? {
-              id: testStep.testPurpose.id,
-              type: "intention",
-              value: testStep.testPurpose.title,
-              details: testStep.testPurpose.details,
-              tags: [],
-              imageFileUrl: "",
-              timestamp: 0,
-            }
-          : null;
+          const testPurpose = testStep.testPurpose
+            ? {
+                id: testStep.testPurpose.id,
+                type: "intention",
+                value: testStep.testPurpose.title,
+                details: testStep.testPurpose.details,
+                tags: [],
+                imageFileUrl: "",
+                timestamp: 0,
+              }
+            : null;
 
-        return {
-          id: testStep.id,
-          operation,
-          intention: testPurpose,
-          notices: notes,
-          bugs: [],
-        };
-      }) ?? []
+          return {
+            id: testStep.id,
+            operation,
+            intention: testPurpose,
+            notices: notes,
+            bugs: [],
+          };
+        }) ?? []
     );
 
     const coverageSources =

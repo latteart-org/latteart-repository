@@ -30,33 +30,43 @@ export interface StaticDirectoryService {
     sourceFilePath: string,
     destRelativePathToRoot: string
   ): Promise<void>;
+
+  collectFileNames(filterPattern?: RegExp): Promise<string[]>;
+
+  collectFilePaths(filterPattern?: RegExp): Promise<string[]>;
 }
 
 export class StaticDirectoryServiceImpl implements StaticDirectoryService {
-  constructor(private rootDirectoryPath: string) {}
+  constructor(private staticRootPath: string, private directoryPath: string) {}
 
   public async outputFile<T>(
     relativePathToRoot: string,
     data: T
   ): Promise<void> {
     await fs.outputFile(
-      path.join(this.rootDirectoryPath, relativePathToRoot),
+      path.join(this.staticRootPath, this.directoryPath, relativePathToRoot),
       data
     );
   }
 
   public async removeFile(relativePathToRoot: string): Promise<void> {
-    await fs.remove(path.join(this.rootDirectoryPath, relativePathToRoot));
+    await fs.remove(
+      path.join(this.staticRootPath, this.directoryPath, relativePathToRoot)
+    );
   }
 
   public getFileUrl(relativePathToRoot: string): string {
-    const filePath = path.join(this.rootDirectoryPath, relativePathToRoot);
+    const filePath = path.join(this.directoryPath, relativePathToRoot);
 
-    return `${filePath.split(path.sep).slice(1).join("/")}`;
+    return `${filePath.split(path.sep).join("/")}`;
   }
 
   public getJoinedPath(relativePathToRoot: string): string {
-    return path.join(this.rootDirectoryPath, relativePathToRoot);
+    return path.join(
+      this.staticRootPath,
+      this.directoryPath,
+      relativePathToRoot
+    );
   }
 
   public async moveFile(
@@ -64,12 +74,34 @@ export class StaticDirectoryServiceImpl implements StaticDirectoryService {
     destRelativePathToRoot: string
   ): Promise<void> {
     const destFilePath = path.join(
-      this.rootDirectoryPath,
+      this.staticRootPath,
+      this.directoryPath,
       destRelativePathToRoot
     );
 
     await fs.mkdirp(path.dirname(destFilePath));
     await fs.copyFile(sourceFilePath, destFilePath);
     await fs.remove(sourceFilePath);
+  }
+
+  public async collectFileNames(filterPattern = /.+/): Promise<string[]> {
+    return (
+      await fs.readdir(path.join(this.staticRootPath, this.directoryPath), {
+        withFileTypes: true,
+      })
+    )
+      .filter((dirent) => {
+        return !dirent.isDirectory();
+      })
+      .map((dirent) => {
+        return dirent.name;
+      })
+      .filter((fileName) => fileName.match(filterPattern));
+  }
+
+  public async collectFilePaths(filterPattern = /.+/): Promise<string[]> {
+    return (await this.collectFileNames(filterPattern)).map((fileName) =>
+      this.getJoinedPath(fileName)
+    );
   }
 }

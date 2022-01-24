@@ -145,7 +145,7 @@ export class SessionsService {
       if (attachedFile.fileUrl) {
         const existsAttachedFile = existsAttachedFiles.find(
           (existsAttachedFile) =>
-            existsAttachedFile.imageUrl === attachedFile.fileUrl
+            existsAttachedFile.fileUrl === attachedFile.fileUrl
         );
         if (!existsAttachedFile) {
           throw new Error(`AttachedFile not found: ${attachedFile.fileUrl}`);
@@ -163,7 +163,7 @@ export class SessionsService {
           new AttachedFileEntity({
             session: existsSession,
             name: attachedFile.name,
-            imageUrl: attachedFileImageUrl,
+            fileUrl: attachedFileImageUrl,
           })
         );
       }

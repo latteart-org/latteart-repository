@@ -17,7 +17,7 @@
 import LoggingService from "@/logger/LoggingService";
 import { ServerErrorCode, ServerError } from "@/ServerError";
 import { ImageFileRepositoryServiceImpl } from "@/services/ImageFileRepositoryService";
-import { TestPurposeService } from "@/services/TestPurposeService";
+import { TestPurposeServiceImpl } from "@/services/TestPurposeService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
 import { Controller, Get, Put, Delete, Body, Post, Route, Path } from "tsoa";
 import { screenshotDirectoryService } from "..";
@@ -28,7 +28,7 @@ import {
   GetNoteResponse,
   UpdateNoteResponse,
 } from "../interfaces/Notes";
-import { NotesService } from "../services/NotesService";
+import { NotesServiceImpl } from "../services/NotesService";
 
 @Route("test-results/{testResultId}/notes")
 export class NotesController extends Controller {
@@ -54,12 +54,12 @@ export class NotesController extends Controller {
 
     try {
       if (requestBody.type === "notice") {
-        return new NotesService({
+        return new NotesServiceImpl({
           imageFileRepository: imageFileRepositoryService,
           timestamp: timestampService,
         }).createNote(testResultId, requestBody);
       } else {
-        return new TestPurposeService().createTestPurpose(
+        return new TestPurposeServiceImpl().createTestPurpose(
           testResultId,
           requestBody
         );
@@ -86,7 +86,7 @@ export class NotesController extends Controller {
     });
 
     try {
-      const note = await new NotesService({
+      const note = await new NotesServiceImpl({
         imageFileRepository: imageFileRepositoryService,
         timestamp: timestampService,
       }).getNote(noteId);
@@ -95,7 +95,9 @@ export class NotesController extends Controller {
         return note;
       }
 
-      const testPurpose = await new TestPurposeService().getTestPurpose(noteId);
+      const testPurpose = await new TestPurposeServiceImpl().getTestPurpose(
+        noteId
+      );
 
       if (testPurpose) {
         return testPurpose;
@@ -129,22 +131,27 @@ export class NotesController extends Controller {
     });
 
     try {
-      const note = await new NotesService({
+      const note = await new NotesServiceImpl({
         imageFileRepository: imageFileRepositoryService,
         timestamp: timestampService,
       }).getNote(noteId);
 
       if (note) {
-        return new NotesService({
+        return new NotesServiceImpl({
           imageFileRepository: imageFileRepositoryService,
           timestamp: timestampService,
         }).updateNote(noteId, requestBody);
       }
 
-      const testPurpose = await new TestPurposeService().getTestPurpose(noteId);
+      const testPurpose = await new TestPurposeServiceImpl().getTestPurpose(
+        noteId
+      );
 
       if (testPurpose) {
-        return new TestPurposeService().updateTestPurpose(noteId, requestBody);
+        return new TestPurposeServiceImpl().updateTestPurpose(
+          noteId,
+          requestBody
+        );
       }
     } catch (error) {
       LoggingService.error("Edit note failed.", error);
@@ -174,22 +181,24 @@ export class NotesController extends Controller {
     });
 
     try {
-      const note = await new NotesService({
+      const note = await new NotesServiceImpl({
         imageFileRepository: imageFileRepositoryService,
         timestamp: timestampService,
       }).getNote(noteId);
 
       if (note) {
-        return new NotesService({
+        return new NotesServiceImpl({
           imageFileRepository: imageFileRepositoryService,
           timestamp: timestampService,
         }).deleteNote(noteId);
       }
 
-      const testPurpose = await new TestPurposeService().getTestPurpose(noteId);
+      const testPurpose = await new TestPurposeServiceImpl().getTestPurpose(
+        noteId
+      );
 
       if (testPurpose) {
-        return new TestPurposeService().deleteTestPurpose(noteId);
+        return new TestPurposeServiceImpl().deleteTestPurpose(noteId);
       }
     } catch (error) {
       LoggingService.error("Delete note failed.", error);

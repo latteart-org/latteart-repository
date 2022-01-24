@@ -1,7 +1,7 @@
 import { TestPurposeEntity } from "@/entities/TestPurposeEntity";
 import { TestResultEntity } from "@/entities/TestResultEntity";
 import { CreateNoteDto } from "@/interfaces/Notes";
-import { TestPurposeService } from "@/services/TestPurposeService";
+import { TestPurposeServiceImpl } from "@/services/TestPurposeService";
 import { getRepository } from "typeorm";
 import { SqliteTestConnectionHelper } from "../../helper/TestConnectionHelper";
 
@@ -18,7 +18,7 @@ afterEach(async () => {
 describe("TestPurposeService", () => {
   describe("#createTestPurpose", () => {
     it("テスト目的を1件新規追加する", async () => {
-      const service = new TestPurposeService();
+      const service = new TestPurposeServiceImpl();
 
       const testResultEntity = await getRepository(TestResultEntity).save(
         new TestResultEntity()
@@ -48,7 +48,7 @@ describe("TestPurposeService", () => {
 
   describe("#updateTestPurpose", () => {
     it("テスト目的1件の内容を更新する", async () => {
-      const service = new TestPurposeService();
+      const service = new TestPurposeServiceImpl();
 
       const testResultEntity = await getRepository(TestResultEntity).save(
         new TestResultEntity()

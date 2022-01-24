@@ -1,6 +1,6 @@
 import { TestResultEntity } from "@/entities/TestResultEntity";
 import { CreateNoteDto } from "@/interfaces/Notes";
-import { NotesService } from "@/services/NotesService";
+import { NotesServiceImpl } from "@/services/NotesService";
 import { ImageFileRepositoryService } from "@/services/ImageFileRepositoryService";
 import { TimestampService } from "@/services/TimestampService";
 import { getRepository } from "typeorm";
@@ -30,7 +30,7 @@ describe("NotesService", () => {
         unix: jest.fn().mockReturnValue(0),
         format: jest.fn(),
       };
-      const service = new NotesService({
+      const service = new NotesServiceImpl({
         imageFileRepository: imageFileRepositoryService,
         timestamp: timestampService,
       });

@@ -1,6 +1,6 @@
 {
   "name": "latteart-repository",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "main": "index.js",
   "private": true,
   "scripts": {
@@ -13,7 +13,7 @@
     "package:mac": "nexe dist/index.js -o dist/latteart-repository/latteart-repository --target macos-x64-12.18.1",
     "prepackage:win": "yarn prepackage:settings && yarn prepackage:dependencies:win && yarn build",
     "prepackage:mac": "yarn prepackage:settings && yarn prepackage:dependencies:mac && yarn build",
-    "prepackage:settings": "cpx \"latteart*.config.json\" dist/latteart-repository && cpx ormconfig.json dist/latteart-repository",
+    "prepackage:settings": "cpx \"latteart*.config.json\" dist/latteart-repository && cpx ormconfig.json dist/latteart-repository && mkdirp dist/latteart-repository/public/imports && mkdirp dist/latteart-repository/public/exports",
     "prepackage:dependencies:win": "cpx externals/package.json dist/latteart-repository && cd dist/latteart-repository && yarn install && ./node_modules/.bin/node-pre-gyp install --directory=./node_modules/sqlite3 --target_platform=win32 --target_arch=x64 && rimraf package.json && rimraf yarn.lock",
     "prepackage:dependencies:mac": "cpx externals/package.json dist/latteart-repository && cd dist/latteart-repository && yarn install && ./node_modules/.bin/node-pre-gyp install --directory=./node_modules/sqlite3 --target_platform=darwin --target_arch=x64 && rimraf package.json && rimraf yarn.lock",
     "lint": "eslint src",
@@ -26,6 +26,7 @@
     "generate:migration": "yarn typeorm migration:generate"
   },
   "devDependencies": {
+    "@types/adm-zip": "^0.4.34",
     "@types/body-parser": "^1.19.1",
     "@types/jest": "^26.0.15",
     "@types/node": "^12.12.70",
@@ -37,6 +38,7 @@
     "husky": "4",
     "jest": "^26.6.3",
     "lint-staged": "^10.5.4",
+    "mkdirp": "^1.0.4",
     "nexe": "3.3.7",
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
@@ -57,6 +59,7 @@
     "@types/fs-extra": "^9.0.3",
     "@types/log4js": "^2.3.5",
     "@types/moment": "^2.13.0",
+    "adm-zip": "^0.5.9",
     "archiver": "^5.0.2",
     "axios": "^0.20.0",
     "body-parser": "^1.19.0",

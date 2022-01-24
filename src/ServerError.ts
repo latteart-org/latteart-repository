@@ -38,6 +38,12 @@ export enum ServerErrorCode {
   PATCH_SESSION_FAILED = "patch_session_failed",
   GET_SESSION_FAILED = "get_session_failed",
   GET_SERVERNAME_FAILED = "get_servername_failed",
+  EXPORT_TEST_RESULT_FAILED = "export_test_result_failed",
+  IMPORT_TEST_RESULT_FAILED = "import_test_result_failed",
+  EXPORT_PROJECT_FAILED = "export_project_failed",
+  IMPORT_PROJECT_FAILED = "import_project_failed",
+  IMPORT_PROJECT_NOT_EXIST = "import_project_not_exist",
+  IMPORT_TEST_RESULT_NOT_EXIST = "import_test_result_not_exist",
 }
 
 export interface ServerErrorData {

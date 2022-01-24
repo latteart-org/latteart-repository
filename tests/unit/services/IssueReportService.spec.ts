@@ -1,8 +1,4 @@
-import { ImageFileRepositoryServiceImpl } from "@/services/ImageFileRepositoryService";
 import { SqliteTestConnectionHelper } from "../../helper/TestConnectionHelper";
-import { StaticDirectoryService } from "@/services/StaticDirectoryService";
-import fs from "fs-extra";
-import path from "path";
 import { IssueReportServiceImpl } from "@/services/IssueReportService";
 import { IssueReportOutputService } from "@/services/IssueReportOutputService";
 import { TestResultService } from "@/services/TestResultService";
@@ -118,8 +114,10 @@ describe("IssueReportService", () => {
         ],
         stories: [
           {
-            id: "testMatrix1_viewPoint1_group1_testTarget1",
-            key: "",
+            id: "story1",
+            testMatrixId: "testMatrix1",
+            testTargetId: "testTarget1",
+            viewPointId: "viewPoint1",
             status: "",
             sessions: [
               {

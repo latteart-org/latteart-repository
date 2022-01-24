@@ -15,14 +15,14 @@
  */
 
 import { CreateResponse } from "@/interfaces/Snapshots";
-import { ProjectsService } from "./ProjectsService";
+import { ProjectsServiceImpl } from "./ProjectsService";
 import { SnapshotFileRepositoryService } from "./SnapshotFileRepositoryService";
 
 export class SnapshotsService {
   constructor(
     private service: {
       snapshotFileRepository: SnapshotFileRepositoryService;
-      project: ProjectsService;
+      project: ProjectsServiceImpl;
     }
   ) {}
 

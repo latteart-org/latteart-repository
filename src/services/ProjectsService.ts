@@ -19,7 +19,6 @@ import {
   GetProjectResponse,
   UpdateProjectResponse,
   UpdateProjectDto,
-  CreateProjectResponse,
   Project,
 } from "../interfaces/Projects";
 import { ProjectEntity } from "../entities/ProjectEntity";
@@ -38,7 +37,17 @@ import LoggingService from "@/logger/LoggingService";
 import { TimestampService } from "./TimestampService";
 import { TransactionRunner } from "@/TransactionRunner";
 
-export class ProjectsService {
+export interface ProjectsService {
+  getProjectIdentifiers(): Promise<ProjectListResponse[]>;
+  createProject(): Promise<{ id: string; name: string }>;
+  getProject(projectId: string): Promise<GetProjectResponse>;
+  updateProject(
+    projectId: string,
+    requestBody: UpdateProjectDto
+  ): Promise<UpdateProjectResponse>;
+}
+
+export class ProjectsServiceImpl implements ProjectsService {
   private static DATETIME_LOG_FORMAT = "YYYY-MM-DD HH:mm:ss:SS";
 
   constructor(
@@ -50,40 +59,45 @@ export class ProjectsService {
 
   public async getProjectIdentifiers(): Promise<ProjectListResponse[]> {
     const projectRepository = getRepository(ProjectEntity);
-    return await projectRepository.find({ select: ["id", "name"] });
+    const projects = await projectRepository.find();
+    console.log(projects);
+    return projects
+      .map((project) => {
+        return {
+          id: project.id,
+          name: project.name,
+          createdAt: project.createdAt?.toString() ?? "",
+        };
+      })
+      .sort((a, b) => {
+        return a.createdAt > b.createdAt ? 1 : -1;
+      });
   }
 
-  public async createProject(): Promise<CreateProjectResponse> {
-    let savedProject = null;
-    let savedViewPointPreset = null;
+  public async createProject(): Promise<{ id: string; name: string }> {
+    let savedProject: ProjectEntity | null = null;
     await getManager().transaction(async (transactionEntityManager) => {
       savedProject = await transactionEntityManager.save(
         new ProjectEntity("1")
       );
 
-      savedViewPointPreset = await transactionEntityManager.save(
+      await transactionEntityManager.save(
         new ViewPointPresetEntity({ project: savedProject, name: "" })
       );
     });
-    (savedProject as unknown) as ProjectEntity;
+    if (!savedProject) {
+      throw new Error("Project save failed.");
+    }
     return {
-      testMatrices: [],
-      sequences: {
-        group: 0,
-        viewPoint: 0,
-        testMatrix: 0,
-        testTarget: 0,
-        session: {},
-      },
+      id: (savedProject as ProjectEntity).id,
+      name: (savedProject as ProjectEntity).name,
     };
   }
 
   public async getProject(projectId: string): Promise<GetProjectResponse> {
-    const projectRepository = getRepository(ProjectEntity);
-    const projects = await projectRepository.find();
-    const project = await this.getReturnProject(projects[0].id);
+    const project = await this.getReturnProject(projectId);
     if (!project) {
-      throw new Error(`Project not found: ${projects[0].id}`);
+      throw new Error(`Project not found: ${projectId}`);
     }
 
     return this.projectEntityToResponse(project);
@@ -95,13 +109,15 @@ export class ProjectsService {
   ): Promise<UpdateProjectResponse> {
     const projectRepository = getRepository(ProjectEntity);
 
-    const allProjects = await projectRepository.find({
+    const existsProject = await projectRepository.findOne(projectId, {
       relations: ["testMatrices"],
     });
-    const existsProject = allProjects[0];
+    if (!existsProject) {
+      throw new Error(`Project not found: ${projectId}`);
+    }
     LoggingService.debug(
       `START ALL SELECT1 - ${this.service.timestamp.format(
-        ProjectsService.DATETIME_LOG_FORMAT
+        ProjectsServiceImpl.DATETIME_LOG_FORMAT
       )}`
     );
 
@@ -135,7 +151,7 @@ export class ProjectsService {
 
     LoggingService.debug(
       `END ALL SELECT1 - ${this.service.timestamp.format(
-        ProjectsService.DATETIME_LOG_FORMAT
+        ProjectsServiceImpl.DATETIME_LOG_FORMAT
       )}`
     );
     let unupdatedTestMatrices = existsProject.testMatrices;
@@ -157,7 +173,7 @@ export class ProjectsService {
 
     LoggingService.debug(
       `START UPDATE - ${this.service.timestamp.format(
-        ProjectsService.DATETIME_LOG_FORMAT
+        ProjectsServiceImpl.DATETIME_LOG_FORMAT
       )}`
     );
 
@@ -308,7 +324,7 @@ export class ProjectsService {
           let existsStory = null;
           for (const t of existsProject.testMatrices) {
             for (const s of t.stories) {
-              if (s.id === story.key) {
+              if (s.id === story.id) {
                 existsStory = s;
                 break;
               }
@@ -322,7 +338,7 @@ export class ProjectsService {
           }
           const savedStoryWithUnupdatedList = await this.updateStory(
             transactionalEntityManager,
-            story.key,
+            story.id,
             index,
             story.status,
             existsStory,
@@ -351,13 +367,13 @@ export class ProjectsService {
         }
         LoggingService.debug(
           `END UPDATE - ${this.service.timestamp.format(
-            ProjectsService.DATETIME_LOG_FORMAT
+            ProjectsServiceImpl.DATETIME_LOG_FORMAT
           )}`
         );
 
         LoggingService.debug(
           `START DELETE - ${this.service.timestamp.format(
-            ProjectsService.DATETIME_LOG_FORMAT
+            ProjectsServiceImpl.DATETIME_LOG_FORMAT
           )}`
         );
         for (const testMatrix of unupdatedTestMatrices) {
@@ -428,7 +444,7 @@ export class ProjectsService {
         }
         LoggingService.debug(
           `END DELETE - ${this.service.timestamp.format(
-            ProjectsService.DATETIME_LOG_FORMAT
+            ProjectsServiceImpl.DATETIME_LOG_FORMAT
           )}`
         );
       }
@@ -436,14 +452,14 @@ export class ProjectsService {
 
     LoggingService.debug(
       `START ALL SELECT2 - ${this.service.timestamp.format(
-        ProjectsService.DATETIME_LOG_FORMAT
+        ProjectsServiceImpl.DATETIME_LOG_FORMAT
       )}`
     );
 
     const updatedProject = await this.getReturnProject(existsProject.id);
     LoggingService.debug(
       `START END SELECT2 - ${this.service.timestamp.format(
-        ProjectsService.DATETIME_LOG_FORMAT
+        ProjectsServiceImpl.DATETIME_LOG_FORMAT
       )}`
     );
 
@@ -453,13 +469,13 @@ export class ProjectsService {
 
     LoggingService.debug(
       `START CONVERT - ${this.service.timestamp.format(
-        ProjectsService.DATETIME_LOG_FORMAT
+        ProjectsServiceImpl.DATETIME_LOG_FORMAT
       )}`
     );
     const response = this.projectEntityToResponse(updatedProject);
     LoggingService.debug(
       `END CONVERT - ${this.service.timestamp.format(
-        ProjectsService.DATETIME_LOG_FORMAT
+        ProjectsServiceImpl.DATETIME_LOG_FORMAT
       )}`
     );
 
@@ -910,23 +926,15 @@ export class ProjectsService {
     return updatedProject;
   }
 
-  private projectEntityToResponse(project: ProjectEntity): Project {
+  public projectEntityToResponse(project: ProjectEntity): Project {
     const stories: Project["stories"] = [];
     for (const testMatrix of project.testMatrices) {
       for (const story of testMatrix.stories) {
-        const targetTestMatrix = project.testMatrices.find((tm) => {
-          return testMatrix.id === tm.id;
-        });
-        const targetGroup = targetTestMatrix?.testTargetGroups.find(
-          (testTargetGroup) => {
-            return testTargetGroup.testTargets.some((testTarget) => {
-              return testTarget.id === story.testTargetId;
-            });
-          }
-        );
         stories.push({
-          id: `${testMatrix.id}_${story.viewPointId}_${targetGroup?.id}_${story.testTargetId}`,
-          key: story.id,
+          id: story.id,
+          testMatrixId: story.testMatrixId,
+          testTargetId: story.testTargetId,
+          viewPointId: story.viewPointId,
           status: story.status,
           sessions: story.sessions
             .map((session) => {
@@ -944,7 +952,7 @@ export class ProjectsService {
                     .map((attachedFile) => {
                       return {
                         name: attachedFile.name,
-                        fileUrl: attachedFile.imageUrl,
+                        fileUrl: attachedFile.fileUrl,
                       };
                     }) ?? [],
                 doneDate: session.doneDate,
@@ -961,6 +969,10 @@ export class ProjectsService {
                         return tag.name === "reported";
                       })
                         ? "reported"
+                        : note.tags?.find((tag) => {
+                            return tag.name === "invalid";
+                          })
+                        ? "invalid"
                         : "",
                       ticketId: "",
                       type: "notice",

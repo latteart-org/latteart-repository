@@ -25,7 +25,12 @@ import LoggingService from "./logger/LoggingService";
 import StandardLogger, { RunningMode } from "./logger/StandardLogger";
 import bodyParser from "body-parser";
 import { SettingsType, SettingsUtility } from "./lib/settings/SettingsUtility";
-import { configFilePath, deviceConfigFilePath, publicDirPath } from "./common";
+import {
+  appRootPath,
+  configFilePath,
+  deviceConfigFilePath,
+  publicDirPath,
+} from "./common";
 import { createConnection, getConnectionOptions } from "typeorm";
 import { NoteEntity } from "./entities/NoteEntity";
 import { TagEntity } from "./entities/TagEntity";
@@ -54,22 +59,39 @@ import { ViewPointPresetEntity } from "./entities/ViewPointPresetEntity";
 import { ServerError } from "./ServerError";
 import { TransactionRunner } from "./TransactionRunner";
 import { Init1638930268191 } from "./migrations/1638930268191-Init";
+import { UpdateProjectEntity1641956149882 } from "./migrations/1641956149882-UpdateProjectEntity";
+import { UpdateAttachedFilesEntity1642388104855 } from "./migrations/1642388104855-UpdateAttachedFilesEntity";
 
 LoggingService.initialize(
-  new StandardLogger(RunningMode.Debug, "./logs/latteart-repository.log")
+  new StandardLogger(
+    RunningMode.Debug,
+    path.join(appRootPath, "logs", "latteart-repository.log")
+  )
 );
 
 export const screenshotDirectoryService = new StaticDirectoryServiceImpl(
-  path.join(publicDirPath, "screenshots")
+  publicDirPath,
+  "screenshots"
 );
 export const attachedFileDirectoryService = new StaticDirectoryServiceImpl(
-  path.join(publicDirPath, "attached-files")
+  publicDirPath,
+  "attached-files"
 );
 export const snapshotDirectoryService = new StaticDirectoryServiceImpl(
-  path.join(publicDirPath, "snapshots")
+  publicDirPath,
+  "snapshots"
 );
 export const testScriptDirectoryService = new StaticDirectoryServiceImpl(
-  path.join(publicDirPath, "test-scripts")
+  publicDirPath,
+  "test-scripts"
+);
+export const importDirectoryService = new StaticDirectoryServiceImpl(
+  publicDirPath,
+  "imports"
+);
+export const exportDirectoryService = new StaticDirectoryServiceImpl(
+  publicDirPath,
+  "exports"
 );
 
 export const transactionRunner = new TransactionRunner();
@@ -119,7 +141,11 @@ async function initializeOrmConnection(connectionName: string) {
       ViewPointEntity,
       ViewPointPresetEntity,
     ],
-    migrations: [Init1638930268191],
+    migrations: [
+      Init1638930268191,
+      UpdateProjectEntity1641956149882,
+      UpdateAttachedFilesEntity1642388104855,
+    ],
   };
 
   if (baseOptions.type === "sqlite") {

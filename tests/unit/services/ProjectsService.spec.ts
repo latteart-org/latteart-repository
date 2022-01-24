@@ -1,7 +1,7 @@
 import { ProgressDataEntity } from "@/entities/ProgressDataEntity";
 import { ProjectEntity } from "@/entities/ProjectEntity";
 import { Project, UpdateProjectDto } from "@/interfaces/Projects";
-import { ProjectsService } from "@/services/ProjectsService";
+import { ProjectsServiceImpl } from "@/services/ProjectsService";
 import { TimestampService } from "@/services/TimestampService";
 import { TransactionRunner } from "@/TransactionRunner";
 import { getRepository } from "typeorm";
@@ -21,7 +21,7 @@ describe("ProjectsService", () => {
   describe("#updateProject", () => {
     describe("プロジェクトの進捗状況を更新する", () => {
       let timestampService: TimestampService;
-      let service: ProjectsService;
+      let service: ProjectsServiceImpl;
 
       const firstDate = "0";
       const projectName = "projectName1";
@@ -82,7 +82,7 @@ describe("ProjectsService", () => {
           format: jest.fn(),
         };
 
-        service = new ProjectsService(
+        service = new ProjectsServiceImpl(
           { timestamp: timestampService },
           new TransactionRunner()
         );
@@ -91,8 +91,9 @@ describe("ProjectsService", () => {
       });
 
       it("テストマトリクス、テスト対象グループ、テスト対象の初回登録時", async () => {
+        const existsProject = (await getRepository(ProjectEntity).find())[0];
         const registeredProject = await service.updateProject(
-          "",
+          existsProject.id,
           requestBodyForRegister
         );
 
@@ -196,8 +197,9 @@ describe("ProjectsService", () => {
 
         it("同日の更新", async () => {
           // 登録
+          const existsProject = (await getRepository(ProjectEntity).find())[0];
           const registeredProject = await service.updateProject(
-            "",
+            existsProject.id,
             requestBodyForRegister
           );
 
@@ -208,7 +210,7 @@ describe("ProjectsService", () => {
 
           // 更新
           const updatedProject = await service.updateProject(
-            "",
+            existsProject.id,
             requestBodyForUpdate
           );
 
@@ -243,9 +245,11 @@ describe("ProjectsService", () => {
         });
 
         it("別日の更新", async () => {
+          const existsProject = (await getRepository(ProjectEntity).find())[0];
+
           // 登録
           const registeredProject = await service.updateProject(
-            "",
+            existsProject.id,
             requestBodyForRegister
           );
 
@@ -258,7 +262,7 @@ describe("ProjectsService", () => {
 
           // 更新
           const updatedProject = await service.updateProject(
-            "",
+            existsProject.id,
             requestBodyForUpdate
           );
 

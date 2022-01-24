@@ -14,7 +14,13 @@
  * limitations under the License.
  */
 
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { SnapshotEntity } from "./SnapshotEntity";
 import { TestMatrixEntity } from "./TestMatrixEntity";
 import { ViewPointPresetEntity } from "./ViewPointPresetEntity";
@@ -41,6 +47,9 @@ export class ProjectEntity {
     (testMatrixEntity) => testMatrixEntity.project
   )
   testMatrices!: TestMatrixEntity[];
+
+  @CreateDateColumn({ name: "created_at" })
+  readonly createdAt?: Date;
 
   constructor(name: string) {
     this.name = name;

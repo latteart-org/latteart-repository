@@ -35,6 +35,14 @@ import { TestStepsController } from "./../controllers/TestStepsController";
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { ServerNameController } from "./../controllers/ServerNameController";
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { TestResultExportController } from "./../controllers/TestResultExportController";
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { TestResultImportController } from "./../controllers/TestResultImportController";
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { ProjectExportController } from "./../controllers/ProjectExportController";
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { ProjectImportController } from "./../controllers/ProjectImportController";
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { CompressedImageController } from "./../controllers/CompressedImageController";
 import * as express from "express";
 
@@ -109,6 +117,7 @@ const models: TsoaRoute.Models = {
     properties: {
       id: { dataType: "string", required: true },
       name: { dataType: "string", required: true },
+      createdAt: { dataType: "string", required: true },
     },
     additionalProperties: false,
   },
@@ -117,7 +126,9 @@ const models: TsoaRoute.Models = {
     dataType: "refObject",
     properties: {
       id: { dataType: "string", required: true },
-      key: { dataType: "string", required: true },
+      testMatrixId: { dataType: "string", required: true },
+      testTargetId: { dataType: "string", required: true },
+      viewPointId: { dataType: "string", required: true },
       status: { dataType: "string", required: true },
       sessions: {
         dataType: "array",
@@ -664,6 +675,10 @@ const models: TsoaRoute.Models = {
             operation: {
               dataType: "nestedObjectLiteral",
               nestedProperties: {
+                keywordTexts: {
+                  dataType: "array",
+                  array: { dataType: "string" },
+                },
                 inputElements: {
                   dataType: "array",
                   array: {
@@ -671,9 +686,8 @@ const models: TsoaRoute.Models = {
                     nestedProperties: {
                       attributes: {
                         dataType: "nestedObjectLiteral",
-                        nestedProperties: {
-                          anyAttribute: { dataType: "string", required: true },
-                        },
+                        nestedProperties: {},
+                        additionalProperties: { dataType: "string" },
                         required: true,
                       },
                       checked: { dataType: "boolean", required: true },
@@ -695,9 +709,8 @@ const models: TsoaRoute.Models = {
                   nestedProperties: {
                     attributes: {
                       dataType: "nestedObjectLiteral",
-                      nestedProperties: {
-                        anyAttribute: { dataType: "string", required: true },
-                      },
+                      nestedProperties: {},
+                      additionalProperties: { dataType: "string" },
                       required: true,
                     },
                     checked: { dataType: "boolean", required: true },
@@ -730,9 +743,8 @@ const models: TsoaRoute.Models = {
                 nestedProperties: {
                   attributes: {
                     dataType: "nestedObjectLiteral",
-                    nestedProperties: {
-                      anyAttribute: { dataType: "string", required: true },
-                    },
+                    nestedProperties: {},
+                    additionalProperties: { dataType: "string" },
                     required: true,
                   },
                   checked: { dataType: "boolean", required: true },
@@ -760,9 +772,8 @@ const models: TsoaRoute.Models = {
               nestedProperties: {
                 attributes: {
                   dataType: "nestedObjectLiteral",
-                  nestedProperties: {
-                    anyAttribute: { dataType: "string", required: true },
-                  },
+                  nestedProperties: {},
+                  additionalProperties: { dataType: "string" },
                   required: true,
                 },
                 checked: { dataType: "boolean", required: true },
@@ -993,6 +1004,24 @@ const models: TsoaRoute.Models = {
       },
       bugs: { dataType: "array", array: { dataType: "string" } },
       notices: { dataType: "array", array: { dataType: "string" } },
+    },
+    additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  CreateProjectExportDto: {
+    dataType: "refObject",
+    properties: {
+      includeTestResults: { dataType: "boolean", required: true },
+      includeProject: { dataType: "boolean", required: true },
+    },
+    additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  CreateProjectImportDto: {
+    dataType: "refObject",
+    properties: {
+      includeTestResults: { dataType: "boolean", required: true },
+      includeProject: { dataType: "boolean", required: true },
     },
     additionalProperties: false,
   },
@@ -1886,6 +1915,202 @@ export function RegisterRoutes(app: express.Router) {
       const controller = new ServerNameController();
 
       const promise = controller.get.apply(controller, validatedArgs as any);
+      promiseHandler(controller, promise, response, undefined, next);
+    }
+  );
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.post(
+    "/api/v1/test-results/:testResultId/export",
+
+    function TestResultExportController_create(
+      request: any,
+      response: any,
+      next: any
+    ) {
+      const args = {
+        testResultId: {
+          in: "path",
+          name: "testResultId",
+          required: true,
+          dataType: "string",
+        },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request, response);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new TestResultExportController();
+
+      const promise = controller.create.apply(controller, validatedArgs as any);
+      promiseHandler(controller, promise, response, undefined, next);
+    }
+  );
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.get(
+    "/api/v1/imports/test-results",
+
+    function TestResultImportController_list(
+      request: any,
+      response: any,
+      next: any
+    ) {
+      const args = {};
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request, response);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new TestResultImportController();
+
+      const promise = controller.list.apply(controller, validatedArgs as any);
+      promiseHandler(controller, promise, response, undefined, next);
+    }
+  );
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.post(
+    "/api/v1/imports/test-results/:importFileName",
+
+    function TestResultImportController_create(
+      request: any,
+      response: any,
+      next: any
+    ) {
+      const args = {
+        importFileName: {
+          in: "path",
+          name: "importFileName",
+          required: true,
+          dataType: "string",
+        },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request, response);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new TestResultImportController();
+
+      const promise = controller.create.apply(controller, validatedArgs as any);
+      promiseHandler(controller, promise, response, undefined, next);
+    }
+  );
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.post(
+    "/api/v1/projects/:projectId/export",
+
+    function ProjectExportController_create(
+      request: any,
+      response: any,
+      next: any
+    ) {
+      const args = {
+        projectId: {
+          in: "path",
+          name: "projectId",
+          required: true,
+          dataType: "string",
+        },
+        requestBody: {
+          in: "body",
+          name: "requestBody",
+          required: true,
+          ref: "CreateProjectExportDto",
+        },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request, response);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new ProjectExportController();
+
+      const promise = controller.create.apply(controller, validatedArgs as any);
+      promiseHandler(controller, promise, response, undefined, next);
+    }
+  );
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.get(
+    "/api/v1/imports/projects",
+
+    function ProjectImportController_list(
+      request: any,
+      response: any,
+      next: any
+    ) {
+      const args = {};
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request, response);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new ProjectImportController();
+
+      const promise = controller.list.apply(controller, validatedArgs as any);
+      promiseHandler(controller, promise, response, undefined, next);
+    }
+  );
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.post(
+    "/api/v1/imports/projects/:importFileName",
+
+    function ProjectImportController_create(
+      request: any,
+      response: any,
+      next: any
+    ) {
+      const args = {
+        importFileName: {
+          in: "path",
+          name: "importFileName",
+          required: true,
+          dataType: "string",
+        },
+        requestBody: {
+          in: "body",
+          name: "requestBody",
+          required: true,
+          ref: "CreateProjectImportDto",
+        },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request, response);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new ProjectImportController();
+
+      const promise = controller.create.apply(controller, validatedArgs as any);
       promiseHandler(controller, promise, response, undefined, next);
     }
   );

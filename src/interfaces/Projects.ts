@@ -17,6 +17,7 @@
 export interface ProjectListResponse {
   id: string;
   name: string;
+  createdAt: string;
 }
 
 export type GetProjectResponse = Project;
@@ -51,7 +52,9 @@ export interface Project {
 
 interface StoryDetails {
   id: string;
-  key: string;
+  testMatrixId: string;
+  testTargetId: string;
+  viewPointId: string;
   status: string;
   sessions: {
     id: string;

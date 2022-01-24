@@ -20,7 +20,7 @@ import { ServerErrorCode, ServerError } from "@/ServerError";
 import { CommandExecutionServiceImpl } from "@/services/CommandExecutionService";
 import { ConfigsService } from "@/services/ConfigsService";
 import { ImageFileRepositoryServiceImpl } from "@/services/ImageFileRepositoryService";
-import { NotesService } from "@/services/NotesService";
+import { NotesServiceImpl } from "@/services/NotesService";
 import { TestStepServiceImpl } from "@/services/TestStepService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
 import { Controller, Post, Route, Path } from "tsoa";
@@ -47,7 +47,7 @@ export class NoteCompressedImageController extends Controller {
       timestamp: timestampService,
       config: new ConfigsService(),
     });
-    const noteService = new NotesService({
+    const noteService = new NotesServiceImpl({
       imageFileRepository: imageFileRepositoryService,
       timestamp: timestampService,
     });

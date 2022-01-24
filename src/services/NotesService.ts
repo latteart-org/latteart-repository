@@ -29,7 +29,21 @@ import { getRepository } from "typeorm";
 import { TimestampService } from "./TimestampService";
 import { ImageFileRepositoryService } from "./ImageFileRepositoryService";
 
-export class NotesService {
+export interface NotesService {
+  createNote(
+    testResultId: string,
+    requestBody: CreateNoteDto
+  ): Promise<CreateNoteResponse>;
+  getNote(noteId: string): Promise<GetNoteResponse | undefined>;
+  updateNote(
+    noteId: string,
+    requestBody: UpdateNoteDto
+  ): Promise<UpdateNoteResponse>;
+  deleteNote(noteId: string): Promise<void>;
+  getNoteScreenshot(noteId: string): Promise<{ id: string; fileUrl: string }>;
+}
+
+export class NotesServiceImpl {
   constructor(
     private service: {
       imageFileRepository: ImageFileRepositoryService;
