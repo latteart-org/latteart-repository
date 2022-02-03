@@ -19,6 +19,7 @@ import moment from "moment";
 export interface TimestampService {
   unix(): number;
   format(format: string): string;
+  epochMilliseconds(): number;
 }
 
 export class TimestampServiceImpl implements TimestampService {
@@ -28,5 +29,9 @@ export class TimestampServiceImpl implements TimestampService {
 
   public format(format: string): string {
     return moment().format(format);
+  }
+
+  public epochMilliseconds(): number {
+    return moment().valueOf();
   }
 }

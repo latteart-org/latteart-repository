@@ -26,6 +26,7 @@ export const createTimestampServiceMock = (): TimestampService => {
   return {
     unix: jest.fn(),
     format: jest.fn(),
+    epochMilliseconds: jest.fn(),
   };
 };
 
