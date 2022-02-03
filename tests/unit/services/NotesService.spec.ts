@@ -29,6 +29,7 @@ describe("NotesService", () => {
       const timestampService: TimestampService = {
         unix: jest.fn().mockReturnValue(0),
         format: jest.fn(),
+        epochMilliseconds: jest.fn(),
       };
       const service = new NotesServiceImpl({
         imageFileRepository: imageFileRepositoryService,

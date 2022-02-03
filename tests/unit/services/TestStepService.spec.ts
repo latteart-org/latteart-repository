@@ -32,6 +32,7 @@ describe("TestStepService", () => {
       const timestampService: TimestampService = {
         unix: jest.fn().mockReturnValue(0),
         format: jest.fn(),
+        epochMilliseconds: jest.fn(),
       };
       const service = new TestStepServiceImpl({
         imageFileRepository: imageFileRepositoryService,
@@ -115,6 +116,7 @@ describe("TestStepService", () => {
       const timestampService: TimestampService = {
         unix: jest.fn().mockReturnValue(0),
         format: jest.fn(),
+        epochMilliseconds: jest.fn(),
       };
       const service = new TestStepServiceImpl({
         imageFileRepository: imageFileRepositoryService,

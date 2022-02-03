@@ -31,6 +31,7 @@ describe("TestResultService", () => {
         timestamp: {
           unix: jest.fn(),
           format: jest.fn(),
+          epochMilliseconds: jest.fn(),
         },
         testStep: {
           getTestStep: jest.fn(),
@@ -59,6 +60,7 @@ describe("TestResultService", () => {
         timestamp: {
           unix: jest.fn().mockReturnValue(0),
           format: jest.fn(),
+          epochMilliseconds: jest.fn().mockReturnValue(0),
         },
         testStep: {
           getTestStep: jest.fn(),

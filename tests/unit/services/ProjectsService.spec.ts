@@ -80,6 +80,7 @@ describe("ProjectsService", () => {
         timestampService = {
           unix: jest.fn(),
           format: jest.fn(),
+          epochMilliseconds: jest.fn(),
         };
 
         service = new ProjectsServiceImpl(
