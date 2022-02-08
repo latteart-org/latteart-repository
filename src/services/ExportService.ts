@@ -64,8 +64,8 @@ export type TestResultExportDataV1 = {
   version: number;
   name: string;
   sessionId: string;
-  startTimestamp: number;
-  endTimestamp: number;
+  startTimeStamp: number;
+  endTimeStamp: number;
   initialUrl: string;
   history: {
     [k: string]: HistoryItemExportDataV1;
@@ -223,8 +223,8 @@ export class ExportServiceImpl implements ExportService {
       version: 1,
       name: testResult.name,
       sessionId: testResult.id,
-      startTimestamp: testResult.startTimeStamp,
-      endTimestamp: testResult.endTimeStamp,
+      startTimeStamp: testResult.startTimeStamp,
+      endTimeStamp: testResult.endTimeStamp,
       initialUrl: testResult.initialUrl,
       history,
       notes,

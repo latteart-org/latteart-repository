@@ -106,7 +106,9 @@ export class TestResultServiceImpl implements TestResultService {
   public async createTestResult(
     body: CreateTestResultDto
   ): Promise<CreateTestResultResponse> {
-    const startTimestamp = this.service.timestamp.epochMilliseconds();
+    const startTimestamp = body.startTimeStamp
+      ? body.startTimeStamp
+      : this.service.timestamp.epochMilliseconds();
     const endTimestamp = -1;
 
     const { id, name } = await getRepository(TestResultEntity).save({

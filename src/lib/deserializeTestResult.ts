@@ -192,8 +192,8 @@ const deserializeTestResultV1 = (
   const testResult = {
     id: testResultImportData.sessionId,
     name: testResultImportData.name,
-    startTimeStamp: testResultImportData.startTimestamp,
-    endTimeStamp: testResultImportData.endTimestamp,
+    startTimeStamp: testResultImportData.startTimeStamp,
+    endTimeStamp: testResultImportData.endTimeStamp,
     initialUrl: testResultImportData.initialUrl,
     testSteps,
     coverageSources: testResultImportData.coverageSources,
@@ -257,8 +257,8 @@ const deserializeTestResultV0 = (
   const testResult = {
     id: testResultImportData.sessionId,
     name: testResultImportData.name,
-    startTimeStamp: testResultImportData.startTimestamp,
-    endTimeStamp: testResultImportData.endTimestamp,
+    startTimeStamp: testResultImportData.startTimeStamp,
+    endTimeStamp: testResultImportData.endTimeStamp,
     initialUrl: testResultImportData.initialUrl,
     testSteps,
     coverageSources: testResultImportData.coverageSources,

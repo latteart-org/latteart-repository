@@ -17,6 +17,7 @@
 export interface CreateTestResultDto {
   initialUrl: string;
   name?: string;
+  startTimeStamp?: number;
 }
 
 export interface ListTestResultResponse {
