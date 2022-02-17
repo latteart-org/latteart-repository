@@ -33,10 +33,7 @@ export class ConfigsService {
 
   public async getConfig(projectId: string): Promise<GetConfigResponse> {
     const configEntity = await this.getConfigSource(projectId);
-    const config = JSON.parse(configEntity.text);
-    config.config.imageCompression.command =
-      ConfigsService.imageCompressionCommand;
-    return config;
+    return this.deleteCompressionCommand(JSON.parse(configEntity.text));
   }
 
   public async getDeviceConfig(
@@ -51,11 +48,16 @@ export class ConfigsService {
     requestBody: PutConfigDto
   ): Promise<PutConfigResponse> {
     const configEntity = await this.getConfigSource(projectId);
-    configEntity.text = JSON.stringify(requestBody);
+    const settings = { ...requestBody } as any;
+    settings.config.imageCompression.command =
+      ConfigsService.imageCompressionCommand;
+    configEntity.text = JSON.stringify(settings);
 
     const savedConfig = await getRepository(ConfigEntity).save(configEntity);
 
-    return (JSON.parse(savedConfig.text) as unknown) as PutConfigResponse;
+    return this.deleteCompressionCommand(
+      (JSON.parse(savedConfig.text) as unknown) as PutConfigResponse
+    );
   }
 
   public async updateDeviceConfig(
@@ -99,5 +101,11 @@ export class ConfigsService {
       }
     }
     return config[0];
+  }
+
+  private deleteCompressionCommand(settings: any): any {
+    const s = { ...settings };
+    delete s.config.imageCompression.command;
+    return s;
   }
 }

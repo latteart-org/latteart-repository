@@ -129,7 +129,7 @@ export class TestResultServiceImpl implements TestResultService {
         `session_${this.service.timestamp.format("YYYYMMDD_HHmmss")}`,
       startTimestamp,
       endTimestamp,
-      initialUrl: body.initialUrl,
+      initialUrl: body.initialUrl ?? "",
       testSteps: [],
       coverageSources: [],
       defaultInputElements: [],

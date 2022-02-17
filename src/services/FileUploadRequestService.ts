@@ -36,9 +36,10 @@ export class FileUploadRequestService {
     url: string,
     testResultId: string | null
   ): Promise<any> {
-    return await callPostApi(`${url}/api/v1/imports/test-results/${fileName}`, {
+    return await callPostApi(`${url}/api/v1/imports/test-results`, {
+      fileName,
+      testResultId,
       temp: true,
-      id: testResultId,
     });
   }
 
