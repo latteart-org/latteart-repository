@@ -30,11 +30,7 @@ export class FileUploadRequestController extends Controller {
       const service = new FileUploadRequestService();
       const { data } = await service.upload(requestBody);
 
-      await service.importRequest(
-        data[0],
-        requestBody.url,
-        requestBody.id ?? null
-      );
+      await service.importRequest(data[0], requestBody.url, requestBody.id);
     } catch (error) {
       if (error instanceof Error) {
         LoggingService.error("File upload request failed.", error);

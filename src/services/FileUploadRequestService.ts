@@ -34,7 +34,7 @@ export class FileUploadRequestService {
   public async importRequest(
     fileName: string,
     url: string,
-    testResultId: string | null
+    testResultId: string | undefined
   ): Promise<any> {
     return await callPostApi(`${url}/api/v1/imports/test-results`, {
       fileName,
