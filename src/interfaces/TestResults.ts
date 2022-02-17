@@ -15,7 +15,7 @@
  */
 
 export interface CreateTestResultDto {
-  initialUrl: string;
+  initialUrl?: string;
   name?: string;
   startTimeStamp?: number;
 }
