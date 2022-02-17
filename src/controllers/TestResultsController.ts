@@ -20,8 +20,8 @@ import { ConfigsService } from "@/services/ConfigsService";
 import { ImageFileRepositoryServiceImpl } from "@/services/ImageFileRepositoryService";
 import { TestStepServiceImpl } from "@/services/TestStepService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
-import { Controller, Get, Post, Patch, Route, Path, Body } from "tsoa";
-import { screenshotDirectoryService } from "..";
+import { Controller, Get, Post, Patch, Route, Path, Body, Delete } from "tsoa";
+import { screenshotDirectoryService, transactionRunner } from "..";
 import {
   ListTestResultResponse,
   CreateTestResultResponse,
@@ -77,11 +77,14 @@ export class TestResultsController extends Controller {
         return testResult;
       }
     } catch (error) {
-      LoggingService.error("Get test result failed.", error);
+      if (error instanceof Error) {
+        LoggingService.error("Get test result failed.", error);
 
-      throw new ServerError(500, {
-        code: ServerErrorCode.GET_TEST_RESULT_FAILED,
-      });
+        throw new ServerError(500, {
+          code: ServerErrorCode.GET_TEST_RESULT_FAILED,
+        });
+      }
+      throw error;
     }
 
     LoggingService.error(
@@ -112,15 +115,18 @@ export class TestResultsController extends Controller {
           timestamp: timestampService,
           config: new ConfigsService(),
         }),
-      }).createTestResult(requestBody);
+      }).createTestResult(requestBody, null);
 
       return result;
     } catch (error) {
-      LoggingService.error("Create test result failed.", error);
+      if (error instanceof Error) {
+        LoggingService.error("Create test result failed.", error);
 
-      throw new ServerError(500, {
-        code: ServerErrorCode.CREATE_TEST_RESULT_FAILED,
-      });
+        throw new ServerError(500, {
+          code: ServerErrorCode.CREATE_TEST_RESULT_FAILED,
+        });
+      }
+      throw error;
     }
   }
 
@@ -146,11 +152,41 @@ export class TestResultsController extends Controller {
         }),
       }).patchTestResult(testResultId, requestBody.name);
     } catch (error) {
-      LoggingService.error("Update test result failed.", error);
+      if (error instanceof Error) {
+        LoggingService.error("Update test result failed.", error);
 
-      throw new ServerError(500, {
-        code: ServerErrorCode.UPDATE_TEST_RESULT_FAILED,
-      });
+        throw new ServerError(500, {
+          code: ServerErrorCode.UPDATE_TEST_RESULT_FAILED,
+        });
+      }
+      throw error;
+    }
+  }
+  @Delete("{testResultId}")
+  public async delete(@Path() testResultId: string): Promise<void> {
+    const timestampService = new TimestampServiceImpl();
+    const imageFileRepositoryService = new ImageFileRepositoryServiceImpl({
+      staticDirectory: screenshotDirectoryService,
+    });
+    const service = new TestResultServiceImpl({
+      timestamp: timestampService,
+      testStep: new TestStepServiceImpl({
+        imageFileRepository: imageFileRepositoryService,
+        timestamp: timestampService,
+        config: new ConfigsService(),
+      }),
+    });
+
+    try {
+      return await service.deleteTestResult(testResultId, transactionRunner);
+    } catch (error) {
+      if (error instanceof Error) {
+        LoggingService.error("Delete test result failed.", error);
+        throw new ServerError(500, {
+          code: ServerErrorCode.DELETE_TEST_RESULT_FAILED,
+        });
+      }
+      throw error;
     }
   }
 }

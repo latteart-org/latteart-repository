@@ -94,6 +94,11 @@ export const exportDirectoryService = new StaticDirectoryServiceImpl(
   "exports"
 );
 
+export const tempDirectoryService = new StaticDirectoryServiceImpl(
+  publicDirPath,
+  "temp"
+);
+
 export const transactionRunner = new TransactionRunner();
 
 (async () => {

@@ -163,3 +163,8 @@ export interface UpdateProjectDto {
   stories: StoryDetails[];
   progressDatas: ProgressData[];
 }
+
+export interface ViewPoint {
+  id: string | null;
+  name: string;
+}

@@ -29,9 +29,14 @@ import {
 } from "@/interfaces/DeviceConfigs";
 
 export class ConfigsService {
+  private static imageCompressionCommand = "";
+
   public async getConfig(projectId: string): Promise<GetConfigResponse> {
     const configEntity = await this.getConfigSource(projectId);
-    return JSON.parse(configEntity.text);
+    const config = JSON.parse(configEntity.text);
+    config.config.imageCompression.command =
+      ConfigsService.imageCompressionCommand;
+    return config;
   }
 
   public async getDeviceConfig(
@@ -72,6 +77,8 @@ export class ConfigsService {
     let config = await configRepository.find();
     if (!config[0]) {
       const settings = SettingsUtility.settingsProvider.settings;
+      ConfigsService.imageCompressionCommand =
+        settings.config.imageCompression.command;
       console.log(settings);
       const deviceSettings = SettingsUtility.deviceSettingsProvider.settings;
       console.log(deviceSettings);
