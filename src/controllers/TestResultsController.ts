@@ -178,7 +178,11 @@ export class TestResultsController extends Controller {
     });
 
     try {
-      return await service.deleteTestResult(testResultId, transactionRunner);
+      return await service.deleteTestResult(
+        testResultId,
+        transactionRunner,
+        screenshotDirectoryService
+      );
     } catch (error) {
       if (error instanceof Error) {
         LoggingService.error("Delete test result failed.", error);

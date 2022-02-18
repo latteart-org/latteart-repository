@@ -31,8 +31,10 @@ import {
 } from "@/interfaces/TestResults";
 import { TransactionRunner } from "@/TransactionRunner";
 import { getRepository } from "typeorm";
+import { StaticDirectoryServiceImpl } from "./StaticDirectoryService";
 import { TestStepService } from "./TestStepService";
 import { TimestampService } from "./TimestampService";
+import path from "path";
 
 export interface TestResultService {
   getTestResultIdentifiers(): Promise<ListTestResultResponse[]>;
@@ -155,7 +157,8 @@ export class TestResultServiceImpl implements TestResultService {
 
   public async deleteTestResult(
     testResultId: string,
-    transactionRunner: TransactionRunner
+    transactionRunner: TransactionRunner,
+    screenshotDirectoryService: StaticDirectoryServiceImpl
   ): Promise<void> {
     const sessions = await getRepository(SessionEntity).find({
       testResult: { id: testResultId },
@@ -182,10 +185,21 @@ export class TestResultServiceImpl implements TestResultService {
       await transactionalEntityManager.delete(NoteEntity, {
         testResult: { id: testResultId },
       });
+
+      const fileUrls = (
+        await transactionalEntityManager.find(ScreenshotEntity, {
+          testResult: { id: testResultId },
+        })
+      ).map((screenshot) => screenshot.fileUrl);
+
       await transactionalEntityManager.delete(ScreenshotEntity, {
         testResult: { id: testResultId },
       });
       await transactionalEntityManager.delete(TestResultEntity, testResultId);
+
+      fileUrls.forEach((fileUrl) => {
+        screenshotDirectoryService.removeFile(path.basename(fileUrl));
+      });
     });
     return;
   }
