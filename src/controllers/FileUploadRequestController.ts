@@ -25,12 +25,17 @@ export class FileUploadRequestController extends Controller {
   @Post()
   public async upload(
     @Body() requestBody: CreateFileUploadRequestDto
-  ): Promise<void> {
+  ): Promise<{ id: string }> {
     try {
       const service = new FileUploadRequestService();
       const { data } = await service.upload(requestBody);
 
-      await service.importRequest(data[0], requestBody.url, requestBody.id);
+      const result = await service.importRequest(
+        data[0],
+        requestBody.url,
+        requestBody.id
+      );
+      return { id: result.data.testResultId };
     } catch (error) {
       if (error instanceof Error) {
         LoggingService.error("File upload request failed.", error);
