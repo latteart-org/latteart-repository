@@ -14,7 +14,14 @@
  * limitations under the License.
  */
 
+import { CoverageSourceEntity } from "@/entities/CoverageSourceEntity";
+import { DefaultInputElementEntity } from "@/entities/DefaultInputElementEntity";
+import { NoteEntity } from "@/entities/NoteEntity";
+import { ScreenshotEntity } from "@/entities/ScreenshotEntity";
+import { SessionEntity } from "@/entities/SessionEntity";
+import { TestPurposeEntity } from "@/entities/TestPurposeEntity";
 import { TestResultEntity } from "@/entities/TestResultEntity";
+import { TestStepEntity } from "@/entities/TestStepEntity";
 import {
   CreateTestResultDto,
   ListTestResultResponse,
@@ -22,9 +29,12 @@ import {
   GetTestResultResponse,
   PatchTestResultResponse,
 } from "@/interfaces/TestResults";
+import { TransactionRunner } from "@/TransactionRunner";
 import { getRepository } from "typeorm";
+import { StaticDirectoryServiceImpl } from "./StaticDirectoryService";
 import { TestStepService } from "./TestStepService";
 import { TimestampService } from "./TimestampService";
+import path from "path";
 
 export interface TestResultService {
   getTestResultIdentifiers(): Promise<ListTestResultResponse[]>;
@@ -32,7 +42,8 @@ export interface TestResultService {
   getTestResult(id: string): Promise<GetTestResultResponse | undefined>;
 
   createTestResult(
-    body: CreateTestResultDto
+    body: CreateTestResultDto,
+    testResultId: string | null
   ): Promise<CreateTestResultResponse>;
 
   patchTestResult(id: string, name: string): Promise<PatchTestResultResponse>;
@@ -104,14 +115,17 @@ export class TestResultServiceImpl implements TestResultService {
   }
 
   public async createTestResult(
-    body: CreateTestResultDto
+    body: CreateTestResultDto,
+    testResultId: string | null
   ): Promise<CreateTestResultResponse> {
     const startTimestamp = body.startTimeStamp
       ? body.startTimeStamp
       : this.service.timestamp.epochMilliseconds();
     const endTimestamp = -1;
 
-    const { id, name } = await getRepository(TestResultEntity).save({
+    const repository = getRepository(TestResultEntity);
+
+    const newTestResult = await repository.save({
       name:
         body.name ??
         `session_${this.service.timestamp.format("YYYYMMDD_HHmmss")}`,
@@ -126,10 +140,68 @@ export class TestResultServiceImpl implements TestResultService {
       screenshots: [],
     });
 
+    if (testResultId) {
+      const oldTestResult = await repository.findOne(testResultId);
+      const sessionRepository = getRepository(SessionEntity);
+      sessionRepository.update(
+        { testResult: oldTestResult },
+        { testResult: newTestResult }
+      );
+    }
+
     return {
-      id,
-      name,
+      id: newTestResult.id,
+      name: newTestResult.name,
     };
+  }
+
+  public async deleteTestResult(
+    testResultId: string,
+    transactionRunner: TransactionRunner,
+    screenshotDirectoryService: StaticDirectoryServiceImpl
+  ): Promise<void> {
+    const sessions = await getRepository(SessionEntity).find({
+      testResult: { id: testResultId },
+    });
+    if (sessions.length > 1) {
+      throw new Error(
+        "Linked to Session: sessionId:" + sessions.map((session) => session.id)
+      );
+    }
+
+    await transactionRunner.waitAndRun(async (transactionalEntityManager) => {
+      await transactionalEntityManager.delete(TestStepEntity, {
+        testResult: { id: testResultId },
+      });
+      await transactionalEntityManager.delete(CoverageSourceEntity, {
+        testResult: { id: testResultId },
+      });
+      await transactionalEntityManager.delete(DefaultInputElementEntity, {
+        testResult: { id: testResultId },
+      });
+      await transactionalEntityManager.delete(TestPurposeEntity, {
+        testResult: { id: testResultId },
+      });
+      await transactionalEntityManager.delete(NoteEntity, {
+        testResult: { id: testResultId },
+      });
+
+      const fileUrls = (
+        await transactionalEntityManager.find(ScreenshotEntity, {
+          testResult: { id: testResultId },
+        })
+      ).map((screenshot) => screenshot.fileUrl);
+
+      await transactionalEntityManager.delete(ScreenshotEntity, {
+        testResult: { id: testResultId },
+      });
+      await transactionalEntityManager.delete(TestResultEntity, testResultId);
+
+      fileUrls.forEach((fileUrl) => {
+        screenshotDirectoryService.removeFile(path.basename(fileUrl));
+      });
+    });
+    return;
   }
 
   public async patchTestResult(

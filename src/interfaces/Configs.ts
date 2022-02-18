@@ -54,7 +54,6 @@ export interface GetConfigResponse {
     imageCompression: {
       isEnabled: boolean;
       isDeleteSrcImage: boolean;
-      command: string;
     };
   };
   captureSettings: {

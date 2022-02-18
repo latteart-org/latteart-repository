@@ -502,7 +502,8 @@ export class ProjectImportService {
         testResultData.testResultFile.data
       );
       const newTestResult = await service.testResultService.createTestResult(
-        testResult
+        testResult,
+        null
       );
 
       testResultIdMap.set(testResult.id, newTestResult.id);

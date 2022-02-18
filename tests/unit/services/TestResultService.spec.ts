@@ -77,7 +77,7 @@ describe("TestResultService", () => {
         name: "session_name",
       };
 
-      const result = await service.createTestResult(body);
+      const result = await service.createTestResult(body, null);
 
       expect(result).toEqual({
         id: expect.any(String),
