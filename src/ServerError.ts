@@ -46,7 +46,7 @@ export enum ServerErrorCode {
   IMPORT_PROJECT_NOT_EXIST = "import_project_not_exist",
   IMPORT_TEST_RESULT_NOT_EXIST = "import_test_result_not_exist",
   FILE_UPLOAD_REQUEST_FAILED = "upload_request_failed",
-  TEMP_DELETE_FAILD = "delete_temp_file_failed",
+  TEMP_DELETE_FAILED = "delete_temp_file_failed",
 }
 
 export interface ServerErrorData {

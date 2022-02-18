@@ -30,7 +30,7 @@ export class TempFileController extends Controller {
       if (error instanceof Error) {
         LoggingService.error("Delete tempfile failed.", error);
         throw new ServerError(500, {
-          code: ServerErrorCode.TEMP_DELETE_FAILD,
+          code: ServerErrorCode.TEMP_DELETE_FAILED,
         });
       }
       throw error;
