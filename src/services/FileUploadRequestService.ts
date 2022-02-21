@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-import { CreateFileUploadRequestDto } from "../interfaces/FileUploadRequest";
 import { callMultiPartApi, callDeleteApi, callPostApi } from "@/lib/Request";
 
 export class FileUploadRequestService {
-  public async upload(requestBody: CreateFileUploadRequestDto): Promise<any> {
+  public async upload(
+    targetFile: {
+      name: string;
+      path: string;
+    },
+    destRepositoryUrl: string
+  ): Promise<any> {
     const result = await callMultiPartApi(
-      [requestBody.file].map((file) => {
-        return {
-          name: file.name,
-          path: "public/" + file.path,
-        };
-      }),
-      `${requestBody.url}/api/v1/upload`
+      [targetFile],
+      `${destRepositoryUrl}/api/v1/upload`
     );
     return result;
   }

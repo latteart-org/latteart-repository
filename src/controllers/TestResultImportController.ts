@@ -66,12 +66,14 @@ export class TestResultImportController extends Controller {
   public async create(
     @Body() requestBody: CreateTestResultImportDto
   ): Promise<{ testResultId: string }> {
+    const fileName = path.basename(requestBody.fileName);
+
     if (requestBody?.repositoryUrl) {
       await downloadZip(
-        `${requestBody.repositoryUrl}/${requestBody.temp ? "temp" : "import"}/${
-          requestBody.fileName
-        }`,
-        tempDirectoryService.getJoinedPath(requestBody.fileName)
+        `${requestBody.repositoryUrl}/${
+          requestBody.temp ? "temp" : "import"
+        }/${fileName}`,
+        tempDirectoryService.getJoinedPath(fileName)
       );
     }
 
@@ -118,10 +120,7 @@ export class TestResultImportController extends Controller {
         testPurpose: testPurposeService,
         note: noteService,
         importFileRepository: importFileRepositoryService,
-      }).importTestResult(
-        requestBody.fileName,
-        requestBody?.testResultId ?? null
-      );
+      }).importTestResult(fileName, requestBody?.testResultId ?? null);
     } catch (error) {
       if (error instanceof Error) {
         LoggingService.error("Import test result failed.", error);

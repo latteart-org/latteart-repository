@@ -14,28 +14,56 @@
  * limitations under the License.
  */
 
-import { CreateFileUploadRequestDto } from "../interfaces/FileUploadRequest";
+import { TestResultUploadRequestDto } from "../interfaces/TestResultUploadRequest";
 import LoggingService from "@/logger/LoggingService";
 import { ServerError, ServerErrorCode } from "@/ServerError";
 import { FileUploadRequestService } from "@/services/FileUploadRequestService";
 import { Controller, Post, Route, Body } from "tsoa";
+import { screenshotDirectoryService, tempDirectoryService } from "..";
+import { TimestampServiceImpl } from "@/services/TimestampService";
+import { ImageFileRepositoryServiceImpl } from "@/services/ImageFileRepositoryService";
+import { TestResultServiceImpl } from "@/services/TestResultService";
+import { TestStepServiceImpl } from "@/services/TestStepService";
+import { ConfigsService } from "@/services/ConfigsService";
+import { ExportFileRepositoryServiceImpl } from "@/services/ExportFileRepositoryService";
+import { ExportServiceImpl } from "@/services/ExportService";
+import { TempFileService } from "@/services/TempFileService";
 
 @Route("upload-request/test-result")
 export class FileUploadRequestController extends Controller {
   @Post()
   public async upload(
-    @Body() requestBody: CreateFileUploadRequestDto
+    @Body() requestBody: TestResultUploadRequestDto
   ): Promise<{ id: string }> {
     try {
       const service = new FileUploadRequestService();
-      const { data } = await service.upload(requestBody);
+
+      const exportFile = await this.createExportService().exportTestResult(
+        requestBody.source.testResultId
+      );
+
+      const fileName = exportFile.url.split("/").pop() ?? "";
+      const targetFile = {
+        name: fileName,
+        path: tempDirectoryService.getJoinedPath(fileName),
+      };
+
+      const { data } = await service.upload(
+        targetFile,
+        requestBody.dest.repositoryUrl
+      );
 
       const result = await service.importRequest(
         data[0],
-        requestBody.url,
-        requestBody.id
+        requestBody.dest.repositoryUrl,
+        requestBody.dest.testResultId
       );
-      return { id: result.data.testResultId };
+
+      const newTestResultId = result.data.testResultId;
+
+      await new TempFileService().deleteFile(fileName, tempDirectoryService);
+
+      return { id: newTestResultId };
     } catch (error) {
       if (error instanceof Error) {
         LoggingService.error("File upload request failed.", error);
@@ -45,5 +73,30 @@ export class FileUploadRequestController extends Controller {
       }
       throw error;
     }
+  }
+
+  private createExportService() {
+    const timestampService = new TimestampServiceImpl();
+    const imageFileRepositoryService = new ImageFileRepositoryServiceImpl({
+      staticDirectory: screenshotDirectoryService,
+    });
+    const testResultService = new TestResultServiceImpl({
+      timestamp: timestampService,
+      testStep: new TestStepServiceImpl({
+        imageFileRepository: imageFileRepositoryService,
+        timestamp: timestampService,
+        config: new ConfigsService(),
+      }),
+    });
+    const exportFileRepositoryService = new ExportFileRepositoryServiceImpl({
+      staticDirectory: tempDirectoryService,
+      imageFileRepository: imageFileRepositoryService,
+      timestamp: timestampService,
+    });
+
+    return new ExportServiceImpl({
+      testResult: testResultService,
+      exportFileRepository: exportFileRepositoryService,
+    });
   }
 }

@@ -37,8 +37,6 @@ import { SessionsController } from "./../controllers/SessionsController";
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { SnapshotsController } from "./../controllers/SnapshotsController";
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { TempFileController } from "./../controllers/TempFileController";
-// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { TestResultExportController } from "./../controllers/TestResultExportController";
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { TestResultImportController } from "./../controllers/TestResultImportController";
@@ -55,19 +53,24 @@ import * as express from "express";
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
-  CreateFileUploadRequestDto: {
+  TestResultUploadRequestDto: {
     dataType: "refObject",
     properties: {
-      id: { dataType: "string" },
-      file: {
+      source: {
         dataType: "nestedObjectLiteral",
         nestedProperties: {
-          path: { dataType: "string", required: true },
-          name: { dataType: "string", required: true },
+          testResultId: { dataType: "string", required: true },
         },
         required: true,
       },
-      url: { dataType: "string", required: true },
+      dest: {
+        dataType: "nestedObjectLiteral",
+        nestedProperties: {
+          testResultId: { dataType: "string" },
+          repositoryUrl: { dataType: "string", required: true },
+        },
+        required: true,
+      },
     },
     additionalProperties: false,
   },
@@ -1273,7 +1276,7 @@ export function RegisterRoutes(app: express.Router) {
           in: "body",
           name: "requestBody",
           required: true,
-          ref: "CreateFileUploadRequestDto",
+          ref: "TestResultUploadRequestDto",
         },
       };
 
@@ -1850,35 +1853,6 @@ export function RegisterRoutes(app: express.Router) {
       const controller = new SnapshotsController();
 
       const promise = controller.create.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
-    }
-  );
-  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  app.delete(
-    "/api/v1/temp/:fileName",
-
-    function TempFileController_delete(request: any, response: any, next: any) {
-      const args = {
-        fileName: {
-          in: "path",
-          name: "fileName",
-          required: true,
-          dataType: "string",
-        },
-      };
-
-      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-      let validatedArgs: any[] = [];
-      try {
-        validatedArgs = getValidatedArgs(args, request, response);
-      } catch (err) {
-        return next(err);
-      }
-
-      const controller = new TempFileController();
-
-      const promise = controller.delete.apply(controller, validatedArgs as any);
       promiseHandler(controller, promise, response, undefined, next);
     }
   );
