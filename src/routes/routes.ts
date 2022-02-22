@@ -17,7 +17,7 @@ import { DeviceConfigsController } from "./../controllers/DeviceConfigsControlle
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { FileUploadController } from "./../controllers/FileUploadController";
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { FileUploadRequestController } from "./../controllers/FileUploadRequestController";
+import { TestResultUploadRequestController } from "./../controllers/TestResultUploadRequestController";
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { NoteCompressedImageController } from "./../controllers/NoteCompressedImageController";
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -646,10 +646,17 @@ const models: TsoaRoute.Models = {
   CreateTestResultImportDto: {
     dataType: "refObject",
     properties: {
-      fileName: { dataType: "string", required: true },
-      testResultId: { dataType: "string" },
-      repositoryUrl: { dataType: "string" },
-      temp: { dataType: "boolean" },
+      source: {
+        dataType: "nestedObjectLiteral",
+        nestedProperties: {
+          testResultFileUrl: { dataType: "string", required: true },
+        },
+        required: true,
+      },
+      dest: {
+        dataType: "nestedObjectLiteral",
+        nestedProperties: { testResultId: { dataType: "string" } },
+      },
     },
     additionalProperties: false,
   },
@@ -1266,7 +1273,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/upload-request/test-result",
 
-    function FileUploadRequestController_upload(
+    function TestResultUploadRequestController_upload(
       request: any,
       response: any,
       next: any
@@ -1289,7 +1296,7 @@ export function RegisterRoutes(app: express.Router) {
         return next(err);
       }
 
-      const controller = new FileUploadRequestController();
+      const controller = new TestResultUploadRequestController();
 
       const promise = controller.upload.apply(controller, validatedArgs as any);
       promiseHandler(controller, promise, response, undefined, next);

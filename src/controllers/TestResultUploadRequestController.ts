@@ -30,13 +30,15 @@ import { ExportServiceImpl } from "@/services/ExportService";
 import { TempFileService } from "@/services/TempFileService";
 
 @Route("upload-request/test-result")
-export class FileUploadRequestController extends Controller {
+export class TestResultUploadRequestController extends Controller {
   @Post()
   public async upload(
     @Body() requestBody: TestResultUploadRequestDto
   ): Promise<{ id: string }> {
     try {
-      const service = new FileUploadRequestService();
+      const service = new FileUploadRequestService(
+        requestBody.dest.repositoryUrl
+      );
 
       const exportFile = await this.createExportService().exportTestResult(
         requestBody.source.testResultId
@@ -48,18 +50,14 @@ export class FileUploadRequestController extends Controller {
         path: tempDirectoryService.getJoinedPath(fileName),
       };
 
-      const { data } = await service.upload(
-        targetFile,
-        requestBody.dest.repositoryUrl
+      const fileUrls = await service.upload(targetFile);
+
+      const result = await service.testResultImportRequest(
+        { testResultFileUrl: fileUrls[0] },
+        { testResultId: requestBody.dest.testResultId }
       );
 
-      const result = await service.importRequest(
-        data[0],
-        requestBody.dest.repositoryUrl,
-        requestBody.dest.testResultId
-      );
-
-      const newTestResultId = result.data.testResultId;
+      const newTestResultId = result.testResultId;
 
       await new TempFileService().deleteFile(fileName, tempDirectoryService);
 
