@@ -2088,7 +2088,11 @@ export function RegisterRoutes(app: express.Router) {
           name: "requestBody",
           required: true,
           dataType: "nestedObjectLiteral",
-          nestedProperties: { name: { dataType: "string", required: true } },
+          nestedProperties: {
+            initialUrl: { dataType: "string" },
+            startTime: { dataType: "double" },
+            name: { dataType: "string" },
+          },
         },
       };
 

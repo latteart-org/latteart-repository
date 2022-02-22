@@ -118,9 +118,11 @@ export class TestResultServiceImpl implements TestResultService {
     body: CreateTestResultDto,
     testResultId: string | null
   ): Promise<CreateTestResultResponse> {
-    const startTimestamp = body.startTimeStamp
-      ? body.startTimeStamp
-      : this.service.timestamp.epochMilliseconds();
+    const createTimestamp = body.initialUrl
+      ? this.service.timestamp.epochMilliseconds()
+      : 0;
+    const startTimestamp = body.startTimeStamp ?? createTimestamp;
+
     const endTimestamp = -1;
 
     const repository = getRepository(TestResultEntity);
@@ -206,7 +208,9 @@ export class TestResultServiceImpl implements TestResultService {
 
   public async patchTestResult(
     id: string,
-    name: string
+    name?: string,
+    startTime?: number,
+    initialUrl?: string
   ): Promise<PatchTestResultResponse> {
     const testResultEntity = await getRepository(
       TestResultEntity
@@ -233,7 +237,17 @@ export class TestResultServiceImpl implements TestResultService {
       relations: ["defaultInputElements"],
     });
 
-    testResultEntity.name = name;
+    if (initialUrl) {
+      testResultEntity.initialUrl = initialUrl;
+    }
+
+    if (name) {
+      testResultEntity.name = name;
+    }
+
+    if (startTime) {
+      testResultEntity.startTimestamp = startTime;
+    }
 
     const updatedTestResultEntity = await getRepository(TestResultEntity).save(
       testResultEntity
