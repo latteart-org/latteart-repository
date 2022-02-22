@@ -36,7 +36,6 @@ export interface PatchSessionDto {
   testResultFiles?: {
     name: string;
     id: string;
-    repositoryUrl: string;
   }[];
   testerName?: string;
   testingTime?: number;
