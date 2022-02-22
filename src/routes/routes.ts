@@ -612,7 +612,6 @@ const models: TsoaRoute.Models = {
         array: {
           dataType: "nestedObjectLiteral",
           nestedProperties: {
-            repositoryUrl: { dataType: "string", required: true },
             id: { dataType: "string", required: true },
             name: { dataType: "string", required: true },
           },
