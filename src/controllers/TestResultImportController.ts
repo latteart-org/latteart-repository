@@ -53,11 +53,12 @@ export class TestResultImportController extends Controller {
     return (
       await Promise.all(
         zipFilePaths.map(async (zipFilePath) => {
+          const zipFileName = path.basename(zipFilePath);
           return (await isTestResultExportFile(zipFilePath))
             ? [
                 {
-                  url: importDirectoryService.getFileUrl(zipFilePath),
-                  name: path.basename(zipFilePath),
+                  url: importDirectoryService.getFileUrl(zipFileName),
+                  name: zipFileName,
                 },
               ]
             : [];
