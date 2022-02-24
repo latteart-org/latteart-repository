@@ -133,7 +133,8 @@ export class TestResultsController extends Controller {
   @Patch("{testResultId}")
   public async patch(
     @Path() testResultId: string,
-    @Body() requestBody: { name: string }
+    @Body()
+    requestBody: { name?: string; startTime?: number; initialUrl?: string }
   ): Promise<PatchTestResultResponse> {
     console.log("TestResultsController - patchTestResult");
 
@@ -150,7 +151,10 @@ export class TestResultsController extends Controller {
           timestamp: timestampService,
           config: new ConfigsService(),
         }),
-      }).patchTestResult(testResultId, requestBody.name);
+      }).patchTestResult({
+        id: testResultId,
+        ...requestBody,
+      });
     } catch (error) {
       if (error instanceof Error) {
         LoggingService.error("Update test result failed.", error);
