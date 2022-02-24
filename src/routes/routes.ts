@@ -150,6 +150,13 @@ const models: TsoaRoute.Models = {
   CreateProjectImportDto: {
     dataType: "refObject",
     properties: {
+      source: {
+        dataType: "nestedObjectLiteral",
+        nestedProperties: {
+          projectFileUrl: { dataType: "string", required: true },
+        },
+        required: true,
+      },
       includeTestResults: { dataType: "boolean", required: true },
       includeProject: { dataType: "boolean", required: true },
     },
@@ -1553,7 +1560,7 @@ export function RegisterRoutes(app: express.Router) {
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   app.post(
-    "/api/v1/imports/projects/:importFileName",
+    "/api/v1/imports/projects",
 
     function ProjectImportController_create(
       request: any,
@@ -1561,12 +1568,6 @@ export function RegisterRoutes(app: express.Router) {
       next: any
     ) {
       const args = {
-        importFileName: {
-          in: "path",
-          name: "importFileName",
-          required: true,
-          dataType: "string",
-        },
         requestBody: {
           in: "body",
           name: "requestBody",

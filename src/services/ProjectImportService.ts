@@ -75,7 +75,7 @@ export class ProjectImportService {
       testPurposeService: TestPurposeService;
       transactionRunner: TransactionRunner;
     }
-  ): Promise<{ id: string; name: string }> {
+  ): Promise<{ projectId: string }> {
     const files = await this.getFileData(
       importFileName,
       service.importDirectoryService
@@ -115,7 +115,7 @@ export class ProjectImportService {
       });
     }
 
-    return { id: projectId, name: importFileName };
+    return { projectId };
   }
 
   private extractProjectData(
