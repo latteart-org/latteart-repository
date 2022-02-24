@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-export interface CreateFileUploadRequestDto {
-  id?: string;
-  file: {
-    name: string;
-    path: string;
+export interface TestResultUploadRequestDto {
+  source: {
+    testResultId: string;
   };
-  url: string;
+  dest: {
+    repositoryUrl: string;
+    testResultId?: string;
+  };
 }

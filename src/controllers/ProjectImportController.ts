@@ -93,7 +93,7 @@ export class ProjectImportController extends Controller {
       const testPurposeService = new TestPurposeServiceImpl();
 
       const response = await new ProjectImportService().import(
-        importFileName,
+        path.basename(importFileName),
         requestBody.includeProject,
         requestBody.includeTestResults,
         {

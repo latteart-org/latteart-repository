@@ -15,8 +15,10 @@
  */
 
 export interface CreateTestResultImportDto {
-  fileName: string;
-  testResultId?: string;
-  repositoryUrl?: string;
-  temp?: boolean;
+  source: {
+    testResultFileUrl: string;
+  };
+  dest?: {
+    testResultId?: string;
+  };
 }

@@ -18,10 +18,15 @@ import axios from "axios";
 import fs from "fs";
 import FormData from "form-data";
 
+export type HTTPResponse = {
+  status: number;
+  data?: unknown;
+};
+
 export const callMultiPartApi = async (
   fileInfos: { name: string; path: string }[],
   url: string
-): Promise<any> => {
+): Promise<HTTPResponse> => {
   const formData = new FormData();
   fileInfos.forEach((fileInfo) => {
     const file = fs.createReadStream(fileInfo.path);
@@ -31,20 +36,28 @@ export const callMultiPartApi = async (
   const result = await axios.post(url, formData, {
     headers: formData.getHeaders(),
   });
-  return result;
+
+  return { status: result.status, data: result.data };
 };
 
-export const callPostApi = async (url: string, body: any): Promise<any> => {
-  return await axios.post(url, body);
+export const callPostApi = async (
+  url: string,
+  body: any
+): Promise<HTTPResponse> => {
+  const result = await axios.post(url, body);
+
+  return { status: result.status, data: result.data };
 };
 
-export const callDeleteApi = async (url: string): Promise<any> => {
-  return await axios.delete(url);
+export const callDeleteApi = async (url: string): Promise<HTTPResponse> => {
+  const result = await axios.delete(url);
+
+  return { status: result.status, data: result.data };
 };
 
 export const downloadZip = async (
   url: string,
-  filePath: string
+  destFilePath: string
 ): Promise<void> => {
   const response = await axios.get(url, {
     responseType: "arraybuffer",
@@ -54,7 +67,7 @@ export const downloadZip = async (
     throw Error(`Not found.: ${url}`);
   }
   return new Promise((resolve) => {
-    fs.writeFile(filePath, response.data, () => {
+    fs.writeFile(destFilePath, response.data, () => {
       resolve();
     });
   });
