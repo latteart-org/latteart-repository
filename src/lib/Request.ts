@@ -55,10 +55,7 @@ export const callDeleteApi = async (url: string): Promise<HTTPResponse> => {
   return { status: result.status, data: result.data };
 };
 
-export const downloadZip = async (
-  url: string,
-  destFilePath: string
-): Promise<void> => {
+export const downloadZip = async (url: string): Promise<unknown> => {
   const response = await axios.get(url, {
     responseType: "arraybuffer",
     headers: { Accept: "application/zip" },
@@ -66,9 +63,6 @@ export const downloadZip = async (
   if (response.status === 404) {
     throw Error(`Not found.: ${url}`);
   }
-  return new Promise((resolve) => {
-    fs.writeFile(destFilePath, response.data, () => {
-      resolve();
-    });
-  });
+
+  return response.data;
 };
