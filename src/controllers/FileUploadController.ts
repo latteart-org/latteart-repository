@@ -52,9 +52,9 @@ export class FileUploadController extends Controller {
       );
     } catch (error) {
       if (error instanceof Error) {
-        LoggingService.error("File upload request failed.", error);
+        LoggingService.error("File upload failed.", error);
         throw new ServerError(500, {
-          code: ServerErrorCode.FILE_UPLOAD_REQUEST_FAILED,
+          code: ServerErrorCode.FILE_UPLOAD_FAILED,
         });
       }
       throw error;

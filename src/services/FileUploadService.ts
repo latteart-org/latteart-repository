@@ -21,11 +21,13 @@ export class FileUploadService {
     files: { filename: string; buffer: any }[],
     directoryService: StaticDirectoryService
   ): Promise<string[]> {
-    const savedFiles = [];
-    for (const file of files) {
-      await directoryService.outputFile(file.filename, file.buffer);
-      savedFiles.push(file.filename);
-    }
-    return savedFiles;
+    const savedFileUrls = await Promise.all(
+      files.map(async (file) => {
+        await directoryService.outputFile(file.filename, file.buffer);
+        return directoryService.getFileUrl(file.filename);
+      })
+    );
+
+    return savedFileUrls;
   }
 }
