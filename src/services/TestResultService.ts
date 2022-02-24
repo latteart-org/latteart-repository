@@ -46,7 +46,12 @@ export interface TestResultService {
     testResultId: string | null
   ): Promise<CreateTestResultResponse>;
 
-  patchTestResult(id: string, name: string): Promise<PatchTestResultResponse>;
+  patchTestResult(params: {
+    id: string;
+    name?: string;
+    startTime?: number;
+    initialUrl?: string;
+  }): Promise<PatchTestResultResponse>;
 
   collectAllTestStepIds(testResultId: string): Promise<string[]>;
 
@@ -206,12 +211,13 @@ export class TestResultServiceImpl implements TestResultService {
     return;
   }
 
-  public async patchTestResult(
-    id: string,
-    name?: string,
-    startTime?: number,
-    initialUrl?: string
-  ): Promise<PatchTestResultResponse> {
+  public async patchTestResult(params: {
+    id: string;
+    name?: string;
+    startTime?: number;
+    initialUrl?: string;
+  }): Promise<PatchTestResultResponse> {
+    const id = params.id;
     const testResultEntity = await getRepository(
       TestResultEntity
     ).findOneOrFail(id, {
@@ -237,16 +243,16 @@ export class TestResultServiceImpl implements TestResultService {
       relations: ["defaultInputElements"],
     });
 
-    if (initialUrl) {
-      testResultEntity.initialUrl = initialUrl;
+    if (params.initialUrl) {
+      testResultEntity.initialUrl = params.initialUrl;
     }
 
-    if (name) {
-      testResultEntity.name = name;
+    if (params.name) {
+      testResultEntity.name = params.name;
     }
 
-    if (startTime) {
-      testResultEntity.startTimestamp = startTime;
+    if (params.startTime) {
+      testResultEntity.startTimestamp = params.startTime;
     }
 
     const updatedTestResultEntity = await getRepository(TestResultEntity).save(

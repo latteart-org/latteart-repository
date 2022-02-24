@@ -151,12 +151,10 @@ export class TestResultsController extends Controller {
           timestamp: timestampService,
           config: new ConfigsService(),
         }),
-      }).patchTestResult(
-        testResultId,
-        requestBody.name,
-        requestBody.startTime,
-        requestBody.initialUrl
-      );
+      }).patchTestResult({
+        id: testResultId,
+        ...requestBody,
+      });
     } catch (error) {
       if (error instanceof Error) {
         LoggingService.error("Update test result failed.", error);
