@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 NTT Corporation.
+ * Copyright 2022 NTT Corporation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,21 +21,28 @@ import { ImageFileRepositoryServiceImpl } from "@/services/ImageFileRepositorySe
 import { TestResultServiceImpl } from "@/services/TestResultService";
 import { TestStepServiceImpl } from "@/services/TestStepService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
-import { Controller, Post, Route, Path, Get } from "tsoa";
-import { importDirectoryService, screenshotDirectoryService } from "..";
+import { Controller, Post, Route, Get, Body } from "tsoa";
+import {
+  importDirectoryService,
+  screenshotDirectoryService,
+  tempDirectoryService,
+} from "..";
 import { ImportFileRepositoryServiceImpl } from "@/services/ImportFileRepositoryService";
 import { ImportService } from "@/services/ImportService";
 import { TestPurposeServiceImpl } from "@/services/TestPurposeService";
 import { NotesServiceImpl } from "@/services/NotesService";
 import path from "path";
 import { isTestResultExportFile } from "@/lib/archiveFileTypeChecker";
+import { CreateTestResultImportDto } from "../interfaces/TesResultImport";
+import { downloadZip } from "@/lib/Request";
+import { TempFileService } from "@/services/TempFileService";
 
 @Route("imports/test-results")
 export class TestResultImportController extends Controller {
   @Get()
   public async list(): Promise<
     {
-      id: string;
+      url: string;
       name: string;
     }[]
   > {
@@ -46,21 +53,35 @@ export class TestResultImportController extends Controller {
     return (
       await Promise.all(
         zipFilePaths.map(async (zipFilePath) => {
-          const filename = path.basename(zipFilePath);
-
+          const zipFileName = path.basename(zipFilePath);
           return (await isTestResultExportFile(zipFilePath))
-            ? [{ id: filename, name: filename }]
+            ? [
+                {
+                  url: importDirectoryService.getFileUrl(zipFileName),
+                  name: zipFileName,
+                },
+              ]
             : [];
         })
       )
     ).flat();
   }
 
-  @Post("{importFileName}")
+  @Post()
   public async create(
-    @Path() importFileName: string
-  ): Promise<{ name: string }> {
+    @Body() requestBody: CreateTestResultImportDto
+  ): Promise<{ testResultId: string }> {
     const timestampService = new TimestampServiceImpl();
+
+    const extname = path.extname(
+      requestBody.source.testResultFileUrl.split("/").pop() ?? ""
+    );
+
+    const timestamp = timestampService.format("YYYYMMDD_HHmmss");
+    const tempFileName = `temp_${timestamp}${extname}`;
+
+    const data = await downloadZip(requestBody.source.testResultFileUrl);
+    await tempDirectoryService.outputFile(tempFileName, data);
 
     const imageFileRepositoryService = new ImageFileRepositoryServiceImpl({
       staticDirectory: screenshotDirectoryService,
@@ -89,19 +110,26 @@ export class TestResultImportController extends Controller {
     const testPurposeService = new TestPurposeServiceImpl();
 
     const importFileRepositoryService = new ImportFileRepositoryServiceImpl({
-      staticDirectory: importDirectoryService,
+      staticDirectory: tempDirectoryService,
       imageFileRepository: imageFileRepositoryService,
       timestamp: timestampService,
     });
 
     try {
-      return await new ImportService({
+      const result = await new ImportService({
         testResult: testResultService,
         testStep: testStepService,
         testPurpose: testPurposeService,
         note: noteService,
         importFileRepository: importFileRepositoryService,
-      }).importTestResult(importFileName);
+      }).importTestResult(tempFileName, requestBody.dest?.testResultId ?? null);
+
+      await new TempFileService().deleteFile(
+        tempFileName,
+        tempDirectoryService
+      );
+
+      return result;
     } catch (error) {
       if (error instanceof Error) {
         LoggingService.error("Import test result failed.", error);

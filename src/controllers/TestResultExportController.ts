@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 NTT Corporation.
+ * Copyright 2022 NTT Corporation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,13 +23,21 @@ import { TestResultServiceImpl } from "@/services/TestResultService";
 import { ExportFileRepositoryServiceImpl } from "@/services/ExportFileRepositoryService";
 import { TestStepServiceImpl } from "@/services/TestStepService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
-import { Controller, Post, Route, Path } from "tsoa";
-import { exportDirectoryService, screenshotDirectoryService } from "..";
+import { Controller, Post, Route, Path, Body } from "tsoa";
+import {
+  exportDirectoryService,
+  screenshotDirectoryService,
+  tempDirectoryService,
+} from "..";
+import { CreateTestResultExportDto } from "../interfaces/TestResultExport";
 
 @Route("test-results/{testResultId}/export")
 export class TestResultExportController extends Controller {
   @Post()
-  public async create(@Path() testResultId: string): Promise<{ url: string }> {
+  public async create(
+    @Path() testResultId: string,
+    @Body() requestBody?: CreateTestResultExportDto
+  ): Promise<{ url: string }> {
     const timestampService = new TimestampServiceImpl();
 
     const imageFileRepositoryService = new ImageFileRepositoryServiceImpl({
@@ -46,7 +54,9 @@ export class TestResultExportController extends Controller {
     });
 
     const exportFileRepositoryService = new ExportFileRepositoryServiceImpl({
-      staticDirectory: exportDirectoryService,
+      staticDirectory: requestBody?.temp
+        ? tempDirectoryService
+        : exportDirectoryService,
       imageFileRepository: imageFileRepositoryService,
       timestamp: timestampService,
     });

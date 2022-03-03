@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 NTT Corporation.
+ * Copyright 2022 NTT Corporation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -92,6 +92,11 @@ export const importDirectoryService = new StaticDirectoryServiceImpl(
 export const exportDirectoryService = new StaticDirectoryServiceImpl(
   publicDirPath,
   "exports"
+);
+
+export const tempDirectoryService = new StaticDirectoryServiceImpl(
+  publicDirPath,
+  "temp"
 );
 
 export const transactionRunner = new TransactionRunner();

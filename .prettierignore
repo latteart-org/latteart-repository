@@ -7,3 +7,4 @@ DockerFile
 jest.config.js
 *.png
 put_zip_files_here
+third-party-licenses.txt

@@ -14,8 +14,20 @@
  * limitations under the License.
  */
 
-export interface CreateProjectImportDto {
-  source: { projectFileUrl: string };
-  includeTestResults: boolean;
-  includeProject: boolean;
+import { StaticDirectoryService } from "./StaticDirectoryService";
+
+export class FileUploadService {
+  public async upload(
+    files: { filename: string; buffer: any }[],
+    directoryService: StaticDirectoryService
+  ): Promise<string[]> {
+    const savedFileUrls = await Promise.all(
+      files.map(async (file) => {
+        await directoryService.outputFile(file.filename, file.buffer);
+        return directoryService.getFileUrl(file.filename);
+      })
+    );
+
+    return savedFileUrls;
+  }
 }

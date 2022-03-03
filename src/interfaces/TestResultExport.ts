@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-export interface CreateProjectImportDto {
-  source: { projectFileUrl: string };
-  includeTestResults: boolean;
-  includeProject: boolean;
+export interface CreateTestResultExportDto {
+  temp: boolean;
 }

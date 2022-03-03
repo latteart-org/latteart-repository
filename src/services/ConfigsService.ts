@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 NTT Corporation.
+ * Copyright 2022 NTT Corporation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,9 +29,11 @@ import {
 } from "@/interfaces/DeviceConfigs";
 
 export class ConfigsService {
+  private static imageCompressionCommand = "";
+
   public async getConfig(projectId: string): Promise<GetConfigResponse> {
     const configEntity = await this.getConfigSource(projectId);
-    return JSON.parse(configEntity.text);
+    return this.deleteCompressionCommand(JSON.parse(configEntity.text));
   }
 
   public async getDeviceConfig(
@@ -46,11 +48,16 @@ export class ConfigsService {
     requestBody: PutConfigDto
   ): Promise<PutConfigResponse> {
     const configEntity = await this.getConfigSource(projectId);
-    configEntity.text = JSON.stringify(requestBody);
+    const settings = { ...requestBody } as any;
+    settings.config.imageCompression.command =
+      ConfigsService.imageCompressionCommand;
+    configEntity.text = JSON.stringify(settings);
 
     const savedConfig = await getRepository(ConfigEntity).save(configEntity);
 
-    return (JSON.parse(savedConfig.text) as unknown) as PutConfigResponse;
+    return this.deleteCompressionCommand(
+      (JSON.parse(savedConfig.text) as unknown) as PutConfigResponse
+    );
   }
 
   public async updateDeviceConfig(
@@ -72,6 +79,8 @@ export class ConfigsService {
     let config = await configRepository.find();
     if (!config[0]) {
       const settings = SettingsUtility.settingsProvider.settings;
+      ConfigsService.imageCompressionCommand =
+        settings.config.imageCompression.command;
       console.log(settings);
       const deviceSettings = SettingsUtility.deviceSettingsProvider.settings;
       console.log(deviceSettings);
@@ -92,5 +101,11 @@ export class ConfigsService {
       }
     }
     return config[0];
+  }
+
+  private deleteCompressionCommand(settings: any): any {
+    const s = { ...settings };
+    delete s.config.imageCompression.command;
+    return s;
   }
 }

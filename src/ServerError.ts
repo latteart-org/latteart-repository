@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 NTT Corporation.
+ * Copyright 2022 NTT Corporation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ export enum ServerErrorCode {
   COMPRESS_NOTE_IMAGE_FAILED = "compress_note_image_failed",
   COMPRESS_TEST_STEP_IMAGE_FAILED = "compress_test_step_image_failed",
   UPDATE_TEST_RESULT_FAILED = "update_test_result_failed",
+  DELETE_TEST_RESULT_FAILED = "delete_test_result_failed",
   PATCH_SESSION_FAILED = "patch_session_failed",
   GET_SESSION_FAILED = "get_session_failed",
   GET_SERVERNAME_FAILED = "get_servername_failed",
@@ -44,6 +45,8 @@ export enum ServerErrorCode {
   IMPORT_PROJECT_FAILED = "import_project_failed",
   IMPORT_PROJECT_NOT_EXIST = "import_project_not_exist",
   IMPORT_TEST_RESULT_NOT_EXIST = "import_test_result_not_exist",
+  FILE_UPLOAD_REQUEST_FAILED = "upload_request_failed",
+  FILE_UPLOAD_FAILED = "upload_failed",
 }
 
 export interface ServerErrorData {
