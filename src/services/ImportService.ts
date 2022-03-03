@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 NTT Corporation.
+ * Copyright 2022 NTT Corporation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,8 @@ import { NotesServiceImpl } from "./NotesService";
 import { TestPurposeServiceImpl } from "./TestPurposeService";
 import { ImportFileRepositoryService } from "./ImportFileRepositoryService";
 import { deserializeTestResult } from "@/lib/deserializeTestResult";
+import { getRepository } from "typeorm";
+import { TestResultEntity } from "@/entities/TestResultEntity";
 
 export class ImportService {
   constructor(
@@ -34,8 +36,9 @@ export class ImportService {
   ) {}
 
   public async importTestResult(
-    importFileName: string
-  ): Promise<{ name: string }> {
+    importFileName: string,
+    testResultId: string | null
+  ): Promise<{ testResultId: string }> {
     console.log(importFileName);
 
     const importedData = await this.service.importFileRepository.importTestResult(
@@ -45,7 +48,8 @@ export class ImportService {
     const testResult = deserializeTestResult(importedData.testResultFile.data);
 
     const newTestResult = await this.service.testResult.createTestResult(
-      testResult
+      testResult,
+      testResultId
     );
 
     await Promise.all(
@@ -114,6 +118,12 @@ export class ImportService {
       })
     );
 
-    return { name: testResult.name };
+    if (testResultId) {
+      getRepository(TestResultEntity);
+    }
+
+    return {
+      testResultId: newTestResult.id,
+    };
   }
 }

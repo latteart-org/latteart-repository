@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 NTT Corporation.
+ * Copyright 2022 NTT Corporation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,11 +26,14 @@ export class ConfigsController {
     try {
       return new ConfigsService().getConfig(projectId);
     } catch (error) {
-      LoggingService.error("Get settings failed.", error);
+      if (error instanceof Error) {
+        LoggingService.error("Get settings failed.", error);
 
-      throw new ServerError(404, {
-        code: ServerErrorCode.GET_SETTINGS_FAILED,
-      });
+        throw new ServerError(404, {
+          code: ServerErrorCode.GET_SETTINGS_FAILED,
+        });
+      }
+      throw error;
     }
   }
 
@@ -42,11 +45,14 @@ export class ConfigsController {
     try {
       return new ConfigsService().updateConfig(projectId, requestBody);
     } catch (error) {
-      LoggingService.error("Save settings failed.", error);
+      if (error instanceof Error) {
+        LoggingService.error("Save settings failed.", error);
 
-      throw new ServerError(500, {
-        code: ServerErrorCode.SAVE_SETTINGS_FAILED,
-      });
+        throw new ServerError(500, {
+          code: ServerErrorCode.SAVE_SETTINGS_FAILED,
+        });
+      }
+      throw error;
     }
   }
 }

@@ -14,8 +14,15 @@
  * limitations under the License.
  */
 
-export interface CreateProjectImportDto {
-  source: { projectFileUrl: string };
-  includeTestResults: boolean;
-  includeProject: boolean;
+import fs from "fs-extra";
+import { StaticDirectoryServiceImpl } from "./StaticDirectoryService";
+
+export class TempFileService {
+  public async deleteFile(
+    fileName: string,
+    tempDirService: StaticDirectoryServiceImpl
+  ): Promise<void> {
+    const filePath = tempDirService.getJoinedPath(fileName);
+    await fs.remove(filePath);
+  }
 }

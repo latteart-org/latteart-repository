@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 NTT Corporation.
+ * Copyright 2022 NTT Corporation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,8 +64,8 @@ export type TestResultExportDataV1 = {
   version: number;
   name: string;
   sessionId: string;
-  startTimestamp: number;
-  endTimestamp: number;
+  startTimeStamp: number;
+  endTimeStamp: number;
   initialUrl: string;
   history: {
     [k: string]: HistoryItemExportDataV1;
@@ -223,8 +223,8 @@ export class ExportServiceImpl implements ExportService {
       version: 1,
       name: testResult.name,
       sessionId: testResult.id,
-      startTimestamp: testResult.startTimeStamp,
-      endTimestamp: testResult.endTimeStamp,
+      startTimeStamp: testResult.startTimeStamp,
+      endTimeStamp: testResult.endTimeStamp,
       initialUrl: testResult.initialUrl,
       history,
       notes,
