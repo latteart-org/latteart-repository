@@ -20,7 +20,7 @@ export type GetDeviceConfigResponse = DeviceConfigs;
 
 export interface DeviceConfigs {
   platformName: "PC" | "Android" | "iOS" | "";
-  browser: "Chrome" | "Safari" | "";
+  browser: "Chrome" | "Safari" | "Edge" | "";
   device: {
     deviceName: string;
     modelNumber: string;

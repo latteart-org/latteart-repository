@@ -17,6 +17,7 @@
 enum Browser {
   Chrome = "Chrome",
   Safari = "Safari",
+  Edge = "Edge",
 }
 
 enum PlatformName {
