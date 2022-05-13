@@ -228,7 +228,7 @@ describe("SettingsProvider", () => {
       try {
         settingsProvider.loadFile(filePath);
       } catch (error) {
-        message = error.message;
+        message = (error as Error).message;
       }
 
       expect(message).toEqual(
@@ -331,11 +331,12 @@ describe("SettingsProvider", () => {
     });
     it("Incorrect screenDefType", () => {
       const screenDefType = "hoge" as ScreenDefType;
-      settingsProvider.settings.config.screenDefinition.screenDefType = screenDefType;
+      settingsProvider.settings.config.screenDefinition.screenDefType =
+        screenDefType;
       try {
         (settingsProvider as any).validate(settingsProvider.settings);
       } catch (error) {
-        expect(error.message).toEqual(
+        expect((error as Error).message).toEqual(
           `${ERR_MSG.SETTINGS.INVALID_SCREEN_DEF_TYPE} ${screenDefType}`
         );
       }
@@ -346,7 +347,7 @@ describe("SettingsProvider", () => {
       try {
         (settingsProvider as any).validate(settingsProvider.settings);
       } catch (error) {
-        expect(error.message).toEqual(
+        expect((error as Error).message).toEqual(
           `${ERR_MSG.SETTINGS.INVALID_LOCALE} ${locale}`
         );
       }
@@ -357,7 +358,7 @@ describe("SettingsProvider", () => {
       try {
         (settingsProvider as any).validate(settingsProvider.settings);
       } catch (error) {
-        expect(error.message).toEqual(
+        expect((error as Error).message).toEqual(
           `${ERR_MSG.SETTINGS.INVALID_MODE} ${mode}`
         );
       }

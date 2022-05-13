@@ -54,6 +54,7 @@ export class TransactionRunner {
         return result;
       } catch (error) {
         if (
+          error instanceof Error &&
           [
             "TransactionAlreadyStartedError",
             "TransactionNotStartedError",
@@ -79,6 +80,6 @@ export class TransactionRunner {
   }
 
   private sleep(milliSeconds: number) {
-    return new Promise((resolve) => setTimeout(() => resolve(), milliSeconds));
+    return new Promise((resolve) => setTimeout(() => resolve(0), milliSeconds));
   }
 }

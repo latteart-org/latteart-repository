@@ -50,11 +50,14 @@ export class TestStepsController extends Controller {
         config: new ConfigsService(),
       }).createTestStep(testResultId, requestBody);
     } catch (error) {
-      LoggingService.error("Add test step failed.", error);
+      if (error instanceof Error) {
+        LoggingService.error("Add test step failed.", error);
 
-      throw new ServerError(500, {
-        code: ServerErrorCode.ADD_TEST_STEP_FAILED,
-      });
+        throw new ServerError(500, {
+          code: ServerErrorCode.ADD_TEST_STEP_FAILED,
+        });
+      }
+      throw error;
     }
   }
 
@@ -80,11 +83,14 @@ export class TestStepsController extends Controller {
 
       return testStep;
     } catch (error) {
-      LoggingService.error("Get test step failed.", error);
+      if (error instanceof Error) {
+        LoggingService.error("Get test step failed.", error);
 
-      throw new ServerError(404, {
-        code: ServerErrorCode.GET_TEST_STEP_FAILED,
-      });
+        throw new ServerError(404, {
+          code: ServerErrorCode.GET_TEST_STEP_FAILED,
+        });
+      }
+      throw error;
     }
   }
 
@@ -127,11 +133,14 @@ export class TestStepsController extends Controller {
 
       return testStep;
     } catch (error) {
-      LoggingService.error("Edit test step failed.", error);
+      if (error instanceof Error) {
+        LoggingService.error("Edit test step failed.", error);
 
-      throw new ServerError(500, {
-        code: ServerErrorCode.EDIT_TEST_STEP_FAILED,
-      });
+        throw new ServerError(500, {
+          code: ServerErrorCode.EDIT_TEST_STEP_FAILED,
+        });
+      }
+      throw error;
     }
   }
 }
