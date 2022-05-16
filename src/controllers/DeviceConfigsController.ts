@@ -26,11 +26,14 @@ export class DeviceConfigsController {
     try {
       return new ConfigsService().getDeviceConfig(projectId);
     } catch (error) {
-      LoggingService.error("Get device settings failed.", error);
+      if (error instanceof Error) {
+        LoggingService.error("Get device settings failed.", error);
 
-      throw new ServerError(500, {
-        code: ServerErrorCode.GET_DEVICE_SETTINGS_FAILED,
-      });
+        throw new ServerError(500, {
+          code: ServerErrorCode.GET_DEVICE_SETTINGS_FAILED,
+        });
+      }
+      throw error;
     }
   }
 
@@ -42,11 +45,14 @@ export class DeviceConfigsController {
     try {
       return new ConfigsService().updateDeviceConfig(projectId, requestBody);
     } catch (error) {
-      LoggingService.error("Save device settings failed.", error);
+      if (error instanceof Error) {
+        LoggingService.error("Save device settings failed.", error);
 
-      throw new ServerError(500, {
-        code: ServerErrorCode.SAVE_DEVICE_SETTINGS_FAILED,
-      });
+        throw new ServerError(500, {
+          code: ServerErrorCode.SAVE_DEVICE_SETTINGS_FAILED,
+        });
+      }
+      throw error;
     }
   }
 }

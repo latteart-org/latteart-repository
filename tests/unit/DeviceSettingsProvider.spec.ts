@@ -67,7 +67,7 @@ describe("DeviceSettingsProvider", () => {
       try {
         deviceSettingsProvider.loadFile(filePath);
       } catch (error) {
-        message = error.message;
+        message = (error as Error).message;
       }
 
       expect(message).toEqual(
@@ -128,7 +128,7 @@ describe("DeviceSettingsProvider", () => {
           deviceSettingsProvider.settings
         );
       } catch (error) {
-        expect(error.message).toEqual(
+        expect((error as Error).message).toEqual(
           `${ERR_MSG.SETTINGS.INVALID_BROWSER} ${browser}`
         );
       }
@@ -141,7 +141,7 @@ describe("DeviceSettingsProvider", () => {
           deviceSettingsProvider.settings
         );
       } catch (error) {
-        expect(error.message).toEqual(
+        expect((error as Error).message).toEqual(
           `${ERR_MSG.SETTINGS.INVALID_PLATFORMNAME} ${platformName}`
         );
       }

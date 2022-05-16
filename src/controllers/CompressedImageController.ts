@@ -62,11 +62,14 @@ export class CompressedImageController extends Controller {
           .config.imageCompression.isDeleteSrcImage,
       });
     } catch (error) {
-      LoggingService.error("Compress test step image failed.", error);
+      if (error instanceof Error) {
+        LoggingService.error("Compress test step image failed.", error);
 
-      throw new ServerError(500, {
-        code: ServerErrorCode.COMPRESS_TEST_STEP_IMAGE_FAILED,
-      });
+        throw new ServerError(500, {
+          code: ServerErrorCode.COMPRESS_TEST_STEP_IMAGE_FAILED,
+        });
+      }
+      throw error;
     }
   }
 }

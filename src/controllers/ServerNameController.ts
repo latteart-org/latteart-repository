@@ -26,11 +26,14 @@ export class ServerNameController {
     try {
       return new ServerNameService().getServerName();
     } catch (error) {
-      LoggingService.error("Get server name failed.", error);
+      if (error instanceof Error) {
+        LoggingService.error("Get server name failed.", error);
 
-      throw new ServerError(404, {
-        code: ServerErrorCode.GET_SERVERNAME_FAILED,
-      });
+        throw new ServerError(404, {
+          code: ServerErrorCode.GET_SERVERNAME_FAILED,
+        });
+      }
+      throw error;
     }
   }
 }

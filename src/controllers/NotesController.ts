@@ -65,11 +65,14 @@ export class NotesController extends Controller {
         );
       }
     } catch (error) {
-      LoggingService.error("Add note failed.", error);
+      if (error instanceof Error) {
+        LoggingService.error("Add note failed.", error);
 
-      throw new ServerError(500, {
-        code: ServerErrorCode.ADD_NOTE_FAILED,
-      });
+        throw new ServerError(500, {
+          code: ServerErrorCode.ADD_NOTE_FAILED,
+        });
+      }
+      throw error;
     }
   }
 
@@ -103,11 +106,14 @@ export class NotesController extends Controller {
         return testPurpose;
       }
     } catch (error) {
-      LoggingService.error("Get note failed.", error);
+      if (error instanceof Error) {
+        LoggingService.error("Get note failed.", error);
 
-      throw new ServerError(500, {
-        code: ServerErrorCode.GET_NOTE_FAILED,
-      });
+        throw new ServerError(500, {
+          code: ServerErrorCode.GET_NOTE_FAILED,
+        });
+      }
+      throw error;
     }
 
     LoggingService.error(`Note not found. noteId: ${noteId}`);
@@ -154,11 +160,14 @@ export class NotesController extends Controller {
         );
       }
     } catch (error) {
-      LoggingService.error("Edit note failed.", error);
+      if (error instanceof Error) {
+        LoggingService.error("Edit note failed.", error);
 
-      throw new ServerError(500, {
-        code: ServerErrorCode.EDIT_NOTE_FAILED,
-      });
+        throw new ServerError(500, {
+          code: ServerErrorCode.EDIT_NOTE_FAILED,
+        });
+      }
+      throw error;
     }
 
     LoggingService.error(`Note not found. noteId: ${noteId}`);
@@ -201,11 +210,14 @@ export class NotesController extends Controller {
         return new TestPurposeServiceImpl().deleteTestPurpose(noteId);
       }
     } catch (error) {
-      LoggingService.error("Delete note failed.", error);
+      if (error instanceof Error) {
+        LoggingService.error("Delete note failed.", error);
 
-      throw new ServerError(500, {
-        code: ServerErrorCode.DELETE_NOTE_FAILED,
-      });
+        throw new ServerError(500, {
+          code: ServerErrorCode.DELETE_NOTE_FAILED,
+        });
+      }
+      throw error;
     }
 
     LoggingService.error(`Note not found. noteId: ${noteId}`);
