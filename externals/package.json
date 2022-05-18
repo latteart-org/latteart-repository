@@ -1,9 +1,10 @@
 {
   "private": true,
   "dependencies": {
+    "jsdoc": "3.6.7",
     "jsdoc-api": "6.0.0",
     "jsdoc-mermaid": "^1.0.0",
-    "jsdoc": "3.6.7",
+    "log4js": "^6.3.0",
     "sqlite3": "^5.0.2"
   }
 }
