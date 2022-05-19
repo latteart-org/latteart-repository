@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 NTT Corporation.
+ * Copyright 2022 NTT Corporation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-export interface CreateFileUploadRequestDto {
-  id?: string;
-  file: {
-    name: string;
-    path: string;
+export interface TestResultUploadRequestDto {
+  source: {
+    testResultId: string;
   };
-  url: string;
+  dest: {
+    repositoryUrl: string;
+    testResultId?: string;
+  };
 }

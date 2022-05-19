@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 NTT Corporation.
+ * Copyright 2022 NTT Corporation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,7 +46,12 @@ export interface TestResultService {
     testResultId: string | null
   ): Promise<CreateTestResultResponse>;
 
-  patchTestResult(id: string, name: string): Promise<PatchTestResultResponse>;
+  patchTestResult(params: {
+    id: string;
+    name?: string;
+    startTime?: number;
+    initialUrl?: string;
+  }): Promise<PatchTestResultResponse>;
 
   collectAllTestStepIds(testResultId: string): Promise<string[]>;
 
@@ -118,9 +123,11 @@ export class TestResultServiceImpl implements TestResultService {
     body: CreateTestResultDto,
     testResultId: string | null
   ): Promise<CreateTestResultResponse> {
-    const startTimestamp = body.startTimeStamp
-      ? body.startTimeStamp
-      : this.service.timestamp.epochMilliseconds();
+    const createTimestamp = body.initialUrl
+      ? this.service.timestamp.epochMilliseconds()
+      : 0;
+    const startTimestamp = body.startTimeStamp ?? createTimestamp;
+
     const endTimestamp = -1;
 
     const repository = getRepository(TestResultEntity);
@@ -204,10 +211,13 @@ export class TestResultServiceImpl implements TestResultService {
     return;
   }
 
-  public async patchTestResult(
-    id: string,
-    name: string
-  ): Promise<PatchTestResultResponse> {
+  public async patchTestResult(params: {
+    id: string;
+    name?: string;
+    startTime?: number;
+    initialUrl?: string;
+  }): Promise<PatchTestResultResponse> {
+    const id = params.id;
     const testResultEntity = await getRepository(
       TestResultEntity
     ).findOneOrFail(id, {
@@ -233,7 +243,17 @@ export class TestResultServiceImpl implements TestResultService {
       relations: ["defaultInputElements"],
     });
 
-    testResultEntity.name = name;
+    if (params.initialUrl) {
+      testResultEntity.initialUrl = params.initialUrl;
+    }
+
+    if (params.name) {
+      testResultEntity.name = params.name;
+    }
+
+    if (params.startTime) {
+      testResultEntity.startTimestamp = params.startTime;
+    }
 
     const updatedTestResultEntity = await getRepository(TestResultEntity).save(
       testResultEntity

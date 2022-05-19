@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 NTT Corporation.
+ * Copyright 2022 NTT Corporation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,7 +75,7 @@ export class ProjectImportService {
       testPurposeService: TestPurposeService;
       transactionRunner: TransactionRunner;
     }
-  ): Promise<{ id: string; name: string }> {
+  ): Promise<{ projectId: string }> {
     const files = await this.getFileData(
       importFileName,
       service.importDirectoryService
@@ -115,7 +115,7 @@ export class ProjectImportService {
       });
     }
 
-    return { id: projectId, name: importFileName };
+    return { projectId };
   }
 
   private extractProjectData(

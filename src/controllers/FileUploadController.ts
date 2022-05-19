@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 NTT Corporation.
+ * Copyright 2022 NTT Corporation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,9 +52,9 @@ export class FileUploadController extends Controller {
       );
     } catch (error) {
       if (error instanceof Error) {
-        LoggingService.error("File upload request failed.", error);
+        LoggingService.error("File upload failed.", error);
         throw new ServerError(500, {
-          code: ServerErrorCode.FILE_UPLOAD_REQUEST_FAILED,
+          code: ServerErrorCode.FILE_UPLOAD_FAILED,
         });
       }
       throw error;

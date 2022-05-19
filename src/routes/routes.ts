@@ -17,7 +17,7 @@ import { DeviceConfigsController } from "./../controllers/DeviceConfigsControlle
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { FileUploadController } from "./../controllers/FileUploadController";
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { FileUploadRequestController } from "./../controllers/FileUploadRequestController";
+import { TestResultUploadRequestController } from "./../controllers/TestResultUploadRequestController";
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { NoteCompressedImageController } from "./../controllers/NoteCompressedImageController";
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -37,8 +37,6 @@ import { SessionsController } from "./../controllers/SessionsController";
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { SnapshotsController } from "./../controllers/SnapshotsController";
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { TempFileController } from "./../controllers/TempFileController";
-// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { TestResultExportController } from "./../controllers/TestResultExportController";
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { TestResultImportController } from "./../controllers/TestResultImportController";
@@ -55,19 +53,24 @@ import * as express from "express";
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
-  CreateFileUploadRequestDto: {
+  TestResultUploadRequestDto: {
     dataType: "refObject",
     properties: {
-      id: { dataType: "string" },
-      file: {
+      source: {
         dataType: "nestedObjectLiteral",
         nestedProperties: {
-          path: { dataType: "string", required: true },
-          name: { dataType: "string", required: true },
+          testResultId: { dataType: "string", required: true },
         },
         required: true,
       },
-      url: { dataType: "string", required: true },
+      dest: {
+        dataType: "nestedObjectLiteral",
+        nestedProperties: {
+          testResultId: { dataType: "string" },
+          repositoryUrl: { dataType: "string", required: true },
+        },
+        required: true,
+      },
     },
     additionalProperties: false,
   },
@@ -147,6 +150,13 @@ const models: TsoaRoute.Models = {
   CreateProjectImportDto: {
     dataType: "refObject",
     properties: {
+      source: {
+        dataType: "nestedObjectLiteral",
+        nestedProperties: {
+          projectFileUrl: { dataType: "string", required: true },
+        },
+        required: true,
+      },
       includeTestResults: { dataType: "boolean", required: true },
       includeProject: { dataType: "boolean", required: true },
     },
@@ -642,10 +652,17 @@ const models: TsoaRoute.Models = {
   CreateTestResultImportDto: {
     dataType: "refObject",
     properties: {
-      fileName: { dataType: "string", required: true },
-      testResultId: { dataType: "string" },
-      repositoryUrl: { dataType: "string" },
-      temp: { dataType: "boolean" },
+      source: {
+        dataType: "nestedObjectLiteral",
+        nestedProperties: {
+          testResultFileUrl: { dataType: "string", required: true },
+        },
+        required: true,
+      },
+      dest: {
+        dataType: "nestedObjectLiteral",
+        nestedProperties: { testResultId: { dataType: "string" } },
+      },
     },
     additionalProperties: false,
   },
@@ -1262,7 +1279,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/upload-request/test-result",
 
-    function FileUploadRequestController_upload(
+    function TestResultUploadRequestController_upload(
       request: any,
       response: any,
       next: any
@@ -1272,7 +1289,7 @@ export function RegisterRoutes(app: express.Router) {
           in: "body",
           name: "requestBody",
           required: true,
-          ref: "CreateFileUploadRequestDto",
+          ref: "TestResultUploadRequestDto",
         },
       };
 
@@ -1285,7 +1302,7 @@ export function RegisterRoutes(app: express.Router) {
         return next(err);
       }
 
-      const controller = new FileUploadRequestController();
+      const controller = new TestResultUploadRequestController();
 
       const promise = controller.upload.apply(controller, validatedArgs as any);
       promiseHandler(controller, promise, response, undefined, next);
@@ -1543,7 +1560,7 @@ export function RegisterRoutes(app: express.Router) {
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   app.post(
-    "/api/v1/imports/projects/:importFileName",
+    "/api/v1/imports/projects",
 
     function ProjectImportController_create(
       request: any,
@@ -1551,12 +1568,6 @@ export function RegisterRoutes(app: express.Router) {
       next: any
     ) {
       const args = {
-        importFileName: {
-          in: "path",
-          name: "importFileName",
-          required: true,
-          dataType: "string",
-        },
         requestBody: {
           in: "body",
           name: "requestBody",
@@ -1853,35 +1864,6 @@ export function RegisterRoutes(app: express.Router) {
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  app.delete(
-    "/api/v1/temp/:fileName",
-
-    function TempFileController_delete(request: any, response: any, next: any) {
-      const args = {
-        fileName: {
-          in: "path",
-          name: "fileName",
-          required: true,
-          dataType: "string",
-        },
-      };
-
-      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-      let validatedArgs: any[] = [];
-      try {
-        validatedArgs = getValidatedArgs(args, request, response);
-      } catch (err) {
-        return next(err);
-      }
-
-      const controller = new TempFileController();
-
-      const promise = controller.delete.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
-    }
-  );
-  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   app.post(
     "/api/v1/test-results/:testResultId/export",
 
@@ -2087,7 +2069,11 @@ export function RegisterRoutes(app: express.Router) {
           name: "requestBody",
           required: true,
           dataType: "nestedObjectLiteral",
-          nestedProperties: { name: { dataType: "string", required: true } },
+          nestedProperties: {
+            initialUrl: { dataType: "string" },
+            startTime: { dataType: "double" },
+            name: { dataType: "string" },
+          },
         },
       };
 
