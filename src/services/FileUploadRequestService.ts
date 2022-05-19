@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 NTT Corporation.
+ * Copyright 2022 NTT Corporation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,39 +14,37 @@
  * limitations under the License.
  */
 
-import { CreateFileUploadRequestDto } from "../interfaces/FileUploadRequest";
-import { callMultiPartApi, callDeleteApi, callPostApi } from "@/lib/Request";
+import { callMultiPartApi, callPostApi } from "@/lib/Request";
 
 export class FileUploadRequestService {
-  public async upload(requestBody: CreateFileUploadRequestDto): Promise<any> {
+  constructor(private destRepositoryUrl: string) {}
+
+  public async upload(targetFile: {
+    name: string;
+    path: string;
+  }): Promise<string[]> {
     const result = await callMultiPartApi(
-      [requestBody.file].map((file) => {
-        return {
-          name: file.name,
-          path: "public/" + file.path,
-        };
-      }),
-      `${requestBody.url}/api/v1/upload`
+      [targetFile],
+      `${this.destRepositoryUrl}/api/v1/upload`
     );
-    return result;
+
+    const urls = result.data as string[];
+
+    return urls.map((url) => `${this.destRepositoryUrl}/${url}`);
   }
 
-  public async importRequest(
-    fileName: string,
-    url: string,
-    testResultId: string | undefined
-  ): Promise<any> {
-    return await callPostApi(`${url}/api/v1/imports/test-results`, {
-      fileName,
-      testResultId,
-      temp: true,
-    });
-  }
+  public async testResultImportRequest(
+    source: { testResultFileUrl: string },
+    dest?: { testResultId?: string }
+  ): Promise<{ testResultId: string }> {
+    const res = await callPostApi(
+      `${this.destRepositoryUrl}/api/v1/imports/test-results`,
+      {
+        source,
+        dest,
+      }
+    );
 
-  public async deleteUploadedFile(
-    domain: string,
-    fileName: string
-  ): Promise<void> {
-    await callDeleteApi(`${domain}/api/v1/temp/${fileName}`);
+    return res.data as { testResultId: string };
   }
 }

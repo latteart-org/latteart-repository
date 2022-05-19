@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 NTT Corporation.
+ * Copyright 2022 NTT Corporation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,13 @@ export class FileUploadService {
     files: { filename: string; buffer: any }[],
     directoryService: StaticDirectoryService
   ): Promise<string[]> {
-    const savedFiles = [];
-    for (const file of files) {
-      await directoryService.outputFile(file.filename, file.buffer);
-      savedFiles.push(file.filename);
-    }
-    return savedFiles;
+    const savedFileUrls = await Promise.all(
+      files.map(async (file) => {
+        await directoryService.outputFile(file.filename, file.buffer);
+        return directoryService.getFileUrl(file.filename);
+      })
+    );
+
+    return savedFileUrls;
   }
 }
