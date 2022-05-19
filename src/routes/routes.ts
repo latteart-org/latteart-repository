@@ -1122,14 +1122,14 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new ConfigsController();
+
+        const promise = controller.get.apply(controller, validatedArgs as any);
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new ConfigsController();
-
-      const promise = controller.get.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1157,14 +1157,17 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new ConfigsController();
+
+        const promise = controller.update.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new ConfigsController();
-
-      const promise = controller.update.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1190,14 +1193,14 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new DeviceConfigsController();
+
+        const promise = controller.get.apply(controller, validatedArgs as any);
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new DeviceConfigsController();
-
-      const promise = controller.get.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1229,14 +1232,17 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new DeviceConfigsController();
+
+        const promise = controller.update.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new DeviceConfigsController();
-
-      const promise = controller.update.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1262,17 +1268,17 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new FileUploadController();
+
+        const promise = controller.testResultUpload.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new FileUploadController();
-
-      const promise = controller.testResultUpload.apply(
-        controller,
-        validatedArgs as any
-      );
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1298,14 +1304,17 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new TestResultUploadRequestController();
+
+        const promise = controller.upload.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new TestResultUploadRequestController();
-
-      const promise = controller.upload.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1337,14 +1346,17 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new NoteCompressedImageController();
+
+        const promise = controller.create.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new NoteCompressedImageController();
-
-      const promise = controller.create.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1372,14 +1384,17 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new NotesController();
+
+        const promise = controller.create.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new NotesController();
-
-      const promise = controller.create.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1407,14 +1422,14 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new NotesController();
+
+        const promise = controller.get.apply(controller, validatedArgs as any);
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new NotesController();
-
-      const promise = controller.get.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1448,14 +1463,17 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new NotesController();
+
+        const promise = controller.update.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new NotesController();
-
-      const promise = controller.update.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1483,14 +1501,17 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new NotesController();
+
+        const promise = controller.delete.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new NotesController();
-
-      const promise = controller.delete.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1522,14 +1543,17 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new ProjectExportController();
+
+        const promise = controller.create.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new ProjectExportController();
-
-      const promise = controller.create.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1548,14 +1572,14 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new ProjectImportController();
+
+        const promise = controller.list.apply(controller, validatedArgs as any);
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new ProjectImportController();
-
-      const promise = controller.list.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1581,14 +1605,17 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new ProjectImportController();
+
+        const promise = controller.create.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new ProjectImportController();
-
-      const promise = controller.create.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1603,14 +1630,14 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new ProjectsController();
+
+        const promise = controller.list.apply(controller, validatedArgs as any);
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new ProjectsController();
-
-      const promise = controller.list.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1625,14 +1652,17 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new ProjectsController();
+
+        const promise = controller.create.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new ProjectsController();
-
-      const promise = controller.create.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1654,14 +1684,14 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new ProjectsController();
+
+        const promise = controller.get.apply(controller, validatedArgs as any);
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new ProjectsController();
-
-      const promise = controller.get.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1689,14 +1719,17 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new ProjectsController();
+
+        const promise = controller.update.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new ProjectsController();
-
-      const promise = controller.update.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1728,14 +1761,17 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new ProjectTestScriptsController();
+
+        const promise = controller.create.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new ProjectTestScriptsController();
-
-      const promise = controller.create.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1750,14 +1786,14 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new ServerNameController();
+
+        const promise = controller.get.apply(controller, validatedArgs as any);
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new ServerNameController();
-
-      const promise = controller.get.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1791,14 +1827,17 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new SessionsController();
+
+        const promise = controller.patch.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new SessionsController();
-
-      const promise = controller.patch.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1820,14 +1859,14 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new SnapshotsController();
+
+        const promise = controller.get.apply(controller, validatedArgs as any);
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new SnapshotsController();
-
-      const promise = controller.get.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1853,14 +1892,17 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new SnapshotsController();
+
+        const promise = controller.create.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new SnapshotsController();
-
-      const promise = controller.create.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1891,14 +1933,17 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new TestResultExportController();
+
+        const promise = controller.create.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new TestResultExportController();
-
-      const promise = controller.create.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1917,14 +1962,14 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new TestResultImportController();
+
+        const promise = controller.list.apply(controller, validatedArgs as any);
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new TestResultImportController();
-
-      const promise = controller.list.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1950,14 +1995,17 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new TestResultImportController();
+
+        const promise = controller.create.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new TestResultImportController();
-
-      const promise = controller.create.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1976,14 +2024,14 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new TestResultsController();
+
+        const promise = controller.list.apply(controller, validatedArgs as any);
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new TestResultsController();
-
-      const promise = controller.list.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -2005,14 +2053,14 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new TestResultsController();
+
+        const promise = controller.get.apply(controller, validatedArgs as any);
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new TestResultsController();
-
-      const promise = controller.get.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -2038,14 +2086,17 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new TestResultsController();
+
+        const promise = controller.create.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new TestResultsController();
-
-      const promise = controller.create.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -2082,14 +2133,17 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new TestResultsController();
+
+        const promise = controller.patch.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new TestResultsController();
-
-      const promise = controller.patch.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -2115,14 +2169,17 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new TestResultsController();
+
+        const promise = controller.delete.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new TestResultsController();
-
-      const promise = controller.delete.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -2154,14 +2211,17 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new TestScriptsController();
+
+        const promise = controller.create.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new TestScriptsController();
-
-      const promise = controller.create.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -2193,14 +2253,17 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new TestStepsController();
+
+        const promise = controller.create.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new TestStepsController();
-
-      const promise = controller.create.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -2228,14 +2291,14 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new TestStepsController();
+
+        const promise = controller.get.apply(controller, validatedArgs as any);
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new TestStepsController();
-
-      const promise = controller.get.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -2269,14 +2332,17 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new TestStepsController();
+
+        const promise = controller.patch.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new TestStepsController();
-
-      const promise = controller.patch.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -2308,14 +2374,17 @@ export function RegisterRoutes(app: express.Router) {
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new CompressedImageController();
+
+        const promise = controller.create.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
       }
-
-      const controller = new CompressedImageController();
-
-      const promise = controller.create.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, undefined, next);
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
