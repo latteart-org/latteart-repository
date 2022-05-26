@@ -56,8 +56,8 @@ export const callDeleteApi = async (url: string): Promise<HTTPResponse> => {
 };
 
 export const downloadZip = async (url: string): Promise<unknown> => {
-  const encodeUrl = encodeURI(url);
-  const response = await axios.get(encodeUrl, {
+  const encodedUrl = encodeURI(url);
+  const response = await axios.get(encodedUrl, {
     responseType: "arraybuffer",
     headers: { Accept: "application/zip" },
   });
