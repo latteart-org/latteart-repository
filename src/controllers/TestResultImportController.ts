@@ -80,9 +80,7 @@ export class TestResultImportController extends Controller {
     const timestamp = timestampService.format("YYYYMMDD_HHmmss");
     const tempFileName = `temp_${timestamp}${extname}`;
 
-    const encodeUrl = encodeURI(requestBody.source.testResultFileUrl);
-
-    const data = await downloadZip(encodeUrl);
+    const data = await downloadZip(requestBody.source.testResultFileUrl);
     await tempDirectoryService.outputFile(tempFileName, data);
 
     const imageFileRepositoryService = new ImageFileRepositoryServiceImpl({

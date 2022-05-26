@@ -199,13 +199,13 @@ export class ExportFileRepositoryServiceImpl
       deleteSource: true,
     }).zip();
 
-    const renamedZipFile = path
-      .basename(zipFilePath)
-      .replace("tmpZipName", testResult.name);
+    const timestamp = this.service.timestamp.format("YYYYMMDD_HHmmss");
 
-    await this.service.staticDirectory.moveFile(zipFilePath, renamedZipFile);
+    const exportFileName = `${testResult.name}_${timestamp}.zip`;
 
-    return this.service.staticDirectory.getFileUrl(renamedZipFile);
+    await this.service.staticDirectory.moveFile(zipFilePath, exportFileName);
+
+    return this.service.staticDirectory.getFileUrl(exportFileName);
   }
 
   private async outputFiles(testResult: {
@@ -213,14 +213,9 @@ export class ExportFileRepositoryServiceImpl
     testResultFile: { fileName: string; data: string };
     screenshots: { id: string; fileUrl: string }[];
   }) {
-    const timestamp = this.service.timestamp.format("YYYYMMDD_HHmmss");
-
     const tmpDirPath = await fs.mkdtemp(path.join(os.tmpdir(), "latteart-"));
 
-    const outputDirectoryPath = path.join(
-      tmpDirPath,
-      `tmpZipName_${timestamp}`
-    );
+    const outputDirectoryPath = path.join(tmpDirPath, `test_result`);
 
     const destTestResultFilePath = path.join(
       outputDirectoryPath,

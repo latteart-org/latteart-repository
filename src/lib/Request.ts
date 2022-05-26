@@ -30,7 +30,7 @@ export const callMultiPartApi = async (
   const formData = new FormData();
   fileInfos.forEach((fileInfo) => {
     const file = fs.createReadStream(fileInfo.path);
-    formData.append(fileInfo.name, (file as unknown) as Blob);
+    formData.append(fileInfo.name, file as unknown as Blob);
   });
   console.log({ url });
   const result = await axios.post(url, formData, {
@@ -56,7 +56,8 @@ export const callDeleteApi = async (url: string): Promise<HTTPResponse> => {
 };
 
 export const downloadZip = async (url: string): Promise<unknown> => {
-  const response = await axios.get(url, {
+  const encodeUrl = encodeURI(url);
+  const response = await axios.get(encodeUrl, {
     responseType: "arraybuffer",
     headers: { Accept: "application/zip" },
   });
