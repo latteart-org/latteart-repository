@@ -199,12 +199,13 @@ export class ExportFileRepositoryServiceImpl
       deleteSource: true,
     }).zip();
 
-    await this.service.staticDirectory.moveFile(
-      zipFilePath,
-      path.basename(zipFilePath)
-    );
+    const renamedZipFile = path
+      .basename(zipFilePath)
+      .replace("tmpZipName", testResult.name);
 
-    return this.service.staticDirectory.getFileUrl(path.basename(zipFilePath));
+    await this.service.staticDirectory.moveFile(zipFilePath, renamedZipFile);
+
+    return this.service.staticDirectory.getFileUrl(renamedZipFile);
   }
 
   private async outputFiles(testResult: {
@@ -218,7 +219,7 @@ export class ExportFileRepositoryServiceImpl
 
     const outputDirectoryPath = path.join(
       tmpDirPath,
-      `${testResult.name}_${timestamp}`
+      `tmpZipName_${timestamp}`
     );
 
     const destTestResultFilePath = path.join(
