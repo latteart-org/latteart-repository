@@ -55,7 +55,8 @@ export interface ExportFileRepositoryService {
 }
 
 export class ExportFileRepositoryServiceImpl
-  implements ExportFileRepositoryService {
+  implements ExportFileRepositoryService
+{
   constructor(
     private service: {
       staticDirectory: StaticDirectoryService;
@@ -129,9 +130,8 @@ export class ExportFileRepositoryServiceImpl
 
                   await fs.mkdirp(distAttachedDirPath);
                   const fileName = attachedFile.fileUrl.split("/").slice(-1)[0];
-                  const srcFilePath = attachedFileDirectoryService.getJoinedPath(
-                    fileName
-                  );
+                  const srcFilePath =
+                    attachedFileDirectoryService.getJoinedPath(fileName);
                   console.log(
                     `attached: ${srcFilePath} => ${path.join(
                       distAttachedDirPath,
@@ -176,9 +176,8 @@ export class ExportFileRepositoryServiceImpl
       testResult.screenshots.map(async (screenshot) => {
         const fileName = screenshot.fileUrl.split("/").slice(-1)[0];
 
-        const srcFilePath = this.service.imageFileRepository.getFilePath(
-          fileName
-        );
+        const srcFilePath =
+          this.service.imageFileRepository.getFilePath(fileName);
         const distFilePath = path.join(testResultPath, "screenshot", fileName);
         console.log(`${srcFilePath} => ${distFilePath}`);
         return await fs.copyFile(srcFilePath, distFilePath);
@@ -219,47 +218,8 @@ export class ExportFileRepositoryServiceImpl
 
     const outputDirectoryPath = path.join(
       tmpDirPath,
-      `test_result_${timestamp}`
+      `${testResult.name}_${timestamp}`
     );
-
-    // await Promise.all(
-    //   projects.map(async (project) => {
-    //     const projectDirPath = path.join(
-    //       outputDirectoryPath,
-    //       "projects",
-    //       project.projectId
-    //     );
-    //     const destProjectFilePath = path.join(
-    //       projectDirPath,
-    //       project.projectFile.fileName
-    //     );
-
-    //     await fs.outputFile(destProjectFilePath, project.projectFile.data);
-
-    //     const attachedFilePaths: string[] = [];
-    //     // project.attachedFiles.map(({ fileUrl }) => {
-    //     //   const fileName = fileUrl.split("/").slice(-1)[0];
-
-    //     //   return this.service.imageFileRepository.getFilePath(fileName);
-    //     // });
-
-    //     const destAttachedFileDirPath = path.join(projectDirPath, "attached");
-
-    //     if (attachedFilePaths.length > 0) {
-    //       await fs.mkdirp(destAttachedFileDirPath);
-    //     }
-
-    //     await Promise.all(
-    //       attachedFilePaths.map((filePath) => {
-    //         const destAttachedFilePath = path.join(
-    //           destAttachedFileDirPath,
-    //           path.basename(filePath)
-    //         );
-    //         return fs.copyFile(filePath, destAttachedFilePath);
-    //       })
-    //     );
-    //   })
-    // );
 
     const destTestResultFilePath = path.join(
       outputDirectoryPath,
