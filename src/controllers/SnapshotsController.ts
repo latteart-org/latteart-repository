@@ -51,11 +51,14 @@ export class SnapshotsController extends Controller {
     try {
       return await this.createSnapshotsService().createSnapshot(projectId);
     } catch (error) {
-      LoggingService.error("Save snapshot failed.", error);
+      if (error instanceof Error) {
+        LoggingService.error("Save snapshot failed.", error);
 
-      throw new ServerError(500, {
-        code: ServerErrorCode.SAVE_SNAPSHOT_FAILED,
-      });
+        throw new ServerError(500, {
+          code: ServerErrorCode.SAVE_SNAPSHOT_FAILED,
+        });
+      }
+      throw error;
     }
   }
 

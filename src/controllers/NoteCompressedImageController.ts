@@ -64,11 +64,14 @@ export class NoteCompressedImageController extends Controller {
         ),
       });
     } catch (error) {
-      LoggingService.error("Compress note image failed.", error);
+      if (error instanceof Error) {
+        LoggingService.error("Compress note image failed.", error);
 
-      throw new ServerError(500, {
-        code: ServerErrorCode.COMPRESS_NOTE_IMAGE_FAILED,
-      });
+        throw new ServerError(500, {
+          code: ServerErrorCode.COMPRESS_NOTE_IMAGE_FAILED,
+        });
+      }
+      throw error;
     }
   }
 }

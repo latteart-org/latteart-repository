@@ -42,11 +42,14 @@ export class SessionsController extends Controller {
         imageFileRepositoryService: imageFileRepositoryService,
       }).patchSession(projectId, sessionId, requestBody);
     } catch (error) {
-      LoggingService.error("Patch session failed.", error);
+      if (error instanceof Error) {
+        LoggingService.error("Patch session failed.", error);
 
-      throw new ServerError(500, {
-        code: ServerErrorCode.PATCH_SESSION_FAILED,
-      });
+        throw new ServerError(500, {
+          code: ServerErrorCode.PATCH_SESSION_FAILED,
+        });
+      }
+      throw error;
     }
   }
 }

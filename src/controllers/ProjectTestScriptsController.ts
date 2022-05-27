@@ -49,14 +49,13 @@ export class ProjectTestScriptsController extends Controller {
       }),
     });
 
-    const testScriptFileRepositoryService = new TestScriptFileRepositoryServiceImpl(
-      {
+    const testScriptFileRepositoryService =
+      new TestScriptFileRepositoryServiceImpl({
         staticDirectory: testScriptDirectoryService,
         testScriptDocRendering: new TestScriptJSDocRenderingService(),
         imageFileRepository: imageFileRepositoryService,
         timestamp: timestampService,
-      }
-    );
+      });
 
     try {
       return await new TestScriptsService({
@@ -64,11 +63,14 @@ export class ProjectTestScriptsController extends Controller {
         testScriptFileRepository: testScriptFileRepositoryService,
       }).createTestScriptByProject(projectId, requestBody);
     } catch (error) {
-      LoggingService.error("Save test script failed.", error);
+      if (error instanceof Error) {
+        LoggingService.error("Save test script failed.", error);
 
-      throw new ServerError(500, {
-        code: ServerErrorCode.SAVE_TEST_SCRIPT_FAILED,
-      });
+        throw new ServerError(500, {
+          code: ServerErrorCode.SAVE_TEST_SCRIPT_FAILED,
+        });
+      }
+      throw error;
     }
   }
 }
