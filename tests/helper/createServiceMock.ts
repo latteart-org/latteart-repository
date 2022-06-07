@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 NTT Corporation.
+ * Copyright 2021 NTT Corporation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,23 +53,26 @@ export const createTestStepServiceMock = (): TestStepService => {
   };
 };
 
-export const createImageFileRepositoryServiceMock = (): ImageFileRepositoryService => {
-  return {
-    writeBufferToFile: jest.fn(),
-    writeBase64ToFile: jest.fn(),
-    removeFile: jest.fn(),
-    getFilePath: jest.fn(),
-    getFileUrl: jest.fn(),
+export const createImageFileRepositoryServiceMock =
+  (): ImageFileRepositoryService => {
+    return {
+      writeBufferToFile: jest.fn(),
+      writeBase64ToFile: jest.fn(),
+      removeFile: jest.fn(),
+      getFilePath: jest.fn(),
+      getFileUrl: jest.fn(),
+    };
   };
-};
 
 export const createStaticDirectoryServiceMock = (): StaticDirectoryService => {
   return {
+    mkdir: jest.fn(),
     outputFile: jest.fn(),
     removeFile: jest.fn(),
     getFileUrl: jest.fn(),
     getJoinedPath: jest.fn(),
     moveFile: jest.fn(),
+    copyFile: jest.fn(),
     collectFileNames: jest.fn(),
     collectFilePaths: jest.fn(),
   };

@@ -20,8 +20,10 @@ describe("ImageFileRepositoryService", () => {
       const expectedUrl = "expectedUrl";
 
       const staticDirectoryService: StaticDirectoryService = {
+        mkdir: jest.fn(),
         outputFile: jest.fn(),
         removeFile: jest.fn(),
+        copyFile: jest.fn(),
         getFileUrl: jest.fn().mockReturnValue(expectedUrl),
         getJoinedPath: jest.fn(),
         moveFile: jest.fn(),
