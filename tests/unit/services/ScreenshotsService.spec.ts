@@ -7,8 +7,8 @@ import { TimestampServiceImpl } from "@/services/TimestampService";
 import { SqliteTestConnectionHelper } from "../../helper/TestConnectionHelper";
 import { getRepository } from "typeorm";
 import path from "path";
-import fs from "fs-extra";
 import moment from "moment";
+import fs from "fs-extra";
 
 const testConnectionHelper = new SqliteTestConnectionHelper();
 
@@ -21,29 +21,24 @@ const tempDirectoryService = new StaticDirectoryServiceImpl(
   resourcesDirPath,
   "temp"
 );
+const tempDirPath = path.join(resourcesDirPath, "temp");
 const screenshotDirectoryService = new StaticDirectoryServiceImpl(
   resourcesDirPath,
   "screenshots"
 );
 
-const clearTempDir = async () => {
-  const files = await tempDirectoryService.collectFileNames();
-  await Promise.all(
-    files.map(async (file) => {
-      const filePath = tempDirectoryService.getJoinedPath(file);
-      await fs.remove(filePath);
-    })
-  );
-};
-
 beforeEach(async () => {
+  await fs.mkdir(tempDirPath).catch((e) => {
+    console.error(e);
+  });
   await testConnectionHelper.createTestConnection({ logging: false });
-  await clearTempDir();
 });
 
 afterEach(async () => {
+  await fs.remove(tempDirPath).catch((e) => {
+    console.error(e);
+  });
   await testConnectionHelper.closeTestConnection();
-  await clearTempDir();
 });
 
 describe("ScreenshotsService", () => {
