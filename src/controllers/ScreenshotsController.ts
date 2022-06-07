@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 NTT Corporation.
+ * Copyright 2022 NTT Corporation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ export class ScreenshotsController extends Controller {
         LoggingService.error("Get screenshots failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.GET_SCREENSHOTS,
+          code: ServerErrorCode.GET_SCREENSHOTS_FAILED,
         });
       }
       throw error;

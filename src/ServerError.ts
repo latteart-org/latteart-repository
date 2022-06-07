@@ -47,7 +47,7 @@ export enum ServerErrorCode {
   IMPORT_TEST_RESULT_NOT_EXIST = "import_test_result_not_exist",
   FILE_UPLOAD_REQUEST_FAILED = "upload_request_failed",
   FILE_UPLOAD_FAILED = "upload_failed",
-  GET_SCREENSHOTS = "get_screenshots_failed",
+  GET_SCREENSHOTS_FAILED = "get_screenshots_failed",
 }
 
 export interface ServerErrorData {
