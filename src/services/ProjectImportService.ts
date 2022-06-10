@@ -267,6 +267,8 @@ export class ProjectImportService {
           for (const viewPointBeforeSaving of testMatrixBeforeSaving.viewPoints) {
             const viewPointEntity = new ViewPointEntity();
             viewPointEntity.name = viewPointBeforeSaving.name;
+            viewPointEntity.description =
+              viewPointBeforeSaving.description ?? "";
             viewPointEntity.testMatrices = [newTestMatrixEntity];
             const newViewPointEntity = await transactionalEntityManager.save(
               viewPointEntity
@@ -381,9 +383,8 @@ export class ProjectImportService {
                     story: newStoryEntity,
                     testResult: testResult ?? undefined,
                   });
-                  const newSessionEntity = await transactionalEntityManager.save(
-                    sessionEntity
-                  );
+                  const newSessionEntity =
+                    await transactionalEntityManager.save(sessionEntity);
 
                   const attachedFileEntities: AttachedFileEntity[] = [];
                   for (const [
@@ -395,12 +396,13 @@ export class ProjectImportService {
                     }
                     const attachedFileData =
                       sessionData.attachedFiles[attachedFileIndex];
-                    const attachedFileImageUrl = await service.attachedFileRepositoryService.writeBase64ToFile(
-                      `${service.timestampService.unix().toString()}_${
-                        attachedFileBeforeSaving.name
-                      }`,
-                      attachedFileData.data
-                    );
+                    const attachedFileImageUrl =
+                      await service.attachedFileRepositoryService.writeBase64ToFile(
+                        `${service.timestampService.unix().toString()}_${
+                          attachedFileBeforeSaving.name
+                        }`,
+                        attachedFileData.data
+                      );
                     attachedFileEntities.push(
                       new AttachedFileEntity({
                         session: newSessionEntity,
@@ -540,10 +542,11 @@ export class ProjectImportService {
           console.log(newTestStep);
 
           if (testStep.testPurpose) {
-            const newTestPurpose = await service.testPurposeService.createTestPurpose(
-              newTestResult.id,
-              testStep.testPurpose
-            );
+            const newTestPurpose =
+              await service.testPurposeService.createTestPurpose(
+                newTestResult.id,
+                testStep.testPurpose
+              );
 
             await service.testStepService.attachTestPurposeToTestStep(
               newTestStep.id,
