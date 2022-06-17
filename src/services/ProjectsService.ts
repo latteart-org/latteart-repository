@@ -258,6 +258,7 @@ export class ProjectsServiceImpl implements ProjectsService {
               viewPoint.id,
               viewPoint.name,
               viewPoint.description,
+              viewPoint.index,
               testMatrixEntity,
               unupdatedViewPoints
             );
@@ -631,6 +632,7 @@ export class ProjectsServiceImpl implements ProjectsService {
     id: string | null,
     name: string,
     description: string,
+    index: number,
     testMatrixEntity: TestMatrixEntity,
     unupdatedList: ViewPointEntity[]
   ): Promise<{
@@ -648,10 +650,12 @@ export class ProjectsServiceImpl implements ProjectsService {
       }
       if (
         viewPointEntry.name !== name ||
-        viewPointEntry.description !== description
+        viewPointEntry.description !== description ||
+        viewPointEntry.index !== index
       ) {
         viewPointEntry.name = name;
         viewPointEntry.description = description;
+        viewPointEntry.index = index;
         viewPointEntry = await transactionalEntityManager.save(viewPointEntry);
         if (!viewPointEntry) {
           throw new Error(`Faild save viewPoint: ${id}`);
@@ -664,6 +668,7 @@ export class ProjectsServiceImpl implements ProjectsService {
       const newEntry = new ViewPointEntity();
       newEntry.name = name;
       newEntry.description = description;
+      newEntry.index = index;
       newEntry.testMatrices = [testMatrixEntity];
       viewPointEntry = await transactionalEntityManager.save(newEntry);
     }
@@ -1063,6 +1068,7 @@ export class ProjectsServiceImpl implements ProjectsService {
             return {
               id: viewPoint.id,
               name: viewPoint.name,
+              index: viewPoint.index as number,
               description: viewPoint.description ?? "",
             };
           }),

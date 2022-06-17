@@ -374,6 +374,7 @@ describe("ProjectImportService", () => {
                 id: "viewPointId",
                 name: "viewPointName",
                 description: "viewPointDescription",
+                index: 0,
               },
             ],
           },
