@@ -264,12 +264,17 @@ export class ProjectImportService {
           );
 
           const viewPointMap: Map<string, ViewPointEntity> = new Map();
-          for (const viewPointBeforeSaving of testMatrixBeforeSaving.viewPoints) {
+          for (const [
+            index,
+            viewPointBeforeSaving,
+          ] of testMatrixBeforeSaving.viewPoints.entries()) {
             const viewPointEntity = new ViewPointEntity();
             viewPointEntity.name = viewPointBeforeSaving.name;
             viewPointEntity.description =
               viewPointBeforeSaving.description ?? "";
+            viewPointEntity.index = index;
             viewPointEntity.testMatrices = [newTestMatrixEntity];
+            console.log(viewPointEntity);
             const newViewPointEntity = await transactionalEntityManager.save(
               viewPointEntity
             );

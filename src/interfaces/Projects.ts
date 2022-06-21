@@ -44,6 +44,7 @@ export interface Project {
     viewPoints: {
       id: string;
       name: string;
+      index: number;
       description: string;
     }[];
   }[];
@@ -159,6 +160,7 @@ export interface UpdateProjectDto {
     viewPoints?: {
       id: string | null;
       name: string;
+      index: number;
       description: string;
     }[];
   }[];
@@ -169,4 +171,5 @@ export interface UpdateProjectDto {
 export interface ViewPoint {
   id: string | null;
   name: string;
+  index: number;
 }

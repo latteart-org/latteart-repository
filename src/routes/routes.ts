@@ -318,6 +318,7 @@ const models: TsoaRoute.Models = {
                 dataType: "nestedObjectLiteral",
                 nestedProperties: {
                   description: { dataType: "string", required: true },
+                  index: { dataType: "double", required: true },
                   name: { dataType: "string", required: true },
                   id: { dataType: "string", required: true },
                 },
@@ -406,6 +407,7 @@ const models: TsoaRoute.Models = {
                 dataType: "nestedObjectLiteral",
                 nestedProperties: {
                   description: { dataType: "string", required: true },
+                  index: { dataType: "double", required: true },
                   name: { dataType: "string", required: true },
                   id: {
                     dataType: "union",

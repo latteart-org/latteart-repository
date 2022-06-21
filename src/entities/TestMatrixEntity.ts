@@ -68,13 +68,37 @@ export class TestMatrixEntity {
   })
   stories!: StoryEntity[];
 
-  public sortedViewPoint(): ViewPointEntity[] {
-    return this.viewPoints.sort((a, b) => {
-      return (a.createdAt as Date).toString() >=
-        (b.createdAt as Date).toString()
-        ? 1
-        : -1;
-    });
+  public sortedViewPoint(): {
+    id: string;
+    name: string;
+    description?: string;
+    index: number;
+    createdAt?: Date;
+    testMatrices: TestMatrixEntity[];
+    stories: StoryEntity[];
+  }[] {
+    return this.viewPoints
+      .sort((v1, v2) => {
+        if (v1.index === undefined && v2.index === undefined) {
+          return (v1.createdAt as Date).toString() >=
+            (v2.createdAt as Date).toString()
+            ? 1
+            : -1;
+        }
+        if (v1.index === undefined) {
+          return 1;
+        }
+        if (v2.index === undefined) {
+          return -1;
+        }
+        return v1.index - v2.index;
+      })
+      .map((viewPoint, index) => {
+        return {
+          ...viewPoint,
+          index,
+        };
+      });
   }
 
   constructor(name: string, index: number, project: ProjectEntity) {

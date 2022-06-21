@@ -109,6 +109,7 @@ describe("IssueReportService", () => {
                 id: "viewPoint1",
                 name: "viewPointName1",
                 description: "viewPointDescription1",
+                index: 0,
               },
             ],
           },
