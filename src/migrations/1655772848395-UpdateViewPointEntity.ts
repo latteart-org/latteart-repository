@@ -1,11 +1,11 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class UpdateViewPointEntity1655370898455 implements MigrationInterface {
-  name = "UpdateViewPointEntity1655370898455";
+export class UpdateViewPointEntity1655772848395 implements MigrationInterface {
+  name = "UpdateViewPointEntity1655772848395";
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TABLE "temporary_VIEW_POINTS" ("view_point_id" varchar PRIMARY KEY NOT NULL, "name" varchar NOT NULL, "created_at" datetime NOT NULL DEFAULT (datetime('now')), "description" varchar NOT NULL, "index" integer NOT NULL)`
+      `CREATE TABLE "temporary_VIEW_POINTS" ("view_point_id" varchar PRIMARY KEY NOT NULL, "name" varchar NOT NULL, "created_at" datetime NOT NULL DEFAULT (datetime('now')), "description" varchar NOT NULL, "index" integer)`
     );
     await queryRunner.query(
       `INSERT INTO "temporary_VIEW_POINTS"("view_point_id", "name", "created_at", "description") SELECT "view_point_id", "name", "created_at", "description" FROM "VIEW_POINTS"`

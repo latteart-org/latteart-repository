@@ -68,7 +68,15 @@ export class TestMatrixEntity {
   })
   stories!: StoryEntity[];
 
-  public sortedViewPoint(): ViewPointEntity[] {
+  public sortedViewPoint(): {
+    id: string;
+    name: string;
+    description?: string;
+    index: number;
+    createdAt?: Date;
+    testMatrices: TestMatrixEntity[];
+    stories: StoryEntity[];
+  }[] {
     return this.viewPoints
       .sort((v1, v2) => {
         if (v1.index === undefined && v2.index === undefined) {

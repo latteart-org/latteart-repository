@@ -1068,7 +1068,7 @@ export class ProjectsServiceImpl implements ProjectsService {
             return {
               id: viewPoint.id,
               name: viewPoint.name,
-              index: viewPoint.index as number,
+              index: viewPoint.index,
               description: viewPoint.description ?? "",
             };
           }),
