@@ -915,6 +915,10 @@ export class ProjectsServiceImpl implements ProjectsService {
               "stories.sessions",
               "stories.sessions.attachedFiles",
               "stories.sessions.testResult",
+              "stories.sessions.testResult.testSteps",
+              "stories.sessions.testResult.testSteps.screenshot",
+              "stories.sessions.testResult.testSteps.notes",
+              "stories.sessions.testResult.testSteps.notes.tags",
               "stories.sessions.testResult.notes",
               "stories.sessions.testResult.notes.tags",
               "stories.viewPoint",
@@ -977,26 +981,33 @@ export class ProjectsServiceImpl implements ProjectsService {
                 doneDate: session.doneDate,
                 isDone: !!session.doneDate,
                 issues:
-                  session?.testResult?.notes?.map((note) => {
-                    return {
-                      details: note.details,
-                      source: {
-                        index: 0,
-                        type: "notice",
-                      },
-                      status: note.tags?.find((tag) => {
-                        return tag.name === "reported";
-                      })
-                        ? "reported"
-                        : note.tags?.find((tag) => {
-                            return tag.name === "invalid";
+                  session.testResult?.testSteps?.flatMap((testStep) => {
+                    return (
+                      testStep.notes?.map((note) => {
+                        return {
+                          details: note.details,
+                          source: {
+                            index: 0,
+                            type: "notice",
+                          },
+                          status: note.tags?.find((tag) => {
+                            return tag.name === "reported";
                           })
-                        ? "invalid"
-                        : "",
-                      ticketId: "",
-                      type: "notice",
-                      value: note.value,
-                    };
+                            ? "reported"
+                            : note.tags?.find((tag) => {
+                                return tag.name === "invalid";
+                              })
+                            ? "invalid"
+                            : "",
+                          ticketId: "",
+                          type: "notice",
+                          value: note.value,
+                          imageFilePath:
+                            note.screenshot?.fileUrl ??
+                            testStep.screenshot?.fileUrl,
+                        };
+                      }) ?? []
+                    );
                   }) ?? [],
                 memo: session.memo,
                 name: session.name,
