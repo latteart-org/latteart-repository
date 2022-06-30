@@ -34,6 +34,12 @@ export class ViewPointEntity {
   @Column({ name: "name" })
   name!: string;
 
+  @Column({ name: "description" })
+  description?: string;
+
+  @Column({ name: "index", nullable: true })
+  index?: number;
+
   @CreateDateColumn({ name: "created_at" })
   readonly createdAt?: Date;
 

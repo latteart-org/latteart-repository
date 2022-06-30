@@ -61,6 +61,9 @@ import { TransactionRunner } from "./TransactionRunner";
 import { Init1638930268191 } from "./migrations/1638930268191-Init";
 import { UpdateProjectEntity1641956149882 } from "./migrations/1641956149882-UpdateProjectEntity";
 import { UpdateAttachedFilesEntity1642388104855 } from "./migrations/1642388104855-UpdateAttachedFilesEntity";
+import { UpdateViewPointEntity1654749340817 } from "./migrations/1654749340817-UpdateViewPointEntity";
+import { UpdateViewPointEntity1655772848395 } from "./migrations/1655772848395-UpdateViewPointEntity";
+import { UpdateSessionEntity1656305325919 } from "./migrations/1656305325919-UpdateSessionEntity";
 
 LoggingService.initialize(
   new StandardLogger(
@@ -150,6 +153,9 @@ async function initializeOrmConnection(connectionName: string) {
       Init1638930268191,
       UpdateProjectEntity1641956149882,
       UpdateAttachedFilesEntity1642388104855,
+      UpdateViewPointEntity1654749340817,
+      UpdateViewPointEntity1655772848395,
+      UpdateSessionEntity1656305325919,
     ],
   };
 

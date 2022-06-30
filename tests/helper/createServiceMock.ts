@@ -53,23 +53,26 @@ export const createTestStepServiceMock = (): TestStepService => {
   };
 };
 
-export const createImageFileRepositoryServiceMock = (): ImageFileRepositoryService => {
-  return {
-    writeBufferToFile: jest.fn(),
-    writeBase64ToFile: jest.fn(),
-    removeFile: jest.fn(),
-    getFilePath: jest.fn(),
-    getFileUrl: jest.fn(),
+export const createImageFileRepositoryServiceMock =
+  (): ImageFileRepositoryService => {
+    return {
+      writeBufferToFile: jest.fn(),
+      writeBase64ToFile: jest.fn(),
+      removeFile: jest.fn(),
+      getFilePath: jest.fn(),
+      getFileUrl: jest.fn(),
+    };
   };
-};
 
 export const createStaticDirectoryServiceMock = (): StaticDirectoryService => {
   return {
+    mkdir: jest.fn(),
     outputFile: jest.fn(),
     removeFile: jest.fn(),
     getFileUrl: jest.fn(),
     getJoinedPath: jest.fn(),
     moveFile: jest.fn(),
+    copyFile: jest.fn(),
     collectFileNames: jest.fn(),
     collectFilePaths: jest.fn(),
   };

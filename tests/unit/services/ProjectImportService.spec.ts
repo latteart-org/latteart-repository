@@ -168,7 +168,8 @@ describe("ProjectImportService", () => {
   describe("#importTestResults", () => {
     it("テスト結果の登録", async () => {
       const timestampService: TimestampService = createTimestampServiceMock();
-      const testResultService: TestResultService = createTestResultServiceMock();
+      const testResultService: TestResultService =
+        createTestResultServiceMock();
       testResultService.createTestResult = jest.fn().mockResolvedValue({
         id: "testResultId",
       });
@@ -177,7 +178,8 @@ describe("ProjectImportService", () => {
         id: "testStepId",
       });
       const notesService: NotesService = createNotesServiceMock();
-      const testPurposeService: TestPurposeService = createTestPurposeServiceMock();
+      const testPurposeService: TestPurposeService =
+        createTestPurposeServiceMock();
       testPurposeService.createTestPurpose = jest.fn().mockResolvedValue({
         id: "testPurposeId",
       });
@@ -339,7 +341,8 @@ describe("ProjectImportService", () => {
   describe("#importProject", () => {
     it("プロジェクトの登録", async () => {
       const timestampService = createTimestampServiceMock();
-      const attachedFileRepositoryService = createImageFileRepositoryServiceMock();
+      const attachedFileRepositoryService =
+        createImageFileRepositoryServiceMock();
 
       const projectJson: Project = {
         id: "projectId",
@@ -370,6 +373,8 @@ describe("ProjectImportService", () => {
               {
                 id: "viewPointId",
                 name: "viewPointName",
+                description: "viewPointDescription",
+                index: 0,
               },
             ],
           },

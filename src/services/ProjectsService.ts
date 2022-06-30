@@ -136,9 +136,11 @@ export class ProjectsServiceImpl implements ProjectsService {
         testMatrixWithStory.progressDatas = await progressDataRepository.find({
           testMatrix,
         });
-        testMatrixWithStory.testTargetGroups = await testTargetGroupRepository.find(
-          { where: { testMatrix: testMatrix.id }, relations: ["testTargets"] }
-        );
+        testMatrixWithStory.testTargetGroups =
+          await testTargetGroupRepository.find({
+            where: { testMatrix: testMatrix.id },
+            relations: ["testTargets"],
+          });
         testMatrixWithStory.viewPoints = (
           await testMatrixRepository.findOne(testMatrix.id, {
             relations: ["viewPoints"],
@@ -203,14 +205,15 @@ export class ProjectsServiceImpl implements ProjectsService {
           }
 
           for (const [index, testTargetGroup] of testMatrix.groups.entries()) {
-            const savedTestTargetGroupWithUnupdatedList = await this.updateTestTargetGroup(
-              transactionalEntityManager,
-              testTargetGroup.id,
-              testTargetGroup.name,
-              index,
-              testMatrixEntity,
-              unupdatedTestTargetGroups
-            );
+            const savedTestTargetGroupWithUnupdatedList =
+              await this.updateTestTargetGroup(
+                transactionalEntityManager,
+                testTargetGroup.id,
+                testTargetGroup.name,
+                index,
+                testMatrixEntity,
+                unupdatedTestTargetGroups
+              );
             const testTargetGroupEntity =
               savedTestTargetGroupWithUnupdatedList.testTargetGroupEntity;
             unupdatedTestTargetGroups =
@@ -224,15 +227,16 @@ export class ProjectsServiceImpl implements ProjectsService {
               index,
               testTarget,
             ] of testTargetGroup.testTargets.entries()) {
-              const savedTestTargetWithUnupdatedList = await this.updateTestTarget(
-                transactionalEntityManager,
-                testTarget.id,
-                testTarget.name,
-                index,
-                JSON.stringify(testTarget.plans),
-                testTargetGroupEntity,
-                unupdatedTestTargets
-              );
+              const savedTestTargetWithUnupdatedList =
+                await this.updateTestTarget(
+                  transactionalEntityManager,
+                  testTarget.id,
+                  testTarget.name,
+                  index,
+                  JSON.stringify(testTarget.plans),
+                  testTargetGroupEntity,
+                  unupdatedTestTargets
+                );
               unupdatedTestTargets =
                 savedTestTargetWithUnupdatedList.unupdatedList;
 
@@ -253,6 +257,8 @@ export class ProjectsServiceImpl implements ProjectsService {
               transactionalEntityManager,
               viewPoint.id,
               viewPoint.name,
+              viewPoint.description,
+              viewPoint.index,
               testMatrixEntity,
               unupdatedViewPoints
             );
@@ -388,10 +394,11 @@ export class ProjectsServiceImpl implements ProjectsService {
         }
 
         for (const testTargetGroup of unupdatedTestTargetGroups) {
-          const deleteTestTargetGroup = await transactionalEntityManager.findOne(
-            TestTargetGroupEntity,
-            testTargetGroup.id
-          );
+          const deleteTestTargetGroup =
+            await transactionalEntityManager.findOne(
+              TestTargetGroupEntity,
+              testTargetGroup.id
+            );
           if (!deleteTestTargetGroup) {
             continue;
           }
@@ -624,6 +631,8 @@ export class ProjectsServiceImpl implements ProjectsService {
     transactionalEntityManager: EntityManager,
     id: string | null,
     name: string,
+    description: string,
+    index: number,
     testMatrixEntity: TestMatrixEntity,
     unupdatedList: ViewPointEntity[]
   ): Promise<{
@@ -639,8 +648,14 @@ export class ProjectsServiceImpl implements ProjectsService {
       if (!viewPointEntry) {
         throw new Error(`ViewPoint not found: ${id}`);
       }
-      if (viewPointEntry.name !== name) {
+      if (
+        viewPointEntry.name !== name ||
+        viewPointEntry.description !== description ||
+        viewPointEntry.index !== index
+      ) {
         viewPointEntry.name = name;
+        viewPointEntry.description = description;
+        viewPointEntry.index = index;
         viewPointEntry = await transactionalEntityManager.save(viewPointEntry);
         if (!viewPointEntry) {
           throw new Error(`Faild save viewPoint: ${id}`);
@@ -652,6 +667,8 @@ export class ProjectsServiceImpl implements ProjectsService {
     } else {
       const newEntry = new ViewPointEntity();
       newEntry.name = name;
+      newEntry.description = description;
+      newEntry.index = index;
       newEntry.testMatrices = [testMatrixEntity];
       viewPointEntry = await transactionalEntityManager.save(newEntry);
     }
@@ -899,6 +916,8 @@ export class ProjectsServiceImpl implements ProjectsService {
               "stories.sessions.attachedFiles",
               "stories.sessions.testResult",
               "stories.sessions.testResult.notes",
+              "stories.sessions.testResult.notes.testSteps",
+              "stories.sessions.testResult.notes.testSteps.screenshot",
               "stories.sessions.testResult.notes.tags",
               "stories.viewPoint",
               "stories.testTarget",
@@ -911,9 +930,11 @@ export class ProjectsServiceImpl implements ProjectsService {
         testMatrixWithStory.progressDatas = await progressDataRepository.find({
           testMatrix,
         });
-        testMatrixWithStory.testTargetGroups = await testTargetGroupRepository.find(
-          { where: { testMatrix: testMatrix.id }, relations: ["testTargets"] }
-        );
+        testMatrixWithStory.testTargetGroups =
+          await testTargetGroupRepository.find({
+            where: { testMatrix: testMatrix.id },
+            relations: ["testTargets"],
+          });
         testMatrixWithStory.viewPoints = (
           await testMatrixRepository.findOne(testMatrix.id, {
             relations: ["viewPoints"],
@@ -958,7 +979,10 @@ export class ProjectsServiceImpl implements ProjectsService {
                 doneDate: session.doneDate,
                 isDone: !!session.doneDate,
                 issues:
-                  session?.testResult?.notes?.map((note) => {
+                  session.testResult?.notes?.map((note) => {
+                    const testStep = note.testSteps
+                      ? note.testSteps[0]
+                      : undefined;
                     return {
                       details: note.details,
                       source: {
@@ -977,6 +1001,10 @@ export class ProjectsServiceImpl implements ProjectsService {
                       ticketId: "",
                       type: "notice",
                       value: note.value,
+                      imageFilePath:
+                        note.screenshot?.fileUrl ??
+                        testStep?.screenshot?.fileUrl ??
+                        "",
                     };
                   }) ?? [],
                 memo: session.memo,
@@ -1049,6 +1077,8 @@ export class ProjectsServiceImpl implements ProjectsService {
             return {
               id: viewPoint.id,
               name: viewPoint.name,
+              index: viewPoint.index,
+              description: viewPoint.description ?? "",
             };
           }),
         };

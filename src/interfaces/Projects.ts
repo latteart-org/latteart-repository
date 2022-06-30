@@ -44,6 +44,8 @@ export interface Project {
     viewPoints: {
       id: string;
       name: string;
+      index: number;
+      description: string;
     }[];
   }[];
   stories: StoryDetails[];
@@ -74,6 +76,7 @@ interface StoryDetails {
       ticketId: string;
       type: string;
       value: string;
+      imageFilePath?: string;
     }[];
     memo: string;
     name: string;
@@ -158,6 +161,8 @@ export interface UpdateProjectDto {
     viewPoints?: {
       id: string | null;
       name: string;
+      index: number;
+      description: string;
     }[];
   }[];
   stories: StoryDetails[];
@@ -167,4 +172,5 @@ export interface UpdateProjectDto {
 export interface ViewPoint {
   id: string | null;
   name: string;
+  index: number;
 }

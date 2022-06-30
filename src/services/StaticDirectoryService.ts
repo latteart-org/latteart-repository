@@ -18,6 +18,8 @@ import path from "path";
 import fs from "fs-extra";
 
 export interface StaticDirectoryService {
+  mkdir(dirname: string): Promise<string>;
+
   outputFile<T>(relativePathToRoot: string, data: T): Promise<void>;
 
   removeFile(relativePathToRoot: string): Promise<void>;
@@ -31,6 +33,11 @@ export interface StaticDirectoryService {
     destRelativePathToRoot: string
   ): Promise<void>;
 
+  copyFile(
+    sourceFilePath: string,
+    destRelativePathToRoot: string
+  ): Promise<void>;
+
   collectFileNames(filterPattern?: RegExp): Promise<string[]>;
 
   collectFilePaths(filterPattern?: RegExp): Promise<string[]>;
@@ -38,6 +45,12 @@ export interface StaticDirectoryService {
 
 export class StaticDirectoryServiceImpl implements StaticDirectoryService {
   constructor(private staticRootPath: string, private directoryPath: string) {}
+
+  public async mkdir(dirname: string): Promise<string> {
+    const dirPath = this.getJoinedPath(dirname);
+    await fs.mkdir(dirPath);
+    return dirPath;
+  }
 
   public async outputFile<T>(
     relativePathToRoot: string,
@@ -82,6 +95,20 @@ export class StaticDirectoryServiceImpl implements StaticDirectoryService {
     await fs.mkdirp(path.dirname(destFilePath));
     await fs.copyFile(sourceFilePath, destFilePath);
     await fs.remove(sourceFilePath);
+  }
+
+  public async copyFile(
+    sourceFilePath: string,
+    destRelativePathToRoot: string
+  ): Promise<void> {
+    const destFilePath = path.join(
+      this.staticRootPath,
+      this.directoryPath,
+      destRelativePathToRoot
+    );
+
+    await fs.mkdirp(path.dirname(destFilePath));
+    await fs.copyFile(sourceFilePath, destFilePath);
   }
 
   public async collectFileNames(filterPattern = /.+/): Promise<string[]> {
