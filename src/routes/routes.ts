@@ -208,6 +208,7 @@ const models: TsoaRoute.Models = {
               array: {
                 dataType: "nestedObjectLiteral",
                 nestedProperties: {
+                  imageFilePath: { dataType: "string" },
                   value: { dataType: "string", required: true },
                   type: { dataType: "string", required: true },
                   ticketId: { dataType: "string", required: true },
@@ -480,51 +481,29 @@ const models: TsoaRoute.Models = {
     additionalProperties: false,
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  CreateTestScriptDto: {
+  TestScriptGenerationOption: {
     dataType: "refObject",
     properties: {
-      pageObjects: {
-        dataType: "array",
-        array: {
-          dataType: "nestedObjectLiteral",
-          nestedProperties: {
-            script: { dataType: "string", required: true },
-            name: { dataType: "string", required: true },
-          },
-        },
+      testScript: {
+        dataType: "nestedObjectLiteral",
+        nestedProperties: { isSimple: { dataType: "boolean", required: true } },
         required: true,
       },
       testData: {
-        dataType: "array",
-        array: {
-          dataType: "nestedObjectLiteral",
-          nestedProperties: {
-            testData: { dataType: "string", required: true },
-            name: { dataType: "string", required: true },
-          },
-        },
-        required: true,
-      },
-      testSuite: {
         dataType: "nestedObjectLiteral",
         nestedProperties: {
-          spec: { dataType: "string", required: true },
-          name: { dataType: "string", required: true },
+          maxGeneration: { dataType: "double", required: true },
+          useDataDriven: { dataType: "boolean", required: true },
         },
         required: true,
-      },
-      others: {
-        dataType: "array",
-        array: {
-          dataType: "nestedObjectLiteral",
-          nestedProperties: {
-            script: { dataType: "string", required: true },
-            name: { dataType: "string", required: true },
-          },
-        },
       },
     },
     additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  CreateTestScriptDto: {
+    dataType: "refAlias",
+    type: { ref: "TestScriptGenerationOption", validators: {} },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   PatchSessionResponse: {
@@ -788,20 +767,26 @@ const models: TsoaRoute.Models = {
                 url: { dataType: "string", required: true },
                 title: { dataType: "string", required: true },
                 elementInfo: {
-                  dataType: "nestedObjectLiteral",
-                  nestedProperties: {
-                    attributes: {
+                  dataType: "union",
+                  subSchemas: [
+                    {
                       dataType: "nestedObjectLiteral",
-                      nestedProperties: {},
-                      additionalProperties: { dataType: "string" },
-                      required: true,
+                      nestedProperties: {
+                        attributes: {
+                          dataType: "nestedObjectLiteral",
+                          nestedProperties: {},
+                          additionalProperties: { dataType: "string" },
+                          required: true,
+                        },
+                        checked: { dataType: "boolean", required: true },
+                        value: { dataType: "string", required: true },
+                        xpath: { dataType: "string", required: true },
+                        text: { dataType: "string", required: true },
+                        tagname: { dataType: "string", required: true },
+                      },
                     },
-                    checked: { dataType: "boolean", required: true },
-                    value: { dataType: "string", required: true },
-                    xpath: { dataType: "string", required: true },
-                    text: { dataType: "string", required: true },
-                    tagname: { dataType: "string", required: true },
-                  },
+                    { dataType: "enum", enums: [null] },
+                  ],
                   required: true,
                 },
                 type: { dataType: "string", required: true },
