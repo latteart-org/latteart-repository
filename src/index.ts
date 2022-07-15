@@ -189,8 +189,6 @@ async function initializeOrmConnection(connectionName: string) {
 
     throw new Error(`Migration failed.`);
   });
-
-  await migrateProgressDatas();
 }
 
 function runServer(port: number, timeout?: number) {
@@ -260,65 +258,4 @@ function runServer(port: number, timeout?: number) {
   if (timeout) {
     server.timeout = timeout;
   }
-}
-
-async function migrateProgressDatas() {
-  const progressDataRepository = getRepository(ProgressDataEntity);
-
-  const progressDataEntities = await progressDataRepository.find();
-  const dailyTestTargetProgresses = progressDataEntities.flatMap(
-    (progressData) => {
-      const groups: {
-        id: string;
-        name: string;
-        testTargets: {
-          id: string;
-          name: string;
-          progress: {
-            completedNumber: number;
-            incompletedNumber: number;
-            planNumber: number;
-          };
-        }[];
-      }[] = JSON.parse(progressData.text);
-
-      return groups
-        .flatMap((group) => group.testTargets)
-        .map((testTarget) => {
-          return {
-            date: parseInt(progressData.date, 10),
-            testTarget,
-          };
-        });
-    }
-  );
-
-  const testTargetRepository = getRepository(TestTargetEntity);
-  const testProgressRepository = getRepository(TestProgressEntity);
-
-  for (const dailyTestTargetProgress of dailyTestTargetProgresses) {
-    const testTargetEntity = await testTargetRepository.findOne(
-      dailyTestTargetProgress.testTarget.id,
-      { relations: ["stories"] }
-    );
-
-    const storyEntities = testTargetEntity?.stories ?? [];
-
-    if (storyEntities.length === 0) {
-      continue;
-    }
-
-    await testProgressRepository.save({
-      date: unixtimeToDate(dailyTestTargetProgress.date),
-      plannedSessionNumber:
-        dailyTestTargetProgress.testTarget.progress.planNumber,
-      completedSessionNumber:
-        dailyTestTargetProgress.testTarget.progress.completedNumber,
-      incompletedSessionNumber:
-        dailyTestTargetProgress.testTarget.progress.incompletedNumber,
-      story: storyEntities[0],
-    });
-  }
-
-  await progressDataRepository.clear();
 }
