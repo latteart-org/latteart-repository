@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-import moment from "moment";
+import dayjs from "dayjs";
 
 export function unixtimeToDate(unixtime: number): Date {
-  return moment.unix(unixtime).toDate();
+  return dayjs.unix(unixtime).toDate();
 }
 
 export function unixtimeToFormattedString(
   unixtime: number,
   format: string
 ): string {
-  return moment.unix(unixtime).format(format);
+  return dayjs.unix(unixtime).format(format);
 }
 
 export function dateToFormattedString(date: Date, format: string): string {
-  return moment(date).format(format);
+  return dayjs(date).format(format);
 }
 
 export function getCurrentUnixtime(): number {
-  return moment().unix();
+  return dayjs().unix();
 }
 
 export function getCurrentEpochMillis(): number {
-  return moment().valueOf();
+  return dayjs().valueOf();
 }
