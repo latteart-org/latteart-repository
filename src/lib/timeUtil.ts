@@ -14,28 +14,27 @@
  * limitations under the License.
  */
 
-import {
-  getCurrentEpochMillis,
-  getCurrentUnixtime,
-  unixtimeToFormattedString,
-} from "@/lib/timeUtil";
+import dayjs from "dayjs";
 
-export interface TimestampService {
-  unix(): number;
-  format(format: string): string;
-  epochMilliseconds(): number;
+export function unixtimeToDate(unixtime: number): Date {
+  return dayjs.unix(unixtime).toDate();
 }
 
-export class TimestampServiceImpl implements TimestampService {
-  public unix(): number {
-    return getCurrentUnixtime();
-  }
+export function unixtimeToFormattedString(
+  unixtime: number,
+  format: string
+): string {
+  return dayjs.unix(unixtime).format(format);
+}
 
-  public format(format: string): string {
-    return unixtimeToFormattedString(getCurrentUnixtime(), format);
-  }
+export function dateToFormattedString(date: Date, format: string): string {
+  return dayjs(date).format(format);
+}
 
-  public epochMilliseconds(): number {
-    return getCurrentEpochMillis();
-  }
+export function getCurrentUnixtime(): number {
+  return dayjs().unix();
+}
+
+export function getCurrentEpochMillis(): number {
+  return dayjs().valueOf();
 }

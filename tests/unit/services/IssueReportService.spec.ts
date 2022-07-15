@@ -140,7 +140,6 @@ describe("IssueReportService", () => {
             ],
           },
         ],
-        progressDatas: [],
       };
 
       const outputDirectoryPath = "outputDirectoryPath";

@@ -49,6 +49,7 @@ export enum ServerErrorCode {
   FILE_UPLOAD_FAILED = "upload_failed",
   GET_SCREENSHOTS_FAILED = "get_screenshots_failed",
   NO_TEST_CASES_GENERATED = "no_test_cases_generated",
+  GET_TEST_PROGRESS_FAILED = "get_test_progress_failed",
 }
 
 export interface ServerErrorData {
