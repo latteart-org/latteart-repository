@@ -23,7 +23,6 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { ProgressDataEntity } from "./ProgressDataEntity";
 import { ProjectEntity } from "./ProjectEntity";
 import { StoryEntity } from "./StoryEntity";
 import { TestTargetGroupEntity } from "./TestTargetGroupEntity";
@@ -43,13 +42,6 @@ export class TestMatrixEntity {
 
   @Column({ name: "index" })
   index!: number;
-
-  @OneToMany(
-    () => ProgressDataEntity,
-    (progressData) => progressData.testMatrix,
-    { cascade: ["remove"] }
-  )
-  progressDatas!: ProgressDataEntity[];
 
   @OneToMany(
     () => TestTargetGroupEntity,

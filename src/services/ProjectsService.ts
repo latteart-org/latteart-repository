@@ -25,7 +25,6 @@ import { ProjectEntity } from "../entities/ProjectEntity";
 import { EntityManager, getManager } from "typeorm";
 import { ViewPointPresetEntity } from "../entities/ViewPointPresetEntity";
 import { getRepository } from "typeorm";
-import { ProgressDataEntity } from "../entities/ProgressDataEntity";
 import { TestMatrixEntity } from "../entities/TestMatrixEntity";
 import { TestTargetGroupEntity } from "../entities/TestTargetGroupEntity";
 import { TestTargetEntity } from "../entities/TestTargetEntity";
@@ -124,7 +123,6 @@ export class ProjectsServiceImpl implements ProjectsService {
     );
 
     const testMatrixRepository = getRepository(TestMatrixEntity);
-    const progressDataRepository = getRepository(ProgressDataEntity);
     const testTargetGroupRepository = getRepository(TestTargetGroupEntity);
     const testMatrices = await Promise.all(
       existsProject.testMatrices.map(async (testMatrix) => {
@@ -135,9 +133,6 @@ export class ProjectsServiceImpl implements ProjectsService {
         if (!testMatrixWithStory) {
           throw new Error(`TestMatrix not found: ${testMatrix.id}`);
         }
-        testMatrixWithStory.progressDatas = await progressDataRepository.find({
-          testMatrix,
-        });
         testMatrixWithStory.testTargetGroups =
           await testTargetGroupRepository.find({
             where: { testMatrix: testMatrix.id },
@@ -836,7 +831,6 @@ export class ProjectsServiceImpl implements ProjectsService {
   private async getReturnProject(projectId: string): Promise<ProjectEntity> {
     const projectRepository = getRepository(ProjectEntity);
     const testMatrixRepository = getRepository(TestMatrixEntity);
-    const progressDataRepository = getRepository(ProgressDataEntity);
     const testTargetGroupRepository = getRepository(TestTargetGroupEntity);
 
     const updatedProject = await projectRepository.findOne(projectId, {
@@ -868,9 +862,6 @@ export class ProjectsServiceImpl implements ProjectsService {
         if (!testMatrixWithStory) {
           throw new Error();
         }
-        testMatrixWithStory.progressDatas = await progressDataRepository.find({
-          testMatrix,
-        });
         testMatrixWithStory.testTargetGroups =
           await testTargetGroupRepository.find({
             where: { testMatrix: testMatrix.id },
