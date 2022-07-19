@@ -17,17 +17,6 @@ LatteArt Repository is a service that stores test information for LatteArt.
 
 ## Build
 
-### Ready to build
-
-1. Put `history-viewer` and `snapshot-viewer` directories into the root directory of the project.
-   ```bash
-   latteart-repository
-       ├─ history-viewer # put
-       └─ snapshot-viewer # put
-   ```
-
-### How to build
-
 1. Go to the root directory of the project.
 1. Execute the following command to create validators.
    ```bash
@@ -40,13 +29,14 @@ LatteArt Repository is a service that stores test information for LatteArt.
    ```
 1. The following directories and files are created in `dist/latteart-repository`.
    ```bash
-   dist/latteart-repository
+   dist/latteart-repository/
+       ├─ node_modules/ # external libraries
+       ├─ public/ # resource directory
        ├─ latteart-repository.exe # for Windows
        ├─ latteart-repository # for Mac
        ├─ latteart.config.json # config file
        ├─ latteart.device.config.json # device config file
-       ├─ history-viewer
-       └─ snapshot-viewer
+       └─ ormconfig.json # DB config file
    ```
 
 ## Watch (for developer)
