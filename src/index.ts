@@ -46,7 +46,6 @@ import { ScreenshotEntity } from "./entities/ScreenshotEntity";
 import { StaticDirectoryServiceImpl } from "./services/StaticDirectoryService";
 import { AttachedFileEntity } from "./entities/AttachedFilesEntity";
 import { ConfigEntity } from "./entities/ConfigEntity";
-import { ProgressDataEntity } from "./entities/ProgressDataEntity";
 import { ProjectEntity } from "./entities/ProjectEntity";
 import { SessionEntity } from "./entities/SessionEntity";
 import { SnapshotEntity } from "./entities/SnapshotEntity";
@@ -140,7 +139,6 @@ async function initializeOrmConnection(connectionName: string) {
       TestStepEntity,
       AttachedFileEntity,
       ConfigEntity,
-      ProgressDataEntity,
       ProjectEntity,
       SessionEntity,
       SnapshotEntity,
