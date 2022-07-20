@@ -891,6 +891,38 @@ export class ProjectsServiceImpl implements ProjectsService {
           status: story.status,
           sessions: story.sessions
             .map((session) => {
+              const sortedNotes =
+                session.testResult?.notes?.slice().sort((a, b) => {
+                  const stepA = a.testSteps ? a.testSteps[0] : undefined;
+                  const stepB = b.testSteps ? b.testSteps[0] : undefined;
+                  return (stepA?.timestamp ?? 0) - (stepB?.timestamp ?? 0);
+                }) ?? [];
+
+              const issues = sortedNotes.map((note) => {
+                const testStep = note.testSteps ? note.testSteps[0] : undefined;
+
+                return {
+                  details: note.details,
+                  source: { index: 0, type: "notice" },
+                  status: note.tags?.find((tag) => {
+                    return tag.name === "reported";
+                  })
+                    ? "reported"
+                    : note.tags?.find((tag) => {
+                        return tag.name === "invalid";
+                      })
+                    ? "invalid"
+                    : "",
+                  ticketId: "",
+                  type: "notice",
+                  value: note.value,
+                  imageFilePath:
+                    note.screenshot?.fileUrl ??
+                    testStep?.screenshot?.fileUrl ??
+                    "",
+                };
+              });
+
               return {
                 index: session.index,
                 id: session.id,
@@ -910,35 +942,7 @@ export class ProjectsServiceImpl implements ProjectsService {
                     }) ?? [],
                 doneDate: session.doneDate,
                 isDone: !!session.doneDate,
-                issues:
-                  session.testResult?.notes?.map((note) => {
-                    const testStep = note.testSteps
-                      ? note.testSteps[0]
-                      : undefined;
-                    return {
-                      details: note.details,
-                      source: {
-                        index: 0,
-                        type: "notice",
-                      },
-                      status: note.tags?.find((tag) => {
-                        return tag.name === "reported";
-                      })
-                        ? "reported"
-                        : note.tags?.find((tag) => {
-                            return tag.name === "invalid";
-                          })
-                        ? "invalid"
-                        : "",
-                      ticketId: "",
-                      type: "notice",
-                      value: note.value,
-                      imageFilePath:
-                        note.screenshot?.fileUrl ??
-                        testStep?.screenshot?.fileUrl ??
-                        "",
-                    };
-                  }) ?? [],
+                issues,
                 memo: session.memo,
                 name: session.name,
                 testItem: session.testItem,
