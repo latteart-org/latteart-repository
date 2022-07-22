@@ -35,6 +35,7 @@ interface exportProjectData {
       }[];
     }[];
   }[];
+  progressesFile: { fileName: string; data: string };
 }
 interface exportTestResultData {
   testResultId: string;
@@ -112,6 +113,11 @@ export class ExportFileRepositoryServiceImpl
     await fs.outputFile(
       path.join(projectPath, project.projectFile.fileName),
       project.projectFile.data
+    );
+
+    await fs.outputFile(
+      path.join(projectPath, project.progressesFile.fileName),
+      project.progressesFile.data
     );
 
     await Promise.all(
