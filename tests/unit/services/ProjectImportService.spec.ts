@@ -273,6 +273,10 @@ describe("ProjectImportService", () => {
           data: "{}",
         },
         {
+          filePath: "projects/projectId1/progress.json",
+          data: "{}",
+        },
+        {
           filePath: "projects/projectId1/storyId1/sessionId1/aaa.webp",
           data: "",
         },
@@ -333,6 +337,7 @@ describe("ProjectImportService", () => {
             ],
           },
         ],
+        progressesFile: { fileName: "progress.json", data: "{}" },
       };
       expect(result).toEqual(projectData);
     });
@@ -343,6 +348,7 @@ describe("ProjectImportService", () => {
       const timestampService = createTimestampServiceMock();
       const attachedFileRepositoryService =
         createImageFileRepositoryServiceMock();
+      const progressJson = {};
 
       const projectJson: Project & {
         progressDatas: ProgressData[];
@@ -429,6 +435,10 @@ describe("ProjectImportService", () => {
           data: JSON.stringify(projectJson),
         },
         stories: [],
+        progressesFile: {
+          fileName: "progress.json",
+          data: JSON.stringify(progressJson),
+        },
       };
 
       const service = new ProjectImportService();

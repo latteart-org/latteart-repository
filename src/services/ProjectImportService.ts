@@ -37,6 +37,7 @@ import { StaticDirectoryService } from "./StaticDirectoryService";
 import { TransactionRunner } from "@/TransactionRunner";
 import { TestProgressEntity } from "@/entities/TestProgressEntity";
 import { unixtimeToDate } from "@/lib/timeUtil";
+import { DailyTestProgress } from "./TestProgressService";
 
 interface TestResultData {
   testResultId: string;
@@ -57,6 +58,7 @@ interface ProjectData {
       }[];
     }[];
   }[];
+  progressesFile: { fileName: string; data: string };
 }
 
 export class ProjectImportService {
@@ -129,6 +131,7 @@ export class ProjectImportService {
       projectId: "",
       projectFile: { fileName: "", data: "" },
       stories: [],
+      progressesFile: { fileName: "", data: "" },
     };
     for (const file of files) {
       const fileName = path.basename(file.filePath);
@@ -140,6 +143,11 @@ export class ProjectImportService {
         projectData.projectId = divs[projectsDirIndex + 1];
         projectData.projectFile.fileName = "project.json";
         projectData.projectFile.data = file.data as string;
+        continue;
+      }
+      if (fileName === "progress.json") {
+        projectData.progressesFile.fileName = "progress.json";
+        projectData.progressesFile.data = file.data as string;
         continue;
       }
       const storyId = divs[projectsDirIndex + 2];
@@ -235,6 +243,9 @@ export class ProjectImportService {
     const projectJson = JSON.parse(projectData.projectFile.data) as Project & {
       progressDatas: ProgressData[];
     };
+    const progressJson = JSON.parse(
+      projectData.progressesFile.data
+    ) as DailyTestProgress[];
     let projectId = "";
 
     // <oldId, newEntity(newId)>
@@ -242,23 +253,33 @@ export class ProjectImportService {
     const groupIdRelationMap: Map<string, string> = new Map();
     const testTargetRelationMap: Map<string, string> = new Map();
 
-    const oldTestTargetProgressDatas = projectJson.progressDatas.flatMap(
-      ({ testMatrixProgressDatas }) => {
-        return testMatrixProgressDatas.flatMap(({ date, groups }) => {
-          return groups.flatMap((group) => {
-            return group.testTargets.map((testTarget) => {
-              return {
-                date,
-                testTargetId: testTarget.id,
-                plannedSessionNumber: testTarget.progress.planNumber,
-                completedSessionNumber: testTarget.progress.completedNumber,
-                incompletedSessionNumber: testTarget.progress.incompletedNumber,
-              };
+    const newTestTargetProgressDatas =
+      progressJson.length > 0
+        ? progressJson.flatMap(({ date, storyProgresses }) => {
+            return storyProgresses.map((story) => {
+              return { date, storyProgresses: story };
+            });
+          })
+        : undefined;
+
+    const oldTestTargetProgressDatas = projectJson.progressDatas
+      ? projectJson.progressDatas.flatMap(({ testMatrixProgressDatas }) => {
+          return testMatrixProgressDatas.flatMap(({ date, groups }) => {
+            return groups.flatMap((group) => {
+              return group.testTargets.map((testTarget) => {
+                return {
+                  date,
+                  testTargetId: testTarget.id,
+                  plannedSessionNumber: testTarget.progress.planNumber,
+                  completedSessionNumber: testTarget.progress.completedNumber,
+                  incompletedSessionNumber:
+                    testTarget.progress.incompletedNumber,
+                };
+              });
             });
           });
-        });
-      }
-    );
+        })
+      : undefined;
 
     await service.transactionRunner.waitAndRun(
       async (transactionalEntityManager) => {
@@ -441,7 +462,7 @@ export class ProjectImportService {
                   await transactionalEntityManager.save(newSessionEntity);
                 }
 
-                if (storyIndex === 1) {
+                if (storyIndex === 1 && oldTestTargetProgressDatas) {
                   const progressDatas = oldTestTargetProgressDatas.filter(
                     ({ testTargetId }) =>
                       testTargetBeforeSaving.id === testTargetId
@@ -459,6 +480,27 @@ export class ProjectImportService {
                       (testProgressEntity.date = unixtimeToDate(
                         parseInt(progressData.date, 10)
                       )),
+                      await transactionalEntityManager.save(testProgressEntity);
+                  }
+                }
+
+                if (newTestTargetProgressDatas) {
+                  const progressDatas = newTestTargetProgressDatas.filter(
+                    ({ storyProgresses }) =>
+                      testTargetBeforeSaving.id ===
+                        storyProgresses.testTargetId &&
+                      oldViewPointId === storyProgresses.viewPointId
+                  );
+                  const testProgressEntity = new TestProgressEntity();
+                  for (const progressData of progressDatas) {
+                    testProgressEntity.plannedSessionNumber =
+                      progressData.storyProgresses.plannedSessionNumber;
+                    (testProgressEntity.completedSessionNumber =
+                      progressData.storyProgresses.completedSessionNumber),
+                      (testProgressEntity.incompletedSessionNumber =
+                        progressData.storyProgresses.incompletedSessionNumber),
+                      (testProgressEntity.story = newStoryEntity),
+                      (testProgressEntity.date = new Date(progressData.date)),
                       await transactionalEntityManager.save(testProgressEntity);
                   }
                 }

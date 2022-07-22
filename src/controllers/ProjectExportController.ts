@@ -66,10 +66,12 @@ export class ProjectExportController extends Controller {
         exportFileRepository: exportFileRepositoryService,
       });
 
+      const testProgressService = new TestProgressServiceImpl();
+
       const projectService = new ProjectsServiceImpl(
         {
           timestamp: timestampService,
-          testProgress: new TestProgressServiceImpl(),
+          testProgress: testProgressService,
         },
         transactionRunner
       );
@@ -83,6 +85,7 @@ export class ProjectExportController extends Controller {
           testResultService,
           exportService,
           exportFileRepositoryService,
+          testProgressService,
         }
       );
       return {
