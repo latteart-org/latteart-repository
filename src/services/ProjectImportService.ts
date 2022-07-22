@@ -241,11 +241,11 @@ export class ProjectImportService {
     }
   ): Promise<string> {
     const projectJson = JSON.parse(projectData.projectFile.data) as Project & {
-      progressDatas: ProgressData[];
+      progressDatas?: ProgressData[];
     };
-    const progressJson = JSON.parse(
-      projectData.progressesFile.data
-    ) as DailyTestProgress[];
+    const progressJson = projectData.progressesFile.data
+      ? (JSON.parse(projectData.progressesFile.data) as DailyTestProgress[])
+      : [];
     let projectId = "";
 
     // <oldId, newEntity(newId)>
@@ -262,24 +262,22 @@ export class ProjectImportService {
           })
         : undefined;
 
-    const oldTestTargetProgressDatas = projectJson.progressDatas
-      ? projectJson.progressDatas.flatMap(({ testMatrixProgressDatas }) => {
-          return testMatrixProgressDatas.flatMap(({ date, groups }) => {
-            return groups.flatMap((group) => {
-              return group.testTargets.map((testTarget) => {
-                return {
-                  date,
-                  testTargetId: testTarget.id,
-                  plannedSessionNumber: testTarget.progress.planNumber,
-                  completedSessionNumber: testTarget.progress.completedNumber,
-                  incompletedSessionNumber:
-                    testTarget.progress.incompletedNumber,
-                };
-              });
+    const oldTestTargetProgressDatas =
+      projectJson.progressDatas?.flatMap(({ testMatrixProgressDatas }) => {
+        return testMatrixProgressDatas.flatMap(({ date, groups }) => {
+          return groups.flatMap((group) => {
+            return group.testTargets.map((testTarget) => {
+              return {
+                date,
+                testTargetId: testTarget.id,
+                plannedSessionNumber: testTarget.progress.planNumber,
+                completedSessionNumber: testTarget.progress.completedNumber,
+                incompletedSessionNumber: testTarget.progress.incompletedNumber,
+              };
             });
           });
-        })
-      : undefined;
+        });
+      }) ?? [];
 
     await service.transactionRunner.waitAndRun(
       async (transactionalEntityManager) => {
@@ -462,7 +460,7 @@ export class ProjectImportService {
                   await transactionalEntityManager.save(newSessionEntity);
                 }
 
-                if (storyIndex === 1 && oldTestTargetProgressDatas) {
+                if (storyIndex === 1 && oldTestTargetProgressDatas.length > 0) {
                   const progressDatas = oldTestTargetProgressDatas.filter(
                     ({ testTargetId }) =>
                       testTargetBeforeSaving.id === testTargetId
