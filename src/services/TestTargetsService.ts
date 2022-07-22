@@ -134,15 +134,19 @@ export class TestTargetService {
               await transactionalEntityManager.save(targetStory);
             }
 
-            const progress = await transactionalEntityManager.findOne(
+            const progress = await transactionalEntityManager.find(
               TestProgressEntity,
-              targetStory.id
+              {
+                where: { story: targetStory },
+                order: { createdAt: "DESC" },
+                relations: ["story"],
+              }
             );
-            if (progress) {
-              if (progress?.plannedSessionNumber !== newPlan.value) {
-                progress.plannedSessionNumber = newPlan.value;
-                progress.date = new Date();
-                await transactionalEntityManager.save(progress);
+            if (progress[0]) {
+              if (progress[0].plannedSessionNumber !== newPlan.value) {
+                progress[0].plannedSessionNumber = newPlan.value;
+                progress[0].date = new Date();
+                await transactionalEntityManager.save(progress[0]);
               }
             } else {
               const newProgress = new TestProgressEntity();
