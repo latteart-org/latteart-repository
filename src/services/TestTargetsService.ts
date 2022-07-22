@@ -136,10 +136,14 @@ export class TestTargetService {
 
             const progress = await transactionalEntityManager.findOne(
               TestProgressEntity,
-              targetStory.id
+              {
+                where: { story: targetStory },
+                order: { createdAt: "DESC" },
+                relations: ["story"],
+              }
             );
             if (progress) {
-              if (progress?.plannedSessionNumber !== newPlan.value) {
+              if (progress.plannedSessionNumber !== newPlan.value) {
                 progress.plannedSessionNumber = newPlan.value;
                 progress.date = new Date();
                 await transactionalEntityManager.save(progress);
