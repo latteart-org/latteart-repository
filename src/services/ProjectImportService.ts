@@ -58,7 +58,7 @@ interface ProjectData {
       }[];
     }[];
   }[];
-  progressesFile: { fileName: string; data: string };
+  progressesFile?: { fileName: string; data: string };
 }
 
 export class ProjectImportService {
@@ -131,7 +131,6 @@ export class ProjectImportService {
       projectId: "",
       projectFile: { fileName: "", data: "" },
       stories: [],
-      progressesFile: { fileName: "", data: "" },
     };
     for (const file of files) {
       const fileName = path.basename(file.filePath);
@@ -146,8 +145,10 @@ export class ProjectImportService {
         continue;
       }
       if (fileName === "progress.json") {
-        projectData.progressesFile.fileName = "progress.json";
-        projectData.progressesFile.data = file.data as string;
+        projectData.progressesFile = {
+          fileName: "progress.json",
+          data: file.data as string,
+        };
         continue;
       }
       const storyId = divs[projectsDirIndex + 2];
@@ -243,7 +244,7 @@ export class ProjectImportService {
     const projectJson = JSON.parse(projectData.projectFile.data) as Project & {
       progressDatas?: ProgressData[];
     };
-    const progressJson = projectData.progressesFile.data
+    const progressJson = projectData.progressesFile
       ? (JSON.parse(projectData.progressesFile.data) as DailyTestProgress[])
       : [];
     let projectId = "";
