@@ -15,17 +15,6 @@ LatteArt で利用するテスト情報を保存するサービスです。
 
 ## ビルド
 
-### 事前準備
-
-1. LatteArt(GUI 側)でビルドした以下 2 点をソースコードのルートディレクトリに配置します。
-   ```bash
-   latteart-repository
-       ├─ history-viewer # 配置
-       └─ snapshot-viewer # 配置
-   ```
-
-### 手順
-
 1. ソースコードのルートディレクトリに移動します。
 1. 以下コマンドを実行し、バリデータを生成します。
    ```bash
@@ -38,13 +27,14 @@ LatteArt で利用するテスト情報を保存するサービスです。
    ```
 1. `dist/latteart-repository`に以下構成のディレクトリが作成されます。
    ```bash
-   dist/latteart-repository
+   dist/latteart-repository/
+       ├─ node_modules/ # 外部ライブラリ群
+       ├─ public/ # リソース格納用ディレクトリ
        ├─ latteart-repository.exe # Windows用実行ファイル
        ├─ latteart-repository # Mac用実行ファイル
        ├─ latteart.config.json # 設定ファイル
        ├─ latteart.device.config.json # デバイス設定ファイル
-       ├─ history-viewer # スナップショット(履歴画面)ビューア
-       └─ snapshot-viewer # スナップショットビューア
+       └─ ormconfig.json # DB設定ファイル
    ```
 
 ## ウォッチ(開発用)

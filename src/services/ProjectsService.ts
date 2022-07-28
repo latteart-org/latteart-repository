@@ -25,7 +25,6 @@ import { ProjectEntity } from "../entities/ProjectEntity";
 import { EntityManager, getManager } from "typeorm";
 import { ViewPointPresetEntity } from "../entities/ViewPointPresetEntity";
 import { getRepository } from "typeorm";
-import { ProgressDataEntity } from "../entities/ProgressDataEntity";
 import { TestMatrixEntity } from "../entities/TestMatrixEntity";
 import { TestTargetGroupEntity } from "../entities/TestTargetGroupEntity";
 import { TestTargetEntity } from "../entities/TestTargetEntity";
@@ -36,6 +35,7 @@ import { TestResultEntity } from "@/entities/TestResultEntity";
 import LoggingService from "@/logger/LoggingService";
 import { TimestampService } from "./TimestampService";
 import { TransactionRunner } from "@/TransactionRunner";
+import { TestProgressService } from "./TestProgressService";
 
 export interface ProjectsService {
   getProjectIdentifiers(): Promise<ProjectListResponse[]>;
@@ -53,6 +53,7 @@ export class ProjectsServiceImpl implements ProjectsService {
   constructor(
     private service: {
       timestamp: TimestampService;
+      testProgress: TestProgressService;
     },
     private transactionRunner: TransactionRunner
   ) {}
@@ -122,7 +123,6 @@ export class ProjectsServiceImpl implements ProjectsService {
     );
 
     const testMatrixRepository = getRepository(TestMatrixEntity);
-    const progressDataRepository = getRepository(ProgressDataEntity);
     const testTargetGroupRepository = getRepository(TestTargetGroupEntity);
     const testMatrices = await Promise.all(
       existsProject.testMatrices.map(async (testMatrix) => {
@@ -133,9 +133,6 @@ export class ProjectsServiceImpl implements ProjectsService {
         if (!testMatrixWithStory) {
           throw new Error(`TestMatrix not found: ${testMatrix.id}`);
         }
-        testMatrixWithStory.progressDatas = await progressDataRepository.find({
-          testMatrix,
-        });
         testMatrixWithStory.testTargetGroups =
           await testTargetGroupRepository.find({
             where: { testMatrix: testMatrix.id },
@@ -280,52 +277,7 @@ export class ProjectsServiceImpl implements ProjectsService {
             }
           }
         }
-        for (const progressData of requestBody.progressDatas) {
-          for (const testMatrixProgressData of progressData.testMatrixProgressDatas) {
-            const groupProgressDatas = testMatrixProgressData.groups.flatMap(
-              (group) => {
-                const testTargets = group.testTargets.flatMap((testTarget) => {
-                  if (testTarget.id) return [testTarget];
 
-                  if (newTestTargetEntity) {
-                    return [{ ...testTarget, id: newTestTargetEntity.id }];
-                  }
-
-                  return [];
-                });
-
-                if (group.id) return [{ ...group, testTargets }];
-
-                if (newTestTargetGroupEntity) {
-                  return [
-                    {
-                      ...group,
-                      testTargets,
-                      id: newTestTargetGroupEntity.id,
-                    },
-                  ];
-                }
-
-                return [];
-              }
-            );
-
-            const testMatrixEntity =
-              (await transactionalEntityManager.findOne(
-                TestMatrixEntity,
-                progressData.testMatrixId
-              )) ?? newTestMatrixEntity;
-
-            if (testMatrixEntity) {
-              await this.updateProgressData(
-                transactionalEntityManager,
-                testMatrixEntity,
-                testMatrixProgressData.date,
-                JSON.stringify(groupProgressDatas)
-              );
-            }
-          }
-        }
         for (const [index, story] of requestBody.stories.entries()) {
           let existsStory = null;
           for (const t of existsProject.testMatrices) {
@@ -370,6 +322,30 @@ export class ProjectsServiceImpl implements ProjectsService {
             );
             unupdatedSessions = sessionEntityWithUnupdateList.unupdatedList;
           }
+
+          const plannedSessionNumber =
+            requestBody.testMatrices
+              .find((testMatrix) => testMatrix.id === story.testMatrixId)
+              ?.groups.find((group) =>
+                group.testTargets.some(
+                  (testTarget) => testTarget.id === story.testTargetId
+                )
+              )
+              ?.testTargets.find(
+                (testTarget) => testTarget.id === story.testTargetId
+              )
+              ?.plans.find((plan) => plan.viewPointId === story.viewPointId)
+              ?.value ?? 0;
+
+          await this.service.testProgress.registerTestProgress(story.id, {
+            plannedSessionNumber,
+            completedSessionNumber: story.sessions.filter(
+              (session) => session.doneDate
+            ).length,
+            incompletedSessionNumber: story.sessions.filter(
+              (session) => !session.doneDate
+            ).length,
+          });
         }
         LoggingService.debug(
           `END UPDATE - ${this.service.timestamp.format(
@@ -678,31 +654,6 @@ export class ProjectsServiceImpl implements ProjectsService {
     };
   }
 
-  private async updateProgressData(
-    transactionalEntityManager: EntityManager,
-    testMatrix: TestMatrixEntity,
-    date: string,
-    text: string
-  ): Promise<void> {
-    let targetProgressData = await transactionalEntityManager.findOne(
-      ProgressDataEntity,
-      {
-        date,
-        testMatrix,
-      },
-      { relations: ["testMatrix"] }
-    );
-    if (targetProgressData) {
-      if (targetProgressData.text === text) {
-        return;
-      }
-      targetProgressData.text = text;
-    } else {
-      targetProgressData = new ProgressDataEntity({ testMatrix, date, text });
-    }
-    await transactionalEntityManager.save(targetProgressData);
-  }
-
   private async createStoriesFromViewPoint(
     transactionalEntityManager: EntityManager,
     viewPoint: ViewPointEntity,
@@ -877,25 +828,9 @@ export class ProjectsServiceImpl implements ProjectsService {
     }
   }
 
-  private extractissuesFrom(session: SessionEntity): any {
-    session.testResult?.notes?.map((note) => {
-      return {
-        details: note.details,
-        source: {
-          index: 0,
-          type: "notice",
-        },
-        status: "",
-        ticketid: "",
-        type: "notice",
-        value: note.value,
-      };
-    });
-  }
   private async getReturnProject(projectId: string): Promise<ProjectEntity> {
     const projectRepository = getRepository(ProjectEntity);
     const testMatrixRepository = getRepository(TestMatrixEntity);
-    const progressDataRepository = getRepository(ProgressDataEntity);
     const testTargetGroupRepository = getRepository(TestTargetGroupEntity);
 
     const updatedProject = await projectRepository.findOne(projectId, {
@@ -927,9 +862,6 @@ export class ProjectsServiceImpl implements ProjectsService {
         if (!testMatrixWithStory) {
           throw new Error();
         }
-        testMatrixWithStory.progressDatas = await progressDataRepository.find({
-          testMatrix,
-        });
         testMatrixWithStory.testTargetGroups =
           await testTargetGroupRepository.find({
             where: { testMatrix: testMatrix.id },
@@ -959,6 +891,38 @@ export class ProjectsServiceImpl implements ProjectsService {
           status: story.status,
           sessions: story.sessions
             .map((session) => {
+              const sortedNotes =
+                session.testResult?.notes?.slice().sort((a, b) => {
+                  const stepA = a.testSteps ? a.testSteps[0] : undefined;
+                  const stepB = b.testSteps ? b.testSteps[0] : undefined;
+                  return (stepA?.timestamp ?? 0) - (stepB?.timestamp ?? 0);
+                }) ?? [];
+
+              const issues = sortedNotes.map((note) => {
+                const testStep = note.testSteps ? note.testSteps[0] : undefined;
+
+                return {
+                  details: note.details,
+                  source: { index: 0, type: "notice" },
+                  status: note.tags?.find((tag) => {
+                    return tag.name === "reported";
+                  })
+                    ? "reported"
+                    : note.tags?.find((tag) => {
+                        return tag.name === "invalid";
+                      })
+                    ? "invalid"
+                    : "",
+                  ticketId: "",
+                  type: "notice",
+                  value: note.value,
+                  imageFilePath:
+                    note.screenshot?.fileUrl ??
+                    testStep?.screenshot?.fileUrl ??
+                    "",
+                };
+              });
+
               return {
                 index: session.index,
                 id: session.id,
@@ -978,35 +942,7 @@ export class ProjectsServiceImpl implements ProjectsService {
                     }) ?? [],
                 doneDate: session.doneDate,
                 isDone: !!session.doneDate,
-                issues:
-                  session.testResult?.notes?.map((note) => {
-                    const testStep = note.testSteps
-                      ? note.testSteps[0]
-                      : undefined;
-                    return {
-                      details: note.details,
-                      source: {
-                        index: 0,
-                        type: "notice",
-                      },
-                      status: note.tags?.find((tag) => {
-                        return tag.name === "reported";
-                      })
-                        ? "reported"
-                        : note.tags?.find((tag) => {
-                            return tag.name === "invalid";
-                          })
-                        ? "invalid"
-                        : "",
-                      ticketId: "",
-                      type: "notice",
-                      value: note.value,
-                      imageFilePath:
-                        note.screenshot?.fileUrl ??
-                        testStep?.screenshot?.fileUrl ??
-                        "",
-                    };
-                  }) ?? [],
+                issues,
                 memo: session.memo,
                 name: session.name,
                 testItem: session.testItem,
@@ -1044,12 +980,14 @@ export class ProjectsServiceImpl implements ProjectsService {
         return {
           id: testMatrix.id,
           name: testMatrix.name,
+          index: testMatrix.index,
           groups: testMatrix.testTargetGroups
             .sort(ascSortFunc)
             .map((testTargetGroup) => {
               return {
                 id: testTargetGroup.id,
                 name: testTargetGroup.name,
+                index: testTargetGroup.index,
                 testTargets: testTargetGroup.testTargets
                   .sort(ascSortFunc)
                   .map((testTarget) => {
@@ -1068,6 +1006,7 @@ export class ProjectsServiceImpl implements ProjectsService {
                     return {
                       id: testTarget.id,
                       name: testTarget.name,
+                      index: testTarget.index,
                       plans,
                     };
                   }),
@@ -1084,32 +1023,6 @@ export class ProjectsServiceImpl implements ProjectsService {
         };
       }),
       stories,
-      progressDatas: project.testMatrices.map((testMatrix) => {
-        return {
-          testMatrixId: testMatrix.id,
-          testMatrixProgressDatas: testMatrix.progressDatas.map(
-            (progressData) => {
-              const groups = JSON.parse(progressData.text) as {
-                name: string;
-                id: string;
-                testTargets: {
-                  progress: {
-                    planNumber: number;
-                    incompletedNumber: number;
-                    completedNumber: number;
-                  };
-                  name: string;
-                  id: string;
-                }[];
-              }[];
-              return {
-                date: progressData.date,
-                groups,
-              };
-            }
-          ),
-        };
-      }),
     };
   }
 }

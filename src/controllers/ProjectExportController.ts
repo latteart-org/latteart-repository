@@ -33,6 +33,7 @@ import { ImageFileRepositoryServiceImpl } from "@/services/ImageFileRepositorySe
 import { ConfigsService } from "@/services/ConfigsService";
 import { ExportFileRepositoryServiceImpl } from "@/services/ExportFileRepositoryService";
 import { ProjectsServiceImpl } from "@/services/ProjectsService";
+import { TestProgressServiceImpl } from "@/services/TestProgressService";
 
 @Route("projects/{projectId}/export")
 export class ProjectExportController extends Controller {
@@ -43,11 +44,10 @@ export class ProjectExportController extends Controller {
   ): Promise<{ url: string }> {
     try {
       const timestampService = new TimestampServiceImpl();
-      const screenshotFileRepositoryService = new ImageFileRepositoryServiceImpl(
-        {
+      const screenshotFileRepositoryService =
+        new ImageFileRepositoryServiceImpl({
           staticDirectory: screenshotDirectoryService,
-        }
-      );
+        });
       const exportFileRepositoryService = new ExportFileRepositoryServiceImpl({
         staticDirectory: exportDirectoryService,
         imageFileRepository: screenshotFileRepositoryService,
@@ -66,9 +66,12 @@ export class ProjectExportController extends Controller {
         exportFileRepository: exportFileRepositoryService,
       });
 
+      const testProgressService = new TestProgressServiceImpl();
+
       const projectService = new ProjectsServiceImpl(
         {
           timestamp: timestampService,
+          testProgress: testProgressService,
         },
         transactionRunner
       );
@@ -82,6 +85,7 @@ export class ProjectExportController extends Controller {
           testResultService,
           exportService,
           exportFileRepositoryService,
+          testProgressService,
         }
       );
       return {

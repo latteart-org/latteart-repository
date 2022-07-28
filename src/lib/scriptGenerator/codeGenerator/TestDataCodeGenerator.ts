@@ -14,25 +14,8 @@
  * limitations under the License.
  */
 
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
-import { TestMatrixEntity } from "./TestMatrixEntity";
+import { TestDataSet } from "../testDataRepository/TestDataSet";
 
-@Entity("PROGRESS_DATAS")
-export class ProgressDataEntity {
-  @ManyToOne(() => TestMatrixEntity, (testMatrix) => testMatrix.progressDatas, {
-    primary: true,
-    onDelete: "CASCADE",
-  })
-  @JoinColumn({ name: "test_matrix_id" })
-  testMatrix!: TestMatrixEntity;
-
-  @PrimaryColumn({ name: "date" })
-  date!: string;
-
-  @Column({ name: "text" })
-  text!: string;
-
-  constructor(props: ProgressDataEntity) {
-    Object.assign(this, props);
-  }
+export interface TestDataCodeGenerator {
+  generateFrom(...testDataSets: TestDataSet[]): string;
 }

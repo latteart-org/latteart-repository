@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { DailyTestProgress } from "../services/TestProgressService";
+
 export interface ProjectListResponse {
   id: string;
   name: string;
@@ -21,7 +23,8 @@ export interface ProjectListResponse {
 }
 
 export type GetProjectResponse = Project;
-export type UpdateProjectResponse = Project;
+export type UpdateProjectResponse = Omit<Project, "progressDatas">;
+export type GetTestProgressResponse = DailyTestProgress;
 
 export interface Project {
   id: string;
@@ -29,12 +32,15 @@ export interface Project {
   testMatrices: {
     id: string;
     name: string;
+    index: number;
     groups: {
       id: string;
       name: string;
+      index: number;
       testTargets: {
         id: string;
         name: string;
+        index: number;
         plans: {
           viewPointId: string;
           value: number;
@@ -49,7 +55,6 @@ export interface Project {
     }[];
   }[];
   stories: StoryDetails[];
-  progressDatas: ProgressData[];
 }
 
 interface StoryDetails {
@@ -146,12 +151,15 @@ export interface UpdateProjectDto {
   testMatrices: {
     id: string;
     name: string;
+    index: number;
     groups: {
       id: string;
       name: string;
+      index: number;
       testTargets: {
         id: string;
         name: string;
+        index: number;
         plans: {
           viewPointId: string | null;
           value: number;
@@ -166,7 +174,6 @@ export interface UpdateProjectDto {
     }[];
   }[];
   stories: StoryDetails[];
-  progressDatas: ProgressData[];
 }
 
 export interface ViewPoint {

@@ -7,6 +7,7 @@ import { TestResultService } from "@/services/TestResultService";
 import { ExportService } from "@/services/ExportService";
 import { ExportFileRepositoryService } from "@/services/ExportFileRepositoryService";
 import { TestResultEntity } from "@/entities/TestResultEntity";
+import { TestProgressService } from "@/services/TestProgressService";
 
 const testConnectionHelper = new SqliteTestConnectionHelper();
 
@@ -73,6 +74,11 @@ describe("ProjectExportService", () => {
       serializeTestResult: jest.fn().mockReturnValue("serializedTestResult"),
     };
 
+    const testProgressService: TestProgressService = {
+      registerTestProgress: jest.fn(),
+      collectDailyTestProgresses: jest.fn(),
+    };
+
     it("includeProject: true, includeTestResults: true", async () => {
       projectService.getProject = jest.fn().mockResolvedValue(projectData);
       testResultService.collectAllTestStepScreenshots = jest
@@ -91,6 +97,7 @@ describe("ProjectExportService", () => {
         testResultService,
         exportService,
         exportFileRepositoryService,
+        testProgressService,
       });
 
       expect(projectService.getProject).toBeCalledTimes(1);
@@ -110,6 +117,7 @@ describe("ProjectExportService", () => {
         testResultService,
         exportService,
         exportFileRepositoryService,
+        testProgressService,
       });
 
       expect(projectService.getProject).toBeCalledTimes(0);

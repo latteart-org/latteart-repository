@@ -49,6 +49,14 @@ import { TestStepsController } from "./../controllers/TestStepsController";
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { ScreenshotsController } from "./../controllers/ScreenshotsController";
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { TestMatricesController } from "./../controllers/TestMatricesController";
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { TestTargetGroupsController } from "./../controllers/TestTargetGroupsController";
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { TestTargetsController } from "./../controllers/TestTargetsController";
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { ViewPointsController } from "./../controllers/ViewPointsController";
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { CompressedImageController } from "./../controllers/CompressedImageController";
 import * as express from "express";
 
@@ -208,6 +216,7 @@ const models: TsoaRoute.Models = {
               array: {
                 dataType: "nestedObjectLiteral",
                 nestedProperties: {
+                  imageFilePath: { dataType: "string" },
                   value: { dataType: "string", required: true },
                   type: { dataType: "string", required: true },
                   ticketId: { dataType: "string", required: true },
@@ -239,61 +248,6 @@ const models: TsoaRoute.Models = {
               required: true,
             },
             id: { dataType: "string", required: true },
-          },
-        },
-        required: true,
-      },
-    },
-    additionalProperties: false,
-  },
-  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  ProgressData: {
-    dataType: "refObject",
-    properties: {
-      testMatrixId: { dataType: "string", required: true },
-      testMatrixProgressDatas: {
-        dataType: "array",
-        array: {
-          dataType: "nestedObjectLiteral",
-          nestedProperties: {
-            groups: {
-              dataType: "array",
-              array: {
-                dataType: "nestedObjectLiteral",
-                nestedProperties: {
-                  testTargets: {
-                    dataType: "array",
-                    array: {
-                      dataType: "nestedObjectLiteral",
-                      nestedProperties: {
-                        progress: {
-                          dataType: "nestedObjectLiteral",
-                          nestedProperties: {
-                            planNumber: { dataType: "double", required: true },
-                            incompletedNumber: {
-                              dataType: "double",
-                              required: true,
-                            },
-                            completedNumber: {
-                              dataType: "double",
-                              required: true,
-                            },
-                          },
-                          required: true,
-                        },
-                        name: { dataType: "string", required: true },
-                        id: { dataType: "string", required: true },
-                      },
-                    },
-                    required: true,
-                  },
-                  name: { dataType: "string", required: true },
-                  id: { dataType: "string", required: true },
-                },
-              },
-              required: true,
-            },
-            date: { dataType: "string", required: true },
           },
         },
         required: true,
@@ -349,18 +303,21 @@ const models: TsoaRoute.Models = {
                           },
                           required: true,
                         },
+                        index: { dataType: "double", required: true },
                         name: { dataType: "string", required: true },
                         id: { dataType: "string", required: true },
                       },
                     },
                     required: true,
                   },
+                  index: { dataType: "double", required: true },
                   name: { dataType: "string", required: true },
                   id: { dataType: "string", required: true },
                 },
               },
               required: true,
             },
+            index: { dataType: "double", required: true },
             name: { dataType: "string", required: true },
             id: { dataType: "string", required: true },
           },
@@ -372,11 +329,6 @@ const models: TsoaRoute.Models = {
         array: { dataType: "refObject", ref: "StoryDetails" },
         required: true,
       },
-      progressDatas: {
-        dataType: "array",
-        array: { dataType: "refObject", ref: "ProgressData" },
-        required: true,
-      },
     },
     additionalProperties: false,
   },
@@ -386,9 +338,97 @@ const models: TsoaRoute.Models = {
     type: { ref: "Project", validators: {} },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  "Pick_Project.Exclude_keyofProject.progressDatas__": {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        id: { dataType: "string", required: true },
+        name: { dataType: "string", required: true },
+        testMatrices: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              viewPoints: {
+                dataType: "array",
+                array: {
+                  dataType: "nestedObjectLiteral",
+                  nestedProperties: {
+                    description: { dataType: "string", required: true },
+                    index: { dataType: "double", required: true },
+                    name: { dataType: "string", required: true },
+                    id: { dataType: "string", required: true },
+                  },
+                },
+                required: true,
+              },
+              groups: {
+                dataType: "array",
+                array: {
+                  dataType: "nestedObjectLiteral",
+                  nestedProperties: {
+                    testTargets: {
+                      dataType: "array",
+                      array: {
+                        dataType: "nestedObjectLiteral",
+                        nestedProperties: {
+                          plans: {
+                            dataType: "array",
+                            array: {
+                              dataType: "nestedObjectLiteral",
+                              nestedProperties: {
+                                value: { dataType: "double", required: true },
+                                viewPointId: {
+                                  dataType: "string",
+                                  required: true,
+                                },
+                              },
+                            },
+                            required: true,
+                          },
+                          index: { dataType: "double", required: true },
+                          name: { dataType: "string", required: true },
+                          id: { dataType: "string", required: true },
+                        },
+                      },
+                      required: true,
+                    },
+                    index: { dataType: "double", required: true },
+                    name: { dataType: "string", required: true },
+                    id: { dataType: "string", required: true },
+                  },
+                },
+                required: true,
+              },
+              index: { dataType: "double", required: true },
+              name: { dataType: "string", required: true },
+              id: { dataType: "string", required: true },
+            },
+          },
+          required: true,
+        },
+        stories: {
+          dataType: "array",
+          array: { dataType: "refObject", ref: "StoryDetails" },
+          required: true,
+        },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  "Omit_Project.progressDatas_": {
+    dataType: "refAlias",
+    type: {
+      ref: "Pick_Project.Exclude_keyofProject.progressDatas__",
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   UpdateProjectResponse: {
     dataType: "refAlias",
-    type: { ref: "Project", validators: {} },
+    type: { ref: "Omit_Project.progressDatas_", validators: {} },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   UpdateProjectDto: {
@@ -448,18 +488,21 @@ const models: TsoaRoute.Models = {
                           },
                           required: true,
                         },
+                        index: { dataType: "double", required: true },
                         name: { dataType: "string", required: true },
                         id: { dataType: "string", required: true },
                       },
                     },
                     required: true,
                   },
+                  index: { dataType: "double", required: true },
                   name: { dataType: "string", required: true },
                   id: { dataType: "string", required: true },
                 },
               },
               required: true,
             },
+            index: { dataType: "double", required: true },
             name: { dataType: "string", required: true },
             id: { dataType: "string", required: true },
           },
@@ -471,9 +514,57 @@ const models: TsoaRoute.Models = {
         array: { dataType: "refObject", ref: "StoryDetails" },
         required: true,
       },
-      progressDatas: {
-        dataType: "array",
-        array: { dataType: "refObject", ref: "ProgressData" },
+    },
+    additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  DailyTestProgress: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        storyProgresses: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              incompletedSessionNumber: { dataType: "double", required: true },
+              completedSessionNumber: { dataType: "double", required: true },
+              plannedSessionNumber: { dataType: "double", required: true },
+              viewPointId: { dataType: "string", required: true },
+              testTargetId: { dataType: "string", required: true },
+              testTargetGroupId: { dataType: "string", required: true },
+              testMatrixId: { dataType: "string", required: true },
+              storyId: { dataType: "string", required: true },
+            },
+          },
+          required: true,
+        },
+        date: { dataType: "string", required: true },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  GetTestProgressResponse: {
+    dataType: "refAlias",
+    type: { ref: "DailyTestProgress", validators: {} },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  TestScriptGenerationOption: {
+    dataType: "refObject",
+    properties: {
+      testScript: {
+        dataType: "nestedObjectLiteral",
+        nestedProperties: { isSimple: { dataType: "boolean", required: true } },
+        required: true,
+      },
+      testData: {
+        dataType: "nestedObjectLiteral",
+        nestedProperties: {
+          maxGeneration: { dataType: "double", required: true },
+          useDataDriven: { dataType: "boolean", required: true },
+        },
         required: true,
       },
     },
@@ -481,50 +572,8 @@ const models: TsoaRoute.Models = {
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   CreateTestScriptDto: {
-    dataType: "refObject",
-    properties: {
-      pageObjects: {
-        dataType: "array",
-        array: {
-          dataType: "nestedObjectLiteral",
-          nestedProperties: {
-            script: { dataType: "string", required: true },
-            name: { dataType: "string", required: true },
-          },
-        },
-        required: true,
-      },
-      testData: {
-        dataType: "array",
-        array: {
-          dataType: "nestedObjectLiteral",
-          nestedProperties: {
-            testData: { dataType: "string", required: true },
-            name: { dataType: "string", required: true },
-          },
-        },
-        required: true,
-      },
-      testSuite: {
-        dataType: "nestedObjectLiteral",
-        nestedProperties: {
-          spec: { dataType: "string", required: true },
-          name: { dataType: "string", required: true },
-        },
-        required: true,
-      },
-      others: {
-        dataType: "array",
-        array: {
-          dataType: "nestedObjectLiteral",
-          nestedProperties: {
-            script: { dataType: "string", required: true },
-            name: { dataType: "string", required: true },
-          },
-        },
-      },
-    },
-    additionalProperties: false,
+    dataType: "refAlias",
+    type: { ref: "TestScriptGenerationOption", validators: {} },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   PatchSessionResponse: {
@@ -788,20 +837,26 @@ const models: TsoaRoute.Models = {
                 url: { dataType: "string", required: true },
                 title: { dataType: "string", required: true },
                 elementInfo: {
-                  dataType: "nestedObjectLiteral",
-                  nestedProperties: {
-                    attributes: {
+                  dataType: "union",
+                  subSchemas: [
+                    {
                       dataType: "nestedObjectLiteral",
-                      nestedProperties: {},
-                      additionalProperties: { dataType: "string" },
-                      required: true,
+                      nestedProperties: {
+                        attributes: {
+                          dataType: "nestedObjectLiteral",
+                          nestedProperties: {},
+                          additionalProperties: { dataType: "string" },
+                          required: true,
+                        },
+                        checked: { dataType: "boolean", required: true },
+                        value: { dataType: "string", required: true },
+                        xpath: { dataType: "string", required: true },
+                        text: { dataType: "string", required: true },
+                        tagname: { dataType: "string", required: true },
+                      },
                     },
-                    checked: { dataType: "boolean", required: true },
-                    value: { dataType: "string", required: true },
-                    xpath: { dataType: "string", required: true },
-                    text: { dataType: "string", required: true },
-                    tagname: { dataType: "string", required: true },
-                  },
+                    { dataType: "enum", enums: [null] },
+                  ],
                   required: true,
                 },
                 type: { dataType: "string", required: true },
@@ -1090,6 +1145,133 @@ const models: TsoaRoute.Models = {
       notices: { dataType: "array", array: { dataType: "string" } },
     },
     additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  TestTarget: {
+    dataType: "refObject",
+    properties: {
+      id: { dataType: "string", required: true },
+      name: { dataType: "string", required: true },
+      index: { dataType: "double", required: true },
+      plans: {
+        dataType: "array",
+        array: {
+          dataType: "nestedObjectLiteral",
+          nestedProperties: {
+            value: { dataType: "double", required: true },
+            viewPointId: { dataType: "string", required: true },
+          },
+        },
+        required: true,
+      },
+    },
+    additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  TestTargetGroup: {
+    dataType: "refObject",
+    properties: {
+      id: { dataType: "string", required: true },
+      name: { dataType: "string", required: true },
+      index: { dataType: "double", required: true },
+      testTargets: {
+        dataType: "array",
+        array: { dataType: "refObject", ref: "TestTarget" },
+        required: true,
+      },
+    },
+    additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ViewPoint: {
+    dataType: "refObject",
+    properties: {
+      id: { dataType: "string", required: true },
+      name: { dataType: "string", required: true },
+      index: { dataType: "double" },
+      description: { dataType: "string", required: true },
+    },
+    additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  TestMatrix: {
+    dataType: "refObject",
+    properties: {
+      id: { dataType: "string", required: true },
+      name: { dataType: "string", required: true },
+      index: { dataType: "double", required: true },
+      groups: {
+        dataType: "array",
+        array: { dataType: "refObject", ref: "TestTargetGroup" },
+        required: true,
+      },
+      viewPoints: {
+        dataType: "array",
+        array: { dataType: "refObject", ref: "ViewPoint" },
+        required: true,
+      },
+    },
+    additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  GetTestMatrixResponse: {
+    dataType: "refAlias",
+    type: { ref: "TestMatrix", validators: {} },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  PostTestMatrixResponse: {
+    dataType: "refAlias",
+    type: { ref: "TestMatrix", validators: {} },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  PatchTestMatrixResponse: {
+    dataType: "refAlias",
+    type: { ref: "TestMatrix", validators: {} },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  GetTestTargetGroupResponse: {
+    dataType: "refAlias",
+    type: { ref: "TestTargetGroup", validators: {} },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  PostTestTargetGroupResponse: {
+    dataType: "refAlias",
+    type: { ref: "TestTargetGroup", validators: {} },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  PatchTestTargetGroupResponse: {
+    dataType: "refAlias",
+    type: { ref: "TestTargetGroup", validators: {} },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  GetTestTargetResponse: {
+    dataType: "refAlias",
+    type: { ref: "TestTarget", validators: {} },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  PostTestTargetResponse: {
+    dataType: "refAlias",
+    type: { ref: "TestTarget", validators: {} },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  PatchTestTargetResponse: {
+    dataType: "refAlias",
+    type: { ref: "TestTarget", validators: {} },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  GetViewPointResponse: {
+    dataType: "refAlias",
+    type: { ref: "ViewPoint", validators: {} },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  PostViewPointResponse: {
+    dataType: "refAlias",
+    type: { ref: "ViewPoint", validators: {} },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  PatchViewPointResponse: {
+    dataType: "refAlias",
+    type: { ref: "ViewPoint", validators: {} },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   CreateCompressedImageResponse: {
@@ -1739,6 +1921,44 @@ export function RegisterRoutes(app: express.Router) {
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.get(
+    "/api/v1/projects/:projectId/progress",
+
+    function ProjectsController_getTestProgress(
+      request: any,
+      response: any,
+      next: any
+    ) {
+      const args = {
+        projectId: {
+          in: "path",
+          name: "projectId",
+          required: true,
+          dataType: "string",
+        },
+        since: { in: "query", name: "since", dataType: "double" },
+        until: { in: "query", name: "until", dataType: "double" },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new ProjectsController();
+
+        const promise = controller.getTestProgress.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
+      } catch (err) {
+        return next(err);
+      }
+    }
+  );
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   app.post(
     "/api/v1/projects/:projectId/test-scripts",
 
@@ -2374,6 +2594,609 @@ export function RegisterRoutes(app: express.Router) {
         const controller = new ScreenshotsController();
 
         const promise = controller.get.apply(controller, validatedArgs as any);
+        promiseHandler(controller, promise, response, undefined, next);
+      } catch (err) {
+        return next(err);
+      }
+    }
+  );
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.get(
+    "/api/v1/test-matrices/:testMatrixId",
+
+    function TestMatricesController_get(
+      request: any,
+      response: any,
+      next: any
+    ) {
+      const args = {
+        testMatrixId: {
+          in: "path",
+          name: "testMatrixId",
+          required: true,
+          dataType: "string",
+        },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new TestMatricesController();
+
+        const promise = controller.get.apply(controller, validatedArgs as any);
+        promiseHandler(controller, promise, response, undefined, next);
+      } catch (err) {
+        return next(err);
+      }
+    }
+  );
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.post(
+    "/api/v1/test-matrices",
+
+    function TestMatricesController_post(
+      request: any,
+      response: any,
+      next: any
+    ) {
+      const args = {
+        body: {
+          in: "body",
+          name: "body",
+          required: true,
+          dataType: "nestedObjectLiteral",
+          nestedProperties: {
+            name: { dataType: "string", required: true },
+            projectId: { dataType: "string", required: true },
+          },
+        },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new TestMatricesController();
+
+        const promise = controller.post.apply(controller, validatedArgs as any);
+        promiseHandler(controller, promise, response, undefined, next);
+      } catch (err) {
+        return next(err);
+      }
+    }
+  );
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.patch(
+    "/api/v1/test-matrices/:testMatrixId",
+
+    function TestMatricesController_patch(
+      request: any,
+      response: any,
+      next: any
+    ) {
+      const args = {
+        testMatrixId: {
+          in: "path",
+          name: "testMatrixId",
+          required: true,
+          dataType: "string",
+        },
+        body: {
+          in: "body",
+          name: "body",
+          required: true,
+          dataType: "nestedObjectLiteral",
+          nestedProperties: { name: { dataType: "string", required: true } },
+        },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new TestMatricesController();
+
+        const promise = controller.patch.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
+      } catch (err) {
+        return next(err);
+      }
+    }
+  );
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.delete(
+    "/api/v1/test-matrices/:testMatrixId",
+
+    function TestMatricesController_delete(
+      request: any,
+      response: any,
+      next: any
+    ) {
+      const args = {
+        testMatrixId: {
+          in: "path",
+          name: "testMatrixId",
+          required: true,
+          dataType: "string",
+        },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new TestMatricesController();
+
+        const promise = controller.delete.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
+      } catch (err) {
+        return next(err);
+      }
+    }
+  );
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.get(
+    "/api/v1/test-target-groups/:testTargetGroupId",
+
+    function TestTargetGroupsController_get(
+      request: any,
+      response: any,
+      next: any
+    ) {
+      const args = {
+        testTargetGroupId: {
+          in: "path",
+          name: "testTargetGroupId",
+          required: true,
+          dataType: "string",
+        },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new TestTargetGroupsController();
+
+        const promise = controller.get.apply(controller, validatedArgs as any);
+        promiseHandler(controller, promise, response, undefined, next);
+      } catch (err) {
+        return next(err);
+      }
+    }
+  );
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.post(
+    "/api/v1/test-target-groups",
+
+    function TestTargetGroupsController_post(
+      request: any,
+      response: any,
+      next: any
+    ) {
+      const args = {
+        body: {
+          in: "body",
+          name: "body",
+          required: true,
+          dataType: "nestedObjectLiteral",
+          nestedProperties: {
+            name: { dataType: "string", required: true },
+            testMatrixId: { dataType: "string", required: true },
+          },
+        },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new TestTargetGroupsController();
+
+        const promise = controller.post.apply(controller, validatedArgs as any);
+        promiseHandler(controller, promise, response, undefined, next);
+      } catch (err) {
+        return next(err);
+      }
+    }
+  );
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.patch(
+    "/api/v1/test-target-groups/:testTargetGroupId",
+
+    function TestTargetGroupsController_patch(
+      request: any,
+      response: any,
+      next: any
+    ) {
+      const args = {
+        testTargetGroupId: {
+          in: "path",
+          name: "testTargetGroupId",
+          required: true,
+          dataType: "string",
+        },
+        body: {
+          in: "body",
+          name: "body",
+          required: true,
+          dataType: "nestedObjectLiteral",
+          nestedProperties: { name: { dataType: "string", required: true } },
+        },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new TestTargetGroupsController();
+
+        const promise = controller.patch.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
+      } catch (err) {
+        return next(err);
+      }
+    }
+  );
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.delete(
+    "/api/v1/test-target-groups/:testTargetGroupId",
+
+    function TestTargetGroupsController_delete(
+      request: any,
+      response: any,
+      next: any
+    ) {
+      const args = {
+        testTargetGroupId: {
+          in: "path",
+          name: "testTargetGroupId",
+          required: true,
+          dataType: "string",
+        },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new TestTargetGroupsController();
+
+        const promise = controller.delete.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
+      } catch (err) {
+        return next(err);
+      }
+    }
+  );
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.get(
+    "/api/v1/test-targets/:testTargetId",
+
+    function TestTargetsController_get(request: any, response: any, next: any) {
+      const args = {
+        testTargetId: {
+          in: "path",
+          name: "testTargetId",
+          required: true,
+          dataType: "string",
+        },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new TestTargetsController();
+
+        const promise = controller.get.apply(controller, validatedArgs as any);
+        promiseHandler(controller, promise, response, undefined, next);
+      } catch (err) {
+        return next(err);
+      }
+    }
+  );
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.post(
+    "/api/v1/test-targets",
+
+    function TestTargetsController_post(
+      request: any,
+      response: any,
+      next: any
+    ) {
+      const args = {
+        body: {
+          in: "body",
+          name: "body",
+          required: true,
+          dataType: "nestedObjectLiteral",
+          nestedProperties: {
+            name: { dataType: "string", required: true },
+            testTargetGroupId: { dataType: "string", required: true },
+          },
+        },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new TestTargetsController();
+
+        const promise = controller.post.apply(controller, validatedArgs as any);
+        promiseHandler(controller, promise, response, undefined, next);
+      } catch (err) {
+        return next(err);
+      }
+    }
+  );
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.patch(
+    "/api/v1/test-targets/:testTargetId",
+
+    function TestTargetsController_patch(
+      request: any,
+      response: any,
+      next: any
+    ) {
+      const args = {
+        testTargetId: {
+          in: "path",
+          name: "testTargetId",
+          required: true,
+          dataType: "string",
+        },
+        body: {
+          in: "body",
+          name: "body",
+          required: true,
+          dataType: "nestedObjectLiteral",
+          nestedProperties: {
+            plans: {
+              dataType: "array",
+              array: {
+                dataType: "nestedObjectLiteral",
+                nestedProperties: {
+                  value: { dataType: "double", required: true },
+                  viewPointId: { dataType: "string", required: true },
+                },
+              },
+            },
+            index: { dataType: "double" },
+            name: { dataType: "string" },
+          },
+        },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new TestTargetsController();
+
+        const promise = controller.patch.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
+      } catch (err) {
+        return next(err);
+      }
+    }
+  );
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.delete(
+    "/api/v1/test-targets/:testTargetId",
+
+    function TestTargetsController_delete(
+      request: any,
+      response: any,
+      next: any
+    ) {
+      const args = {
+        testTargetId: {
+          in: "path",
+          name: "testTargetId",
+          required: true,
+          dataType: "string",
+        },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new TestTargetsController();
+
+        const promise = controller.delete.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
+      } catch (err) {
+        return next(err);
+      }
+    }
+  );
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.get(
+    "/api/v1/view-points/:viewPointId",
+
+    function ViewPointsController_get(request: any, response: any, next: any) {
+      const args = {
+        viewPointId: {
+          in: "path",
+          name: "viewPointId",
+          required: true,
+          dataType: "string",
+        },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new ViewPointsController();
+
+        const promise = controller.get.apply(controller, validatedArgs as any);
+        promiseHandler(controller, promise, response, undefined, next);
+      } catch (err) {
+        return next(err);
+      }
+    }
+  );
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.post(
+    "/api/v1/view-points",
+
+    function ViewPointsController_post(request: any, response: any, next: any) {
+      const args = {
+        body: {
+          in: "body",
+          name: "body",
+          required: true,
+          dataType: "nestedObjectLiteral",
+          nestedProperties: {
+            description: { dataType: "string", required: true },
+            index: { dataType: "double", required: true },
+            name: { dataType: "string", required: true },
+            testMatrixId: { dataType: "string", required: true },
+          },
+        },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new ViewPointsController();
+
+        const promise = controller.post.apply(controller, validatedArgs as any);
+        promiseHandler(controller, promise, response, undefined, next);
+      } catch (err) {
+        return next(err);
+      }
+    }
+  );
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.patch(
+    "/api/v1/view-points/:viewPointId",
+
+    function ViewPointsController_patch(
+      request: any,
+      response: any,
+      next: any
+    ) {
+      const args = {
+        viewPointId: {
+          in: "path",
+          name: "viewPointId",
+          required: true,
+          dataType: "string",
+        },
+        body: {
+          in: "body",
+          name: "body",
+          required: true,
+          dataType: "nestedObjectLiteral",
+          nestedProperties: {
+            index: { dataType: "double" },
+            description: { dataType: "string" },
+            name: { dataType: "string" },
+          },
+        },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new ViewPointsController();
+
+        const promise = controller.patch.apply(
+          controller,
+          validatedArgs as any
+        );
+        promiseHandler(controller, promise, response, undefined, next);
+      } catch (err) {
+        return next(err);
+      }
+    }
+  );
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.delete(
+    "/api/v1/view-points/:viewPointId",
+
+    function ViewPointsController_delete(
+      request: any,
+      response: any,
+      next: any
+    ) {
+      const args = {
+        viewPointId: {
+          in: "path",
+          name: "viewPointId",
+          required: true,
+          dataType: "string",
+        },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request, response);
+
+        const controller = new ViewPointsController();
+
+        const promise = controller.delete.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);

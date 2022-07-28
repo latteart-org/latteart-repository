@@ -20,6 +20,7 @@ import { ExportFileRepositoryService } from "./ExportFileRepositoryService";
 import { ExportService } from "./ExportService";
 
 import { ProjectsService } from "./ProjectsService";
+import { TestProgressService } from "./TestProgressService";
 import { TestResultService } from "./TestResultService";
 
 export class ProjectExportService {
@@ -32,11 +33,13 @@ export class ProjectExportService {
       testResultService: TestResultService;
       exportService: ExportService;
       exportFileRepositoryService: ExportFileRepositoryService;
+      testProgressService: TestProgressService;
     }
   ): Promise<string> {
     const exportProjectData = includeProject
       ? await this.extractProjectExportData(projectId, {
           projectService: service.projectService,
+          testProgressService: service.testProgressService,
         })
       : null;
 
@@ -59,18 +62,18 @@ export class ProjectExportService {
     const testResultEntities = await getRepository(TestResultEntity).find();
     return await Promise.all(
       testResultEntities.map(async (testResultEntity) => {
-        const screenshots = await service.testResultService.collectAllTestStepScreenshots(
-          testResultEntity.id
-        );
+        const screenshots =
+          await service.testResultService.collectAllTestStepScreenshots(
+            testResultEntity.id
+          );
         const testResult = await service.testResultService.getTestResult(
           testResultEntity.id
         );
         if (!testResult) {
           throw new Error();
         }
-        const serializedTestResult = service.exportService.serializeTestResult(
-          testResult
-        );
+        const serializedTestResult =
+          service.exportService.serializeTestResult(testResult);
         return {
           testResultId: testResult.id,
           testResultFile: { fileName: "log.json", data: serializedTestResult },
@@ -84,10 +87,15 @@ export class ProjectExportService {
     projectId: string,
     service: {
       projectService: ProjectsService;
+      testProgressService: TestProgressService;
     }
   ) {
     const project = await service.projectService.getProject(projectId);
     (project as any).version = 1;
+    const dailyProgresses =
+      await service.testProgressService.collectDailyTestProgresses(
+        project.stories.map((story) => story.id)
+      );
 
     return {
       projectId: project.id,
@@ -107,6 +115,10 @@ export class ProjectExportService {
           }),
         };
       }),
+      progressesFile: {
+        fileName: "progress.json",
+        data: JSON.stringify(dailyProgresses),
+      },
     };
   }
 }

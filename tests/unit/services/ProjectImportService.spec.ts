@@ -18,7 +18,7 @@ import {
   createNotesServiceMock,
   createTestPurposeServiceMock,
 } from "../../helper/createServiceMock";
-import { Project } from "@/interfaces/Projects";
+import { ProgressData, Project } from "@/interfaces/Projects";
 import { getRepository } from "typeorm";
 import { ProjectEntity } from "@/entities/ProjectEntity";
 
@@ -273,6 +273,10 @@ describe("ProjectImportService", () => {
           data: "{}",
         },
         {
+          filePath: "projects/projectId1/progress.json",
+          data: "{}",
+        },
+        {
           filePath: "projects/projectId1/storyId1/sessionId1/aaa.webp",
           data: "",
         },
@@ -333,6 +337,7 @@ describe("ProjectImportService", () => {
             ],
           },
         ],
+        progressesFile: { fileName: "progress.json", data: "{}" },
       };
       expect(result).toEqual(projectData);
     });
@@ -343,22 +348,28 @@ describe("ProjectImportService", () => {
       const timestampService = createTimestampServiceMock();
       const attachedFileRepositoryService =
         createImageFileRepositoryServiceMock();
+      const progressJson = {};
 
-      const projectJson: Project = {
+      const projectJson: Project & {
+        progressDatas: ProgressData[];
+      } = {
         id: "projectId",
         name: "projectName",
         testMatrices: [
           {
             id: "testMatrixId",
             name: "testMatrixName",
+            index: 0,
             groups: [
               {
                 id: "groupId",
                 name: "groupName",
+                index: 0,
                 testTargets: [
                   {
                     id: "testTargetId",
                     name: "testTargetName",
+                    index: 0,
                     plans: [
                       {
                         viewPointId: "viewPointId",
@@ -424,6 +435,10 @@ describe("ProjectImportService", () => {
           data: JSON.stringify(projectJson),
         },
         stories: [],
+        progressesFile: {
+          fileName: "progress.json",
+          data: JSON.stringify(progressJson),
+        },
       };
 
       const service = new ProjectImportService();

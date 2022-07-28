@@ -46,7 +46,6 @@ import { ScreenshotEntity } from "./entities/ScreenshotEntity";
 import { StaticDirectoryServiceImpl } from "./services/StaticDirectoryService";
 import { AttachedFileEntity } from "./entities/AttachedFilesEntity";
 import { ConfigEntity } from "./entities/ConfigEntity";
-import { ProgressDataEntity } from "./entities/ProgressDataEntity";
 import { ProjectEntity } from "./entities/ProjectEntity";
 import { SessionEntity } from "./entities/SessionEntity";
 import { SnapshotEntity } from "./entities/SnapshotEntity";
@@ -64,6 +63,8 @@ import { UpdateAttachedFilesEntity1642388104855 } from "./migrations/16423881048
 import { UpdateViewPointEntity1654749340817 } from "./migrations/1654749340817-UpdateViewPointEntity";
 import { UpdateViewPointEntity1655772848395 } from "./migrations/1655772848395-UpdateViewPointEntity";
 import { UpdateSessionEntity1656305325919 } from "./migrations/1656305325919-UpdateSessionEntity";
+import { TestProgressEntity } from "./entities/TestProgressEntity";
+import { AddTestProgressEntity1657768635961 } from "./migrations/1657768635961-AddTestProgressEntity";
 
 LoggingService.initialize(
   new StandardLogger(
@@ -138,7 +139,6 @@ async function initializeOrmConnection(connectionName: string) {
       TestStepEntity,
       AttachedFileEntity,
       ConfigEntity,
-      ProgressDataEntity,
       ProjectEntity,
       SessionEntity,
       SnapshotEntity,
@@ -148,6 +148,7 @@ async function initializeOrmConnection(connectionName: string) {
       TestTargetGroupEntity,
       ViewPointEntity,
       ViewPointPresetEntity,
+      TestProgressEntity,
     ],
     migrations: [
       Init1638930268191,
@@ -156,6 +157,7 @@ async function initializeOrmConnection(connectionName: string) {
       UpdateViewPointEntity1654749340817,
       UpdateViewPointEntity1655772848395,
       UpdateSessionEntity1656305325919,
+      AddTestProgressEntity1657768635961,
     ],
   };
 
