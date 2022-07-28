@@ -551,29 +551,91 @@ const models: TsoaRoute.Models = {
     type: { ref: "DailyTestProgress", validators: {} },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  TestScriptGenerationOption: {
-    dataType: "refObject",
-    properties: {
-      testScript: {
-        dataType: "nestedObjectLiteral",
-        nestedProperties: { isSimple: { dataType: "boolean", required: true } },
-        required: true,
-      },
-      testData: {
-        dataType: "nestedObjectLiteral",
-        nestedProperties: {
-          maxGeneration: { dataType: "double", required: true },
-          useDataDriven: { dataType: "boolean", required: true },
+  TestResultViewOption: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        node: {
+          dataType: "nestedObjectLiteral",
+          nestedProperties: {
+            definitions: {
+              dataType: "array",
+              array: {
+                dataType: "nestedObjectLiteral",
+                nestedProperties: {
+                  conditions: {
+                    dataType: "array",
+                    array: {
+                      dataType: "nestedObjectLiteral",
+                      nestedProperties: {
+                        value: { dataType: "string", required: true },
+                        method: {
+                          dataType: "union",
+                          subSchemas: [
+                            { dataType: "enum", enums: ["contains"] },
+                            { dataType: "enum", enums: ["equals"] },
+                            { dataType: "enum", enums: ["regex"] },
+                          ],
+                          required: true,
+                        },
+                        target: {
+                          dataType: "union",
+                          subSchemas: [
+                            { dataType: "enum", enums: ["title"] },
+                            { dataType: "enum", enums: ["url"] },
+                            { dataType: "enum", enums: ["keyword"] },
+                          ],
+                          required: true,
+                        },
+                      },
+                    },
+                    required: true,
+                  },
+                  name: { dataType: "string", required: true },
+                },
+              },
+              required: true,
+            },
+            unit: {
+              dataType: "union",
+              subSchemas: [
+                { dataType: "enum", enums: ["title"] },
+                { dataType: "enum", enums: ["url"] },
+              ],
+              required: true,
+            },
+          },
+          required: true,
         },
-        required: true,
       },
+      validators: {},
     },
-    additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  TestScriptOption: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        view: { ref: "TestResultViewOption", required: true },
+        testData: {
+          dataType: "nestedObjectLiteral",
+          nestedProperties: {
+            maxGeneration: { dataType: "double", required: true },
+            useDataDriven: { dataType: "boolean", required: true },
+          },
+          required: true,
+        },
+        optimized: { dataType: "boolean", required: true },
+      },
+      validators: {},
+    },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   CreateTestScriptDto: {
     dataType: "refAlias",
-    type: { ref: "TestScriptGenerationOption", validators: {} },
+    type: { ref: "TestScriptOption", validators: {} },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   PatchSessionResponse: {
