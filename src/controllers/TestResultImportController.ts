@@ -22,11 +22,7 @@ import { TestResultServiceImpl } from "@/services/TestResultService";
 import { TestStepServiceImpl } from "@/services/TestStepService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
 import { Controller, Post, Route, Get, Body } from "tsoa";
-import {
-  importDirectoryService,
-  screenshotDirectoryService,
-  tempDirectoryService,
-} from "..";
+import { importDirectoryService, screenshotDirectoryService } from "..";
 import { ImportFileRepositoryServiceImpl } from "@/services/ImportFileRepositoryService";
 import { ImportService } from "@/services/ImportService";
 import { TestPurposeServiceImpl } from "@/services/TestPurposeService";
@@ -34,8 +30,6 @@ import { NotesServiceImpl } from "@/services/NotesService";
 import path from "path";
 import { isTestResultExportFile } from "@/lib/archiveFileTypeChecker";
 import { CreateTestResultImportDto } from "../interfaces/TesResultImport";
-import { downloadZip } from "@/lib/Request";
-import { TempFileService } from "@/services/TempFileService";
 
 @Route("imports/test-results")
 export class TestResultImportController extends Controller {
@@ -73,15 +67,9 @@ export class TestResultImportController extends Controller {
   ): Promise<{ testResultId: string }> {
     const timestampService = new TimestampServiceImpl();
 
-    const extname = path.extname(
+    const basename = path.basename(
       requestBody.source.testResultFileUrl.split("/").pop() ?? ""
     );
-
-    const timestamp = timestampService.format("YYYYMMDD_HHmmss");
-    const tempFileName = `temp_${timestamp}${extname}`;
-
-    const data = await downloadZip(requestBody.source.testResultFileUrl);
-    await tempDirectoryService.outputFile(tempFileName, data);
 
     const imageFileRepositoryService = new ImageFileRepositoryServiceImpl({
       staticDirectory: screenshotDirectoryService,
@@ -110,7 +98,7 @@ export class TestResultImportController extends Controller {
     const testPurposeService = new TestPurposeServiceImpl();
 
     const importFileRepositoryService = new ImportFileRepositoryServiceImpl({
-      staticDirectory: tempDirectoryService,
+      staticDirectory: importDirectoryService,
       imageFileRepository: imageFileRepositoryService,
       timestamp: timestampService,
     });
@@ -122,12 +110,7 @@ export class TestResultImportController extends Controller {
         testPurpose: testPurposeService,
         note: noteService,
         importFileRepository: importFileRepositoryService,
-      }).importTestResult(tempFileName, requestBody.dest?.testResultId ?? null);
-
-      await new TempFileService().deleteFile(
-        tempFileName,
-        tempDirectoryService
-      );
+      }).importTestResult(basename, requestBody.dest?.testResultId ?? null);
 
       return result;
     } catch (error) {

@@ -19,7 +19,6 @@ import {
   attachedFileDirectoryService,
   importDirectoryService,
   screenshotDirectoryService,
-  tempDirectoryService,
   transactionRunner,
 } from "..";
 import path from "path";
@@ -35,8 +34,6 @@ import { ConfigsService } from "@/services/ConfigsService";
 import { NotesServiceImpl } from "@/services/NotesService";
 import { TestPurposeServiceImpl } from "@/services/TestPurposeService";
 import { isProjectExportFile } from "@/lib/archiveFileTypeChecker";
-import { downloadZip } from "@/lib/Request";
-import { TempFileService } from "@/services/TempFileService";
 
 @Route("imports/projects")
 export class ProjectImportController extends Controller {
@@ -70,15 +67,9 @@ export class ProjectImportController extends Controller {
     try {
       const timestampService = new TimestampServiceImpl();
 
-      const extname = path.extname(
+      const basename = path.basename(
         requestBody.source.projectFileUrl.split("/").pop() ?? ""
       );
-
-      const timestamp = timestampService.format("YYYYMMDD_HHmmss");
-      const tempFileName = `temp_${timestamp}${extname}`;
-
-      const data = await downloadZip(requestBody.source.projectFileUrl);
-      await tempDirectoryService.outputFile(tempFileName, data);
 
       const screenshotRepositoryService = new ImageFileRepositoryServiceImpl({
         staticDirectory: screenshotDirectoryService,
@@ -88,7 +79,7 @@ export class ProjectImportController extends Controller {
       });
       const importDirectoryRepositoryService =
         new ImageFileRepositoryServiceImpl({
-          staticDirectory: tempDirectoryService,
+          staticDirectory: importDirectoryService,
         });
       const configService = new ConfigsService();
       const testStepService = new TestStepServiceImpl({
@@ -109,7 +100,7 @@ export class ProjectImportController extends Controller {
       const testPurposeService = new TestPurposeServiceImpl();
 
       const response = await new ProjectImportService().import(
-        tempFileName,
+        basename,
         requestBody.includeProject,
         requestBody.includeTestResults,
         {
@@ -119,16 +110,11 @@ export class ProjectImportController extends Controller {
           screenshotRepositoryService,
           attachedFileRepositoryService,
           importDirectoryRepositoryService,
-          importDirectoryService: tempDirectoryService,
+          importDirectoryService: importDirectoryService,
           notesService,
           testPurposeService,
           transactionRunner,
         }
-      );
-
-      await new TempFileService().deleteFile(
-        tempFileName,
-        tempDirectoryService
       );
 
       return response;
