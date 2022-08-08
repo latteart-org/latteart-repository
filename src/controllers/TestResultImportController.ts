@@ -21,55 +21,21 @@ import { ImageFileRepositoryServiceImpl } from "@/services/ImageFileRepositorySe
 import { TestResultServiceImpl } from "@/services/TestResultService";
 import { TestStepServiceImpl } from "@/services/TestStepService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
-import { Controller, Post, Route, Get, Body } from "tsoa";
-import { importDirectoryService, screenshotDirectoryService } from "..";
+import { Controller, Post, Route, Body } from "tsoa";
+import { screenshotDirectoryService, tempDirectoryService } from "..";
 import { ImportFileRepositoryServiceImpl } from "@/services/ImportFileRepositoryService";
 import { ImportService } from "@/services/ImportService";
 import { TestPurposeServiceImpl } from "@/services/TestPurposeService";
 import { NotesServiceImpl } from "@/services/NotesService";
-import path from "path";
-import { isTestResultExportFile } from "@/lib/archiveFileTypeChecker";
 import { CreateTestResultImportDto } from "../interfaces/TesResultImport";
 
 @Route("imports/test-results")
 export class TestResultImportController extends Controller {
-  @Get()
-  public async list(): Promise<
-    {
-      url: string;
-      name: string;
-    }[]
-  > {
-    const zipFilePaths = await importDirectoryService.collectFilePaths(
-      /^.+\.zip$/
-    );
-
-    return (
-      await Promise.all(
-        zipFilePaths.map(async (zipFilePath) => {
-          const zipFileName = path.basename(zipFilePath);
-          return (await isTestResultExportFile(zipFilePath))
-            ? [
-                {
-                  url: importDirectoryService.getFileUrl(zipFileName),
-                  name: zipFileName,
-                },
-              ]
-            : [];
-        })
-      )
-    ).flat();
-  }
-
   @Post()
   public async create(
     @Body() requestBody: CreateTestResultImportDto
   ): Promise<{ testResultId: string }> {
     const timestampService = new TimestampServiceImpl();
-
-    const basename = path.basename(
-      requestBody.source.testResultFileUrl.split("/").pop() ?? ""
-    );
 
     const imageFileRepositoryService = new ImageFileRepositoryServiceImpl({
       staticDirectory: screenshotDirectoryService,
@@ -98,7 +64,7 @@ export class TestResultImportController extends Controller {
     const testPurposeService = new TestPurposeServiceImpl();
 
     const importFileRepositoryService = new ImportFileRepositoryServiceImpl({
-      staticDirectory: importDirectoryService,
+      staticDirectory: tempDirectoryService,
       imageFileRepository: imageFileRepositoryService,
       timestamp: timestampService,
     });
@@ -110,7 +76,10 @@ export class TestResultImportController extends Controller {
         testPurpose: testPurposeService,
         note: noteService,
         importFileRepository: importFileRepositoryService,
-      }).importTestResult(basename, requestBody.dest?.testResultId ?? null);
+      }).importTestResult(
+        requestBody.source.testResultFile,
+        requestBody.dest?.testResultId ?? null
+      );
 
       return result;
     } catch (error) {

@@ -126,7 +126,7 @@ const models: TsoaRoute.Models = {
     "CreateProjectImportDto": {
         "dataType": "refObject",
         "properties": {
-            "source": {"dataType":"nestedObjectLiteral","nestedProperties":{"projectFileUrl":{"dataType":"string","required":true}},"required":true},
+            "source": {"dataType":"nestedObjectLiteral","nestedProperties":{"projectFile":{"dataType":"nestedObjectLiteral","nestedProperties":{"name":{"dataType":"string","required":true},"data":{"dataType":"string","required":true}},"required":true}},"required":true},
             "includeTestResults": {"dataType":"boolean","required":true},
             "includeProject": {"dataType":"boolean","required":true},
         },
@@ -274,7 +274,7 @@ const models: TsoaRoute.Models = {
     "CreateTestResultImportDto": {
         "dataType": "refObject",
         "properties": {
-            "source": {"dataType":"nestedObjectLiteral","nestedProperties":{"testResultFileUrl":{"dataType":"string","required":true}},"required":true},
+            "source": {"dataType":"nestedObjectLiteral","nestedProperties":{"testResultFile":{"dataType":"nestedObjectLiteral","nestedProperties":{"name":{"dataType":"string","required":true},"data":{"dataType":"string","required":true}},"required":true}},"required":true},
             "dest": {"dataType":"nestedObjectLiteral","nestedProperties":{"testResultId":{"dataType":"string"}}},
         },
         "additionalProperties": false,
@@ -856,28 +856,6 @@ export function RegisterRoutes(app: express.Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/api/v1/imports/projects',
-
-            function ProjectImportController_list(request: any, response: any, next: any) {
-            const args = {
-            };
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request, response);
-
-                const controller = new ProjectImportController();
-
-
-              const promise = controller.list.apply(controller, validatedArgs as any);
-              promiseHandler(controller, promise, response, undefined, next);
-            } catch (err) {
-                return next(err);
-            }
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/api/v1/imports/projects',
 
             function ProjectImportController_create(request: any, response: any, next: any) {
@@ -1199,28 +1177,6 @@ export function RegisterRoutes(app: express.Router) {
 
 
               const promise = controller.create.apply(controller, validatedArgs as any);
-              promiseHandler(controller, promise, response, undefined, next);
-            } catch (err) {
-                return next(err);
-            }
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/api/v1/imports/test-results',
-
-            function TestResultImportController_list(request: any, response: any, next: any) {
-            const args = {
-            };
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request, response);
-
-                const controller = new TestResultImportController();
-
-
-              const promise = controller.list.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);

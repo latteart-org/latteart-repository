@@ -38,6 +38,7 @@ import { TransactionRunner } from "@/TransactionRunner";
 import { TestProgressEntity } from "@/entities/TestProgressEntity";
 import { unixtimeToDate } from "@/lib/timeUtil";
 import { DailyTestProgress } from "./TestProgressService";
+import { isProjectExportFile } from "@/lib/archiveFileTypeChecker";
 
 interface TestResultData {
   testResultId: string;
@@ -63,7 +64,7 @@ interface ProjectData {
 
 export class ProjectImportService {
   public async import(
-    importFileName: string,
+    importFile: { data: string; name: string },
     includeProject: boolean,
     includeTestResults: boolean,
     service: {
@@ -79,22 +80,28 @@ export class ProjectImportService {
       transactionRunner: TransactionRunner;
     }
   ): Promise<{ projectId: string }> {
-    const files = await this.getFileData(
+    const importFileName = path.basename(
+      importFile.name.split("/").pop() ?? ""
+    );
+
+    const decoded = Buffer.from(importFile.data, "base64");
+    await service.importDirectoryService.outputFile(
+      path.basename(importFile.name),
+      decoded
+    );
+
+    const { testResultFiles, projectFiles } = await this.readImportFile(
       importFileName,
+      {
+        includeProject,
+        includeTestResults,
+      },
       service.importDirectoryService
     );
-    const testResultFiles = files.filter((file) => {
-      return file.filePath.includes("test-results");
-    });
-    if (includeTestResults && testResultFiles.length === 0) {
-      throw new Error("Test result information does not exist.");
-    }
-    const projectFiles = files.filter((file) => {
-      return file.filePath.includes("projects");
-    });
-    if (includeProject && projectFiles.length === 0) {
-      throw new Error("Project information does not exist.");
-    }
+
+    await service.importDirectoryService.removeFile(
+      path.basename(importFileName)
+    );
 
     let testResultIdMap: Map<string, string> = new Map();
     let projectId = "";
@@ -606,11 +613,38 @@ export class ProjectImportService {
     return testResultIdMap;
   }
 
-  private async getFileData(
+  private async readImportFile(
     importFileName: string,
+    option: {
+      includeProject: boolean;
+      includeTestResults: boolean;
+    },
     importDirectoryService: StaticDirectoryService
   ) {
     const importFilePath = importDirectoryService.getJoinedPath(importFileName);
-    return await readZip(importFilePath);
+
+    if (!(await isProjectExportFile(importFilePath))) {
+      throw Error("Invalid project data file.");
+    }
+
+    const files = await readZip(importFilePath);
+
+    const testResultFiles = files.filter((file) => {
+      return file.filePath.includes("test-results");
+    });
+    if (option.includeTestResults && testResultFiles.length === 0) {
+      throw new Error("Test result information does not exist.");
+    }
+    const projectFiles = files.filter((file) => {
+      return file.filePath.includes("projects");
+    });
+    if (option.includeProject && projectFiles.length === 0) {
+      throw new Error("Project information does not exist.");
+    }
+
+    return {
+      testResultFiles,
+      projectFiles,
+    };
   }
 }
