@@ -24,7 +24,7 @@ import { deserializeTestResult } from "@/lib/deserializeTestResult";
 import { getRepository } from "typeorm";
 import { TestResultEntity } from "@/entities/TestResultEntity";
 
-export class ImportService {
+export class TestResultImportService {
   constructor(
     private service: {
       testResult: TestResultService;
@@ -39,17 +39,11 @@ export class ImportService {
     importFile: { data: string; name: string },
     testResultId: string | null
   ): Promise<{ testResultId: string }> {
-    const importFileName = path.basename(
-      importFile.name.split("/").pop() ?? ""
-    );
+    console.log(importFile.name);
 
-    console.log(importFileName);
-
-    await this.service.importFileRepository.outputImportFile(importFile);
     const importedData = await this.service.importFileRepository.readImportFile(
-      importFileName
+      importFile.data
     );
-    await this.service.importFileRepository.deleteImportFile(importFileName);
 
     const testResult = deserializeTestResult(importedData.testResultFile.data);
 

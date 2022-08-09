@@ -71,7 +71,7 @@ describe("ProjectImportService", () => {
       service["extractProjectData"] = jest.fn().mockReturnValue({});
       service["importProject"] = jest.fn().mockResolvedValue("1");
 
-      const importFile = { data: "", name: "importFileName" };
+      const importFile = { data: "data", name: "importFileName" };
       const option = { includeProject: true, includeTestResults: true };
       await service.import(
         importFile,
@@ -91,12 +91,7 @@ describe("ProjectImportService", () => {
         }
       );
 
-      expect(service["readImportFile"]).toBeCalledWith(
-        importFile.name,
-        option,
-        importDirectoryService
-      );
-      expect(importDirectoryService.removeFile).toBeCalledWith(importFile.name);
+      expect(service["readImportFile"]).toBeCalledWith(importFile.data, option);
       expect(service["extractTestResultsData"]).toBeCalledTimes(1);
       expect(service["importTestResults"]).toBeCalledTimes(1);
       expect(service["extractProjectData"]).toBeCalledTimes(1);
@@ -118,7 +113,7 @@ describe("ProjectImportService", () => {
       service["extractProjectData"] = jest.fn().mockReturnValue({});
       service["importProject"] = jest.fn().mockResolvedValue("1");
 
-      const importFile = { data: "", name: "importFileName" };
+      const importFile = { data: "data", name: "importFileName" };
       const option = { includeProject: false, includeTestResults: false };
       await service.import(
         importFile,
@@ -138,12 +133,7 @@ describe("ProjectImportService", () => {
         }
       );
 
-      expect(service["readImportFile"]).toBeCalledWith(
-        importFile.name,
-        option,
-        importDirectoryService
-      );
-      expect(importDirectoryService.removeFile).toBeCalledWith(importFile.name);
+      expect(service["readImportFile"]).toBeCalledWith(importFile.data, option);
       expect(service["extractTestResultsData"]).toBeCalledTimes(0);
       expect(service["importTestResults"]).toBeCalledTimes(0);
       expect(service["extractProjectData"]).toBeCalledTimes(0);

@@ -24,7 +24,7 @@ import { TimestampServiceImpl } from "@/services/TimestampService";
 import { Controller, Post, Route, Body } from "tsoa";
 import { screenshotDirectoryService, tempDirectoryService } from "..";
 import { ImportFileRepositoryServiceImpl } from "@/services/ImportFileRepositoryService";
-import { ImportService } from "@/services/ImportService";
+import { TestResultImportService } from "@/services/TestResultImportService";
 import { TestPurposeServiceImpl } from "@/services/TestPurposeService";
 import { NotesServiceImpl } from "@/services/NotesService";
 import { CreateTestResultImportDto } from "../interfaces/TesResultImport";
@@ -70,7 +70,7 @@ export class TestResultImportController extends Controller {
     });
 
     try {
-      const result = await new ImportService({
+      const result = await new TestResultImportService({
         testResult: testResultService,
         testStep: testStepService,
         testPurpose: testPurposeService,

@@ -19,17 +19,12 @@ import { TimestampService } from "./TimestampService";
 import { ImageFileRepositoryService } from "./ImageFileRepositoryService";
 import { StaticDirectoryService } from "./StaticDirectoryService";
 import { readZip } from "@/lib/zipReader";
-import { isTestResultExportFile } from "@/lib/archiveFileTypeChecker";
 
 export interface ImportFileRepositoryService {
-  readImportFile(importFileName: string): Promise<{
+  readImportFile(base64FileData: string): Promise<{
     testResultFile: { fileName: string; data: string };
     screenshots: { filePath: string; data: string }[];
   }>;
-
-  outputImportFile(importFile: { data: string; name: string }): Promise<void>;
-
-  deleteImportFile(importFileName: string): Promise<void>;
 }
 
 export class ImportFileRepositoryServiceImpl
@@ -43,19 +38,12 @@ export class ImportFileRepositoryServiceImpl
     }
   ) {}
 
-  public async readImportFile(importFileName: string): Promise<{
+  public async readImportFile(base64FileData: string): Promise<{
     testResultFile: { fileName: string; data: string };
     screenshots: { filePath: string; data: string }[];
   }> {
-    const importFilePath = this.service.staticDirectory.getJoinedPath(
-      path.basename(importFileName)
-    );
-
-    if (!(await isTestResultExportFile(importFilePath))) {
-      throw Error("Invalid test result file.");
-    }
-
-    const files = await readZip(importFilePath);
+    const decoded = Buffer.from(base64FileData, "base64");
+    const files = await readZip(decoded);
 
     const testResultFile = files.find((file) => file.filePath === "log.json");
 
@@ -80,23 +68,5 @@ export class ImportFileRepositoryServiceImpl
       },
       screenshots,
     };
-  }
-
-  public async outputImportFile(importFile: {
-    data: string;
-    name: string;
-  }): Promise<void> {
-    const decoded = Buffer.from(importFile.data, "base64");
-
-    return this.service.staticDirectory.outputFile(
-      path.basename(importFile.name),
-      decoded
-    );
-  }
-
-  public async deleteImportFile(importFileName: string): Promise<void> {
-    return this.service.staticDirectory.removeFile(
-      path.basename(importFileName)
-    );
   }
 }
