@@ -38,7 +38,6 @@ import { TransactionRunner } from "@/TransactionRunner";
 import { TestProgressEntity } from "@/entities/TestProgressEntity";
 import { unixtimeToDate } from "@/lib/timeUtil";
 import { DailyTestProgress } from "./TestProgressService";
-import { isProjectExportFile } from "@/lib/archiveFileTypeChecker";
 
 interface TestResultData {
   testResultId: string;
@@ -80,27 +79,12 @@ export class ProjectImportService {
       transactionRunner: TransactionRunner;
     }
   ): Promise<{ projectId: string }> {
-    const importFileName = path.basename(
-      importFile.name.split("/").pop() ?? ""
-    );
-
-    const decoded = Buffer.from(importFile.data, "base64");
-    await service.importDirectoryService.outputFile(
-      path.basename(importFile.name),
-      decoded
-    );
-
     const { testResultFiles, projectFiles } = await this.readImportFile(
-      importFileName,
+      importFile.data,
       {
         includeProject,
         includeTestResults,
-      },
-      service.importDirectoryService
-    );
-
-    await service.importDirectoryService.removeFile(
-      path.basename(importFileName)
+      }
     );
 
     let testResultIdMap: Map<string, string> = new Map();
@@ -614,30 +598,30 @@ export class ProjectImportService {
   }
 
   private async readImportFile(
-    importFileName: string,
+    base64FileData: string,
     option: {
       includeProject: boolean;
       includeTestResults: boolean;
-    },
-    importDirectoryService: StaticDirectoryService
-  ) {
-    const importFilePath = importDirectoryService.getJoinedPath(importFileName);
-
-    if (!(await isProjectExportFile(importFilePath))) {
-      throw Error("Invalid project data file.");
     }
-
-    const files = await readZip(importFilePath);
+  ) {
+    const decoded = Buffer.from(base64FileData, "base64");
+    const files = await readZip(decoded);
 
     const testResultFiles = files.filter((file) => {
       return file.filePath.includes("test-results");
     });
-    if (option.includeTestResults && testResultFiles.length === 0) {
-      throw new Error("Test result information does not exist.");
-    }
     const projectFiles = files.filter((file) => {
       return file.filePath.includes("projects");
     });
+
+    if (testResultFiles.length === 0 && projectFiles.length === 0) {
+      throw Error("Invalid project data file.");
+    }
+
+    if (option.includeTestResults && testResultFiles.length === 0) {
+      throw new Error("Test result information does not exist.");
+    }
+
     if (option.includeProject && projectFiles.length === 0) {
       throw new Error("Project information does not exist.");
     }
