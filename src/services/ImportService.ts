@@ -36,14 +36,20 @@ export class ImportService {
   ) {}
 
   public async importTestResult(
-    importFileName: string,
+    importFile: { data: string; name: string },
     testResultId: string | null
   ): Promise<{ testResultId: string }> {
+    const importFileName = path.basename(
+      importFile.name.split("/").pop() ?? ""
+    );
+
     console.log(importFileName);
 
-    const importedData = await this.service.importFileRepository.importTestResult(
+    await this.service.importFileRepository.outputImportFile(importFile);
+    const importedData = await this.service.importFileRepository.readImportFile(
       importFileName
     );
+    await this.service.importFileRepository.deleteImportFile(importFileName);
 
     const testResult = deserializeTestResult(importedData.testResultFile.data);
 
@@ -84,10 +90,11 @@ export class ImportService {
         );
 
         if (testStep.testPurpose) {
-          const newTestPurpose = await this.service.testPurpose.createTestPurpose(
-            newTestResult.id,
-            testStep.testPurpose
-          );
+          const newTestPurpose =
+            await this.service.testPurpose.createTestPurpose(
+              newTestResult.id,
+              testStep.testPurpose
+            );
 
           await this.service.testStep.attachTestPurposeToTestStep(
             newTestStep.id,
