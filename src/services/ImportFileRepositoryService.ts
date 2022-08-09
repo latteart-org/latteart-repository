@@ -19,37 +19,22 @@ import { TimestampService } from "./TimestampService";
 import { ImageFileRepositoryService } from "./ImageFileRepositoryService";
 import { StaticDirectoryService } from "./StaticDirectoryService";
 import { readZip } from "@/lib/zipReader";
+import { isTestResultExportFile } from "@/lib/archiveFileTypeChecker";
 
-interface importProjectData {
-  projectId: string;
-  projectFile: { fileName: string; data: string };
-  stories: {
-    storyId: string;
-    sessions: {
-      sessionId: string;
-      attachedFiles: {
-        fileName: string;
-        data: string;
-      }[];
-    }[];
-  }[];
-  testResults: {
-    testResultId: string;
-    testResultFile: { fileName: string; data: string };
-    screenshots: { filePath: string; data: string }[];
-  }[];
-}
 export interface ImportFileRepositoryService {
-  importTestResult(
-    importFileName: string
-  ): Promise<{
+  readImportFile(importFileName: string): Promise<{
     testResultFile: { fileName: string; data: string };
     screenshots: { filePath: string; data: string }[];
   }>;
+
+  outputImportFile(importFile: { data: string; name: string }): Promise<void>;
+
+  deleteImportFile(importFileName: string): Promise<void>;
 }
 
 export class ImportFileRepositoryServiceImpl
-  implements ImportFileRepositoryService {
+  implements ImportFileRepositoryService
+{
   constructor(
     private service: {
       staticDirectory: StaticDirectoryService;
@@ -58,15 +43,17 @@ export class ImportFileRepositoryServiceImpl
     }
   ) {}
 
-  public async importTestResult(
-    importFileName: string
-  ): Promise<{
+  public async readImportFile(importFileName: string): Promise<{
     testResultFile: { fileName: string; data: string };
     screenshots: { filePath: string; data: string }[];
   }> {
     const importFilePath = this.service.staticDirectory.getJoinedPath(
       path.basename(importFileName)
     );
+
+    if (!(await isTestResultExportFile(importFilePath))) {
+      throw Error("Invalid test result file.");
+    }
 
     const files = await readZip(importFilePath);
 
@@ -93,5 +80,23 @@ export class ImportFileRepositoryServiceImpl
       },
       screenshots,
     };
+  }
+
+  public async outputImportFile(importFile: {
+    data: string;
+    name: string;
+  }): Promise<void> {
+    const decoded = Buffer.from(importFile.data, "base64");
+
+    return this.service.staticDirectory.outputFile(
+      path.basename(importFile.name),
+      decoded
+    );
+  }
+
+  public async deleteImportFile(importFileName: string): Promise<void> {
+    return this.service.staticDirectory.removeFile(
+      path.basename(importFileName)
+    );
   }
 }

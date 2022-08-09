@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-import { Body, Controller, Get, Post, Route } from "tsoa";
+import { Body, Controller, Post, Route } from "tsoa";
 import {
   attachedFileDirectoryService,
-  importDirectoryService,
   screenshotDirectoryService,
+  tempDirectoryService,
   transactionRunner,
 } from "..";
-import path from "path";
 import { ProjectImportService } from "@/services/ProjectImportService";
 import { CreateProjectImportDto } from "../interfaces/ProjectImport";
 import LoggingService from "@/logger/LoggingService";
@@ -33,43 +32,15 @@ import { TestStepServiceImpl } from "@/services/TestStepService";
 import { ConfigsService } from "@/services/ConfigsService";
 import { NotesServiceImpl } from "@/services/NotesService";
 import { TestPurposeServiceImpl } from "@/services/TestPurposeService";
-import { isProjectExportFile } from "@/lib/archiveFileTypeChecker";
 
 @Route("imports/projects")
 export class ProjectImportController extends Controller {
-  @Get()
-  public async list(): Promise<{ url: string; name: string }[]> {
-    const zipFilePaths = await importDirectoryService.collectFilePaths(
-      /^.+\.zip$/
-    );
-
-    return (
-      await Promise.all(
-        zipFilePaths.map(async (zipFilePath) => {
-          const zipFileName = path.basename(zipFilePath);
-          return (await isProjectExportFile(zipFilePath))
-            ? [
-                {
-                  url: importDirectoryService.getFileUrl(zipFileName),
-                  name: zipFileName,
-                },
-              ]
-            : [];
-        })
-      )
-    ).flat();
-  }
-
   @Post()
   public async create(
     @Body() requestBody: CreateProjectImportDto
   ): Promise<{ projectId: string }> {
     try {
       const timestampService = new TimestampServiceImpl();
-
-      const basename = path.basename(
-        requestBody.source.projectFileUrl.split("/").pop() ?? ""
-      );
 
       const screenshotRepositoryService = new ImageFileRepositoryServiceImpl({
         staticDirectory: screenshotDirectoryService,
@@ -79,7 +50,7 @@ export class ProjectImportController extends Controller {
       });
       const importDirectoryRepositoryService =
         new ImageFileRepositoryServiceImpl({
-          staticDirectory: importDirectoryService,
+          staticDirectory: tempDirectoryService,
         });
       const configService = new ConfigsService();
       const testStepService = new TestStepServiceImpl({
@@ -100,7 +71,7 @@ export class ProjectImportController extends Controller {
       const testPurposeService = new TestPurposeServiceImpl();
 
       const response = await new ProjectImportService().import(
-        basename,
+        requestBody.source.projectFile,
         requestBody.includeProject,
         requestBody.includeTestResults,
         {
@@ -110,7 +81,7 @@ export class ProjectImportController extends Controller {
           screenshotRepositoryService,
           attachedFileRepositoryService,
           importDirectoryRepositoryService,
-          importDirectoryService: importDirectoryService,
+          importDirectoryService: tempDirectoryService,
           notesService,
           testPurposeService,
           transactionRunner,
