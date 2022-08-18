@@ -30,7 +30,6 @@ import { getRepository } from "typeorm";
 import { TimestampService } from "./TimestampService";
 import { ImageFileRepositoryService } from "./ImageFileRepositoryService";
 import { CoverageSourceEntity } from "@/entities/CoverageSourceEntity";
-import { DefaultInputElementEntity } from "@/entities/DefaultInputElementEntity";
 import { ConfigsService } from "./ConfigsService";
 
 export interface TestStepService {
@@ -51,9 +50,7 @@ export interface TestStepService {
     testPurposeId: string | null
   ): Promise<PatchTestStepResponse>;
 
-  getTestStepOperation(
-    testStepId: string
-  ): Promise<{
+  getTestStepOperation(testStepId: string): Promise<{
     input: string;
     type: string;
     elementInfo: any;
@@ -97,12 +94,6 @@ export class TestStepServiceImpl implements TestStepService {
       relations: ["coverageSources"],
     });
 
-    const {
-      defaultInputElements: defaultInputElementsEntity,
-    } = await getRepository(TestResultEntity).findOneOrFail(testResultId, {
-      relations: ["defaultInputElements"],
-    });
-
     const targetCoverageSource = testResultEntity.coverageSources?.find(
       (coverageSource) => {
         return (
@@ -135,18 +126,8 @@ export class TestStepServiceImpl implements TestStepService {
       );
     }
 
-    defaultInputElementsEntity?.push(
-      new DefaultInputElementEntity({
-        title: requestBody.title,
-        url: requestBody.url,
-        inputElements: JSON.stringify(requestBody.inputElements),
-        testResult: testResultEntity,
-      })
-    );
-
     const savedTestResultEntity = await getRepository(TestResultEntity).save({
       ...testResultEntity,
-      defaultInputElements: defaultInputElementsEntity,
     });
 
     // add test step.
@@ -180,9 +161,11 @@ export class TestStepServiceImpl implements TestStepService {
     );
 
     // result coverage source.
-    const savedCoverageSourceEntity = savedTestResultEntity.coverageSources?.find(
-      ({ url, title }) => url === requestBody.url && title === requestBody.title
-    );
+    const savedCoverageSourceEntity =
+      savedTestResultEntity.coverageSources?.find(
+        ({ url, title }) =>
+          url === requestBody.url && title === requestBody.title
+      );
     const coverageSource = {
       title: savedCoverageSourceEntity?.title ?? "",
       url: savedCoverageSourceEntity?.url ?? "",
@@ -191,18 +174,10 @@ export class TestStepServiceImpl implements TestStepService {
         : [],
     };
 
-    // result input element info.
-    const inputElementInfo = {
-      title: requestBody.title,
-      url: requestBody.url,
-      inputElements: requestBody.inputElements,
-    };
-
     return {
       id: newTestStepEntity.id,
       operation,
       coverageSource,
-      inputElementInfo,
     };
   }
 
@@ -250,9 +225,7 @@ export class TestStepServiceImpl implements TestStepService {
     return this.convertTestStepEntityToTestStep(updatedTestStepEntity);
   }
 
-  public async getTestStepOperation(
-    testStepId: string
-  ): Promise<{
+  public async getTestStepOperation(testStepId: string): Promise<{
     input: string;
     type: string;
     elementInfo: any;

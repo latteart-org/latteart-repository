@@ -15,7 +15,6 @@
  */
 
 import { CoverageSourceEntity } from "@/entities/CoverageSourceEntity";
-import { DefaultInputElementEntity } from "@/entities/DefaultInputElementEntity";
 import { NoteEntity } from "@/entities/NoteEntity";
 import { ScreenshotEntity } from "@/entities/ScreenshotEntity";
 import { SessionEntity } from "@/entities/SessionEntity";
@@ -103,15 +102,8 @@ export class TestResultServiceImpl implements TestResultService {
         relations: ["coverageSources"],
       });
 
-      const { defaultInputElements } = await getRepository(
-        TestResultEntity
-      ).findOneOrFail(id, {
-        relations: ["defaultInputElements"],
-      });
-
       return await this.convertTestResultEntityToTestResult({
         coverageSources,
-        defaultInputElements,
         ...testResultEntity,
       });
     } catch (error) {
@@ -141,7 +133,6 @@ export class TestResultServiceImpl implements TestResultService {
       initialUrl: body.initialUrl ?? "",
       testSteps: [],
       coverageSources: [],
-      defaultInputElements: [],
       testPurposes: [],
       notes: [],
       screenshots: [],
@@ -185,9 +176,6 @@ export class TestResultServiceImpl implements TestResultService {
         testResult: { id: testResultId },
       });
       await transactionalEntityManager.delete(CoverageSourceEntity, {
-        testResult: { id: testResultId },
-      });
-      await transactionalEntityManager.delete(DefaultInputElementEntity, {
         testResult: { id: testResultId },
       });
       await transactionalEntityManager.delete(TestPurposeEntity, {
@@ -238,12 +226,6 @@ export class TestResultServiceImpl implements TestResultService {
       relations: ["coverageSources"],
     });
 
-    const { defaultInputElements } = await getRepository(
-      TestResultEntity
-    ).findOneOrFail(id, {
-      relations: ["defaultInputElements"],
-    });
-
     if (params.initialUrl) {
       testResultEntity.initialUrl = params.initialUrl;
     }
@@ -262,7 +244,6 @@ export class TestResultServiceImpl implements TestResultService {
 
     return this.convertTestResultEntityToTestResult({
       coverageSources,
-      defaultInputElements,
       ...updatedTestResultEntity,
     });
   }
@@ -373,15 +354,6 @@ export class TestResultServiceImpl implements TestResultService {
         };
       }) ?? [];
 
-    const inputElementInfos =
-      testResultEntity.defaultInputElements?.map((defaultInputElementInfo) => {
-        return {
-          title: defaultInputElementInfo.title,
-          url: defaultInputElementInfo.url,
-          inputElements: JSON.parse(defaultInputElementInfo.inputElements),
-        };
-      }) ?? [];
-
     return {
       id: testResultEntity.id,
       name: testResultEntity.name,
@@ -390,7 +362,6 @@ export class TestResultServiceImpl implements TestResultService {
       initialUrl: testResultEntity.initialUrl,
       testSteps,
       coverageSources,
-      inputElementInfos,
     };
   }
 }
