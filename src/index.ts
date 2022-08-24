@@ -38,7 +38,6 @@ import fs from "fs-extra";
 import path from "path";
 import { RegisterRoutes } from "./routes/routes";
 import { TestStepEntity } from "./entities/TestStepEntity";
-import { DefaultInputElementEntity } from "./entities/DefaultInputElementEntity";
 import { CoverageSourceEntity } from "./entities/CoverageSourceEntity";
 import { TestPurposeEntity } from "./entities/TestPurposeEntity";
 import { TestResultEntity } from "./entities/TestResultEntity";
@@ -65,6 +64,7 @@ import { UpdateViewPointEntity1655772848395 } from "./migrations/1655772848395-U
 import { UpdateSessionEntity1656305325919 } from "./migrations/1656305325919-UpdateSessionEntity";
 import { TestProgressEntity } from "./entities/TestProgressEntity";
 import { AddTestProgressEntity1657768635961 } from "./migrations/1657768635961-AddTestProgressEntity";
+import { DeleteDefaultInputElementEntity1661223982605 } from "./migrations/1661223982605-DeleteDefaultInputElementEntity";
 
 LoggingService.initialize(
   new StandardLogger(
@@ -130,7 +130,6 @@ async function initializeOrmConnection(connectionName: string) {
     ...baseOptions,
     entities: [
       CoverageSourceEntity,
-      DefaultInputElementEntity,
       NoteEntity,
       ScreenshotEntity,
       TagEntity,
@@ -158,6 +157,7 @@ async function initializeOrmConnection(connectionName: string) {
       UpdateViewPointEntity1655772848395,
       UpdateSessionEntity1656305325919,
       AddTestProgressEntity1657768635961,
+      DeleteDefaultInputElementEntity1661223982605,
     ],
   };
 

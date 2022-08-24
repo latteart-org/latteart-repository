@@ -7,8 +7,6 @@ import { ConfigsController } from './../controllers/ConfigsController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { DeviceConfigsController } from './../controllers/DeviceConfigsController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { FileUploadController } from './../controllers/FileUploadController';
-// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { NoteCompressedImageController } from './../controllers/NoteCompressedImageController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { NotesController } from './../controllers/NotesController';
@@ -299,7 +297,6 @@ const models: TsoaRoute.Models = {
             "initialUrl": {"dataType":"string","required":true},
             "testSteps": {"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"notices":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"tags":{"dataType":"array","array":{"dataType":"string"},"required":true},"imageFileUrl":{"dataType":"string","required":true},"details":{"dataType":"string","required":true},"value":{"dataType":"string","required":true},"type":{"dataType":"string","required":true},"id":{"dataType":"string","required":true}}},"required":true},"bugs":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"tags":{"dataType":"array","array":{"dataType":"string"},"required":true},"imageFileUrl":{"dataType":"string","required":true},"details":{"dataType":"string","required":true},"value":{"dataType":"string","required":true},"type":{"dataType":"string","required":true},"id":{"dataType":"string","required":true}}},"required":true},"intention":{"dataType":"union","subSchemas":[{"dataType":"nestedObjectLiteral","nestedProperties":{"tags":{"dataType":"array","array":{"dataType":"string"},"required":true},"imageFileUrl":{"dataType":"string","required":true},"details":{"dataType":"string","required":true},"value":{"dataType":"string","required":true},"type":{"dataType":"string","required":true},"id":{"dataType":"string","required":true}}},{"dataType":"enum","enums":[null]}],"required":true},"operation":{"dataType":"nestedObjectLiteral","nestedProperties":{"keywordTexts":{"dataType":"array","array":{"dataType":"string"}},"inputElements":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"attributes":{"dataType":"nestedObjectLiteral","nestedProperties":{},"additionalProperties":{"dataType":"string"},"required":true},"checked":{"dataType":"boolean","required":true},"value":{"dataType":"string","required":true},"xpath":{"dataType":"string","required":true},"text":{"dataType":"string","required":true},"tagname":{"dataType":"string","required":true}}},"required":true},"windowHandle":{"dataType":"string","required":true},"timestamp":{"dataType":"string","required":true},"imageFileUrl":{"dataType":"string","required":true},"url":{"dataType":"string","required":true},"title":{"dataType":"string","required":true},"elementInfo":{"dataType":"union","subSchemas":[{"dataType":"nestedObjectLiteral","nestedProperties":{"attributes":{"dataType":"nestedObjectLiteral","nestedProperties":{},"additionalProperties":{"dataType":"string"},"required":true},"checked":{"dataType":"boolean","required":true},"value":{"dataType":"string","required":true},"xpath":{"dataType":"string","required":true},"text":{"dataType":"string","required":true},"tagname":{"dataType":"string","required":true}}},{"dataType":"enum","enums":[null]}],"required":true},"type":{"dataType":"string","required":true},"input":{"dataType":"string","required":true}},"required":true},"id":{"dataType":"string","required":true}}},"required":true},
             "coverageSources": {"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"screenElements":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"attributes":{"dataType":"nestedObjectLiteral","nestedProperties":{},"additionalProperties":{"dataType":"string"},"required":true},"checked":{"dataType":"boolean","required":true},"value":{"dataType":"string","required":true},"xpath":{"dataType":"string","required":true},"text":{"dataType":"string","required":true},"tagname":{"dataType":"string","required":true}}},"required":true},"url":{"dataType":"string","required":true},"title":{"dataType":"string","required":true}}},"required":true},
-            "inputElementInfos": {"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"inputElements":{"dataType":"nestedObjectLiteral","nestedProperties":{"attributes":{"dataType":"nestedObjectLiteral","nestedProperties":{},"additionalProperties":{"dataType":"string"},"required":true},"checked":{"dataType":"boolean","required":true},"value":{"dataType":"string","required":true},"xpath":{"dataType":"string","required":true},"text":{"dataType":"string","required":true},"tagname":{"dataType":"string","required":true}},"required":true},"url":{"dataType":"string","required":true},"title":{"dataType":"string","required":true}}},"required":true},
         },
         "additionalProperties": false,
     },
@@ -373,19 +370,9 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "InputElementInfo": {
-        "dataType": "refObject",
-        "properties": {
-            "title": {"dataType":"string","required":true},
-            "url": {"dataType":"string","required":true},
-            "inputElements": {"dataType":"array","array":{"dataType":"refObject","ref":"ElementInfo"},"required":true},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "CreateTestStepResponse": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"inputElementInfo":{"ref":"InputElementInfo"},"coverageSource":{"ref":"CoverageSource","required":true},"operation":{"ref":"Operation","required":true},"id":{"dataType":"string","required":true}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"coverageSource":{"ref":"CoverageSource","required":true},"operation":{"ref":"Operation","required":true},"id":{"dataType":"string","required":true}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "CapturedOperation": {
@@ -682,29 +669,6 @@ export function RegisterRoutes(app: express.Router) {
 
 
               const promise = controller.update.apply(controller, validatedArgs as any);
-              promiseHandler(controller, promise, response, undefined, next);
-            } catch (err) {
-                return next(err);
-            }
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.post('/api/v1/upload',
-
-            function FileUploadController_testResultUpload(request: any, response: any, next: any) {
-            const args = {
-                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
-            };
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request, response);
-
-                const controller = new FileUploadController();
-
-
-              const promise = controller.testResultUpload.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);
