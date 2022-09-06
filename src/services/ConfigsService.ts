@@ -27,13 +27,31 @@ import {
   PutDeviceConfigDto,
   PutDeviceConfigResponse,
 } from "@/interfaces/DeviceConfigs";
+import { ScreenDefinitionConfig } from "@/lib/ScreenDefFactory";
+import { AutofillSetting, Coverage } from "@/lib/settings/Settings";
+
+type configWithImageCompressionCommand = Omit<GetConfigResponse, "config"> & {
+  config: {
+    screenDefinition: ScreenDefinitionConfig;
+    autofillSetting: AutofillSetting;
+    coverage: Coverage;
+    imageCompression: {
+      isEnabled: boolean;
+      isDeleteSrcImage: boolean;
+      command: string;
+    };
+  };
+};
 
 export class ConfigsService {
   private static imageCompressionCommand = "";
 
   public async getConfig(projectId: string): Promise<GetConfigResponse> {
     const configEntity = await this.getConfigSource(projectId);
-    return this.deleteCompressionCommand(JSON.parse(configEntity.text));
+    const config = JSON.parse(
+      configEntity.text
+    ) as configWithImageCompressionCommand;
+    return this.deleteCompressionCommand(config);
   }
 
   public async getDeviceConfig(
@@ -48,16 +66,28 @@ export class ConfigsService {
     requestBody: PutConfigDto
   ): Promise<PutConfigResponse> {
     const configEntity = await this.getConfigSource(projectId);
-    const settings = { ...requestBody } as any;
-    settings.config.imageCompression.command =
-      ConfigsService.imageCompressionCommand;
+    const settings: configWithImageCompressionCommand = {
+      ...requestBody,
+      config: {
+        ...requestBody.config,
+        imageCompression: {
+          ...requestBody.config.imageCompression,
+          command: ConfigsService.imageCompressionCommand,
+        },
+      },
+    };
+
     configEntity.text = JSON.stringify(settings);
 
-    const savedConfig = await getRepository(ConfigEntity).save(configEntity);
-
-    return this.deleteCompressionCommand(
-      (JSON.parse(savedConfig.text) as unknown) as PutConfigResponse
+    const savedConfigEntity = await getRepository(ConfigEntity).save(
+      configEntity
     );
+
+    const savedConfig = JSON.parse(
+      savedConfigEntity.text
+    ) as configWithImageCompressionCommand;
+
+    return this.deleteCompressionCommand(savedConfig);
   }
 
   public async updateDeviceConfig(
@@ -69,9 +99,9 @@ export class ConfigsService {
 
     const savedConfig = await getRepository(ConfigEntity).save(configEntity);
 
-    return (JSON.parse(
+    return JSON.parse(
       savedConfig.deviceText
-    ) as unknown) as PutDeviceConfigResponse;
+    ) as unknown as PutDeviceConfigResponse;
   }
 
   private async getConfigSource(projectId: string): Promise<ConfigEntity> {
@@ -103,9 +133,18 @@ export class ConfigsService {
     return config[0];
   }
 
-  private deleteCompressionCommand(settings: any): any {
-    const s = { ...settings };
-    delete s.config.imageCompression.command;
-    return s;
+  private deleteCompressionCommand(
+    settings: configWithImageCompressionCommand
+  ): GetConfigResponse {
+    return {
+      ...settings,
+      config: {
+        ...settings.config,
+        imageCompression: {
+          isEnabled: settings.config.imageCompression.isEnabled,
+          isDeleteSrcImage: settings.config.imageCompression.isDeleteSrcImage,
+        },
+      },
+    };
   }
 }

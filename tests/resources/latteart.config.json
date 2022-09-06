@@ -144,8 +144,6 @@
       }
     },
     "autofillSetting": {
-      "autoPopupRegistrationDialog": false,
-      "autoPopupSelectionDialog": false,
       "conditionGroups": []
     },
     "screenDefinition": {

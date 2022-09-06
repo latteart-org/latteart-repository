@@ -65,8 +65,6 @@ export default class Settings {
     this.defaultTagList = [];
     this.config = {
       autofillSetting: {
-        autoPopupRegistrationDialog: false,
-        autoPopupSelectionDialog: false,
         conditionGroups: [],
       },
       screenDefinition: {
@@ -91,8 +89,6 @@ export default class Settings {
 }
 
 export interface AutofillSetting {
-  autoPopupRegistrationDialog: boolean;
-  autoPopupSelectionDialog: boolean;
   conditionGroups: AutofillConditionGroup[];
 }
 

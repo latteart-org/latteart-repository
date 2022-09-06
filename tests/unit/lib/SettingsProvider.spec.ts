@@ -34,8 +34,6 @@ describe("SettingsProvider", () => {
           },
         },
         autofillSetting: {
-          autoPopupRegistrationDialog: false,
-          autoPopupSelectionDialog: false,
           conditionGroups: [],
         },
         screenDefinition: {
@@ -191,8 +189,6 @@ describe("SettingsProvider", () => {
             },
           },
           autofillSetting: {
-            autoPopupRegistrationDialog: false,
-            autoPopupSelectionDialog: false,
             conditionGroups: [],
           },
           screenDefinition: {
@@ -272,8 +268,6 @@ describe("SettingsProvider", () => {
             },
           },
           autofillSetting: {
-            autoPopupRegistrationDialog: false,
-            autoPopupSelectionDialog: false,
             conditionGroups: [],
           },
           screenDefinition: {

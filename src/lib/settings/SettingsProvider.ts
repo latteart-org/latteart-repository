@@ -176,20 +176,6 @@ export class SettingsProvider {
     if (source.config && source.config.autofillSetting) {
       const sourceAutofillSetting = source.config.autofillSetting;
 
-      if (sourceAutofillSetting.autoPopupRegistrationDialog) {
-        Object.assign(
-          target.config.autofillSetting.autoPopupRegistrationDialog,
-          sourceAutofillSetting.autoPopupRegistrationDialog
-        );
-      }
-
-      if (sourceAutofillSetting.autoPopupSelectionDialog) {
-        Object.assign(
-          target.config.autofillSetting.autoPopupSelectionDialog,
-          sourceAutofillSetting.autoPopupSelectionDialog
-        );
-      }
-
       if (sourceAutofillSetting.conditionGroups) {
         target.config.autofillSetting.conditionGroups =
           sourceAutofillSetting.conditionGroups;
