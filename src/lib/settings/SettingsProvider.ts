@@ -173,6 +173,15 @@ export class SettingsProvider {
       target.defaultTagList = source.defaultTagList;
     }
 
+    if (source.config && source.config.autofillSetting) {
+      const sourceAutofillSetting = source.config.autofillSetting;
+
+      if (sourceAutofillSetting.conditionGroups) {
+        target.config.autofillSetting.conditionGroups =
+          sourceAutofillSetting.conditionGroups;
+      }
+    }
+
     if (source.config && source.config.screenDefinition) {
       const sourceScreenDefinition = source.config.screenDefinition;
 

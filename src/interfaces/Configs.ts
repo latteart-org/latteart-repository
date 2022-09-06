@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-import { ScreenDefinitionConfig } from "@/lib/ScreenDefFactory";
+import { ScreenDefinitionConfig } from "../lib/ScreenDefFactory";
+import { AutofillSetting, Coverage } from "../lib/settings/Settings";
 
 export type PutConfigDto = GetConfigResponse;
 
@@ -33,15 +34,15 @@ export interface GetConfigResponse {
     configureCaptureSettings: boolean;
   };
   viewPointsPreset: Array<{
+    id: string;
     name: string;
-    viewPoints: Array<{ name: string }>;
+    viewPoints: Array<{ name: string; description: string }>;
   }>;
   defaultTagList: string[];
   config: {
     screenDefinition: ScreenDefinitionConfig;
-    exclusionElements: {
-      tags: string[];
-    };
+    autofillSetting: AutofillSetting;
+    coverage: Coverage;
     imageCompression: {
       isEnabled: boolean;
       isDeleteSrcImage: boolean;

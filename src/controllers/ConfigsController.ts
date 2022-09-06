@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+import {
+  GetConfigResponse,
+  PutConfigDto,
+  PutConfigResponse,
+} from "../interfaces/Configs";
 import LoggingService from "@/logger/LoggingService";
 import { ServerError, ServerErrorCode } from "@/ServerError";
 import { Get, Route, Path, Put, Body } from "tsoa";
@@ -22,7 +27,7 @@ import { ConfigsService } from "../services/ConfigsService";
 @Route("projects/{projectId}/configs")
 export class ConfigsController {
   @Get()
-  public async get(@Path() projectId: string): Promise<any> {
+  public async get(@Path() projectId: string): Promise<GetConfigResponse> {
     try {
       return new ConfigsService().getConfig(projectId);
     } catch (error) {
@@ -40,8 +45,8 @@ export class ConfigsController {
   @Put()
   public async update(
     @Path() projectId: string,
-    @Body() requestBody: any
-  ): Promise<any> {
+    @Body() requestBody: PutConfigDto
+  ): Promise<PutConfigResponse> {
     try {
       return new ConfigsService().updateConfig(projectId, requestBody);
     } catch (error) {
