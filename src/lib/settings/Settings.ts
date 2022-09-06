@@ -37,6 +37,7 @@ export default class Settings {
   }>;
   public defaultTagList: string[];
   public config: {
+    autofillSetting: AutofillSetting;
     screenDefinition: ScreenDefinition;
     coverage: Coverage;
     imageCompression: ImageCompression;
@@ -63,6 +64,11 @@ export default class Settings {
     this.viewPointsPreset = [];
     this.defaultTagList = [];
     this.config = {
+      autofillSetting: {
+        autoPopupRegistrationDialog: false,
+        autoPopupSelectionDialog: false,
+        conditionGroups: [],
+      },
       screenDefinition: {
         screenDefType: ScreenDefType.Title,
         conditionGroups: [],
@@ -84,6 +90,12 @@ export default class Settings {
   }
 }
 
+export interface AutofillSetting {
+  autoPopupRegistrationDialog: boolean;
+  autoPopupSelectionDialog: boolean;
+  conditionGroups: AutofillConditionGroup[];
+}
+
 export interface ScreenDefinition {
   screenDefType: ScreenDefType;
   conditionGroups: ScreenDefinitionConditionGroup[];
@@ -100,6 +112,22 @@ export interface ImageCompression {
   isDeleteSrcImage: boolean;
   command: string;
 }
+
+export interface AutofillConditionGroup {
+  isEnabled: boolean;
+  settingName: string;
+  url: string;
+  title: string;
+  inputValueConditions: Array<AutofillCondition>;
+}
+
+export type AutofillCondition = {
+  isEnabled: boolean;
+  locatorType: string;
+  locator: string;
+  locatorMatchType: "equals" | "regex";
+  inputValue: string;
+};
 
 export interface ScreenDefinitionConditionGroup {
   isEnabled: boolean;

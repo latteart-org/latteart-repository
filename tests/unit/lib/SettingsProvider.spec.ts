@@ -33,6 +33,11 @@ describe("SettingsProvider", () => {
             tags: [],
           },
         },
+        autofillSetting: {
+          autoPopupRegistrationDialog: false,
+          autoPopupSelectionDialog: false,
+          conditionGroups: [],
+        },
         screenDefinition: {
           screenDefType: "title",
           conditionGroups: [],
@@ -185,6 +190,11 @@ describe("SettingsProvider", () => {
               tags: [],
             },
           },
+          autofillSetting: {
+            autoPopupRegistrationDialog: false,
+            autoPopupSelectionDialog: false,
+            conditionGroups: [],
+          },
           screenDefinition: {
             screenDefType: "title",
             conditionGroups: [],
@@ -260,6 +270,11 @@ describe("SettingsProvider", () => {
             include: {
               tags: [],
             },
+          },
+          autofillSetting: {
+            autoPopupRegistrationDialog: false,
+            autoPopupSelectionDialog: false,
+            conditionGroups: [],
           },
           screenDefinition: {
             screenDefType: "title",
