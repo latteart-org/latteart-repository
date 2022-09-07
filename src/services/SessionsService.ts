@@ -101,6 +101,10 @@ export class SessionsService {
       updateTargetSession.testUser = requestBody.testerName;
     }
 
+    if (requestBody.testingTime !== undefined) {
+      updateTargetSession.testingTime = requestBody.testingTime;
+    }
+
     if (requestBody.testResultFiles) {
       if (requestBody.testResultFiles.length > 0) {
         const testResult = await getRepository(TestResultEntity).findOne(
