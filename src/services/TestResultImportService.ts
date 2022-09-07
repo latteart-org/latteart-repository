@@ -176,9 +176,10 @@ export class TestResultImportService {
         testResult.name ??
         `session_${this.service.timestamp.format("YYYYMMDD_HHmmss")}`,
       startTimestamp:
-        testResult.startTimeStamp ?? testResult.initialUrl
+        testResult.startTimeStamp ??
+        (testResult.initialUrl
           ? this.service.timestamp.epochMilliseconds()
-          : 0,
+          : 0),
       endTimestamp: -1,
       initialUrl: testResult.initialUrl ?? "",
       screenshots: Array.from(screenshotFilePathToEntity.values()),
