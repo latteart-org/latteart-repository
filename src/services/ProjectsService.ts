@@ -323,31 +323,12 @@ export class ProjectsServiceImpl implements ProjectsService {
             );
             unupdatedSessions = sessionEntityWithUnupdateList.unupdatedList;
           }
-
-          const plannedSessionNumber =
-            requestBody.testMatrices
-              .find((testMatrix) => testMatrix.id === story.testMatrixId)
-              ?.groups.find((group) =>
-                group.testTargets.some(
-                  (testTarget) => testTarget.id === story.testTargetId
-                )
-              )
-              ?.testTargets.find(
-                (testTarget) => testTarget.id === story.testTargetId
-              )
-              ?.plans.find((plan) => plan.viewPointId === story.viewPointId)
-              ?.value ?? 0;
-
-          await this.service.testProgress.registerTestProgress(story.id, {
-            plannedSessionNumber,
-            completedSessionNumber: story.sessions.filter(
-              (session) => session.doneDate
-            ).length,
-            incompletedSessionNumber: story.sessions.filter(
-              (session) => !session.doneDate
-            ).length,
-          });
         }
+
+        await this.service.testProgress.registerTestProgresses(
+          ...requestBody.stories.map((story) => story.id)
+        );
+
         LoggingService.debug(
           `END UPDATE - ${this.service.timestamp.format(
             ProjectsServiceImpl.DATETIME_LOG_FORMAT

@@ -27,6 +27,7 @@ import {
 import { sessionEntityToResponse } from "@/lib/entityToResponse";
 import { getRepository } from "typeorm";
 import { ImageFileRepositoryService } from "./ImageFileRepositoryService";
+import { TestProgressServiceImpl } from "./TestProgressService";
 import { TimestampService } from "./TimestampService";
 
 export class SessionsService {
@@ -51,6 +52,8 @@ export class SessionsService {
         story,
       })
     );
+
+    await new TestProgressServiceImpl().registerTestProgresses(story.id);
 
     return await this.entityToResponse(session.id);
   }
@@ -117,12 +120,19 @@ export class SessionsService {
     }
     const result = await sessionRepository.save(updateTargetSession);
 
+    await new TestProgressServiceImpl().registerTestProgresses(result.story.id);
+
     return await this.entityToResponse(result.id);
   }
 
   public async deleteSession(sessionId: string): Promise<void> {
     const sessionRepository = getRepository(SessionEntity);
+    const storyId = (
+      await sessionRepository.findOneOrFail(sessionId, { relations: ["story"] })
+    ).story.id;
     await sessionRepository.delete(sessionId);
+
+    await new TestProgressServiceImpl().registerTestProgresses(storyId);
 
     return;
   }
