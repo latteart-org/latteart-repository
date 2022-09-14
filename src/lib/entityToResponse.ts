@@ -73,6 +73,20 @@ const noteEntityToResponse = (note: NoteEntity): issue => {
 };
 
 export const sessionEntityToResponse = (session: SessionEntity): Session => {
+  const sortedNotes =
+    session.testResult?.notes?.slice().sort((a, b) => {
+      const stepA = a.testSteps ? a.testSteps[0] : undefined;
+      const stepB = b.testSteps ? b.testSteps[0] : undefined;
+
+      const result = (stepA?.timestamp ?? 0) - (stepB?.timestamp ?? 0);
+
+      if (result !== 0) {
+        return result;
+      }
+
+      return a.timestamp - b.timestamp;
+    }) ?? [];
+
   return {
     index: session.index,
     id: session.id,
@@ -92,10 +106,9 @@ export const sessionEntityToResponse = (session: SessionEntity): Session => {
         }) ?? [],
     doneDate: session.doneDate,
     isDone: !!session.doneDate,
-    issues:
-      session.testResult?.notes?.map((note) => {
-        return noteEntityToResponse(note);
-      }) ?? [],
+    issues: sortedNotes.map((note) => {
+      return noteEntityToResponse(note);
+    }),
     memo: session.memo,
     name: session.name,
     testItem: session.testItem,
