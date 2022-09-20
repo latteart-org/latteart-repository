@@ -64,7 +64,7 @@ const models: TsoaRoute.Models = {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "AutofillCondition": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"inputValue":{"dataType":"string","required":true},"locatorMatchType":{"dataType":"union","subSchemas":[{"dataType":"enum","enums":["equals"]},{"dataType":"enum","enums":["regex"]}],"required":true},"locator":{"dataType":"string","required":true},"locatorType":{"dataType":"string","required":true},"isEnabled":{"dataType":"boolean","required":true}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"inputValue":{"dataType":"string","required":true},"locatorMatchType":{"dataType":"union","subSchemas":[{"dataType":"enum","enums":["equals"]},{"dataType":"enum","enums":["contains"]}],"required":true},"locator":{"dataType":"string","required":true},"locatorType":{"dataType":"string","required":true},"isEnabled":{"dataType":"boolean","required":true}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "AutofillConditionGroup": {
