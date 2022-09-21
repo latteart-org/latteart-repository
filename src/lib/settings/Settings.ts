@@ -121,7 +121,7 @@ export type AutofillCondition = {
   isEnabled: boolean;
   locatorType: string;
   locator: string;
-  locatorMatchType: "equals" | "regex";
+  locatorMatchType: "equals" | "contains";
   inputValue: string;
 };
 
