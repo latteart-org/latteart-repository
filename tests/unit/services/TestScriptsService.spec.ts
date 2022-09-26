@@ -43,7 +43,6 @@ const emptyTestResult: GetTestResultResponse = {
   initialUrl: "",
   testSteps: [],
   coverageSources: [],
-  inputElementInfos: [],
 };
 
 beforeEach(async () => {
@@ -58,7 +57,6 @@ describe("TestScriptsService", () => {
   describe("#createTestScriptByTestResult", () => {
     let emptyTestResultService: TestResultService;
     let emptyTestScriptFileRepositoryService: TestScriptFileRepositoryService;
-    let emptyConfigService: any;
 
     beforeEach(() => {
       emptyTestResultService = {
@@ -72,12 +70,6 @@ describe("TestScriptsService", () => {
       };
       emptyTestScriptFileRepositoryService = {
         write: jest.fn().mockResolvedValue("url"),
-      };
-      emptyConfigService = {
-        getConfig: jest.fn(),
-        getDeviceConfig: jest.fn(),
-        updateConfig: jest.fn(),
-        updateDeviceConfig: jest.fn(),
       };
     });
 
@@ -110,10 +102,6 @@ describe("TestScriptsService", () => {
           const screenshots: { id: string; fileUrl: string }[] = [
             { id: "id1", fileUrl: "fileUrl1" },
           ];
-          const screenDefinitionConfig = {
-            screenDefType: "title",
-            conditionGroups: [],
-          };
 
           const services = {
             testResult: {
@@ -127,18 +115,18 @@ describe("TestScriptsService", () => {
               ...emptyTestScriptFileRepositoryService,
               write: jest.fn().mockResolvedValue(url),
             },
-            config: {
-              ...emptyConfigService,
-              getConfig: jest.fn().mockResolvedValue({
-                config: { screenDefinition: screenDefinitionConfig },
-              }),
-            },
           };
 
           const testResultId = "testResultId";
           const requestBody: CreateTestScriptDto = {
-            testScript: { isSimple: true },
+            optimized: false,
             testData: { useDataDriven: false, maxGeneration: 0 },
+            view: {
+              node: {
+                unit: "title",
+                definitions: [],
+              },
+            },
           };
           const result = await new TestScriptsService(
             services
@@ -253,10 +241,6 @@ describe('TestSuite1', () => {
           const screenshots: { id: string; fileUrl: string }[] = [
             { id: "id1", fileUrl: "fileUrl1" },
           ];
-          const screenDefinitionConfig = {
-            screenDefType: "title",
-            conditionGroups: [],
-          };
 
           const services = {
             testResult: {
@@ -270,18 +254,18 @@ describe('TestSuite1', () => {
               ...emptyTestScriptFileRepositoryService,
               write: jest.fn().mockResolvedValue(url),
             },
-            config: {
-              ...emptyConfigService,
-              getConfig: jest.fn().mockResolvedValue({
-                config: { screenDefinition: screenDefinitionConfig },
-              }),
-            },
           };
 
           const testResultId = "testResultId";
           const requestBody: CreateTestScriptDto = {
-            testScript: { isSimple: true },
+            optimized: false,
             testData: { useDataDriven: false, maxGeneration: 0 },
+            view: {
+              node: {
+                unit: "title",
+                definitions: [],
+              },
+            },
           };
           const result = await new TestScriptsService(
             services
@@ -380,10 +364,6 @@ describe('TestSuite1', () => {
           initialUrl: "",
           testSteps: [],
         };
-        const screenDefinitionConfig = {
-          screenDefType: "title",
-          conditionGroups: [],
-        };
 
         const services = {
           testResult: {
@@ -393,18 +373,18 @@ describe('TestSuite1', () => {
           testScriptFileRepository: {
             ...emptyTestScriptFileRepositoryService,
           },
-          config: {
-            ...emptyConfigService,
-            getConfig: jest.fn().mockResolvedValue({
-              config: { screenDefinition: screenDefinitionConfig },
-            }),
-          },
         };
 
         const testResultId = "testResultId";
         const requestBody: CreateTestScriptDto = {
-          testScript: { isSimple: true },
+          optimized: false,
           testData: { useDataDriven: false, maxGeneration: 0 },
+          view: {
+            node: {
+              unit: "title",
+              definitions: [],
+            },
+          },
         };
         await expect(
           new TestScriptsService(services).createTestScriptByTestResult(

@@ -134,9 +134,7 @@
     },
     {
       "name": "preset1",
-      "viewPoints": [
-        { "name": "プリセット１" }
-      ]
+      "viewPoints": [{ "name": "プリセット１" }]
     }
   ],
   "config": {
@@ -144,6 +142,9 @@
       "include": {
         "tags": []
       }
+    },
+    "autofillSetting": {
+      "conditionGroups": []
     },
     "screenDefinition": {
       "isRegex": false,

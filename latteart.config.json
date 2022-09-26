@@ -139,6 +139,9 @@
     "BODY"
   ],
   "config": {
+    "autofillSetting": {
+      "conditionGroups": []
+    },
     "screenDefinition": {
       "screenDefType": "title",
       "conditionGroups": []

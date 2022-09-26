@@ -33,6 +33,9 @@ describe("SettingsProvider", () => {
             tags: [],
           },
         },
+        autofillSetting: {
+          conditionGroups: [],
+        },
         screenDefinition: {
           screenDefType: "title",
           conditionGroups: [],
@@ -185,6 +188,9 @@ describe("SettingsProvider", () => {
               tags: [],
             },
           },
+          autofillSetting: {
+            conditionGroups: [],
+          },
           screenDefinition: {
             screenDefType: "title",
             conditionGroups: [],
@@ -260,6 +266,9 @@ describe("SettingsProvider", () => {
             include: {
               tags: [],
             },
+          },
+          autofillSetting: {
+            conditionGroups: [],
           },
           screenDefinition: {
             screenDefType: "title",

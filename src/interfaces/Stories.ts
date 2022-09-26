@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-import { StaticDirectoryService } from "./StaticDirectoryService";
+import { Session } from "./Sessions";
 
-export class FileUploadService {
-  public async upload(
-    files: { filename: string; buffer: any }[],
-    directoryService: StaticDirectoryService
-  ): Promise<string[]> {
-    const savedFileUrls = await Promise.all(
-      files.map(async (file) => {
-        await directoryService.outputFile(file.filename, file.buffer);
-        return directoryService.getFileUrl(file.filename);
-      })
-    );
+export type PatchStoryResponse = Story;
 
-    return savedFileUrls;
-  }
+export interface PatchStoryDto {
+  status?: string;
+}
+
+export interface Story {
+  id: string;
+  testMatrixId: string;
+  testTargetId: string;
+  viewPointId: string;
+  status: string;
+  index: number;
+  sessions: Session[];
 }
