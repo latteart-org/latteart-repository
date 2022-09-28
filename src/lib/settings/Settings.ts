@@ -38,6 +38,7 @@ export default class Settings {
   public defaultTagList: string[];
   public config: {
     autofillSetting: AutofillSetting;
+    autoOperationSetting: AutoOperationSetting;
     screenDefinition: ScreenDefinition;
     coverage: Coverage;
     imageCompression: ImageCompression;
@@ -67,6 +68,9 @@ export default class Settings {
       autofillSetting: {
         conditionGroups: [],
       },
+      autoOperationSetting: {
+        conditionGroups: [],
+      },
       screenDefinition: {
         screenDefType: ScreenDefType.Title,
         conditionGroups: [],
@@ -90,6 +94,10 @@ export default class Settings {
 
 export interface AutofillSetting {
   conditionGroups: AutofillConditionGroup[];
+}
+
+export interface AutoOperationSetting {
+  conditionGroups: AutoOperationConditionGroup[];
 }
 
 export interface ScreenDefinition {
@@ -124,6 +132,12 @@ export type AutofillCondition = {
   locatorMatchType: "equals" | "contains";
   inputValue: string;
 };
+
+export interface AutoOperationConditionGroup {
+  isEnabled: boolean;
+  settingName: string;
+  autoOperations: any[];
+}
 
 export interface ScreenDefinitionConditionGroup {
   isEnabled: boolean;

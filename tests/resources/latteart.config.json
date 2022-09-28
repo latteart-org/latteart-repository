@@ -138,18 +138,21 @@
     }
   ],
   "config": {
-    "coverage": {
-      "include": {
-        "tags": []
-      }
-    },
     "autofillSetting": {
+      "conditionGroups": []
+    },
+    "autoOperationSetting": {
       "conditionGroups": []
     },
     "screenDefinition": {
       "isRegex": false,
       "screenDefList": [],
       "screenDefType": "title"
+    },
+    "coverage": {
+      "include": {
+        "tags": []
+      }
     },
     "imageCompression": {
       "command": "cwebp {filePath} -o {dirPath}/{baseName}.webp",

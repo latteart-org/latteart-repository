@@ -28,12 +28,17 @@ import {
   PutDeviceConfigResponse,
 } from "@/interfaces/DeviceConfigs";
 import { ScreenDefinitionConfig } from "@/lib/ScreenDefFactory";
-import { AutofillSetting, Coverage } from "@/lib/settings/Settings";
+import {
+  AutofillSetting,
+  AutoOperationSetting,
+  Coverage,
+} from "@/lib/settings/Settings";
 
 type configWithImageCompressionCommand = Omit<GetConfigResponse, "config"> & {
   config: {
-    screenDefinition: ScreenDefinitionConfig;
     autofillSetting: AutofillSetting;
+    autoOperationSetting: AutoOperationSetting;
+    screenDefinition: ScreenDefinitionConfig;
     coverage: Coverage;
     imageCompression: {
       isEnabled: boolean;
