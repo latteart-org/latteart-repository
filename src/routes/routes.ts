@@ -83,6 +83,7 @@ const models: TsoaRoute.Models = {
         "properties": {
             "isEnabled": {"dataType":"boolean","required":true},
             "settingName": {"dataType":"string","required":true},
+            "details": {"dataType":"string"},
             "autoOperations": {"dataType":"array","array":{"dataType":"any"},"required":true},
         },
         "additionalProperties": false,

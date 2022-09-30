@@ -136,6 +136,7 @@ export type AutofillCondition = {
 export interface AutoOperationConditionGroup {
   isEnabled: boolean;
   settingName: string;
+  details?: string;
   autoOperations: any[];
 }
 
