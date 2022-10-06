@@ -15,7 +15,11 @@
  */
 
 import { ScreenDefinitionConfig } from "../lib/ScreenDefFactory";
-import { AutofillSetting, Coverage } from "../lib/settings/Settings";
+import {
+  AutofillSetting,
+  AutoOperationSetting,
+  Coverage,
+} from "../lib/settings/Settings";
 
 export type PutConfigDto = GetConfigResponse;
 
@@ -40,8 +44,9 @@ export interface GetConfigResponse {
   }>;
   defaultTagList: string[];
   config: {
-    screenDefinition: ScreenDefinitionConfig;
     autofillSetting: AutofillSetting;
+    autoOperationSetting: AutoOperationSetting;
+    screenDefinition: ScreenDefinitionConfig;
     coverage: Coverage;
     imageCompression: {
       isEnabled: boolean;
