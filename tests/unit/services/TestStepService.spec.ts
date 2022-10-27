@@ -8,7 +8,6 @@ import { getRepository } from "typeorm";
 import { SqliteTestConnectionHelper } from "../../helper/TestConnectionHelper";
 import { CreateTestStepDto } from "@/interfaces/TestSteps";
 import { CoverageSourceEntity } from "@/entities/CoverageSourceEntity";
-import { request } from "http";
 
 const testConnectionHelper = new SqliteTestConnectionHelper();
 
