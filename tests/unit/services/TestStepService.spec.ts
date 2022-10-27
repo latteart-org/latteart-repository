@@ -8,6 +8,7 @@ import { getRepository } from "typeorm";
 import { SqliteTestConnectionHelper } from "../../helper/TestConnectionHelper";
 import { CreateTestStepDto } from "@/interfaces/TestSteps";
 import { CoverageSourceEntity } from "@/entities/CoverageSourceEntity";
+import { request } from "http";
 
 const testConnectionHelper = new SqliteTestConnectionHelper();
 
@@ -77,6 +78,7 @@ describe("TestStepService", () => {
         screenElements: [element2],
         inputElements: [element2],
         keywordTexts: ["keywordTexts"],
+        isAutomation: false,
         timestamp: 0,
         pageSource: "pageSource",
       };
@@ -92,6 +94,7 @@ describe("TestStepService", () => {
         inputElements: requestBody.inputElements,
         windowHandle: requestBody.windowHandle,
         keywordTexts: requestBody.keywordTexts,
+        isAutomation: requestBody.isAutomation,
       };
 
       const result = await service.createTestStep(
@@ -158,6 +161,7 @@ describe("TestStepService", () => {
         inputElements: JSON.parse(testStepEntity.inputElements),
         windowHandle: testStepEntity.windowHandle,
         keywordTexts: JSON.parse(testStepEntity.keywordTexts),
+        isAutomation: testStepEntity.isAutomation,
       };
 
       const result = await service.getTestStep(testStepEntity.id);
