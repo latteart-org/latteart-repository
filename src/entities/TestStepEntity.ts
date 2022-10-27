@@ -61,8 +61,8 @@ export class TestStepEntity {
   @Column({ name: "timestamp" })
   timestamp: number = 0;
 
-  @Column({ name: "is_automation", nullable: true, default: false })
-  isAutomation: boolean = false;
+  @Column({ name: "is_automatic", nullable: true, default: false })
+  isAutomatic: boolean = false;
 
   @ManyToOne(() => TestResultEntity, (testResult) => testResult.testSteps)
   @JoinColumn({ name: "test_result_id" })
