@@ -52,6 +52,7 @@ interface CapturedOperation {
   keywordTexts?: string[];
   timestamp: number;
   pageSource: string;
+  isAutomation?: boolean;
 }
 
 interface Operation {
@@ -65,6 +66,7 @@ interface Operation {
   inputElements: ElementInfo[];
   windowHandle: string;
   keywordTexts?: string[];
+  isAutomation: boolean;
 }
 
 interface TestStep {
