@@ -69,6 +69,7 @@ export enum ServerErrorCode {
   NO_TEST_CASES_GENERATED = "no_test_cases_generated",
   GET_TEST_PROGRESS_FAILED = "get_test_progress_failed",
   PATCH_STORY_FAILED = "patch_story_failed",
+  EXPORT_CONFIG_FAILED = "export_config_failed",
 }
 
 export interface ServerErrorData {

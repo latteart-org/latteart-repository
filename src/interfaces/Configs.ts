@@ -21,11 +21,13 @@ import {
   Coverage,
 } from "../lib/settings/Settings";
 
-export type PutConfigDto = GetConfigResponse;
+export type PutConfigDto = Config;
 
-export type PutConfigResponse = GetConfigResponse;
+export type PutConfigResponse = Config;
 
-export interface GetConfigResponse {
+export type GetConfigResponse = Config;
+
+export interface Config {
   locale: string;
   mode: string;
   debug: {
