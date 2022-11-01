@@ -20,7 +20,7 @@ import { ConfigsService } from "@/services/ConfigsService";
 
 import { TimestampServiceImpl } from "@/services/TimestampService";
 import { Controller, Post, Route, Path } from "tsoa";
-import { tempDirectoryService } from "..";
+import { exportDirectoryService } from "..";
 import { ConfigExportService } from "@/services/ConfigExportService";
 
 @Route("projects/{projectId}/configs/export")
@@ -30,7 +30,7 @@ export class ConfigExportController extends Controller {
     const result = await new ConfigExportService().export(projectId, {
       configService: new ConfigsService(),
       timestampService: new TimestampServiceImpl(),
-      tempDirectoryService: tempDirectoryService,
+      tempDirectoryService: exportDirectoryService,
     });
 
     try {
