@@ -47,6 +47,8 @@ import { ViewPointsController } from './../controllers/ViewPointsController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { StoriesController } from './../controllers/StoriesController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { ConfigExportController } from './../controllers/ConfigExportController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { CompressedImageController } from './../controllers/CompressedImageController';
 import * as express from 'express';
 
@@ -114,7 +116,7 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "GetConfigResponse": {
+    "Config": {
         "dataType": "refObject",
         "properties": {
             "locale": {"dataType":"string","required":true},
@@ -128,14 +130,19 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "GetConfigResponse": {
+        "dataType": "refAlias",
+        "type": {"ref":"Config","validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "PutConfigResponse": {
         "dataType": "refAlias",
-        "type": {"ref":"GetConfigResponse","validators":{}},
+        "type": {"ref":"Config","validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "PutConfigDto": {
         "dataType": "refAlias",
-        "type": {"ref":"GetConfigResponse","validators":{}},
+        "type": {"ref":"Config","validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "CreateResponseDto": {
@@ -1882,6 +1889,29 @@ export function RegisterRoutes(app: express.Router) {
 
 
               const promise = controller.patch.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/api/v1/projects/:projectId/configs/export',
+
+            function ConfigExportController_create(request: any, response: any, next: any) {
+            const args = {
+                    projectId: {"in":"path","name":"projectId","required":true,"dataType":"string"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new ConfigExportController();
+
+
+              const promise = controller.create.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);
