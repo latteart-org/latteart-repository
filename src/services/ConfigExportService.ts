@@ -30,7 +30,9 @@ export class ConfigExportService {
   ): Promise<string> {
     const config = await service.configService.getConfig(projectId);
 
-    const fileName = `config_${service.timestampService.epochMilliseconds()}.json`;
+    const fileName = `config_${service.timestampService.format(
+      "YYYYMMDD_HHmmss"
+    )}.json`;
     const filePath = service.tempDirectoryService.getJoinedPath(fileName);
     await fs.outputFile(filePath, JSON.stringify(config, null, 2), "utf-8");
 
