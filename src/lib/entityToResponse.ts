@@ -41,9 +41,11 @@ export const storyEntityToResponse = (story: StoryEntity): Story => {
     testTargetId: story.testTargetId,
     viewPointId: story.viewPointId,
     status: story.status,
-    sessions: story.sessions.map((session) => {
-      return sessionEntityToResponse(session);
-    }),
+    sessions: story.sessions
+      .map((session) => {
+        return sessionEntityToResponse(session);
+      })
+      .sort((a, b) => a.index - b.index),
   };
 };
 
