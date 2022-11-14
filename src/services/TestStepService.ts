@@ -142,6 +142,7 @@ export class TestStepServiceImpl implements TestStepService {
       keywordTexts: JSON.stringify(requestBody.keywordTexts ?? []),
       timestamp: requestBody.timestamp,
       testResult: savedTestResultEntity,
+      isAutomatic: !!requestBody.isAutomatic,
     });
     const screenshot = new ScreenshotEntity({
       fileUrl: await this.service.imageFileRepository.writeBase64ToFile(
@@ -275,6 +276,7 @@ export class TestStepServiceImpl implements TestStepService {
       inputElements: JSON.parse(testStepEntity.inputElements),
       windowHandle: testStepEntity.windowHandle,
       keywordTexts: JSON.parse(testStepEntity.keywordTexts),
+      isAutomatic: !!testStepEntity.isAutomatic,
     };
   }
 

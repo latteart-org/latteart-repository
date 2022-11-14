@@ -77,6 +77,7 @@ describe("TestStepService", () => {
         screenElements: [element2],
         inputElements: [element2],
         keywordTexts: ["keywordTexts"],
+        isAutomatic: false,
         timestamp: 0,
         pageSource: "pageSource",
       };
@@ -92,6 +93,7 @@ describe("TestStepService", () => {
         inputElements: requestBody.inputElements,
         windowHandle: requestBody.windowHandle,
         keywordTexts: requestBody.keywordTexts,
+        isAutomatic: requestBody.isAutomatic,
       };
 
       const result = await service.createTestStep(
@@ -158,6 +160,7 @@ describe("TestStepService", () => {
         inputElements: JSON.parse(testStepEntity.inputElements),
         windowHandle: testStepEntity.windowHandle,
         keywordTexts: JSON.parse(testStepEntity.keywordTexts),
+        isAutomatic: testStepEntity.isAutomatic,
       };
 
       const result = await service.getTestStep(testStepEntity.id);

@@ -28,17 +28,20 @@ describe("SettingsProvider", () => {
       defaultTagList: [],
       viewPointsPreset: [],
       config: {
-        coverage: {
-          include: {
-            tags: [],
-          },
-        },
         autofillSetting: {
+          conditionGroups: [],
+        },
+        autoOperationSetting: {
           conditionGroups: [],
         },
         screenDefinition: {
           screenDefType: "title",
           conditionGroups: [],
+        },
+        coverage: {
+          include: {
+            tags: [],
+          },
         },
         imageCompression: {
           command: "cwebp {filePath} -o {dirPath}/{baseName}.webp",
@@ -183,17 +186,20 @@ describe("SettingsProvider", () => {
           },
         ],
         config: {
-          coverage: {
-            include: {
-              tags: [],
-            },
-          },
           autofillSetting: {
+            conditionGroups: [],
+          },
+          autoOperationSetting: {
             conditionGroups: [],
           },
           screenDefinition: {
             screenDefType: "title",
             conditionGroups: [],
+          },
+          coverage: {
+            include: {
+              tags: [],
+            },
           },
           imageCompression: {
             command: "cwebp {filePath} -o {dirPath}/{baseName}.webp",
@@ -262,17 +268,20 @@ describe("SettingsProvider", () => {
         defaultTagList: [],
         viewPointsPreset: [],
         config: {
-          coverage: {
-            include: {
-              tags: [],
-            },
-          },
           autofillSetting: {
+            conditionGroups: [],
+          },
+          autoOperationSetting: {
             conditionGroups: [],
           },
           screenDefinition: {
             screenDefType: "title",
             conditionGroups: [],
+          },
+          coverage: {
+            include: {
+              tags: [],
+            },
           },
           imageCompression: {
             command: "cwebp {filePath} -o {dirPath}/{baseName}.webp",
