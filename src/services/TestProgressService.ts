@@ -54,7 +54,7 @@ export interface TestProgressService {
 
 export class TestProgressServiceImpl implements TestProgressService {
   public async registerTestProgresses(...storyIds: string[]): Promise<void> {
-    const stories = await Promise.all(
+    const storyProgresses = await Promise.all(
       storyIds.map(async (storyId) => {
         const storyRepository = getRepository(StoryEntity);
         const story = await storyRepository.findOneOrFail(storyId, {
@@ -87,7 +87,7 @@ export class TestProgressServiceImpl implements TestProgressService {
 
     const testProgressRepository = getRepository(TestProgressEntity);
 
-    await testProgressRepository.save(stories);
+    await testProgressRepository.save(storyProgresses);
   }
 
   public async collectDailyTestProgresses(

@@ -15,12 +15,12 @@
  */
 
 import { StoryEntity } from "@/entities/StoryEntity";
-import { TestProgressEntity } from "@/entities/TestProgressEntity";
 import { TestTargetEntity } from "@/entities/TestTargetEntity";
 import { TestTargetGroupEntity } from "@/entities/TestTargetGroupEntity";
 import { TestTarget } from "@/interfaces/TestTargets";
 import { TransactionRunner } from "@/TransactionRunner";
 import { getRepository } from "typeorm";
+import { TestProgressServiceImpl } from "./TestProgressService";
 
 export class TestTargetService {
   public async get(testTargetId: string): Promise<TestTarget> {
@@ -133,36 +133,17 @@ export class TestTargetService {
               targetStory.status = "out-of-scope";
               await transactionalEntityManager.save(targetStory);
             }
-
-            const progress = await transactionalEntityManager.findOne(
-              TestProgressEntity,
-              {
-                where: { story: targetStory },
-                order: { createdAt: "DESC" },
-                relations: ["story"],
-              }
-            );
-            if (progress) {
-              if (progress.plannedSessionNumber !== newPlan.value) {
-                progress.plannedSessionNumber = newPlan.value;
-                progress.date = new Date();
-                await transactionalEntityManager.save(progress);
-              }
-            } else {
-              const newProgress = new TestProgressEntity();
-              newProgress.plannedSessionNumber = newPlan.value;
-              newProgress.completedSessionNumber = 0;
-              newProgress.incompletedSessionNumber = 0;
-              newProgress.story = targetStory;
-              newProgress.date = new Date();
-              await transactionalEntityManager.save(newProgress);
-            }
           })
         );
         testTarget.text = text;
       }
       await testTargetRepository.save(testTarget);
     });
+
+    const storyIds = testTarget?.stories.map(({ id }) => id) ?? [];
+
+    await new TestProgressServiceImpl().registerTestProgresses(...storyIds);
+
     return await this.testTargetIdToResponse(testTarget.id);
   }
 
