@@ -32,10 +32,14 @@ import { SessionsService } from "../services/SessionsService";
 export class SessionsController extends Controller {
   @Post("")
   public async post(
+    @Path() projectId: string,
     @Body() requestBody: { storyId: string }
   ): Promise<PostSessionResponse> {
     try {
-      return await new SessionsService().postSession(requestBody.storyId);
+      return await new SessionsService().postSession(
+        projectId,
+        requestBody.storyId
+      );
     } catch (error) {
       if (error instanceof Error) {
         LoggingService.error("Post session failed.", error);
@@ -86,7 +90,7 @@ export class SessionsController extends Controller {
     @Path() sessionId: string
   ): Promise<void> {
     try {
-      await new SessionsService().deleteSession(sessionId);
+      await new SessionsService().deleteSession(projectId, sessionId);
       return;
     } catch (error) {
       if (error instanceof Error) {

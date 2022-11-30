@@ -28,6 +28,9 @@ import {
   unixtimeToFormattedString,
 } from "@/lib/timeUtil";
 import { TestTargetEntity } from "@/entities/TestTargetEntity";
+import { ProjectsServiceImpl } from "./ProjectsService";
+import { TimestampServiceImpl } from "./TimestampService";
+import { transactionRunner } from "..";
 
 export type DailyTestProgress = {
   date: string;
@@ -44,16 +47,25 @@ export type DailyTestProgress = {
 };
 
 export interface TestProgressService {
-  registerTestProgresses(...storyIds: string[]): Promise<void>;
+  registerStoryTestProgresses(...storyIds: string[]): Promise<void>;
 
-  collectDailyTestProgresses(
+  registerProjectTestProgresses(projectId: string): Promise<void>;
+
+  collectStoryDailyTestProgresses(
     storyIds: string[],
+    filter?: { since?: number; until?: number }
+  ): Promise<DailyTestProgress[]>;
+
+  collectProjectDailyTestProgresses(
+    projectId: string,
     filter?: { since?: number; until?: number }
   ): Promise<DailyTestProgress[]>;
 }
 
 export class TestProgressServiceImpl implements TestProgressService {
-  public async registerTestProgresses(...storyIds: string[]): Promise<void> {
+  public async registerStoryTestProgresses(
+    ...storyIds: string[]
+  ): Promise<void> {
     const storyProgresses = await Promise.all(
       storyIds.map(async (storyId) => {
         const storyRepository = getRepository(StoryEntity);
@@ -90,7 +102,23 @@ export class TestProgressServiceImpl implements TestProgressService {
     await testProgressRepository.save(storyProgresses);
   }
 
-  public async collectDailyTestProgresses(
+  public async registerProjectTestProgresses(projectId: string): Promise<void> {
+    const project = await new ProjectsServiceImpl(
+      {
+        timestamp: new TimestampServiceImpl(),
+        testProgress: new TestProgressServiceImpl(),
+      },
+      transactionRunner
+    ).getProject(projectId);
+
+    const storyIds = project.stories.map((story) => story.id);
+
+    return await new TestProgressServiceImpl().registerStoryTestProgresses(
+      ...storyIds
+    );
+  }
+
+  public async collectStoryDailyTestProgresses(
     storyIds: string[],
     filter: { since?: number; until?: number } = {}
   ): Promise<DailyTestProgress[]> {
@@ -156,5 +184,25 @@ export class TestProgressServiceImpl implements TestProgressService {
         }),
       };
     });
+  }
+
+  public async collectProjectDailyTestProgresses(
+    projectId: string,
+    filter: { since?: number; until?: number } = {}
+  ): Promise<DailyTestProgress[]> {
+    const project = await new ProjectsServiceImpl(
+      {
+        timestamp: new TimestampServiceImpl(),
+        testProgress: new TestProgressServiceImpl(),
+      },
+      transactionRunner
+    ).getProject(projectId);
+
+    const storyIds = project.stories.map((story) => story.id);
+
+    return await new TestProgressServiceImpl().collectStoryDailyTestProgresses(
+      storyIds,
+      filter
+    );
   }
 }

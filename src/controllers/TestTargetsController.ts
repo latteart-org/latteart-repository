@@ -25,10 +25,11 @@ import { TestTargetService } from "@/services/TestTargetsService";
 import { Controller, Body, Patch, Route, Path, Get, Post, Delete } from "tsoa";
 import { transactionRunner } from "..";
 
-@Route("/test-targets/")
+@Route("projects/{projectId}/test-targets/")
 export class TestTargetsController extends Controller {
   @Get("{testTargetId}")
   public async get(
+    @Path() projectId: string,
     @Path() testTargetId: string
   ): Promise<GetTestTargetResponse> {
     try {
@@ -47,6 +48,7 @@ export class TestTargetsController extends Controller {
 
   @Post()
   public async post(
+    @Path() projectId: string,
     @Body() body: { testTargetGroupId: string; name: string }
   ): Promise<PostTestTargetResponse> {
     try {
@@ -65,6 +67,7 @@ export class TestTargetsController extends Controller {
 
   @Patch("{testTargetId}")
   public async patch(
+    @Path() projectId: string,
     @Path() testTargetId: string,
     @Body()
     body: {
@@ -75,6 +78,7 @@ export class TestTargetsController extends Controller {
   ): Promise<PatchTestTargetResponse> {
     try {
       return await new TestTargetService().patch(
+        projectId,
         testTargetId,
         body,
         transactionRunner
@@ -92,7 +96,10 @@ export class TestTargetsController extends Controller {
   }
 
   @Delete("{testTargetId}")
-  public async delete(@Path() testTargetId: string): Promise<void> {
+  public async delete(
+    @Path() projectId: string,
+    @Path() testTargetId: string
+  ): Promise<void> {
     try {
       return await new TestTargetService().delete(
         testTargetId,

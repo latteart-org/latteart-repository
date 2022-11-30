@@ -33,13 +33,17 @@ describe("SessionService", () => {
     index: 0,
     id: "",
   };
+  const projectId = "projectId";
 
   describe("#postSession", () => {
     describe("空のセッションを新規作成する", () => {
       it("指定のIDのストーリーに空のセッションを追加する", async () => {
         const storyId = (await saveTestStory()).storyId;
 
-        const result = await new SessionsService().postSession(storyId);
+        const result = await new SessionsService().postSession(
+          projectId,
+          storyId
+        );
 
         expect(result).toEqual({
           ...emptySessionParams,
@@ -49,7 +53,7 @@ describe("SessionService", () => {
 
       it("指定のIDのストーリーが見つからない場合はエラーをスローする", async () => {
         try {
-          await new SessionsService().postSession("AAA");
+          await new SessionsService().postSession(projectId, "AAA");
         } catch (error) {
           expect((error as Error).message).toEqual(`Story not found. AAA`);
         }
@@ -73,7 +77,10 @@ describe("SessionService", () => {
         "指定のIDのセッションの内容を渡されたパラメータの値に更新する",
         async (params) => {
           const storyId = (await saveTestStory()).storyId;
-          const savedSession = await new SessionsService().postSession(storyId);
+          const savedSession = await new SessionsService().postSession(
+            projectId,
+            storyId
+          );
           const sessionId = savedSession.id;
 
           const result = await new SessionsService().patchSession(
@@ -114,7 +121,10 @@ describe("SessionService", () => {
       it("指定のIDのセッションを削除する", async () => {
         const storyId = (await saveTestStory()).storyId;
 
-        const savedSession = await new SessionsService().postSession(storyId);
+        const savedSession = await new SessionsService().postSession(
+          projectId,
+          storyId
+        );
 
         const sessionRepository = getRepository(SessionEntity);
         const session1 = await sessionRepository.findOne(savedSession.id);
@@ -122,7 +132,7 @@ describe("SessionService", () => {
           throw new Error("no session");
         }
 
-        await new SessionsService().deleteSession(session1.id);
+        await new SessionsService().deleteSession(projectId, session1.id);
 
         const session2 = await sessionRepository.findOne(savedSession.id);
 

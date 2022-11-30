@@ -120,19 +120,9 @@ export class ProjectsController extends Controller {
     @Query() until?: number
   ): Promise<GetTestProgressResponse[]> {
     try {
-      const project = await new ProjectsServiceImpl(
-        {
-          timestamp: new TimestampServiceImpl(),
-          testProgress: new TestProgressServiceImpl(),
-        },
-        transactionRunner
-      ).getProject(projectId);
-
-      const storyIds = project.stories.map((story) => story.id);
-
       const filter = { since, until };
-      return await new TestProgressServiceImpl().collectDailyTestProgresses(
-        storyIds,
+      return await new TestProgressServiceImpl().collectProjectDailyTestProgresses(
+        projectId,
         filter
       );
     } catch (error) {

@@ -325,8 +325,8 @@ export class ProjectsServiceImpl implements ProjectsService {
           }
         }
 
-        await this.service.testProgress.registerTestProgresses(
-          ...requestBody.stories.map((story) => story.id)
+        await this.service.testProgress.registerProjectTestProgresses(
+          projectId
         );
 
         LoggingService.debug(

@@ -93,6 +93,7 @@ export class TestTargetService {
   }
 
   public async patch(
+    projectId: string,
     testTargetId: string,
     body: {
       name?: string;
@@ -140,9 +141,9 @@ export class TestTargetService {
       await testTargetRepository.save(testTarget);
     });
 
-    const storyIds = testTarget?.stories.map(({ id }) => id) ?? [];
-
-    await new TestProgressServiceImpl().registerTestProgresses(...storyIds);
+    await new TestProgressServiceImpl().registerProjectTestProgresses(
+      projectId
+    );
 
     return await this.testTargetIdToResponse(testTarget.id);
   }

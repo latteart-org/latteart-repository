@@ -1103,6 +1103,7 @@ export function RegisterRoutes(app: express.Router) {
 
             function SessionsController_post(request: any, response: any, next: any) {
             const args = {
+                    projectId: {"in":"path","name":"projectId","required":true,"dataType":"string"},
                     requestBody: {"in":"body","name":"requestBody","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"storyId":{"dataType":"string","required":true}}},
             };
 
@@ -1685,10 +1686,11 @@ export function RegisterRoutes(app: express.Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/api/v1/test-targets/:testTargetId',
+        app.get('/api/v1/projects/:projectId/test-targets/:testTargetId',
 
             function TestTargetsController_get(request: any, response: any, next: any) {
             const args = {
+                    projectId: {"in":"path","name":"projectId","required":true,"dataType":"string"},
                     testTargetId: {"in":"path","name":"testTargetId","required":true,"dataType":"string"},
             };
 
@@ -1708,10 +1710,11 @@ export function RegisterRoutes(app: express.Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.post('/api/v1/test-targets',
+        app.post('/api/v1/projects/:projectId/test-targets',
 
             function TestTargetsController_post(request: any, response: any, next: any) {
             const args = {
+                    projectId: {"in":"path","name":"projectId","required":true,"dataType":"string"},
                     body: {"in":"body","name":"body","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"name":{"dataType":"string","required":true},"testTargetGroupId":{"dataType":"string","required":true}}},
             };
 
@@ -1731,10 +1734,11 @@ export function RegisterRoutes(app: express.Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.patch('/api/v1/test-targets/:testTargetId',
+        app.patch('/api/v1/projects/:projectId/test-targets/:testTargetId',
 
             function TestTargetsController_patch(request: any, response: any, next: any) {
             const args = {
+                    projectId: {"in":"path","name":"projectId","required":true,"dataType":"string"},
                     testTargetId: {"in":"path","name":"testTargetId","required":true,"dataType":"string"},
                     body: {"in":"body","name":"body","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"plans":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"value":{"dataType":"double","required":true},"viewPointId":{"dataType":"string","required":true}}}},"index":{"dataType":"double"},"name":{"dataType":"string"}}},
             };
@@ -1755,10 +1759,11 @@ export function RegisterRoutes(app: express.Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.delete('/api/v1/test-targets/:testTargetId',
+        app.delete('/api/v1/projects/:projectId/test-targets/:testTargetId',
 
             function TestTargetsController_delete(request: any, response: any, next: any) {
             const args = {
+                    projectId: {"in":"path","name":"projectId","required":true,"dataType":"string"},
                     testTargetId: {"in":"path","name":"testTargetId","required":true,"dataType":"string"},
             };
 
