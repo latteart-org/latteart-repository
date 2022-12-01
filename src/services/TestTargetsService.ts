@@ -110,7 +110,7 @@ export class TestTargetService {
     if (!testTarget) {
       throw new Error(`TestTargetnot found. ${testTargetId}`);
     }
-    const testProgressService = new TestProgressServiceImpl();
+    const testProgressService = new TestProgressServiceImpl(transactionRunner);
     const todayProgresses: TestProgressEntity[] = [];
     await transactionRunner.waitAndRun(async (transactionalEntityManager) => {
       if (body.name && body.name !== testTarget.name) {

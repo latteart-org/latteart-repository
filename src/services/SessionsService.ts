@@ -25,6 +25,7 @@ import {
   Session,
 } from "@/interfaces/Sessions";
 import { sessionEntityToResponse } from "@/lib/entityToResponse";
+import { TransactionRunner } from "@/TransactionRunner";
 import { getRepository } from "typeorm";
 import { ImageFileRepositoryService } from "./ImageFileRepositoryService";
 import { TestProgressServiceImpl } from "./TestProgressService";
@@ -33,7 +34,8 @@ import { TimestampService } from "./TimestampService";
 export class SessionsService {
   public async postSession(
     projectId: string,
-    storyId: string
+    storyId: string,
+    transactionRunner: TransactionRunner
   ): Promise<PostSessionResponse> {
     const storyRepository = getRepository(StoryEntity);
     const story = await storyRepository.findOne(storyId, {
@@ -56,7 +58,7 @@ export class SessionsService {
       })
     );
 
-    const testProgressService = new TestProgressServiceImpl();
+    const testProgressService = new TestProgressServiceImpl(transactionRunner);
     const todayProgress = await testProgressService.getTodayTestProgress(
       storyId
     );
@@ -78,7 +80,8 @@ export class SessionsService {
     service: {
       timestampService: TimestampService;
       imageFileRepositoryService: ImageFileRepositoryService;
-    }
+    },
+    transactionRunner: TransactionRunner
   ): Promise<PatchSessionResponse> {
     const sessionRepository = getRepository(SessionEntity);
     const updateTargetSession = await sessionRepository.findOne(sessionId, {
@@ -133,7 +136,7 @@ export class SessionsService {
     }
     const result = await sessionRepository.save(updateTargetSession);
 
-    const testProgressService = new TestProgressServiceImpl();
+    const testProgressService = new TestProgressServiceImpl(transactionRunner);
     const todayProgress = await testProgressService.getTodayTestProgress(
       result.story.id
     );
@@ -152,7 +155,8 @@ export class SessionsService {
 
   public async deleteSession(
     projectId: string,
-    sessionId: string
+    sessionId: string,
+    transactionRunner: TransactionRunner
   ): Promise<void> {
     const sessionRepository = getRepository(SessionEntity);
     const storyId = (
@@ -160,7 +164,7 @@ export class SessionsService {
     ).story.id;
     await sessionRepository.delete(sessionId);
 
-    const testProgressService = new TestProgressServiceImpl();
+    const testProgressService = new TestProgressServiceImpl(transactionRunner);
     const todayProgress = await testProgressService.getTodayTestProgress(
       storyId
     );

@@ -107,7 +107,7 @@ export class SnapshotsController extends Controller {
         config: new ConfigsService(),
         issueReport: issueReportService,
         attachedFileRepository: attachedFileDirectoryService,
-        testProgress: new TestProgressServiceImpl(),
+        testProgress: new TestProgressServiceImpl(transactionRunner),
       },
       {
         snapshotViewer: { path: path.join(appRootPath, "snapshot-viewer") },
@@ -120,7 +120,7 @@ export class SnapshotsController extends Controller {
       project: new ProjectsServiceImpl(
         {
           timestamp: new TimestampServiceImpl(),
-          testProgress: new TestProgressServiceImpl(),
+          testProgress: new TestProgressServiceImpl(transactionRunner),
         },
         transactionRunner
       ),

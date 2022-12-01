@@ -30,7 +30,7 @@ import {
 import { TestTargetEntity } from "@/entities/TestTargetEntity";
 import { ProjectsServiceImpl } from "./ProjectsService";
 import { TimestampServiceImpl } from "./TimestampService";
-import { transactionRunner } from "..";
+import { TransactionRunner } from "@/TransactionRunner";
 
 export type DailyTestProgress = {
   date: string;
@@ -82,6 +82,8 @@ export interface TestProgressService {
 }
 
 export class TestProgressServiceImpl implements TestProgressService {
+  constructor(private transactionRunner: TransactionRunner) {}
+
   public async registerStoryTestProgresses(
     ...storyIds: string[]
   ): Promise<void> {
@@ -125,9 +127,9 @@ export class TestProgressServiceImpl implements TestProgressService {
     const project = await new ProjectsServiceImpl(
       {
         timestamp: new TimestampServiceImpl(),
-        testProgress: new TestProgressServiceImpl(),
+        testProgress: this,
       },
-      transactionRunner
+      this.transactionRunner
     ).getProject(projectId);
 
     const storyIds = project.stories.map((story) => story.id);
@@ -236,9 +238,9 @@ export class TestProgressServiceImpl implements TestProgressService {
     const project = await new ProjectsServiceImpl(
       {
         timestamp: new TimestampServiceImpl(),
-        testProgress: new TestProgressServiceImpl(),
+        testProgress: this,
       },
-      transactionRunner
+      this.transactionRunner
     ).getProject(projectId);
 
     const storyIds = project.stories.map((story) => story.id);

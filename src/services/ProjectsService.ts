@@ -328,7 +328,9 @@ export class ProjectsServiceImpl implements ProjectsService {
             unupdatedSessions = sessionEntityWithUnupdateList.unupdatedList;
           }
         }
-        const testProgressService = new TestProgressServiceImpl();
+        const testProgressService = new TestProgressServiceImpl(
+          this.transactionRunner
+        );
         const todayProgresses: TestProgressEntity[] = [];
 
         requestBody.stories.map(async (story) => {

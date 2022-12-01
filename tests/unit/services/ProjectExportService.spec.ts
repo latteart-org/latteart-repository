@@ -77,8 +77,11 @@ describe("ProjectExportService", () => {
     const testProgressService: TestProgressService = {
       registerStoryTestProgresses: jest.fn(),
       registerProjectTestProgresses: jest.fn(),
+      updateTestProgress: jest.fn(),
       collectStoryDailyTestProgresses: jest.fn(),
       collectProjectDailyTestProgresses: jest.fn(),
+      getNewTestProgress: jest.fn(),
+      getTodayTestProgress: jest.fn(),
     };
 
     it("includeProject: true, includeTestResults: true", async () => {

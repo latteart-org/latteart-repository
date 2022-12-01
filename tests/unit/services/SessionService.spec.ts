@@ -7,6 +7,8 @@ import { TimestampService } from "@/services/TimestampService";
 import { ImageFileRepositoryService } from "@/services/ImageFileRepositoryService";
 import { TestTargetEntity } from "@/entities/TestTargetEntity";
 import { Session } from "@/interfaces/Sessions";
+import { ProjectEntity } from "@/entities/ProjectEntity";
+import { TransactionRunner } from "@/TransactionRunner";
 
 const testConnectionHelper = new SqliteTestConnectionHelper();
 
@@ -33,16 +35,17 @@ describe("SessionService", () => {
     index: 0,
     id: "",
   };
-  const projectId = "projectId";
 
   describe("#postSession", () => {
     describe("空のセッションを新規作成する", () => {
       it("指定のIDのストーリーに空のセッションを追加する", async () => {
+        const projectId = (await saveTestProject()).projectId;
         const storyId = (await saveTestStory()).storyId;
 
         const result = await new SessionsService().postSession(
           projectId,
-          storyId
+          storyId,
+          new TransactionRunner()
         );
 
         expect(result).toEqual({
@@ -53,7 +56,12 @@ describe("SessionService", () => {
 
       it("指定のIDのストーリーが見つからない場合はエラーをスローする", async () => {
         try {
-          await new SessionsService().postSession(projectId, "AAA");
+          const projectId = (await saveTestProject()).projectId;
+          await new SessionsService().postSession(
+            projectId,
+            "AAA",
+            new TransactionRunner()
+          );
         } catch (error) {
           expect((error as Error).message).toEqual(`Story not found. AAA`);
         }
@@ -76,18 +84,21 @@ describe("SessionService", () => {
       ])(
         "指定のIDのセッションの内容を渡されたパラメータの値に更新する",
         async (params) => {
+          const projectId = (await saveTestProject()).projectId;
           const storyId = (await saveTestStory()).storyId;
           const savedSession = await new SessionsService().postSession(
             projectId,
-            storyId
+            storyId,
+            new TransactionRunner()
           );
           const sessionId = savedSession.id;
 
           const result = await new SessionsService().patchSession(
-            "projectId",
+            projectId,
             sessionId,
             params,
-            createServiceMock({ doneDate })
+            createServiceMock({ doneDate }),
+            new TransactionRunner()
           );
 
           expect(result).toEqual({
@@ -101,13 +112,15 @@ describe("SessionService", () => {
 
       it("指定のIDのセッションが見つからない場合はエラーをスローする", async () => {
         try {
+          const projectId = (await saveTestProject()).projectId;
           const sessionId = "AAA";
 
           await new SessionsService().patchSession(
-            "projectId",
+            projectId,
             sessionId,
             {},
-            createServiceMock({ doneDate })
+            createServiceMock({ doneDate }),
+            new TransactionRunner()
           );
         } catch (error) {
           expect((error as Error).message).toEqual(`Session not found: AAA`);
@@ -119,11 +132,13 @@ describe("SessionService", () => {
   describe("#deleteSession", () => {
     describe("セッションを削除する", () => {
       it("指定のIDのセッションを削除する", async () => {
+        const projectId = (await saveTestProject()).projectId;
         const storyId = (await saveTestStory()).storyId;
 
         const savedSession = await new SessionsService().postSession(
           projectId,
-          storyId
+          storyId,
+          new TransactionRunner()
         );
 
         const sessionRepository = getRepository(SessionEntity);
@@ -132,7 +147,11 @@ describe("SessionService", () => {
           throw new Error("no session");
         }
 
-        await new SessionsService().deleteSession(projectId, session1.id);
+        await new SessionsService().deleteSession(
+          projectId,
+          session1.id,
+          new TransactionRunner()
+        );
 
         const session2 = await sessionRepository.findOne(savedSession.id);
 
@@ -161,6 +180,13 @@ async function saveTestStory() {
   const savedStory = await getRepository(StoryEntity).save(story);
 
   return { storyId: savedStory.id };
+}
+
+async function saveTestProject() {
+  const project = new ProjectEntity("1");
+  const savedProject = await getRepository(ProjectEntity).save(project);
+
+  return { projectId: savedProject.id };
 }
 
 function createServiceMock(params: { doneDate: string }) {

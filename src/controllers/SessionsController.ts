@@ -19,7 +19,7 @@ import { ServerError, ServerErrorCode } from "@/ServerError";
 import { ImageFileRepositoryServiceImpl } from "@/services/ImageFileRepositoryService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
 import { Controller, Body, Patch, Route, Path, Post, Delete } from "tsoa";
-import { attachedFileDirectoryService } from "..";
+import { attachedFileDirectoryService, transactionRunner } from "..";
 
 import {
   PatchSessionDto,
@@ -38,7 +38,8 @@ export class SessionsController extends Controller {
     try {
       return await new SessionsService().postSession(
         projectId,
-        requestBody.storyId
+        requestBody.storyId,
+        transactionRunner
       );
     } catch (error) {
       if (error instanceof Error) {
@@ -70,7 +71,8 @@ export class SessionsController extends Controller {
         {
           timestampService: new TimestampServiceImpl(),
           imageFileRepositoryService: imageFileRepositoryService,
-        }
+        },
+        transactionRunner
       );
     } catch (error) {
       if (error instanceof Error) {
@@ -90,7 +92,11 @@ export class SessionsController extends Controller {
     @Path() sessionId: string
   ): Promise<void> {
     try {
-      await new SessionsService().deleteSession(projectId, sessionId);
+      await new SessionsService().deleteSession(
+        projectId,
+        sessionId,
+        transactionRunner
+      );
       return;
     } catch (error) {
       if (error instanceof Error) {

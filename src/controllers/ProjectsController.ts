@@ -36,7 +36,7 @@ export class ProjectsController extends Controller {
     return new ProjectsServiceImpl(
       {
         timestamp: new TimestampServiceImpl(),
-        testProgress: new TestProgressServiceImpl(),
+        testProgress: new TestProgressServiceImpl(transactionRunner),
       },
       transactionRunner
     ).getProjectIdentifiers();
@@ -48,7 +48,7 @@ export class ProjectsController extends Controller {
       return await new ProjectsServiceImpl(
         {
           timestamp: new TimestampServiceImpl(),
-          testProgress: new TestProgressServiceImpl(),
+          testProgress: new TestProgressServiceImpl(transactionRunner),
         },
         transactionRunner
       ).createProject();
@@ -70,7 +70,7 @@ export class ProjectsController extends Controller {
       return await new ProjectsServiceImpl(
         {
           timestamp: new TimestampServiceImpl(),
-          testProgress: new TestProgressServiceImpl(),
+          testProgress: new TestProgressServiceImpl(transactionRunner),
         },
         transactionRunner
       ).getProject(projectId);
@@ -96,7 +96,7 @@ export class ProjectsController extends Controller {
       return await new ProjectsServiceImpl(
         {
           timestamp: new TimestampServiceImpl(),
-          testProgress: new TestProgressServiceImpl(),
+          testProgress: new TestProgressServiceImpl(transactionRunner),
         },
         transactionRunner
       ).updateProject(projectId, requestBody);
@@ -121,10 +121,9 @@ export class ProjectsController extends Controller {
   ): Promise<GetTestProgressResponse[]> {
     try {
       const filter = { since, until };
-      return await new TestProgressServiceImpl().collectProjectDailyTestProgresses(
-        projectId,
-        filter
-      );
+      return await new TestProgressServiceImpl(
+        transactionRunner
+      ).collectProjectDailyTestProgresses(projectId, filter);
     } catch (error) {
       if (error instanceof Error) {
         LoggingService.error("Get test progress failed.", error);
