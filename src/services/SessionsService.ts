@@ -56,9 +56,17 @@ export class SessionsService {
       })
     );
 
-    await new TestProgressServiceImpl().registerProjectTestProgresses(
-      projectId
+    const testProgressService = new TestProgressServiceImpl();
+    const todayProgress = await testProgressService.getTodayTestProgress(
+      storyId
     );
+
+    if (todayProgress) {
+      const newProgress = await testProgressService.getNewTestProgress(storyId);
+      await testProgressService.updateTestProgress(todayProgress, newProgress);
+    } else {
+      await testProgressService.registerProjectTestProgresses(projectId);
+    }
 
     return await this.entityToResponse(session.id);
   }
@@ -125,9 +133,19 @@ export class SessionsService {
     }
     const result = await sessionRepository.save(updateTargetSession);
 
-    await new TestProgressServiceImpl().registerProjectTestProgresses(
-      projectId
+    const testProgressService = new TestProgressServiceImpl();
+    const todayProgress = await testProgressService.getTodayTestProgress(
+      result.story.id
     );
+
+    if (todayProgress) {
+      const newProgress = await testProgressService.getNewTestProgress(
+        result.story.id
+      );
+      await testProgressService.updateTestProgress(todayProgress, newProgress);
+    } else {
+      await testProgressService.registerProjectTestProgresses(projectId);
+    }
 
     return await this.entityToResponse(result.id);
   }
@@ -142,9 +160,17 @@ export class SessionsService {
     ).story.id;
     await sessionRepository.delete(sessionId);
 
-    await new TestProgressServiceImpl().registerProjectTestProgresses(
-      projectId
+    const testProgressService = new TestProgressServiceImpl();
+    const todayProgress = await testProgressService.getTodayTestProgress(
+      storyId
     );
+
+    if (todayProgress) {
+      const newProgress = await testProgressService.getNewTestProgress(storyId);
+      await testProgressService.updateTestProgress(todayProgress, newProgress);
+    } else {
+      await testProgressService.registerProjectTestProgresses(projectId);
+    }
 
     return;
   }

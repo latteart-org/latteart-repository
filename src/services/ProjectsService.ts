@@ -35,8 +35,12 @@ import { TestResultEntity } from "@/entities/TestResultEntity";
 import LoggingService from "@/logger/LoggingService";
 import { TimestampService } from "./TimestampService";
 import { TransactionRunner } from "@/TransactionRunner";
-import { TestProgressService } from "./TestProgressService";
+import {
+  TestProgressService,
+  TestProgressServiceImpl,
+} from "./TestProgressService";
 import { storyEntityToResponse } from "@/lib/entityToResponse";
+import { TestProgressEntity } from "@/entities/TestProgressEntity";
 
 export interface ProjectsService {
   getProjectIdentifiers(): Promise<ProjectListResponse[]>;
@@ -324,10 +328,34 @@ export class ProjectsServiceImpl implements ProjectsService {
             unupdatedSessions = sessionEntityWithUnupdateList.unupdatedList;
           }
         }
+        const testProgressService = new TestProgressServiceImpl();
+        const todayProgresses: TestProgressEntity[] = [];
 
-        await this.service.testProgress.registerProjectTestProgresses(
-          projectId
-        );
+        requestBody.stories.map(async (story) => {
+          const newTestProgress = await testProgressService.getNewTestProgress(
+            story.id
+          );
+          const todayProgress = await testProgressService.getTodayTestProgress(
+            story.id
+          );
+          if (todayProgress) {
+            todayProgress.plannedSessionNumber =
+              newTestProgress.plannedSessionNumber;
+            todayProgress.completedSessionNumber =
+              newTestProgress.completedSessionNumber;
+            todayProgress.incompletedSessionNumber =
+              newTestProgress.incompletedSessionNumber;
+            todayProgresses.push(todayProgress);
+          }
+        });
+
+        if (todayProgresses.length > 0) {
+          await getRepository(TestProgressEntity).save(todayProgresses);
+        } else {
+          await this.service.testProgress.registerProjectTestProgresses(
+            projectId
+          );
+        }
 
         LoggingService.debug(
           `END UPDATE - ${this.service.timestamp.format(

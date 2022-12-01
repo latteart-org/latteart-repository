@@ -51,6 +51,15 @@ export interface TestProgressService {
 
   registerProjectTestProgresses(projectId: string): Promise<void>;
 
+  updateTestProgress(
+    progress: TestProgressEntity,
+    newTestProgress: Partial<{
+      plannedSessionNumber: number;
+      completedSessionNumber: number;
+      incompletedSessionNumber: number;
+    }>
+  ): Promise<void>;
+
   collectStoryDailyTestProgresses(
     storyIds: string[],
     filter?: { since?: number; until?: number }
@@ -60,6 +69,16 @@ export interface TestProgressService {
     projectId: string,
     filter?: { since?: number; until?: number }
   ): Promise<DailyTestProgress[]>;
+
+  getNewTestProgress(storyId: string): Promise<{
+    plannedSessionNumber: number;
+    completedSessionNumber: number;
+    incompletedSessionNumber: number;
+  }>;
+
+  getTodayTestProgress(
+    storyId: string
+  ): Promise<TestProgressEntity | undefined>;
 }
 
 export class TestProgressServiceImpl implements TestProgressService {
@@ -113,9 +132,33 @@ export class TestProgressServiceImpl implements TestProgressService {
 
     const storyIds = project.stories.map((story) => story.id);
 
-    return await new TestProgressServiceImpl().registerStoryTestProgresses(
-      ...storyIds
-    );
+    return await this.registerStoryTestProgresses(...storyIds);
+  }
+
+  public async updateTestProgress(
+    progress: TestProgressEntity,
+    newTestProgress: Partial<{
+      plannedSessionNumber: number;
+      completedSessionNumber: number;
+      incompletedSessionNumber: number;
+    }>
+  ): Promise<void> {
+    const testProgressEntity = getRepository(TestProgressEntity);
+
+    if (newTestProgress.plannedSessionNumber) {
+      progress.plannedSessionNumber = newTestProgress.plannedSessionNumber;
+    }
+
+    if (newTestProgress.completedSessionNumber) {
+      progress.completedSessionNumber = newTestProgress.completedSessionNumber;
+    }
+
+    if (newTestProgress.incompletedSessionNumber) {
+      progress.incompletedSessionNumber =
+        newTestProgress.incompletedSessionNumber;
+    }
+
+    await testProgressEntity.save(progress);
   }
 
   public async collectStoryDailyTestProgresses(
@@ -200,9 +243,48 @@ export class TestProgressServiceImpl implements TestProgressService {
 
     const storyIds = project.stories.map((story) => story.id);
 
-    return await new TestProgressServiceImpl().collectStoryDailyTestProgresses(
-      storyIds,
-      filter
+    return await this.collectStoryDailyTestProgresses(storyIds, filter);
+  }
+
+  public async getNewTestProgress(storyId: string): Promise<{
+    plannedSessionNumber: number;
+    completedSessionNumber: number;
+    incompletedSessionNumber: number;
+  }> {
+    const story = await getRepository(StoryEntity).findOneOrFail(storyId, {
+      relations: ["sessions"],
+    });
+
+    const testTarget = await getRepository(TestTargetEntity).findOneOrFail(
+      story.testTargetId
     );
+    const plans: { viewPointId: string; value: number }[] = JSON.parse(
+      testTarget.text
+    );
+
+    return {
+      plannedSessionNumber:
+        plans.find((plan) => plan.viewPointId === story.viewPointId)?.value ??
+        0,
+      completedSessionNumber: story.sessions.filter(
+        (session) => session.doneDate
+      ).length,
+      incompletedSessionNumber: story.sessions.filter(
+        (session) => !session.doneDate
+      ).length,
+    };
+  }
+
+  public async getTodayTestProgress(
+    storyId: string
+  ): Promise<TestProgressEntity | undefined> {
+    const _d = new Date();
+    const d = new Date(_d.getFullYear(), _d.getMonth(), _d.getDate(), 0, 0, 0);
+    const today = dateToFormattedString(d, "YYYY-MM-DD HH:mm");
+
+    return await getRepository(TestProgressEntity).findOne({
+      where: { story: storyId, createdAt: MoreThanOrEqual(today) },
+      order: { createdAt: "DESC" },
+    });
   }
 }
