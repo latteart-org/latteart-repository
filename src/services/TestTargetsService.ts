@@ -15,7 +15,6 @@
  */
 
 import { StoryEntity } from "@/entities/StoryEntity";
-import { TestProgressEntity } from "@/entities/TestProgressEntity";
 import { TestTargetEntity } from "@/entities/TestTargetEntity";
 import { TestTargetGroupEntity } from "@/entities/TestTargetGroupEntity";
 import { TestTarget } from "@/interfaces/TestTargets";
@@ -110,8 +109,7 @@ export class TestTargetService {
     if (!testTarget) {
       throw new Error(`TestTargetnot found. ${testTargetId}`);
     }
-    const testProgressService = new TestProgressServiceImpl(transactionRunner);
-    const todayProgresses: TestProgressEntity[] = [];
+
     await transactionRunner.waitAndRun(async (transactionalEntityManager) => {
       if (body.name && body.name !== testTarget.name) {
         testTarget.name = body.name;
@@ -137,13 +135,6 @@ export class TestTargetService {
               targetStory.status = "out-of-scope";
               await transactionalEntityManager.save(targetStory);
             }
-
-            const todayProgress =
-              await testProgressService.getTodayTestProgress(targetStory.id);
-            if (todayProgress) {
-              todayProgress.plannedSessionNumber = newPlan.value;
-              todayProgresses.push(todayProgress);
-            }
           })
         );
         testTarget.text = text;
@@ -151,11 +142,11 @@ export class TestTargetService {
       await testTargetRepository.save(testTarget);
     });
 
-    if (todayProgresses.length > 0) {
-      await getRepository(TestProgressEntity).save(todayProgresses);
-    } else {
-      await testProgressService.registerProjectTestProgresses(projectId);
-    }
+    const storyIds = testTarget.stories.map((story) => story.id);
+
+    await new TestProgressServiceImpl(
+      transactionRunner
+    ).saveTodayTestProgresses(projectId, ...storyIds);
 
     return await this.testTargetIdToResponse(testTarget.id);
   }

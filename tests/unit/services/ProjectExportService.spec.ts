@@ -44,7 +44,6 @@ describe("ProjectExportService", () => {
       getProjectIdentifiers: jest.fn(),
       createProject: jest.fn(),
       getProject: jest.fn().mockResolvedValue(projectData),
-      updateProject: jest.fn(),
     };
 
     const testResultService: TestResultService = {
@@ -77,11 +76,9 @@ describe("ProjectExportService", () => {
     const testProgressService: TestProgressService = {
       registerStoryTestProgresses: jest.fn(),
       registerProjectTestProgresses: jest.fn(),
-      updateTestProgress: jest.fn(),
+      saveTodayTestProgresses: jest.fn(),
       collectStoryDailyTestProgresses: jest.fn(),
       collectProjectDailyTestProgresses: jest.fn(),
-      getNewTestProgress: jest.fn(),
-      getTodayTestProgress: jest.fn(),
     };
 
     it("includeProject: true, includeTestResults: true", async () => {

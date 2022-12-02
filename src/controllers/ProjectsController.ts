@@ -23,8 +23,6 @@ import { transactionRunner } from "..";
 import {
   ProjectListResponse,
   GetProjectResponse,
-  UpdateProjectResponse,
-  UpdateProjectDto,
   GetTestProgressResponse,
 } from "../interfaces/Projects";
 import { ProjectsServiceImpl } from "../services/ProjectsService";
@@ -80,32 +78,6 @@ export class ProjectsController extends Controller {
 
         throw new ServerError(404, {
           code: ServerErrorCode.GET_PROJECT_FAILED,
-        });
-      } else {
-        throw error;
-      }
-    }
-  }
-
-  @Put("{projectId}")
-  public async update(
-    @Path() projectId: string,
-    @Body() requestBody: UpdateProjectDto
-  ): Promise<UpdateProjectResponse> {
-    try {
-      return await new ProjectsServiceImpl(
-        {
-          timestamp: new TimestampServiceImpl(),
-          testProgress: new TestProgressServiceImpl(transactionRunner),
-        },
-        transactionRunner
-      ).updateProject(projectId, requestBody);
-    } catch (error) {
-      if (error instanceof Error) {
-        LoggingService.error("Save project failed.", error);
-
-        throw new ServerError(500, {
-          code: ServerErrorCode.SAVE_PROJECT_FAILED,
         });
       } else {
         throw error;
