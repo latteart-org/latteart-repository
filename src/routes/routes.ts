@@ -262,32 +262,6 @@ const models: TsoaRoute.Models = {
         "type": {"ref":"Project","validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Pick_Project.Exclude_keyofProject.progressDatas__": {
-        "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"id":{"dataType":"string","required":true},"name":{"dataType":"string","required":true},"testMatrices":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"viewPoints":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"description":{"dataType":"string","required":true},"index":{"dataType":"double","required":true},"name":{"dataType":"string","required":true},"id":{"dataType":"string","required":true}}},"required":true},"groups":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"testTargets":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"plans":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"value":{"dataType":"double","required":true},"viewPointId":{"dataType":"string","required":true}}},"required":true},"index":{"dataType":"double","required":true},"name":{"dataType":"string","required":true},"id":{"dataType":"string","required":true}}},"required":true},"index":{"dataType":"double","required":true},"name":{"dataType":"string","required":true},"id":{"dataType":"string","required":true}}},"required":true},"index":{"dataType":"double","required":true},"name":{"dataType":"string","required":true},"id":{"dataType":"string","required":true}}},"required":true},"stories":{"dataType":"array","array":{"dataType":"refObject","ref":"StoryDetails"},"required":true}},"validators":{}},
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Omit_Project.progressDatas_": {
-        "dataType": "refAlias",
-        "type": {"ref":"Pick_Project.Exclude_keyofProject.progressDatas__","validators":{}},
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "UpdateProjectResponse": {
-        "dataType": "refAlias",
-        "type": {"ref":"Omit_Project.progressDatas_","validators":{}},
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "UpdateProjectDto": {
-        "dataType": "refObject",
-        "properties": {
-            "id": {"dataType":"string"},
-            "name": {"dataType":"string"},
-            "testMatrices": {"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"viewPoints":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"description":{"dataType":"string","required":true},"index":{"dataType":"double","required":true},"name":{"dataType":"string","required":true},"id":{"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"enum","enums":[null]}],"required":true}}}},"groups":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"testTargets":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"plans":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"value":{"dataType":"double","required":true},"viewPointId":{"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"enum","enums":[null]}],"required":true}}},"required":true},"index":{"dataType":"double","required":true},"name":{"dataType":"string","required":true},"id":{"dataType":"string","required":true}}},"required":true},"index":{"dataType":"double","required":true},"name":{"dataType":"string","required":true},"id":{"dataType":"string","required":true}}},"required":true},"index":{"dataType":"double","required":true},"name":{"dataType":"string","required":true},"id":{"dataType":"string","required":true}}},"required":true},
-            "stories": {"dataType":"array","array":{"dataType":"refObject","ref":"StoryDetails"},"required":true},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "DailyTestProgress": {
         "dataType": "refAlias",
         "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"storyProgresses":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"incompletedSessionNumber":{"dataType":"double","required":true},"completedSessionNumber":{"dataType":"double","required":true},"plannedSessionNumber":{"dataType":"double","required":true},"viewPointId":{"dataType":"string","required":true},"testTargetId":{"dataType":"string","required":true},"testTargetGroupId":{"dataType":"string","required":true},"testMatrixId":{"dataType":"string","required":true},"storyId":{"dataType":"string","required":true}}},"required":true},"date":{"dataType":"string","required":true}},"validators":{}},
@@ -1004,30 +978,6 @@ export function RegisterRoutes(app: express.Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.put('/api/v1/projects/:projectId',
-
-            function ProjectsController_update(request: any, response: any, next: any) {
-            const args = {
-                    projectId: {"in":"path","name":"projectId","required":true,"dataType":"string"},
-                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"UpdateProjectDto"},
-            };
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request, response);
-
-                const controller = new ProjectsController();
-
-
-              const promise = controller.update.apply(controller, validatedArgs as any);
-              promiseHandler(controller, promise, response, undefined, next);
-            } catch (err) {
-                return next(err);
-            }
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/api/v1/projects/:projectId/progress',
 
             function ProjectsController_getTestProgress(request: any, response: any, next: any) {
@@ -1103,6 +1053,7 @@ export function RegisterRoutes(app: express.Router) {
 
             function SessionsController_post(request: any, response: any, next: any) {
             const args = {
+                    projectId: {"in":"path","name":"projectId","required":true,"dataType":"string"},
                     requestBody: {"in":"body","name":"requestBody","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"storyId":{"dataType":"string","required":true}}},
             };
 
@@ -1685,10 +1636,11 @@ export function RegisterRoutes(app: express.Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/api/v1/test-targets/:testTargetId',
+        app.get('/api/v1/projects/:projectId/test-targets/:testTargetId',
 
             function TestTargetsController_get(request: any, response: any, next: any) {
             const args = {
+                    projectId: {"in":"path","name":"projectId","required":true,"dataType":"string"},
                     testTargetId: {"in":"path","name":"testTargetId","required":true,"dataType":"string"},
             };
 
@@ -1708,10 +1660,11 @@ export function RegisterRoutes(app: express.Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.post('/api/v1/test-targets',
+        app.post('/api/v1/projects/:projectId/test-targets',
 
             function TestTargetsController_post(request: any, response: any, next: any) {
             const args = {
+                    projectId: {"in":"path","name":"projectId","required":true,"dataType":"string"},
                     body: {"in":"body","name":"body","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"name":{"dataType":"string","required":true},"testTargetGroupId":{"dataType":"string","required":true}}},
             };
 
@@ -1731,10 +1684,11 @@ export function RegisterRoutes(app: express.Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.patch('/api/v1/test-targets/:testTargetId',
+        app.patch('/api/v1/projects/:projectId/test-targets/:testTargetId',
 
             function TestTargetsController_patch(request: any, response: any, next: any) {
             const args = {
+                    projectId: {"in":"path","name":"projectId","required":true,"dataType":"string"},
                     testTargetId: {"in":"path","name":"testTargetId","required":true,"dataType":"string"},
                     body: {"in":"body","name":"body","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"plans":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"value":{"dataType":"double","required":true},"viewPointId":{"dataType":"string","required":true}}}},"index":{"dataType":"double"},"name":{"dataType":"string"}}},
             };
@@ -1755,10 +1709,11 @@ export function RegisterRoutes(app: express.Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.delete('/api/v1/test-targets/:testTargetId',
+        app.delete('/api/v1/projects/:projectId/test-targets/:testTargetId',
 
             function TestTargetsController_delete(request: any, response: any, next: any) {
             const args = {
+                    projectId: {"in":"path","name":"projectId","required":true,"dataType":"string"},
                     testTargetId: {"in":"path","name":"testTargetId","required":true,"dataType":"string"},
             };
 

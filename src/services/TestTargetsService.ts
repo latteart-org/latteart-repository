@@ -93,6 +93,7 @@ export class TestTargetService {
   }
 
   public async patch(
+    projectId: string,
     testTargetId: string,
     body: {
       name?: string;
@@ -108,6 +109,7 @@ export class TestTargetService {
     if (!testTarget) {
       throw new Error(`TestTargetnot found. ${testTargetId}`);
     }
+
     await transactionRunner.waitAndRun(async (transactionalEntityManager) => {
       if (body.name && body.name !== testTarget.name) {
         testTarget.name = body.name;
@@ -140,9 +142,11 @@ export class TestTargetService {
       await testTargetRepository.save(testTarget);
     });
 
-    const storyIds = testTarget?.stories.map(({ id }) => id) ?? [];
+    const storyIds = testTarget.stories.map((story) => story.id);
 
-    await new TestProgressServiceImpl().registerTestProgresses(...storyIds);
+    await new TestProgressServiceImpl(
+      transactionRunner
+    ).saveTodayTestProgresses(projectId, ...storyIds);
 
     return await this.testTargetIdToResponse(testTarget.id);
   }

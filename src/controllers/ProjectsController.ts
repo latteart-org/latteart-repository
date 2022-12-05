@@ -23,8 +23,6 @@ import { transactionRunner } from "..";
 import {
   ProjectListResponse,
   GetProjectResponse,
-  UpdateProjectResponse,
-  UpdateProjectDto,
   GetTestProgressResponse,
 } from "../interfaces/Projects";
 import { ProjectsServiceImpl } from "../services/ProjectsService";
@@ -36,7 +34,7 @@ export class ProjectsController extends Controller {
     return new ProjectsServiceImpl(
       {
         timestamp: new TimestampServiceImpl(),
-        testProgress: new TestProgressServiceImpl(),
+        testProgress: new TestProgressServiceImpl(transactionRunner),
       },
       transactionRunner
     ).getProjectIdentifiers();
@@ -48,7 +46,7 @@ export class ProjectsController extends Controller {
       return await new ProjectsServiceImpl(
         {
           timestamp: new TimestampServiceImpl(),
-          testProgress: new TestProgressServiceImpl(),
+          testProgress: new TestProgressServiceImpl(transactionRunner),
         },
         transactionRunner
       ).createProject();
@@ -70,7 +68,7 @@ export class ProjectsController extends Controller {
       return await new ProjectsServiceImpl(
         {
           timestamp: new TimestampServiceImpl(),
-          testProgress: new TestProgressServiceImpl(),
+          testProgress: new TestProgressServiceImpl(transactionRunner),
         },
         transactionRunner
       ).getProject(projectId);
@@ -87,32 +85,6 @@ export class ProjectsController extends Controller {
     }
   }
 
-  @Put("{projectId}")
-  public async update(
-    @Path() projectId: string,
-    @Body() requestBody: UpdateProjectDto
-  ): Promise<UpdateProjectResponse> {
-    try {
-      return await new ProjectsServiceImpl(
-        {
-          timestamp: new TimestampServiceImpl(),
-          testProgress: new TestProgressServiceImpl(),
-        },
-        transactionRunner
-      ).updateProject(projectId, requestBody);
-    } catch (error) {
-      if (error instanceof Error) {
-        LoggingService.error("Save project failed.", error);
-
-        throw new ServerError(500, {
-          code: ServerErrorCode.SAVE_PROJECT_FAILED,
-        });
-      } else {
-        throw error;
-      }
-    }
-  }
-
   @Get("{projectId}/progress")
   public async getTestProgress(
     @Path() projectId: string,
@@ -120,21 +92,10 @@ export class ProjectsController extends Controller {
     @Query() until?: number
   ): Promise<GetTestProgressResponse[]> {
     try {
-      const project = await new ProjectsServiceImpl(
-        {
-          timestamp: new TimestampServiceImpl(),
-          testProgress: new TestProgressServiceImpl(),
-        },
-        transactionRunner
-      ).getProject(projectId);
-
-      const storyIds = project.stories.map((story) => story.id);
-
       const filter = { since, until };
-      return await new TestProgressServiceImpl().collectDailyTestProgresses(
-        storyIds,
-        filter
-      );
+      return await new TestProgressServiceImpl(
+        transactionRunner
+      ).collectProjectDailyTestProgresses(projectId, filter);
     } catch (error) {
       if (error instanceof Error) {
         LoggingService.error("Get test progress failed.", error);

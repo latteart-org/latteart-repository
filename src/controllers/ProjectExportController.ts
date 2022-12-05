@@ -66,7 +66,9 @@ export class ProjectExportController extends Controller {
         exportFileRepository: exportFileRepositoryService,
       });
 
-      const testProgressService = new TestProgressServiceImpl();
+      const testProgressService = new TestProgressServiceImpl(
+        transactionRunner
+      );
 
       const projectService = new ProjectsServiceImpl(
         {

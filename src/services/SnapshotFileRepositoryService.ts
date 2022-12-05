@@ -141,7 +141,7 @@ export class SnapshotFileRepositoryServiceImpl
 
     // output progress file
     const dailyProgresses =
-      await this.service.testProgress.collectDailyTestProgresses(
+      await this.service.testProgress.collectStoryDailyTestProgresses(
         stories.map((story) => story.id)
       );
     await this.outputTestProgressFile(destDataDirPath, dailyProgresses);

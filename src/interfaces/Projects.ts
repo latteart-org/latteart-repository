@@ -23,7 +23,6 @@ export interface ProjectListResponse {
 }
 
 export type GetProjectResponse = Project;
-export type UpdateProjectResponse = Omit<Project, "progressDatas">;
 export type GetTestProgressResponse = DailyTestProgress;
 
 export interface Project {
@@ -143,37 +142,6 @@ export interface CreateProjectResponse {
     testTarget: number;
     session: any;
   };
-}
-
-export interface UpdateProjectDto {
-  id?: string;
-  name?: string;
-  testMatrices: {
-    id: string;
-    name: string;
-    index: number;
-    groups: {
-      id: string;
-      name: string;
-      index: number;
-      testTargets: {
-        id: string;
-        name: string;
-        index: number;
-        plans: {
-          viewPointId: string | null;
-          value: number;
-        }[];
-      }[];
-    }[];
-    viewPoints?: {
-      id: string | null;
-      name: string;
-      index: number;
-      description: string;
-    }[];
-  }[];
-  stories: StoryDetails[];
 }
 
 export interface ViewPoint {
