@@ -27,6 +27,8 @@ export type PutConfigResponse = Config;
 
 export type GetConfigResponse = Config;
 
+export type SnapshotConfig = Pick<Config, "locale">;
+
 export interface Config {
   locale: string;
   mode: string;

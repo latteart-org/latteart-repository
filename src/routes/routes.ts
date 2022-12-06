@@ -327,6 +327,16 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Pick_Config.locale_": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"locale":{"dataType":"string","required":true}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "SnapshotConfig": {
+        "dataType": "refAlias",
+        "type": {"ref":"Pick_Config.locale_","validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "CreateTestResultExportDto": {
         "dataType": "refObject",
         "properties": {
@@ -1150,6 +1160,7 @@ export function RegisterRoutes(app: express.Router) {
             function SnapshotsController_create(request: any, response: any, next: any) {
             const args = {
                     projectId: {"in":"path","name":"projectId","required":true,"dataType":"string"},
+                    snapshotConfig: {"in":"body","name":"snapshotConfig","required":true,"ref":"SnapshotConfig"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
