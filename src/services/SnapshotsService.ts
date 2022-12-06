@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { SnapshotConfig } from "@/interfaces/Configs";
 import { CreateResponse } from "@/interfaces/Snapshots";
 import { ProjectsServiceImpl } from "./ProjectsService";
 import { SnapshotFileRepositoryService } from "./SnapshotFileRepositoryService";
@@ -33,7 +34,7 @@ export class SnapshotsService {
 
   public async createSnapshot(
     projectId: string,
-    locale: string
+    snapshotConfig: SnapshotConfig
   ): Promise<CreateResponse> {
     console.log(projectId);
 
@@ -41,7 +42,7 @@ export class SnapshotsService {
 
     const url = await this.service.snapshotFileRepository.write(
       project,
-      locale
+      snapshotConfig
     );
 
     return {

@@ -29,9 +29,10 @@ import { TestPurposeServiceImpl } from "./TestPurposeService";
 import { ImageFileRepositoryService } from "./ImageFileRepositoryService";
 import { IssueReportService } from "./IssueReportService";
 import { DailyTestProgress, TestProgressService } from "./TestProgressService";
+import { SnapshotConfig } from "@/interfaces/Configs";
 
 export interface SnapshotFileRepositoryService {
-  write(project: Project, locale: string): Promise<string>;
+  write(project: Project, snapshotConfig: SnapshotConfig): Promise<string>;
 }
 
 export class SnapshotFileRepositoryServiceImpl
@@ -61,8 +62,14 @@ export class SnapshotFileRepositoryServiceImpl
     }
   ) {}
 
-  public async write(project: Project, locale: string): Promise<string> {
-    const tmpProjectDirectoryPath = await this.outputProject(project, locale);
+  public async write(
+    project: Project,
+    snapshotConfig: SnapshotConfig
+  ): Promise<string> {
+    const tmpProjectDirectoryPath = await this.outputProject(
+      project,
+      snapshotConfig.locale
+    );
 
     const zipFilePath = await new FileArchiver(tmpProjectDirectoryPath, {
       deleteSource: true,

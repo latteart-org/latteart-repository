@@ -39,6 +39,7 @@ import { SnapshotsService } from "../services/SnapshotsService";
 import path from "path";
 import { appRootPath } from "@/common";
 import { TestProgressServiceImpl } from "@/services/TestProgressService";
+import { SnapshotConfig } from "../interfaces/Configs";
 
 @Route("projects/{projectId}/snapshots")
 export class SnapshotsController extends Controller {
@@ -50,12 +51,12 @@ export class SnapshotsController extends Controller {
   @Post()
   public async create(
     @Path() projectId: string,
-    @Body() body: { locale: string }
+    @Body() snapshotConfig: SnapshotConfig
   ): Promise<CreateResponse> {
     try {
       return await this.createSnapshotsService().createSnapshot(
         projectId,
-        body.locale
+        snapshotConfig
       );
     } catch (error) {
       if (error instanceof Error) {
