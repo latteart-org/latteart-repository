@@ -250,6 +250,7 @@ export class SnapshotFileRepositoryServiceImpl
           inputElements: testStep.operation.inputElements,
           windowHandle: testStep.operation.windowHandle,
           keywordTexts: testStep.operation.keywordTexts,
+          isAutomatic: testStep.operation.isAutomatic,
         };
 
         await this.copyScreenshot(
