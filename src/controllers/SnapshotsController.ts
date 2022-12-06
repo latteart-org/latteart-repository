@@ -27,7 +27,7 @@ import { TestPurposeServiceImpl } from "@/services/TestPurposeService";
 import { TestResultServiceImpl } from "@/services/TestResultService";
 import { TestStepServiceImpl } from "@/services/TestStepService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
-import { Controller, Get, Post, Route, Path } from "tsoa";
+import { Controller, Get, Post, Route, Path, Body } from "tsoa";
 import {
   attachedFileDirectoryService,
   screenshotDirectoryService,
@@ -48,9 +48,15 @@ export class SnapshotsController extends Controller {
   }
 
   @Post()
-  public async create(@Path() projectId: string): Promise<CreateResponse> {
+  public async create(
+    @Path() projectId: string,
+    @Body() body: { locale: string }
+  ): Promise<CreateResponse> {
     try {
-      return await this.createSnapshotsService().createSnapshot(projectId);
+      return await this.createSnapshotsService().createSnapshot(
+        projectId,
+        body.locale
+      );
     } catch (error) {
       if (error instanceof Error) {
         LoggingService.error("Save snapshot failed.", error);

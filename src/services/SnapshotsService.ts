@@ -31,12 +31,18 @@ export class SnapshotsService {
     return [];
   }
 
-  public async createSnapshot(projectId: string): Promise<CreateResponse> {
+  public async createSnapshot(
+    projectId: string,
+    locale: string
+  ): Promise<CreateResponse> {
     console.log(projectId);
 
     const project = await this.service.project.getProject(projectId);
 
-    const url = await this.service.snapshotFileRepository.write(project);
+    const url = await this.service.snapshotFileRepository.write(
+      project,
+      locale
+    );
 
     return {
       url,
