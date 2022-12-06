@@ -166,11 +166,13 @@ async function initializeOrmConnection(connectionName: string) {
   };
 
   if (baseOptions.type === "sqlite") {
-    const databaseName = `${baseOptions.database}`;
-    const databasePath = path.join(__dirname, databaseName);
+    const databaseName = path.basename(baseOptions.database);
+    const databasePath = path.join(appRootPath, databaseName);
 
-    const backupDatabaseName = `${baseOptions.database}.bak`;
-    const backupDatabasePath = path.join(__dirname, backupDatabaseName);
+    const backupDatabaseName = `${databaseName}.bak`;
+    const backupDatabasePath = path.join(appRootPath, backupDatabaseName);
+
+    options.database = databasePath;
 
     if (fs.existsSync(databasePath)) {
       LoggingService.info(
