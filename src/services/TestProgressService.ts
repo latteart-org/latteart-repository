@@ -227,28 +227,40 @@ export class TestProgressServiceImpl implements TestProgressService {
     const today = dateToFormattedString(d, "YYYY-MM-DD HH:mm");
 
     const testProgressRepository = getRepository(TestProgressEntity);
-    const entities = await Promise.all(
-      storyIds.map((storyId) => {
-        return testProgressRepository.findOne({
+    const entitiesWithStoryId = await Promise.all(
+      storyIds.map(async (storyId) => {
+        const entity = await testProgressRepository.findOne({
           where: { story: storyId, createdAt: MoreThanOrEqual(today) },
           order: { createdAt: "DESC" },
         });
+
+        return {
+          storyId,
+          entity,
+        };
       })
     );
 
-    if (entities.includes(undefined)) {
+    const hasNoEntity = entitiesWithStoryId.some((item) => {
+      return !item.entity;
+    });
+
+    if (hasNoEntity) {
       return [];
     }
 
     const updateTargetEntities: TestProgressEntity[] = [];
-    for (const targetEntity of entities as TestProgressEntity[]) {
-      const newProgress = await this.getNewTestProgress(targetEntity.story.id);
+    for (const target of entitiesWithStoryId as {
+      storyId: string;
+      entity: TestProgressEntity;
+    }[]) {
+      const newProgress = await this.getNewTestProgress(target.storyId);
 
-      targetEntity.plannedSessionNumber = newProgress.planned;
-      targetEntity.completedSessionNumber = newProgress.completed;
-      targetEntity.incompletedSessionNumber = newProgress.incompleted;
+      target.entity.plannedSessionNumber = newProgress.planned;
+      target.entity.completedSessionNumber = newProgress.completed;
+      target.entity.incompletedSessionNumber = newProgress.incompleted;
 
-      updateTargetEntities.push(targetEntity);
+      updateTargetEntities.push(target.entity);
     }
 
     return updateTargetEntities;
