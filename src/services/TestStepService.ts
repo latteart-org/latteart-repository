@@ -61,6 +61,7 @@ export interface TestStepService {
     inputElements: any;
     windowHandle: string;
     keywordTexts: any;
+    isAutomatic: boolean;
   }>;
 
   getTestStepScreenshot(
@@ -237,6 +238,7 @@ export class TestStepServiceImpl implements TestStepService {
     inputElements: any;
     windowHandle: string;
     keywordTexts: any;
+    isAutomatic: boolean;
   }> {
     const testStepEntity = await getRepository(TestStepEntity).findOneOrFail(
       testStepId,

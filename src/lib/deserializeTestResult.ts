@@ -57,6 +57,7 @@ export interface TestStep {
     windowHandle: string;
     inputElements: ElementInfo[];
     keywordTexts: string[];
+    isAutomatic: boolean;
   };
   testPurpose: {
     id: string;
@@ -167,6 +168,7 @@ const deserializeTestResultV1 = (
         windowHandle: item.testStep.windowInfo.windowHandle,
         inputElements: item.testStep.inputElements,
         keywordTexts: item.testStep.pageInfo.keywordTexts,
+        isAutomatic: item.testStep.operation.isAutomatic ?? false,
       },
       testPurpose,
       notes,
@@ -231,6 +233,7 @@ const deserializeTestResultV0 = (
         windowHandle: item.testStep.windowInfo.windowHandle,
         inputElements: item.testStep.inputElements,
         keywordTexts: item.testStep.pageInfo.keywordTexts,
+        isAutomatic: false,
       },
       testPurpose,
       notes,

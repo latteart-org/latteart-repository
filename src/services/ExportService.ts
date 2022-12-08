@@ -44,6 +44,7 @@ export type HistoryItemExportDataV1 = {
           [key: string]: string;
         };
       } | null;
+      isAutomatic?: boolean;
     };
     inputElements: {
       tagname: string;
@@ -161,6 +162,7 @@ export class ExportServiceImpl implements ExportService {
                 input: testStep.operation.input,
                 type: testStep.operation.type,
                 elementInfo: testStep.operation.elementInfo,
+                isAutomatic: testStep.operation.isAutomatic,
               },
               inputElements: testStep.operation.inputElements,
             },

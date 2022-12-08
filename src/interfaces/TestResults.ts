@@ -70,6 +70,7 @@ interface TestResult {
         };
       }[];
       keywordTexts?: string[];
+      isAutomatic: boolean;
     };
     intention: {
       id: string;

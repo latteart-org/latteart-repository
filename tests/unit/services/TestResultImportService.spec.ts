@@ -109,6 +109,7 @@ describe("TestResultImportService", () => {
             input: "input",
             type: "type",
             elementInfo: element1,
+            isAutomatic: false,
           },
           inputElements: [element1],
         },
