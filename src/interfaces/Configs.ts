@@ -34,7 +34,9 @@ export type ExportableConfig = Omit<
 
 export type SnapshotConfig = Pick<Config, "locale">;
 
-export type BackendConfig = Omit<Config, "config"> & {
+export type BackendConfig = Omit<Config, "config"> & ServerConfig;
+
+type ServerConfig = {
   config: {
     autofillSetting: AutofillSetting;
     autoOperationSetting: AutoOperationSetting;

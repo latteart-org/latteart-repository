@@ -18,7 +18,7 @@ import fs from "fs-extra";
 import { StaticDirectoryService } from "./StaticDirectoryService";
 import { TimestampService } from "./TimestampService";
 import { ConfigsService } from "./ConfigsService";
-import { convetToExportableConfig } from "@/lib/settings/settingsConverter";
+import { convertToExportableConfig } from "@/lib/settings/settingsConverter";
 
 export class ConfigExportService {
   public async export(
@@ -31,7 +31,7 @@ export class ConfigExportService {
   ): Promise<string> {
     const tempConfig = await service.configService.getConfig(projectId);
 
-    const config = convetToExportableConfig(tempConfig);
+    const config = convertToExportableConfig(tempConfig);
 
     const fileName = `config_${service.timestampService.format(
       "YYYYMMDD_HHmmss"

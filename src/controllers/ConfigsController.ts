@@ -23,7 +23,7 @@ import LoggingService from "@/logger/LoggingService";
 import { ServerError, ServerErrorCode } from "@/ServerError";
 import { Get, Route, Path, Put, Body } from "tsoa";
 import { ConfigsService } from "../services/ConfigsService";
-import { convetToExportableConfig } from "@/lib/settings/settingsConverter";
+import { convertToExportableConfig } from "@/lib/settings/settingsConverter";
 
 @Route("projects/{projectId}/configs")
 export class ConfigsController {
@@ -31,7 +31,7 @@ export class ConfigsController {
   public async get(@Path() projectId: string): Promise<GetConfigResponse> {
     try {
       const config = await new ConfigsService().getConfig(projectId);
-      return convetToExportableConfig(config);
+      return convertToExportableConfig(config);
     } catch (error) {
       if (error instanceof Error) {
         LoggingService.error("Get settings failed.", error);
@@ -54,7 +54,7 @@ export class ConfigsController {
         projectId,
         requestBody
       );
-      return convetToExportableConfig(config);
+      return convertToExportableConfig(config);
     } catch (error) {
       if (error instanceof Error) {
         LoggingService.error("Save settings failed.", error);

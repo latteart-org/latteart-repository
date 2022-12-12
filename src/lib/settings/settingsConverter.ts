@@ -16,7 +16,7 @@
 
 import { BackendConfig, ExportableConfig } from "@/interfaces/Configs";
 
-export function convetToExportableConfig(
+export function convertToExportableConfig(
   settings: BackendConfig
 ): ExportableConfig {
   return {

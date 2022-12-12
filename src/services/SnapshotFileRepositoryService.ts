@@ -30,7 +30,7 @@ import { ImageFileRepositoryService } from "./ImageFileRepositoryService";
 import { IssueReportService } from "./IssueReportService";
 import { DailyTestProgress, TestProgressService } from "./TestProgressService";
 import { SnapshotConfig } from "@/interfaces/Configs";
-import { convetToExportableConfig } from "@/lib/settings/settingsConverter";
+import { convertToExportableConfig } from "@/lib/settings/settingsConverter";
 
 export interface SnapshotFileRepositoryService {
   write(project: Project, snapshotConfig: SnapshotConfig): Promise<string>;
@@ -533,7 +533,7 @@ export class SnapshotFileRepositoryServiceImpl
 
   private async outputConfigFile(outputDirPath: string, locale: string) {
     const tempConfig = await this.service.config.getConfig("");
-    const config = convetToExportableConfig(tempConfig);
+    const config = convertToExportableConfig(tempConfig);
     const configWithLocale = {
       ...config,
       locale,
