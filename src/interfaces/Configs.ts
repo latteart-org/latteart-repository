@@ -21,13 +21,32 @@ import {
   Coverage,
 } from "../lib/settings/Settings";
 
-export type PutConfigDto = Config;
+export type PutConfigDto = ExportableConfig;
 
-export type PutConfigResponse = Config;
+export type PutConfigResponse = ExportableConfig;
 
-export type GetConfigResponse = Config;
+export type GetConfigResponse = ExportableConfig;
+
+export type ExportableConfig = Omit<
+  Config,
+  "locale" | "mode" | "debug" | "captureSettings"
+>;
 
 export type SnapshotConfig = Pick<Config, "locale">;
+
+export type BackendConfig = Omit<Config, "config"> & {
+  config: {
+    autofillSetting: AutofillSetting;
+    autoOperationSetting: AutoOperationSetting;
+    screenDefinition: ScreenDefinitionConfig;
+    coverage: Coverage;
+    imageCompression: {
+      isEnabled: boolean;
+      isDeleteSrcImage: boolean;
+      command: string;
+    };
+  };
+};
 
 export interface Config {
   locale: string;

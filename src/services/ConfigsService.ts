@@ -14,11 +14,7 @@
  * limitations under the License.
  */
 
-import {
-  GetConfigResponse,
-  PutConfigDto,
-  PutConfigResponse,
-} from "../interfaces/Configs";
+import { BackendConfig, PutConfigDto } from "../interfaces/Configs";
 import { getRepository } from "typeorm";
 import { ConfigEntity } from "../entities/ConfigEntity";
 import { SettingsUtility } from "../lib/settings/SettingsUtility";
@@ -27,36 +23,14 @@ import {
   PutDeviceConfigDto,
   PutDeviceConfigResponse,
 } from "@/interfaces/DeviceConfigs";
-import { ScreenDefinitionConfig } from "@/lib/ScreenDefFactory";
-import {
-  AutofillSetting,
-  AutoOperationSetting,
-  Coverage,
-} from "@/lib/settings/Settings";
-
-type configWithImageCompressionCommand = Omit<GetConfigResponse, "config"> & {
-  config: {
-    autofillSetting: AutofillSetting;
-    autoOperationSetting: AutoOperationSetting;
-    screenDefinition: ScreenDefinitionConfig;
-    coverage: Coverage;
-    imageCompression: {
-      isEnabled: boolean;
-      isDeleteSrcImage: boolean;
-      command: string;
-    };
-  };
-};
 
 export class ConfigsService {
   private static imageCompressionCommand = "";
 
-  public async getConfig(projectId: string): Promise<GetConfigResponse> {
+  public async getConfig(projectId: string): Promise<BackendConfig> {
     const configEntity = await this.getConfigSource(projectId);
-    const config = JSON.parse(
-      configEntity.text
-    ) as configWithImageCompressionCommand;
-    return this.deleteCompressionCommand(config);
+    const config = JSON.parse(configEntity.text) as BackendConfig;
+    return config;
   }
 
   public async getDeviceConfig(
@@ -69,9 +43,10 @@ export class ConfigsService {
   public async updateConfig(
     projectId: string,
     requestBody: PutConfigDto
-  ): Promise<PutConfigResponse> {
+  ): Promise<BackendConfig> {
     const configEntity = await this.getConfigSource(projectId);
-    const settings: configWithImageCompressionCommand = {
+    const configText = JSON.parse(configEntity.text) as BackendConfig;
+    const settings: BackendConfig = {
       ...requestBody,
       config: {
         ...requestBody.config,
@@ -80,6 +55,10 @@ export class ConfigsService {
           command: ConfigsService.imageCompressionCommand,
         },
       },
+      locale: configText.locale,
+      mode: configText.mode,
+      debug: configText.debug,
+      captureSettings: configText.captureSettings,
     };
 
     configEntity.text = JSON.stringify(settings);
@@ -88,11 +67,9 @@ export class ConfigsService {
       configEntity
     );
 
-    const savedConfig = JSON.parse(
-      savedConfigEntity.text
-    ) as configWithImageCompressionCommand;
+    const savedConfig = JSON.parse(savedConfigEntity.text) as BackendConfig;
 
-    return this.deleteCompressionCommand(savedConfig);
+    return savedConfig;
   }
 
   public async updateDeviceConfig(
@@ -136,20 +113,5 @@ export class ConfigsService {
       }
     }
     return config[0];
-  }
-
-  private deleteCompressionCommand(
-    settings: configWithImageCompressionCommand
-  ): GetConfigResponse {
-    return {
-      ...settings,
-      config: {
-        ...settings.config,
-        imageCompression: {
-          isEnabled: settings.config.imageCompression.isEnabled,
-          isDeleteSrcImage: settings.config.imageCompression.isDeleteSrcImage,
-        },
-      },
-    };
   }
 }

@@ -30,6 +30,7 @@ import { ImageFileRepositoryService } from "./ImageFileRepositoryService";
 import { IssueReportService } from "./IssueReportService";
 import { DailyTestProgress, TestProgressService } from "./TestProgressService";
 import { SnapshotConfig } from "@/interfaces/Configs";
+import { convetToExportableConfig } from "@/lib/settings/settingsConverter";
 
 export interface SnapshotFileRepositoryService {
   write(project: Project, snapshotConfig: SnapshotConfig): Promise<string>;
@@ -532,8 +533,12 @@ export class SnapshotFileRepositoryServiceImpl
 
   private async outputConfigFile(outputDirPath: string, locale: string) {
     const tempConfig = await this.service.config.getConfig("");
-    tempConfig.locale = locale;
-    const settingsData = JSON.stringify(tempConfig);
+    const config = convetToExportableConfig(tempConfig);
+    const configWithLocale = {
+      ...config,
+      locale,
+    };
+    const settingsData = JSON.stringify(configWithLocale);
     await fs.outputFile(
       path.join(outputDirPath, "latteart.config.js"),
       `const settings = ${settingsData}`,
