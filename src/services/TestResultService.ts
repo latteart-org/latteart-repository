@@ -158,15 +158,6 @@ export class TestResultServiceImpl implements TestResultService {
     transactionRunner: TransactionRunner,
     screenshotDirectoryService: StaticDirectoryServiceImpl
   ): Promise<void> {
-    const sessions = await getRepository(SessionEntity).find({
-      testResult: { id: testResultId },
-    });
-    if (sessions.length > 1) {
-      throw new Error(
-        "Linked to Session: sessionId:" + sessions.map((session) => session.id)
-      );
-    }
-
     await transactionRunner.waitAndRun(async (transactionalEntityManager) => {
       await transactionalEntityManager.delete(NoteEntity, {
         testResult: { id: testResultId },
