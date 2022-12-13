@@ -55,9 +55,6 @@ export class ConfigsService {
           command: ConfigsService.imageCompressionCommand,
         },
       },
-      locale: configText.locale,
-      mode: configText.mode,
-      debug: configText.debug,
       captureSettings: configText.captureSettings,
     };
 

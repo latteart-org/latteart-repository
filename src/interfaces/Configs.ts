@@ -27,14 +27,11 @@ export type PutConfigResponse = ExportableConfig;
 
 export type GetConfigResponse = ExportableConfig;
 
-export type ExportableConfig = Omit<
-  Config,
-  "locale" | "mode" | "debug" | "captureSettings"
->;
+export type ExportableConfig = ProjectConfig;
 
-export type SnapshotConfig = Pick<Config, "locale">;
+export type SnapshotConfig = { locale: string };
 
-export type BackendConfig = Omit<Config, "config"> & ServerConfig;
+export type BackendConfig = Omit<ProjectConfig, "config"> & ServerConfig;
 
 type ServerConfig = {
   config: {
@@ -48,20 +45,12 @@ type ServerConfig = {
       command: string;
     };
   };
+  captureSettings: {
+    ignoreTags: string[];
+  };
 };
 
-export interface Config {
-  locale: string;
-  mode: string;
-  debug: {
-    outputs: {
-      dom: boolean;
-    };
-    saveItems: {
-      keywordSet: boolean;
-    };
-    configureCaptureSettings: boolean;
-  };
+export interface ProjectConfig {
   viewPointsPreset: Array<{
     id: string;
     name: string;
@@ -77,8 +66,5 @@ export interface Config {
       isEnabled: boolean;
       isDeleteSrcImage: boolean;
     };
-  };
-  captureSettings: {
-    ignoreTags: string[];
   };
 }
