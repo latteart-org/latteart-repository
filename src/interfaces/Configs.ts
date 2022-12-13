@@ -31,17 +31,11 @@ export type ExportableConfig = ProjectConfig;
 
 export type SnapshotConfig = { locale: string };
 
-export type BackendConfig = Omit<ProjectConfig, "config"> & ServerConfig;
+export type BackendConfig = ProjectConfig & ServerConfig;
 
 type ServerConfig = {
   config: {
-    autofillSetting: AutofillSetting;
-    autoOperationSetting: AutoOperationSetting;
-    screenDefinition: ScreenDefinitionConfig;
-    coverage: Coverage;
     imageCompression: {
-      isEnabled: boolean;
-      isDeleteSrcImage: boolean;
       command: string;
     };
   };
