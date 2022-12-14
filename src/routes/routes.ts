@@ -116,19 +116,19 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Pick_Config.Exclude_keyofConfig.locale-or-mode-or-debug-or-captureSettings__": {
-        "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"viewPointsPreset":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"viewPoints":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"description":{"dataType":"string","required":true},"name":{"dataType":"string","required":true}}},"required":true},"name":{"dataType":"string","required":true},"id":{"dataType":"string","required":true}}},"required":true},"defaultTagList":{"dataType":"array","array":{"dataType":"string"},"required":true},"config":{"dataType":"nestedObjectLiteral","nestedProperties":{"imageCompression":{"dataType":"nestedObjectLiteral","nestedProperties":{"isDeleteSrcImage":{"dataType":"boolean","required":true},"isEnabled":{"dataType":"boolean","required":true}},"required":true},"coverage":{"ref":"Coverage","required":true},"screenDefinition":{"ref":"ScreenDefinitionConfig","required":true},"autoOperationSetting":{"ref":"AutoOperationSetting","required":true},"autofillSetting":{"ref":"AutofillSetting","required":true}},"required":true}},"validators":{}},
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Omit_Config.locale-or-mode-or-debug-or-captureSettings_": {
-        "dataType": "refAlias",
-        "type": {"ref":"Pick_Config.Exclude_keyofConfig.locale-or-mode-or-debug-or-captureSettings__","validators":{}},
+    "ProjectConfig": {
+        "dataType": "refObject",
+        "properties": {
+            "viewPointsPreset": {"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"viewPoints":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"description":{"dataType":"string","required":true},"name":{"dataType":"string","required":true}}},"required":true},"name":{"dataType":"string","required":true},"id":{"dataType":"string","required":true}}},"required":true},
+            "defaultTagList": {"dataType":"array","array":{"dataType":"string"},"required":true},
+            "config": {"dataType":"nestedObjectLiteral","nestedProperties":{"imageCompression":{"dataType":"nestedObjectLiteral","nestedProperties":{"isDeleteSrcImage":{"dataType":"boolean","required":true},"isEnabled":{"dataType":"boolean","required":true}},"required":true},"coverage":{"ref":"Coverage","required":true},"screenDefinition":{"ref":"ScreenDefinitionConfig","required":true},"autoOperationSetting":{"ref":"AutoOperationSetting","required":true},"autofillSetting":{"ref":"AutofillSetting","required":true}},"required":true},
+        },
+        "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ExportableConfig": {
         "dataType": "refAlias",
-        "type": {"ref":"Omit_Config.locale-or-mode-or-debug-or-captureSettings_","validators":{}},
+        "type": {"ref":"ProjectConfig","validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "GetConfigResponse": {
@@ -328,14 +328,9 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Pick_Config.locale_": {
-        "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"locale":{"dataType":"string","required":true}},"validators":{}},
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "SnapshotConfig": {
         "dataType": "refAlias",
-        "type": {"ref":"Pick_Config.locale_","validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"locale":{"dataType":"string","required":true}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "CreateTestResultExportDto": {
@@ -405,6 +400,11 @@ const models: TsoaRoute.Models = {
     "PatchTestResultResponse": {
         "dataType": "refAlias",
         "type": {"ref":"TestResult","validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ListSessionResponse": {
+        "dataType": "refAlias",
+        "type": {"dataType":"array","array":{"dataType":"string"},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ElementInfo": {
@@ -1336,6 +1336,29 @@ export function RegisterRoutes(app: express.Router) {
 
 
               const promise = controller.delete.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/api/v1/test-results/:testResultId/sessions',
+
+            function TestResultsController_getSessionList(request: any, response: any, next: any) {
+            const args = {
+                    testResultId: {"in":"path","name":"testResultId","required":true,"dataType":"string"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new TestResultsController();
+
+
+              const promise = controller.getSessionList.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);

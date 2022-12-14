@@ -19,6 +19,7 @@ import { SessionEntity } from "@/entities/SessionEntity";
 import { StoryEntity } from "@/entities/StoryEntity";
 import { TestResultEntity } from "@/entities/TestResultEntity";
 import {
+  ListSessionResponse,
   PatchSessionDto,
   PatchSessionResponse,
   PostSessionResponse,
@@ -151,6 +152,18 @@ export class SessionsService {
     ).saveTodayTestProgresses(projectId, storyId);
 
     return;
+  }
+
+  public async getSessionIdentifiers(
+    testResultId: string
+  ): Promise<ListSessionResponse> {
+    const sessionEntities = await getRepository(SessionEntity).find({
+      testResult: { id: testResultId },
+    });
+
+    return sessionEntities.map((session) => {
+      return session.id;
+    });
   }
 
   private async updateAttachedFiles(
