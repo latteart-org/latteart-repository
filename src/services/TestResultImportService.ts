@@ -180,8 +180,9 @@ export class TestResultImportService {
         (testResult.initialUrl
           ? this.service.timestamp.epochMilliseconds()
           : 0),
-      endTimestamp: -1,
+      lastUpdateTimestamp: testResult.lastUpdateTimeStamp,
       initialUrl: testResult.initialUrl ?? "",
+      testingTime: testResult.testingTime,
       screenshots: Array.from(screenshotFilePathToEntity.values()),
       testSteps: testStepEntities,
       coverageSources: coverageSourceEntities,

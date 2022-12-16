@@ -79,7 +79,7 @@ describe("SessionService", () => {
           memo: "memo",
           name: "name",
           testerName: "testerName",
-          testingTime: 10,
+          testingTime: 0,
         },
       ])(
         "指定のIDのセッションの内容を渡されたパラメータの値に更新する",

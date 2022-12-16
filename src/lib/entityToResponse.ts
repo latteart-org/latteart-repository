@@ -123,6 +123,6 @@ export const sessionEntityToResponse = (session: SessionEntity): Session => {
         ]
       : [],
     testerName: session.testUser,
-    testingTime: session.testingTime,
+    testingTime: session.testResult?.testingTime ?? 0,
   };
 };

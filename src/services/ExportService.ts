@@ -61,6 +61,11 @@ export type HistoryItemExportDataV1 = {
   notes: string[];
 };
 
+export type TestResultExportDataV2 = Omit<
+  TestResultExportDataV1,
+  "endTimeStamp"
+> & { lastUpdateTimeStamp: number; testingTime: number };
+
 export type TestResultExportDataV1 = {
   version: number;
   name: string;
@@ -206,13 +211,14 @@ export class ExportServiceImpl implements ExportService {
 
     const history = Object.fromEntries(historyEntries);
 
-    const data: TestResultExportDataV1 = {
-      version: 1,
+    const data: TestResultExportDataV2 = {
+      version: 2,
       name: testResult.name,
       sessionId: testResult.id,
       startTimeStamp: testResult.startTimeStamp,
-      endTimeStamp: testResult.endTimeStamp,
+      lastUpdateTimeStamp: testResult.lastUpdateTimeStamp,
       initialUrl: testResult.initialUrl,
+      testingTime: testResult.testingTime,
       history,
       notes,
       coverageSources: testResult.coverageSources,

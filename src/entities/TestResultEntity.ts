@@ -39,11 +39,14 @@ export class TestResultEntity {
   @Column({ name: "start_timestamp" })
   startTimestamp: number = 0;
 
-  @Column({ name: "end_timestamp" })
-  endTimestamp: number = 0;
+  @Column({ name: "last_update_timestamp" })
+  lastUpdateTimestamp: number = 0;
 
   @Column({ name: "initial_url" })
   initialUrl: string = "";
+
+  @Column({ name: "testing_time" })
+  testingTime: number = 0;
 
   @OneToMany(() => SessionEntity, (session) => session.testResult)
   sessions?: SessionEntity[];

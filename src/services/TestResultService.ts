@@ -120,7 +120,9 @@ export class TestResultServiceImpl implements TestResultService {
       : 0;
     const startTimestamp = body.startTimeStamp ?? createTimestamp;
 
-    const endTimestamp = -1;
+    const lastUpdateTimestamp = -1;
+
+    const testingTime = 0;
 
     const repository = getRepository(TestResultEntity);
 
@@ -129,8 +131,9 @@ export class TestResultServiceImpl implements TestResultService {
         body.name ??
         `session_${this.service.timestamp.format("YYYYMMDD_HHmmss")}`,
       startTimestamp,
-      endTimestamp,
+      lastUpdateTimestamp,
       initialUrl: body.initialUrl ?? "",
+      testingTime,
       testSteps: [],
       coverageSources: [],
       testPurposes: [],
@@ -349,8 +352,9 @@ export class TestResultServiceImpl implements TestResultService {
       id: testResultEntity.id,
       name: testResultEntity.name,
       startTimeStamp: testResultEntity.startTimestamp,
-      endTimeStamp: testResultEntity.endTimestamp,
+      lastUpdateTimeStamp: testResultEntity.lastUpdateTimestamp,
       initialUrl: testResultEntity.initialUrl,
+      testingTime: testResultEntity.testingTime,
       testSteps,
       coverageSources,
     };
