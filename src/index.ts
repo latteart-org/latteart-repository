@@ -66,6 +66,7 @@ import { TestProgressEntity } from "./entities/TestProgressEntity";
 import { AddTestProgressEntity1657768635961 } from "./migrations/1657768635961-AddTestProgressEntity";
 import { DeleteDefaultInputElementEntity1661223982605 } from "./migrations/1661223982605-DeleteDefaultInputElementEntity";
 import { UpdateTestStepEntity1666848612089 } from "./migrations/1666848612089-UpdateTestStepEntity";
+import { UpdateTestResultEntity1671087205573 } from "./migrations/1671087205573-UpdateTestResultEntity";
 
 LoggingService.initialize(
   new StandardLogger(
@@ -160,6 +161,7 @@ async function initializeOrmConnection(connectionName: string) {
       AddTestProgressEntity1657768635961,
       DeleteDefaultInputElementEntity1661223982605,
       UpdateTestStepEntity1666848612089,
+      UpdateTestResultEntity1671087205573,
     ],
   };
 
@@ -180,7 +182,7 @@ async function initializeOrmConnection(connectionName: string) {
   }
 
   const connection = await createConnection(options);
-
+  await connection.query("PRAGMA foreign_keys=OFF;");
   await connection.runMigrations().catch(async (error) => {
     LoggingService.error(error);
 
@@ -188,6 +190,7 @@ async function initializeOrmConnection(connectionName: string) {
 
     throw new Error(`Migration failed.`);
   });
+  await connection.query("PRAGMA foreign_keys=ON;");
 }
 
 function runServer(port: number, timeout?: number) {

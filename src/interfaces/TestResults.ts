@@ -37,8 +37,9 @@ interface TestResult {
   id: string;
   name: string;
   startTimeStamp: number;
-  endTimeStamp: number;
+  lastUpdateTimeStamp: number;
   initialUrl: string;
+  testingTime: number;
   testSteps: {
     id: string;
     operation: {

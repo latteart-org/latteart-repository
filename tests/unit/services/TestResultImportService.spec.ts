@@ -6,7 +6,7 @@ import os from "os";
 import { ImageFileRepositoryServiceImpl } from "@/services/ImageFileRepositoryService";
 import { ImportFileRepositoryServiceImpl } from "@/services/ImportFileRepositoryService";
 import { TimestampService } from "@/services/TimestampService";
-import { TestResultExportDataV1 } from "@/services/ExportService";
+import { TestResultExportDataV2 } from "@/services/ExportService";
 import { getRepository } from "typeorm";
 import { TestResultEntity } from "@/entities/TestResultEntity";
 import { TestStepEntity } from "@/entities/TestStepEntity";
@@ -116,13 +116,14 @@ describe("TestResultImportService", () => {
         testPurpose: testPurpose1.id,
         notes: [note1.id],
       };
-      const testResultExportData: TestResultExportDataV1 = {
-        version: 1,
+      const testResultExportData: TestResultExportDataV2 = {
+        version: 2,
         name: "testResultName",
         sessionId: "testResultId",
         startTimeStamp: 0,
-        endTimeStamp: 0,
+        lastUpdateTimeStamp: -1,
         initialUrl: "initialUrl",
+        testingTime: 0,
         history: { "1": historyItem1 },
         notes: [testPurpose1, note1],
         coverageSources: [
@@ -229,7 +230,7 @@ describe("TestResultImportService", () => {
       // TestResultの確認
       expect(testResultEntity.id).toEqual(result.newTestResultId);
 
-      expect(testResultEntity.endTimestamp).toEqual(-1);
+      expect(testResultEntity.lastUpdateTimestamp).toEqual(-1);
       expect(testResultEntity.initialUrl).toEqual(
         testResultExportData.initialUrl
       );
