@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/**
+ * Note data for new registration.
+ */
 export interface CreateNoteDto {
   type: string;
   value: string;
@@ -22,6 +25,9 @@ export interface CreateNoteDto {
   tags?: string[];
 }
 
+/**
+ * Note data for update.
+ */
 export interface UpdateNoteDto {
   type: string;
   value: string;
@@ -29,10 +35,24 @@ export interface UpdateNoteDto {
   tags?: string[];
 }
 
+/**
+ * Registered note data.
+ */
 export type CreateNoteResponse = Note;
+
+/**
+ * Note data for the specified ID.
+ */
 export type GetNoteResponse = Note;
+
+/**
+ * Updated note data.
+ */
 export type UpdateNoteResponse = Note;
 
+/**
+ * Note date.
+ */
 interface Note {
   id: string;
   type: string;

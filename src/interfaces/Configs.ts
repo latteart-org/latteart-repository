@@ -21,18 +21,39 @@ import {
   Coverage,
 } from "../lib/settings/Settings";
 
+/**
+ * Data for setting update.
+ */
 export type PutConfigDto = ExportableConfig;
 
+/**
+ * Updated configuration data.
+ */
 export type PutConfigResponse = ExportableConfig;
 
+/**
+ * Current setting data.
+ */
 export type GetConfigResponse = ExportableConfig;
 
+/**
+ * Configuration data for export.
+ */
 export type ExportableConfig = ProjectConfig;
 
+/**
+ * Settings added when exporting a snapshot.
+ */
 export type SnapshotConfig = { locale: string };
 
+/**
+ * Settings registered in the database.
+ */
 export type BackendConfig = ProjectConfig & ServerConfig;
 
+/**
+ * Settings for the server.
+ */
 type ServerConfig = {
   config: {
     imageCompression: {
@@ -44,6 +65,9 @@ type ServerConfig = {
   };
 };
 
+/**
+ * Project settings.
+ */
 export interface ProjectConfig {
   viewPointsPreset: Array<{
     id: string;

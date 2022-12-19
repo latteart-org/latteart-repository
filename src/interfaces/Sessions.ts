@@ -14,10 +14,24 @@
  * limitations under the License.
  */
 
+/**
+ * Registered session data.
+ */
 export type PostSessionResponse = Session;
+
+/**
+ * Updated session data.
+ */
 export type PatchSessionResponse = Session;
+
+/**
+ * Session ids.
+ */
 export type ListSessionResponse = string[];
 
+/**
+ * Session data for update.
+ */
 export interface PatchSessionDto {
   attachedFiles?: {
     name: string;
@@ -49,6 +63,9 @@ export interface PatchSessionDto {
   testingTime?: number;
 }
 
+/**
+ * Session.
+ */
 export type Session = {
   index: number;
   id: string;

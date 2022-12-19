@@ -14,25 +14,44 @@
  * limitations under the License.
  */
 
+/**
+ * Test result data for new registration.
+ */
 export interface CreateTestResultDto {
   initialUrl?: string;
   name?: string;
   startTimeStamp?: number;
 }
 
+/**
+ * Test result list record.
+ */
 export interface ListTestResultResponse {
   id: string;
   name: string;
 }
 
+/**
+ * Registered test result data.
+ */
 export interface CreateTestResultResponse {
   id: string;
   name: string;
 }
 
+/**
+ * Test result data for the specified ID.
+ */
 export type GetTestResultResponse = TestResult;
+
+/**
+ * Updated test result data.
+ */
 export type PatchTestResultResponse = TestResult;
 
+/**
+ * Test result.
+ */
 interface TestResult {
   id: string;
   name: string;

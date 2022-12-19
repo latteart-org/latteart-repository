@@ -16,12 +16,21 @@
 
 import { Session } from "./Sessions";
 
+/**
+ * Updated story data.
+ */
 export type PatchStoryResponse = Story;
 
+/**
+ * Data for story update.
+ */
 export interface PatchStoryDto {
   status?: string;
 }
 
+/**
+ * Story.
+ */
 export interface Story {
   id: string;
   testMatrixId: string;

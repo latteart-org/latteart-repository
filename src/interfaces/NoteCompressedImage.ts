@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/**
+ * Compressed image url.
+ */
 export interface CreateResponseDto {
   imageFileUrl: string;
 }

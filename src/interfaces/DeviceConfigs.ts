@@ -14,10 +14,24 @@
  * limitations under the License.
  */
 
+/**
+ * Device config data for update.
+ */
 export type PutDeviceConfigDto = DeviceConfigs;
+
+/**
+ * Updated device config data.
+ */
 export type PutDeviceConfigResponse = DeviceConfigs;
+
+/**
+ * Device config data for the specified ID.
+ */
 export type GetDeviceConfigResponse = DeviceConfigs;
 
+/**
+ * Device config.
+ */
 export interface DeviceConfigs {
   platformName: "PC" | "Android" | "iOS" | "";
   browser: "Chrome" | "Safari" | "Edge" | "";

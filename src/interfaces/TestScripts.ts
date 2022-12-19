@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/**
+ * Screen definition settings for test scripts.
+ */
 type TestResultViewOption = {
   node: {
     unit: "title" | "url";
@@ -28,10 +31,16 @@ type TestResultViewOption = {
   };
 };
 
+/**
+ * Settings for test scripts.
+ */
 export type TestScriptOption = {
   optimized: boolean;
   testData: { useDataDriven: boolean; maxGeneration: number };
   view: TestResultViewOption;
 };
 
+/**
+ * Settings for creating test scripts.
+ */
 export type CreateTestScriptDto = TestScriptOption;
