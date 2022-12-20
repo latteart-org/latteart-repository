@@ -32,6 +32,12 @@ import {
 
 @Route("test-results/{testResultId}/test-steps")
 export class TestStepsController extends Controller {
+  /**
+   * テストステップを作成する
+   * @param testResultId 対象のテスト結果ID
+   * @param requestBody キャプチャーしたテストステップ
+   * @returns 作成したテストステップ・カバレッジソース
+   */
   @Post()
   public async create(
     @Path() testResultId: string,
@@ -61,6 +67,12 @@ export class TestStepsController extends Controller {
     }
   }
 
+  /**
+   * テストステップを取得する
+   * @param testResultId 対象のテスト結果ID
+   * @param testStepId 対象のテストステップID
+   * @returns テストステップ
+   */
   @Get("{testStepId}")
   public async get(
     @Path() testResultId: string,
@@ -94,6 +106,13 @@ export class TestStepsController extends Controller {
     }
   }
 
+  /**
+   * テストステップの目的または気づきを指定のものに更新する
+   * @param testResultId 対象のテスト結果ID
+   * @param testStepId 対象のテストステップID
+   * @param requestBody テストステップの目的または気づき
+   * @returns 更新後のテストステップ
+   */
   @Patch("{testStepId}")
   public async patch(
     @Path() testResultId: string,

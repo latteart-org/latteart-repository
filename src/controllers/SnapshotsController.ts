@@ -43,11 +43,22 @@ import { SnapshotConfig } from "../interfaces/Configs";
 
 @Route("projects/{projectId}/snapshots")
 export class SnapshotsController extends Controller {
+  /**
+   * スナップショットのURLを取得する
+   * @param projectId 対象のプロジェクトID
+   * @returns 空配列
+   */
   @Get()
   public async get(@Path() projectId: string): Promise<string[]> {
     return this.createSnapshotsService().getSnapshotUrl(projectId);
   }
 
+  /**
+   * スナップショットを出力する
+   * @param projectId 対象のプロジェクトID
+   * @param snapshotConfig スナップショット出力時に追加する設定
+   * @returns 出力したスナップショットのダウンロードURL
+   */
   @Post()
   public async create(
     @Path() projectId: string,

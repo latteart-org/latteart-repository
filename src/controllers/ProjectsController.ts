@@ -29,6 +29,10 @@ import { ProjectsServiceImpl } from "../services/ProjectsService";
 
 @Route("projects")
 export class ProjectsController extends Controller {
+  /**
+   * プロジェクト一覧を取得する
+   * @returns プロジェクト一覧
+   */
   @Get()
   public async list(): Promise<ProjectListResponse[]> {
     return new ProjectsServiceImpl(
@@ -40,6 +44,10 @@ export class ProjectsController extends Controller {
     ).getProjectIdentifiers();
   }
 
+  /**
+   * プロジェクトを作成する
+   * @returns 作成したプロジェクトIDとプロジェクト名
+   */
   @Post()
   public async create(): Promise<{ id: string; name: string }> {
     try {
@@ -62,6 +70,11 @@ export class ProjectsController extends Controller {
     }
   }
 
+  /**
+   * プロジェクト情報を取得する
+   * @param projectId 対象のプロジェクトID
+   * @returns プロジェクト情報
+   */
   @Get("{projectId}")
   public async get(@Path() projectId: string): Promise<GetProjectResponse> {
     try {
@@ -85,6 +98,13 @@ export class ProjectsController extends Controller {
     }
   }
 
+  /**
+   * プロジェクト内の指定期間内にあるテスト進捗情報を取得する
+   * @param projectId 対象のプロジェクトID
+   * @param since 開始日
+   * @param until 終了日
+   * @returns テスト進捗情報
+   */
   @Get("{projectId}/progress")
   public async getTestProgress(
     @Path() projectId: string,

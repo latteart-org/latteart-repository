@@ -29,6 +29,12 @@ import { ServerErrorCode, ServerError } from "@/ServerError";
 
 @Route("test-results/{testResultId}/test-steps/{testStepId}/compressed-image")
 export class CompressedImageController extends Controller {
+  /**
+   * スクリーンショットの画像を圧縮する
+   * @param testResultId 対象のテスト結果ID
+   * @param testStepId 対象のテストステップID
+   * @returns 圧縮した画像のURL
+   */
   @Post()
   public async create(
     @Path() testResultId: string,

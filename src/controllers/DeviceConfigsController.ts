@@ -21,6 +21,11 @@ import { ConfigsService } from "../services/ConfigsService";
 
 @Route("projects/{projectId}/device-configs")
 export class DeviceConfigsController {
+  /**
+   * プロジェクトのデバイス設定を取得する
+   * @param projectId 対象のプロジェクトID
+   * @returns プロジェクトのデバイス設定
+   */
   @Get()
   public async get(@Path() projectId: string): Promise<any> {
     try {
@@ -37,6 +42,12 @@ export class DeviceConfigsController {
     }
   }
 
+  /**
+   * プロジェクトのデバイス設定を指定のものに更新する
+   * @param projectId 対象のプロジェクトID
+   * @param requestBody デバイス設定
+   * @returns 更新後のデバイス設定
+   */
   @Put()
   public async update(
     @Path() projectId: string,

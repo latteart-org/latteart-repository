@@ -35,6 +35,10 @@ import { TestResultServiceImpl } from "../services/TestResultService";
 
 @Route("test-results")
 export class TestResultsController extends Controller {
+  /**
+   * テスト結果一覧を取得する
+   * @returns テスト結果一覧
+   */
   @Get()
   public async list(): Promise<ListTestResultResponse[]> {
     console.log("TestResultsController - getTestResults");
@@ -54,6 +58,11 @@ export class TestResultsController extends Controller {
     }).getTestResultIdentifiers();
   }
 
+  /**
+   * テスト結果を取得する
+   * @param testResultId 対象のテスト結果ID
+   * @returns テスト結果
+   */
   @Get("{testResultId}")
   public async get(
     @Path() testResultId: string
@@ -98,6 +107,11 @@ export class TestResultsController extends Controller {
     });
   }
 
+  /**
+   * テスト結果を作成する
+   * @param requestBody テスト対象URL・テスト結果名・テスト開始日時
+   * @returns 作成したテスト結果ID・テスト結果名
+   */
   @Post()
   public async create(
     @Body() requestBody: CreateTestResultDto
@@ -132,6 +146,12 @@ export class TestResultsController extends Controller {
     }
   }
 
+  /**
+   * テスト結果を指定のものに更新する
+   * @param testResultId 対象のテスト結果ID
+   * @param requestBody テスト結果名・テスト開始日時・テスト対象URL
+   * @returns 更新後のテスト結果
+   */
   @Patch("{testResultId}")
   public async patch(
     @Path() testResultId: string,
@@ -168,6 +188,12 @@ export class TestResultsController extends Controller {
       throw error;
     }
   }
+
+  /**
+   * テスト結果を削除する
+   * @param testResultId 対象のテスト結果ID
+   * @returns なし
+   */
   @Delete("{testResultId}")
   public async delete(@Path() testResultId: string): Promise<void> {
     const timestampService = new TimestampServiceImpl();
@@ -199,6 +225,12 @@ export class TestResultsController extends Controller {
       throw error;
     }
   }
+
+  /**
+   * テスト結果に紐づくセッションIDを取得する
+   * @param testResultId 対象のテスト結果ID
+   * @returns テスト結果に紐づくセッションID
+   */
   @Get("{testResultId}/sessions")
   public async getSessionList(
     @Path() testResultId: string

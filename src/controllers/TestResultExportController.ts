@@ -33,6 +33,12 @@ import { CreateTestResultExportDto } from "../interfaces/TestResultExport";
 
 @Route("test-results/{testResultId}/export")
 export class TestResultExportController extends Controller {
+  /**
+   * テスト結果をエクスポートする
+   * @param testResultId 対象のテスト結果ID
+   * @param requestBody エクスポートするテスト結果のディレクトリ
+   * @returns エクスポートしたテスト結果のダウンロードURL
+   */
   @Post()
   public async create(
     @Path() testResultId: string,

@@ -37,6 +37,11 @@ import { ImportFileRepositoryServiceImpl } from "@/services/ImportFileRepository
 
 @Route("imports/projects")
 export class ProjectImportController extends Controller {
+  /**
+   * プロジェクト情報・テスト結果情報をインポートする
+   * @param requestBody インポートするプロジェクト情報・テスト結果情報
+   * @returns インポートしたプロジェクトID
+   */
   @Post()
   public async create(
     @Body() requestBody: CreateProjectImportDto

@@ -37,6 +37,12 @@ import { TestProgressServiceImpl } from "@/services/TestProgressService";
 
 @Route("projects/{projectId}/export")
 export class ProjectExportController extends Controller {
+  /**
+   * プロジェクト情報・テスト結果情報をエクスポートする
+   * @param projectId 対象のプロジェクトID
+   * @param requestBody エクスポート対象のフラグ
+   * @returns エクスポートしたプロジェクト情報・テスト結果情報のダウンロードURL
+   */
   @Post()
   public async create(
     @Path() projectId: string,
