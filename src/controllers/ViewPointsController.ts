@@ -78,7 +78,7 @@ export class ViewPointsController extends Controller {
   }
 
   /**
-   * テスト観点を指定したものに更新する
+   * テスト観点の一部情報を指定したものに更新する
    * @param viewPointId 対象のテスト観点ID
    * @param body テスト観点
    * @returns 更新後のテスト観点
@@ -106,7 +106,6 @@ export class ViewPointsController extends Controller {
   /**
    * テスト観点を削除する
    * @param viewPointId 対象のテスト観点ID
-   * @returns なし
    */
   @Delete("{viewPointId}")
   public async delete(@Path() viewPointId: string): Promise<void> {

@@ -33,10 +33,10 @@ import {
 @Route("test-results/{testResultId}/test-steps")
 export class TestStepsController extends Controller {
   /**
-   * テストステップを作成する
+   * 指定の操作をテストステップとして追加する
    * @param testResultId 対象のテスト結果ID
-   * @param requestBody キャプチャーしたテストステップ
-   * @returns 作成したテストステップ・カバレッジソース
+   * @param requestBody 操作
+   * @returns 追加したテストステップ
    */
   @Post()
   public async create(

@@ -27,6 +27,7 @@ export class SnapshotsService {
     }
   ) {}
 
+  // 削除する
   public async getSnapshotUrl(projectId: string): Promise<string[]> {
     console.log(projectId);
     return [];

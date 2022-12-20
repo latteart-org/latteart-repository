@@ -36,7 +36,7 @@ export class TestResultExportController extends Controller {
   /**
    * テスト結果をエクスポートする
    * @param testResultId 対象のテスト結果ID
-   * @param requestBody エクスポートするテスト結果のディレクトリ
+   * @param requestBody エクスポート設定
    * @returns エクスポートしたテスト結果のダウンロードURL
    */
   @Post()

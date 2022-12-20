@@ -32,13 +32,11 @@ import { TestStepServiceImpl } from "@/services/TestStepService";
 import { ConfigsService } from "@/services/ConfigsService";
 import { NotesServiceImpl } from "@/services/NotesService";
 import { TestPurposeServiceImpl } from "@/services/TestPurposeService";
-import { TestResultImportService } from "@/services/TestResultImportService";
-import { ImportFileRepositoryServiceImpl } from "@/services/ImportFileRepositoryService";
 
 @Route("imports/projects")
 export class ProjectImportController extends Controller {
   /**
-   * プロジェクト情報・テスト結果情報をインポートする
+   * 指定のプロジェクト情報とテスト結果情報をリポジトリにインポートする
    * @param requestBody インポートするプロジェクト情報・テスト結果情報
    * @returns インポートしたプロジェクトID
    */

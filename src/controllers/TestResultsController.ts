@@ -147,7 +147,7 @@ export class TestResultsController extends Controller {
   }
 
   /**
-   * テスト結果を指定のものに更新する
+   * テスト結果の一部情報を指定のものに更新する
    * @param testResultId 対象のテスト結果ID
    * @param requestBody テスト結果名・テスト開始日時・テスト対象URL
    * @returns 更新後のテスト結果
@@ -192,7 +192,6 @@ export class TestResultsController extends Controller {
   /**
    * テスト結果を削除する
    * @param testResultId 対象のテスト結果ID
-   * @returns なし
    */
   @Delete("{testResultId}")
   public async delete(@Path() testResultId: string): Promise<void> {
@@ -227,9 +226,9 @@ export class TestResultsController extends Controller {
   }
 
   /**
-   * テスト結果に紐づくセッションIDを取得する
+   * テスト結果に紐づくセッションID一覧を取得する
    * @param testResultId 対象のテスト結果ID
-   * @returns テスト結果に紐づくセッションID
+   * @returns テスト結果に紐づくセッションID一覧
    */
   @Get("{testResultId}/sessions")
   public async getSessionList(

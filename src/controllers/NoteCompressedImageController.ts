@@ -34,7 +34,7 @@ export class NoteCompressedImageController extends Controller {
    * 気づきのスクリーンショットの画像を圧縮する
    * @param testResultId 対象のテスト結果ID
    * @param noteId 対象の気づきID
-   * @returns 圧縮した画像のURL
+   * @returns 圧縮後の画像のURL
    */
   @Post()
   public async create(

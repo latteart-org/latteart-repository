@@ -44,7 +44,7 @@ import { SnapshotConfig } from "../interfaces/Configs";
 @Route("projects/{projectId}/snapshots")
 export class SnapshotsController extends Controller {
   /**
-   * スナップショットのURLを取得する
+   * スナップショットのURLを取得する  削除する
    * @param projectId 対象のプロジェクトID
    * @returns 空配列
    */

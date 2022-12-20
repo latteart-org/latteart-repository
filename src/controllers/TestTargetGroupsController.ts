@@ -28,9 +28,9 @@ import { transactionRunner } from "..";
 @Route("/test-target-groups/")
 export class TestTargetGroupsController extends Controller {
   /**
-   * テストターゲットグループを取得する
-   * @param testTargetGroupId 対象のテストターゲットグループID
-   * @returns テストターゲットグループ
+   * テスト対象グループを取得する
+   * @param testTargetGroupId 対象のテスト対象グループID
+   * @returns テスト対象グループ
    */
   @Get("{testTargetGroupId}")
   public async get(
@@ -51,9 +51,9 @@ export class TestTargetGroupsController extends Controller {
   }
 
   /**
-   * テストターゲットグループを作成する
-   * @param body 対象のテストマトリクスID・テストターゲットグループ名
-   * @returns 作成したテストターゲットグループ
+   * テスト対象グループを作成する
+   * @param body 対象のテストマトリクスID・テスト対象グループ名
+   * @returns 作成したテスト対象グループ
    */
   @Post()
   public async post(
@@ -74,10 +74,10 @@ export class TestTargetGroupsController extends Controller {
   }
 
   /**
-   * テストターゲットグループを指定したものに更新する
-   * @param testTargetGroupId 対象のテストターゲットグループID
-   * @param body テストターゲットグループ名
-   * @returns 更新後のテストターゲットグループ
+   * テスト対象グループの一部情報を指定したものに更新する
+   * @param testTargetGroupId 対象のテスト対象グループID
+   * @param body テスト対象グループ名
+   * @returns 更新後のテスト対象グループ
    */
   @Patch("{testTargetGroupId}")
   public async patch(
@@ -99,9 +99,8 @@ export class TestTargetGroupsController extends Controller {
   }
 
   /**
-   * テストターゲットグループを削除する
-   * @param testTargetGroupId 対象のテストターゲットグループID
-   * @returns なし
+   * テスト対象グループを削除する
+   * @param testTargetGroupId 対象のテスト対象グループID
    */
   @Delete("{testTargetGroupId}")
   public async delete(@Path() testTargetGroupId: string): Promise<void> {

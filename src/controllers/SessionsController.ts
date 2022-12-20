@@ -31,7 +31,7 @@ import { SessionsService } from "../services/SessionsService";
 @Route("projects/{projectId}/sessions")
 export class SessionsController extends Controller {
   /**
-   * セッションを作成する
+   * 指定のストーリーにセッションを作成する
    * @param projectId 対象のプロジェクトID
    * @param requestBody 対象のストーリーID
    * @returns 作成したセッション
@@ -60,7 +60,7 @@ export class SessionsController extends Controller {
   }
 
   /**
-   * セッションを指定したものに更新する
+   * セッションの一部情報を指定したものに更新する
    * @param projectId 対象のプロジェクトID
    * @param sessionId 対処のセッションID
    * @param requestBody セッション
@@ -103,7 +103,6 @@ export class SessionsController extends Controller {
    * セッションを削除する
    * @param projectId 対象のプロジェクトID
    * @param sessionId 対象のセッションID
-   * @returns なし
    */
   @Delete("{sessionId}")
   public async delete(

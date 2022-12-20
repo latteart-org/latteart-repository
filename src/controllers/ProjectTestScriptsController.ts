@@ -31,10 +31,10 @@ import { TestScriptsService } from "../services/TestScriptsService";
 @Route("projects/{projectId}/test-scripts")
 export class ProjectTestScriptsController extends Controller {
   /**
-   * テストスクリプトを出力する
+   * 指定のプロジェクトのすべてのセッションを元にテストスクリプトを出力する
    * @param projectId 対象のプロジェクトID
-   * @param requestBody テストスクリプト作成条件
-   * @returns 出力したテストスクリプトファイルのダウンロードURLと無効な操作タイプの存在フラグ
+   * @param requestBody テストスクリプト出力設定
+   * @returns 出力したテストスクリプトファイルの情報
    */
   @Post()
   public async create(

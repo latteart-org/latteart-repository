@@ -33,7 +33,7 @@ import { NotesServiceImpl } from "../services/NotesService";
 @Route("test-results/{testResultId}/notes")
 export class NotesController extends Controller {
   /**
-   * 目的または気づきを登録する
+   * テスト結果に目的または気づきを登録する
    * @param testResultId 対象のテスト結果ID
    * @param requestBody 目的または気づき
    * @returns 登録した目的または気づき
@@ -83,10 +83,10 @@ export class NotesController extends Controller {
   }
 
   /**
-   * 気づきを取得する
+   * ノート(目的または気づき)を取得する
    * @param testResultId 対象のテスト結果ID
-   * @param noteId 対象の気づきID
-   * @returns 気づき
+   * @param noteId 対象のノートID
+   * @returns 目的または気づき
    */
   @Get("{noteId}")
   public async get(
@@ -136,9 +136,9 @@ export class NotesController extends Controller {
   }
 
   /**
-   * 目的または気づきを指定のものに更新する
+   * ノート（目的または気づき）を指定のものに更新する
    * @param testResultId 対象のテスト結果ID
-   * @param noteId 対象の気づきID
+   * @param noteId 対象のノートID
    * @param requestBody 目的または気づき
    * @returns 更新後の目的または気づき
    */
@@ -197,10 +197,9 @@ export class NotesController extends Controller {
   }
 
   /**
-   * 目的または気づきを削除する
+   * ノート（目的または気づき）を削除する
    * @param testResultId 対象のテスト結果ID
-   * @param noteId 対象の気づきID
-   * @returns なし
+   * @param noteId 対象のノートID
    */
   @Delete("{noteId}")
   public async delete(

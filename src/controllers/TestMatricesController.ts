@@ -74,7 +74,7 @@ export class TestMatricesController extends Controller {
   }
 
   /**
-   * テストマトリクスを指定したものに更新する
+   * テストマトリクスの一部情報を指定したものに更新する
    * @param testMatrixId 対象のテストマトリクスID
    * @param body テストマトリクス名
    * @returns 更新後のテストマトリクス
@@ -101,7 +101,6 @@ export class TestMatricesController extends Controller {
   /**
    * テストマトリクスを削除する
    * @param testMatrixId 対象のテストマトリクスID
-   * @returns なし
    */
   @Delete("{testMatrixId}")
   public async delete(@Path() testMatrixId: string): Promise<void> {
