@@ -18,7 +18,7 @@ import LoggingService from "@/logger/LoggingService";
 import { ServerErrorCode, ServerError } from "@/ServerError";
 import { TestProgressServiceImpl } from "@/services/TestProgressService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
-import { Controller, Body, Get, Put, Post, Route, Path, Query } from "tsoa";
+import { Controller, Get, Post, Route, Path, Query } from "tsoa";
 import { transactionRunner } from "..";
 import {
   ProjectListResponse,

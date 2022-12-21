@@ -18,11 +18,6 @@ import { BackendConfig, PutConfigDto } from "../interfaces/Configs";
 import { getRepository } from "typeorm";
 import { ConfigEntity } from "../entities/ConfigEntity";
 import { SettingsUtility } from "../lib/settings/SettingsUtility";
-import {
-  GetDeviceConfigResponse,
-  PutDeviceConfigDto,
-  PutDeviceConfigResponse,
-} from "@/interfaces/DeviceConfigs";
 
 export class ConfigsService {
   private static imageCompressionCommand = "";
@@ -31,13 +26,6 @@ export class ConfigsService {
     const configEntity = await this.getConfigSource(projectId);
     const config = JSON.parse(configEntity.text) as BackendConfig;
     return config;
-  }
-
-  public async getDeviceConfig(
-    projectId: string
-  ): Promise<GetDeviceConfigResponse> {
-    const configEntity = await this.getConfigSource(projectId);
-    return JSON.parse(configEntity.deviceText);
   }
 
   public async updateConfig(
@@ -69,20 +57,6 @@ export class ConfigsService {
     return savedConfig;
   }
 
-  public async updateDeviceConfig(
-    projectId: string,
-    requestBody: PutDeviceConfigDto
-  ): Promise<PutDeviceConfigResponse> {
-    const configEntity = await this.getConfigSource(projectId);
-    configEntity.deviceText = JSON.stringify(requestBody);
-
-    const savedConfig = await getRepository(ConfigEntity).save(configEntity);
-
-    return JSON.parse(
-      savedConfig.deviceText
-    ) as unknown as PutDeviceConfigResponse;
-  }
-
   private async getConfigSource(projectId: string): Promise<ConfigEntity> {
     const configRepository = getRepository(ConfigEntity);
     let config = await configRepository.find();
@@ -91,8 +65,23 @@ export class ConfigsService {
       ConfigsService.imageCompressionCommand =
         settings.config.imageCompression.command;
       console.log(settings);
-      const deviceSettings = SettingsUtility.deviceSettingsProvider.settings;
-      console.log(deviceSettings);
+      const deviceSettings = {
+        config: {
+          platformName: "PC",
+          browser: "Chrome",
+          device: {
+            deviceName: "",
+            modelNumber: "",
+            osVersion: "",
+          },
+          platformVersion: "",
+          waitTimeForStartupReload: 0,
+          executablePaths: {
+            browser: "",
+            driver: "",
+          },
+        },
+      };
 
       const newConfig = new ConfigEntity();
       newConfig.projectId = projectId;

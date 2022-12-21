@@ -27,7 +27,7 @@ import { TestPurposeServiceImpl } from "@/services/TestPurposeService";
 import { TestResultServiceImpl } from "@/services/TestResultService";
 import { TestStepServiceImpl } from "@/services/TestStepService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
-import { Controller, Get, Post, Route, Path, Body } from "tsoa";
+import { Controller, Post, Route, Path, Body } from "tsoa";
 import {
   attachedFileDirectoryService,
   screenshotDirectoryService,
@@ -43,16 +43,6 @@ import { SnapshotConfig } from "../interfaces/Configs";
 
 @Route("projects/{projectId}/snapshots")
 export class SnapshotsController extends Controller {
-  /**
-   * スナップショットのURLを取得する  削除する
-   * @param projectId 対象のプロジェクトID
-   * @returns 空配列
-   */
-  @Get()
-  public async get(@Path() projectId: string): Promise<string[]> {
-    return this.createSnapshotsService().getSnapshotUrl(projectId);
-  }
-
   /**
    * スナップショットを出力する
    * @param projectId 対象のプロジェクトID
