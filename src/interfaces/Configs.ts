@@ -21,24 +21,30 @@ import {
   Coverage,
 } from "../lib/settings/Settings";
 
-export type PutConfigDto = Config;
+export type PutConfigDto = ExportableConfig;
 
-export type PutConfigResponse = Config;
+export type PutConfigResponse = ExportableConfig;
 
-export type GetConfigResponse = Config;
+export type GetConfigResponse = ExportableConfig;
 
-export interface Config {
-  locale: string;
-  mode: string;
-  debug: {
-    outputs: {
-      dom: boolean;
+export type ExportableConfig = ProjectConfig;
+
+export type SnapshotConfig = { locale: string };
+
+export type BackendConfig = ProjectConfig & ServerConfig;
+
+type ServerConfig = {
+  config: {
+    imageCompression: {
+      command: string;
     };
-    saveItems: {
-      keywordSet: boolean;
-    };
-    configureCaptureSettings: boolean;
   };
+  captureSettings: {
+    ignoreTags: string[];
+  };
+};
+
+export interface ProjectConfig {
   viewPointsPreset: Array<{
     id: string;
     name: string;
@@ -54,8 +60,5 @@ export interface Config {
       isEnabled: boolean;
       isDeleteSrcImage: boolean;
     };
-  };
-  captureSettings: {
-    ignoreTags: string[];
   };
 }

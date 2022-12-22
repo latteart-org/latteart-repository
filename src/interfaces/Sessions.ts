@@ -16,6 +16,7 @@
 
 export type PostSessionResponse = Session;
 export type PatchSessionResponse = Session;
+export type ListSessionResponse = string[];
 
 export interface PatchSessionDto {
   attachedFiles?: {

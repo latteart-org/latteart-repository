@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { SnapshotConfig } from "@/interfaces/Configs";
 import { CreateResponse } from "@/interfaces/Snapshots";
 import { ProjectsServiceImpl } from "./ProjectsService";
 import { SnapshotFileRepositoryService } from "./SnapshotFileRepositoryService";
@@ -31,12 +32,18 @@ export class SnapshotsService {
     return [];
   }
 
-  public async createSnapshot(projectId: string): Promise<CreateResponse> {
+  public async createSnapshot(
+    projectId: string,
+    snapshotConfig: SnapshotConfig
+  ): Promise<CreateResponse> {
     console.log(projectId);
 
     const project = await this.service.project.getProject(projectId);
 
-    const url = await this.service.snapshotFileRepository.write(project);
+    const url = await this.service.snapshotFileRepository.write(
+      project,
+      snapshotConfig
+    );
 
     return {
       url,

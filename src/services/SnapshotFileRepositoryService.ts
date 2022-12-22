@@ -29,9 +29,11 @@ import { TestPurposeServiceImpl } from "./TestPurposeService";
 import { ImageFileRepositoryService } from "./ImageFileRepositoryService";
 import { IssueReportService } from "./IssueReportService";
 import { DailyTestProgress, TestProgressService } from "./TestProgressService";
+import { SnapshotConfig } from "@/interfaces/Configs";
+import { convertToExportableConfig } from "@/lib/settings/settingsConverter";
 
 export interface SnapshotFileRepositoryService {
-  write(project: Project): Promise<string>;
+  write(project: Project, snapshotConfig: SnapshotConfig): Promise<string>;
 }
 
 export class SnapshotFileRepositoryServiceImpl
@@ -61,8 +63,14 @@ export class SnapshotFileRepositoryServiceImpl
     }
   ) {}
 
-  public async write(project: Project): Promise<string> {
-    const tmpProjectDirectoryPath = await this.outputProject(project);
+  public async write(
+    project: Project,
+    snapshotConfig: SnapshotConfig
+  ): Promise<string> {
+    const tmpProjectDirectoryPath = await this.outputProject(
+      project,
+      snapshotConfig.locale
+    );
 
     const zipFilePath = await new FileArchiver(tmpProjectDirectoryPath, {
       deleteSource: true,
@@ -74,14 +82,14 @@ export class SnapshotFileRepositoryServiceImpl
     return this.service.staticDirectory.getFileUrl(destPath);
   }
 
-  private async outputProject(project: Project) {
+  private async outputProject(project: Project, locale: string) {
     const timestamp = this.service.timestamp.format("YYYYMMDD_HHmmss");
 
     const tmpDirPath = await fs.mkdtemp(path.join(os.tmpdir(), "latteart-"));
 
     const outputDirectoryPath = path.join(tmpDirPath, `snapshot_${timestamp}`);
 
-    await this.writeSnapshot(project, outputDirectoryPath);
+    await this.writeSnapshot(project, outputDirectoryPath, locale);
 
     // Report output
     await this.service.issueReport.writeReport(project, outputDirectoryPath);
@@ -91,7 +99,8 @@ export class SnapshotFileRepositoryServiceImpl
 
   private async writeSnapshot(
     project: Project,
-    outputDirPath: string
+    outputDirPath: string,
+    locale: string
   ): Promise<void> {
     const stories = await this.buildStoriesForSnapshot(project);
 
@@ -109,7 +118,7 @@ export class SnapshotFileRepositoryServiceImpl
     const destDataDirPath = path.join(outputDirPath, "data");
 
     // output config file
-    await this.outputConfigFile(destDataDirPath);
+    await this.outputConfigFile(destDataDirPath, locale);
 
     // output project file
     await this.outputProjectFile(destDataDirPath, projectData);
@@ -141,7 +150,7 @@ export class SnapshotFileRepositoryServiceImpl
 
     // output progress file
     const dailyProgresses =
-      await this.service.testProgress.collectDailyTestProgresses(
+      await this.service.testProgress.collectStoryDailyTestProgresses(
         stories.map((story) => story.id)
       );
     await this.outputTestProgressFile(destDataDirPath, dailyProgresses);
@@ -250,6 +259,7 @@ export class SnapshotFileRepositoryServiceImpl
           inputElements: testStep.operation.inputElements,
           windowHandle: testStep.operation.windowHandle,
           keywordTexts: testStep.operation.keywordTexts,
+          isAutomatic: testStep.operation.isAutomatic,
         };
 
         await this.copyScreenshot(
@@ -521,10 +531,14 @@ export class SnapshotFileRepositoryServiceImpl
     }
   }
 
-  private async outputConfigFile(outputDirPath: string) {
-    const settingsData = JSON.stringify(
-      await this.service.config.getConfig("")
-    );
+  private async outputConfigFile(outputDirPath: string, locale: string) {
+    const tempConfig = await this.service.config.getConfig("");
+    const config = convertToExportableConfig(tempConfig);
+    const configWithLocale = {
+      ...config,
+      locale,
+    };
+    const settingsData = JSON.stringify(configWithLocale);
     await fs.outputFile(
       path.join(outputDirPath, "latteart.config.js"),
       `const settings = ${settingsData}`,

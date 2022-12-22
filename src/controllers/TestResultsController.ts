@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
+import { ListSessionResponse } from "../interfaces/Sessions";
 import LoggingService from "@/logger/LoggingService";
 import { ServerErrorCode, ServerError } from "@/ServerError";
 import { ConfigsService } from "@/services/ConfigsService";
 import { ImageFileRepositoryServiceImpl } from "@/services/ImageFileRepositoryService";
+import { SessionsService } from "@/services/SessionsService";
 import { TestStepServiceImpl } from "@/services/TestStepService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
 import { Controller, Get, Post, Patch, Route, Path, Body, Delete } from "tsoa";
@@ -196,5 +198,13 @@ export class TestResultsController extends Controller {
       }
       throw error;
     }
+  }
+  @Get("{testResultId}/sessions")
+  public async getSessionList(
+    @Path() testResultId: string
+  ): Promise<ListSessionResponse> {
+    console.log("TestResultsController - getSessionIds");
+
+    return new SessionsService().getSessionIdentifiers(testResultId);
   }
 }

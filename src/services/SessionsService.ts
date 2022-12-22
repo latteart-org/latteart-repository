@@ -19,19 +19,25 @@ import { SessionEntity } from "@/entities/SessionEntity";
 import { StoryEntity } from "@/entities/StoryEntity";
 import { TestResultEntity } from "@/entities/TestResultEntity";
 import {
+  ListSessionResponse,
   PatchSessionDto,
   PatchSessionResponse,
   PostSessionResponse,
   Session,
 } from "@/interfaces/Sessions";
 import { sessionEntityToResponse } from "@/lib/entityToResponse";
+import { TransactionRunner } from "@/TransactionRunner";
 import { getRepository } from "typeorm";
 import { ImageFileRepositoryService } from "./ImageFileRepositoryService";
 import { TestProgressServiceImpl } from "./TestProgressService";
 import { TimestampService } from "./TimestampService";
 
 export class SessionsService {
-  public async postSession(storyId: string): Promise<PostSessionResponse> {
+  public async postSession(
+    projectId: string,
+    storyId: string,
+    transactionRunner: TransactionRunner
+  ): Promise<PostSessionResponse> {
     const storyRepository = getRepository(StoryEntity);
     const story = await storyRepository.findOne(storyId, {
       relations: ["sessions"],
@@ -53,7 +59,9 @@ export class SessionsService {
       })
     );
 
-    await new TestProgressServiceImpl().registerTestProgresses(story.id);
+    await new TestProgressServiceImpl(
+      transactionRunner
+    ).saveTodayTestProgresses(projectId, storyId);
 
     return await this.entityToResponse(session.id);
   }
@@ -65,7 +73,8 @@ export class SessionsService {
     service: {
       timestampService: TimestampService;
       imageFileRepositoryService: ImageFileRepositoryService;
-    }
+    },
+    transactionRunner: TransactionRunner
   ): Promise<PatchSessionResponse> {
     const sessionRepository = getRepository(SessionEntity);
     const updateTargetSession = await sessionRepository.findOne(sessionId, {
@@ -120,21 +129,41 @@ export class SessionsService {
     }
     const result = await sessionRepository.save(updateTargetSession);
 
-    await new TestProgressServiceImpl().registerTestProgresses(result.story.id);
+    await new TestProgressServiceImpl(
+      transactionRunner
+    ).saveTodayTestProgresses(projectId, result.story.id);
 
     return await this.entityToResponse(result.id);
   }
 
-  public async deleteSession(sessionId: string): Promise<void> {
+  public async deleteSession(
+    projectId: string,
+    sessionId: string,
+    transactionRunner: TransactionRunner
+  ): Promise<void> {
     const sessionRepository = getRepository(SessionEntity);
     const storyId = (
       await sessionRepository.findOneOrFail(sessionId, { relations: ["story"] })
     ).story.id;
     await sessionRepository.delete(sessionId);
 
-    await new TestProgressServiceImpl().registerTestProgresses(storyId);
+    await new TestProgressServiceImpl(
+      transactionRunner
+    ).saveTodayTestProgresses(projectId, storyId);
 
     return;
+  }
+
+  public async getSessionIdentifiers(
+    testResultId: string
+  ): Promise<ListSessionResponse> {
+    const sessionEntities = await getRepository(SessionEntity).find({
+      testResult: { id: testResultId },
+    });
+
+    return sessionEntities.map((session) => {
+      return session.id;
+    });
   }
 
   private async updateAttachedFiles(

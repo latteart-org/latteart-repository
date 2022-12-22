@@ -28,6 +28,9 @@ import {
   unixtimeToFormattedString,
 } from "@/lib/timeUtil";
 import { TestTargetEntity } from "@/entities/TestTargetEntity";
+import { ProjectsServiceImpl } from "./ProjectsService";
+import { TimestampServiceImpl } from "./TimestampService";
+import { TransactionRunner } from "@/TransactionRunner";
 
 export type DailyTestProgress = {
   date: string;
@@ -44,17 +47,33 @@ export type DailyTestProgress = {
 };
 
 export interface TestProgressService {
-  registerTestProgresses(...storyIds: string[]): Promise<void>;
+  registerStoryTestProgresses(...storyIds: string[]): Promise<void>;
 
-  collectDailyTestProgresses(
+  registerProjectTestProgresses(projectId: string): Promise<void>;
+
+  saveTodayTestProgresses(
+    projectId: string,
+    ...storyIds: string[]
+  ): Promise<void>;
+
+  collectStoryDailyTestProgresses(
     storyIds: string[],
+    filter?: { since?: number; until?: number }
+  ): Promise<DailyTestProgress[]>;
+
+  collectProjectDailyTestProgresses(
+    projectId: string,
     filter?: { since?: number; until?: number }
   ): Promise<DailyTestProgress[]>;
 }
 
 export class TestProgressServiceImpl implements TestProgressService {
-  public async registerTestProgresses(...storyIds: string[]): Promise<void> {
-    const stories = await Promise.all(
+  constructor(private transactionRunner: TransactionRunner) {}
+
+  public async registerStoryTestProgresses(
+    ...storyIds: string[]
+  ): Promise<void> {
+    const storyProgresses = await Promise.all(
       storyIds.map(async (storyId) => {
         const storyRepository = getRepository(StoryEntity);
         const story = await storyRepository.findOneOrFail(storyId, {
@@ -87,10 +106,37 @@ export class TestProgressServiceImpl implements TestProgressService {
 
     const testProgressRepository = getRepository(TestProgressEntity);
 
-    await testProgressRepository.save(stories);
+    await testProgressRepository.save(storyProgresses);
   }
 
-  public async collectDailyTestProgresses(
+  public async registerProjectTestProgresses(projectId: string): Promise<void> {
+    const project = await new ProjectsServiceImpl(
+      {
+        timestamp: new TimestampServiceImpl(),
+        testProgress: this,
+      },
+      this.transactionRunner
+    ).getProject(projectId);
+
+    const storyIds = project.stories.map((story) => story.id);
+
+    return await this.registerStoryTestProgresses(...storyIds);
+  }
+
+  public async saveTodayTestProgresses(
+    projectId: string,
+    ...storyIds: string[]
+  ): Promise<void> {
+    const targetEntities = await this.collectUpdateTargetEntities(...storyIds);
+
+    if (targetEntities.length > 0) {
+      await getRepository(TestProgressEntity).save(targetEntities);
+    } else {
+      await this.registerProjectTestProgresses(projectId);
+    }
+  }
+
+  public async collectStoryDailyTestProgresses(
     storyIds: string[],
     filter: { since?: number; until?: number } = {}
   ): Promise<DailyTestProgress[]> {
@@ -156,5 +202,91 @@ export class TestProgressServiceImpl implements TestProgressService {
         }),
       };
     });
+  }
+
+  public async collectProjectDailyTestProgresses(
+    projectId: string,
+    filter: { since?: number; until?: number } = {}
+  ): Promise<DailyTestProgress[]> {
+    const project = await new ProjectsServiceImpl(
+      {
+        timestamp: new TimestampServiceImpl(),
+        testProgress: this,
+      },
+      this.transactionRunner
+    ).getProject(projectId);
+
+    const storyIds = project.stories.map((story) => story.id);
+
+    return await this.collectStoryDailyTestProgresses(storyIds, filter);
+  }
+
+  private async collectUpdateTargetEntities(...storyIds: string[]) {
+    const _d = new Date();
+    const d = new Date(_d.getFullYear(), _d.getMonth(), _d.getDate(), 0, 0, 0);
+    const today = dateToFormattedString(d, "YYYY-MM-DD HH:mm");
+
+    const testProgressRepository = getRepository(TestProgressEntity);
+    const entitiesWithStoryId = await Promise.all(
+      storyIds.map(async (storyId) => {
+        const entity = await testProgressRepository.findOne({
+          where: { story: storyId, createdAt: MoreThanOrEqual(today) },
+          order: { createdAt: "DESC" },
+        });
+
+        return {
+          storyId,
+          entity,
+        };
+      })
+    );
+
+    const hasNoEntity = entitiesWithStoryId.some((item) => {
+      return !item.entity;
+    });
+
+    if (hasNoEntity) {
+      return [];
+    }
+
+    const updateTargetEntities: TestProgressEntity[] = [];
+    for (const target of entitiesWithStoryId as {
+      storyId: string;
+      entity: TestProgressEntity;
+    }[]) {
+      const newProgress = await this.getNewTestProgress(target.storyId);
+
+      target.entity.plannedSessionNumber = newProgress.planned;
+      target.entity.completedSessionNumber = newProgress.completed;
+      target.entity.incompletedSessionNumber = newProgress.incompleted;
+
+      updateTargetEntities.push(target.entity);
+    }
+
+    return updateTargetEntities;
+  }
+
+  private async getNewTestProgress(storyId: string) {
+    const { sessions, viewPointId, testTargetId } = await getRepository(
+      StoryEntity
+    ).findOneOrFail(storyId, {
+      relations: ["sessions"],
+    });
+
+    const testTarget = await getRepository(TestTargetEntity).findOneOrFail(
+      testTargetId
+    );
+    const plans: { viewPointId: string; value: number }[] = JSON.parse(
+      testTarget.text
+    );
+    const planValue = plans.find(
+      (plan) => plan.viewPointId === viewPointId
+    )?.value;
+
+    const planned = planValue ?? 0;
+    const completed = sessions.filter(({ doneDate }) => doneDate).length;
+    const incompleted = sessions.filter(({ doneDate }) => !doneDate).length;
+
+    return { planned, completed, incompleted };
   }
 }

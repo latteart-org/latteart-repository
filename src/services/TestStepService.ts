@@ -61,6 +61,7 @@ export interface TestStepService {
     inputElements: any;
     windowHandle: string;
     keywordTexts: any;
+    isAutomatic: boolean;
   }>;
 
   getTestStepScreenshot(
@@ -125,6 +126,17 @@ export class TestStepServiceImpl implements TestStepService {
         })
       );
     }
+
+    // update testingTime and lastUpdateTimestamp
+    const startTimeStamp = testResultEntity.startTimestamp;
+    const lastUpdateTimeStamp = testResultEntity.lastUpdateTimestamp;
+    const testStepTimeStamp = requestBody.timestamp;
+
+    if (lastUpdateTimeStamp > startTimeStamp) {
+      const testingTime = testStepTimeStamp - lastUpdateTimeStamp;
+      testResultEntity.testingTime = testResultEntity.testingTime + testingTime;
+    }
+    testResultEntity.lastUpdateTimestamp = testStepTimeStamp;
 
     const savedTestResultEntity = await getRepository(TestResultEntity).save({
       ...testResultEntity,
@@ -237,6 +249,7 @@ export class TestStepServiceImpl implements TestStepService {
     inputElements: any;
     windowHandle: string;
     keywordTexts: any;
+    isAutomatic: boolean;
   }> {
     const testStepEntity = await getRepository(TestStepEntity).findOneOrFail(
       testStepId,

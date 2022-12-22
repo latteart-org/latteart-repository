@@ -39,8 +39,9 @@ const emptyTestResult: GetTestResultResponse = {
   id: "",
   name: "",
   startTimeStamp: 0,
-  endTimeStamp: 0,
+  lastUpdateTimeStamp: 0,
   initialUrl: "",
+  testingTime: 0,
   testSteps: [],
   coverageSources: [],
 };

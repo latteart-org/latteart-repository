@@ -180,8 +180,9 @@ export class TestResultImportService {
         (testResult.initialUrl
           ? this.service.timestamp.epochMilliseconds()
           : 0),
-      endTimestamp: -1,
+      lastUpdateTimestamp: testResult.lastUpdateTimeStamp,
       initialUrl: testResult.initialUrl ?? "",
+      testingTime: testResult.testingTime,
       screenshots: Array.from(screenshotFilePathToEntity.values()),
       testSteps: testStepEntities,
       coverageSources: coverageSourceEntities,
@@ -223,6 +224,7 @@ export class TestResultImportService {
       inputElements: JSON.stringify(testStep.operation.inputElements),
       windowHandle: testStep.operation.windowHandle,
       keywordTexts: JSON.stringify(testStep.operation.keywordTexts ?? []),
+      isAutomatic: testStep.operation.isAutomatic,
       timestamp: parseInt(testStep.operation.timestamp, 10),
       screenshot: screenshotEntity,
       testPurpose: testPurposeEntity,

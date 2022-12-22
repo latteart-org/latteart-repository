@@ -27,7 +27,7 @@ import { TestPurposeServiceImpl } from "@/services/TestPurposeService";
 import { TestResultServiceImpl } from "@/services/TestResultService";
 import { TestStepServiceImpl } from "@/services/TestStepService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
-import { Controller, Get, Post, Route, Path } from "tsoa";
+import { Controller, Get, Post, Route, Path, Body } from "tsoa";
 import {
   attachedFileDirectoryService,
   screenshotDirectoryService,
@@ -39,6 +39,7 @@ import { SnapshotsService } from "../services/SnapshotsService";
 import path from "path";
 import { appRootPath } from "@/common";
 import { TestProgressServiceImpl } from "@/services/TestProgressService";
+import { SnapshotConfig } from "../interfaces/Configs";
 
 @Route("projects/{projectId}/snapshots")
 export class SnapshotsController extends Controller {
@@ -48,9 +49,15 @@ export class SnapshotsController extends Controller {
   }
 
   @Post()
-  public async create(@Path() projectId: string): Promise<CreateResponse> {
+  public async create(
+    @Path() projectId: string,
+    @Body() snapshotConfig: SnapshotConfig
+  ): Promise<CreateResponse> {
     try {
-      return await this.createSnapshotsService().createSnapshot(projectId);
+      return await this.createSnapshotsService().createSnapshot(
+        projectId,
+        snapshotConfig
+      );
     } catch (error) {
       if (error instanceof Error) {
         LoggingService.error("Save snapshot failed.", error);
@@ -107,7 +114,7 @@ export class SnapshotsController extends Controller {
         config: new ConfigsService(),
         issueReport: issueReportService,
         attachedFileRepository: attachedFileDirectoryService,
-        testProgress: new TestProgressServiceImpl(),
+        testProgress: new TestProgressServiceImpl(transactionRunner),
       },
       {
         snapshotViewer: { path: path.join(appRootPath, "snapshot-viewer") },
@@ -120,7 +127,7 @@ export class SnapshotsController extends Controller {
       project: new ProjectsServiceImpl(
         {
           timestamp: new TimestampServiceImpl(),
-          testProgress: new TestProgressServiceImpl(),
+          testProgress: new TestProgressServiceImpl(transactionRunner),
         },
         transactionRunner
       ),

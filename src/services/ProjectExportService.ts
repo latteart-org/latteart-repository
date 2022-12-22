@@ -93,7 +93,7 @@ export class ProjectExportService {
     const project = await service.projectService.getProject(projectId);
     (project as any).version = 1;
     const dailyProgresses =
-      await service.testProgressService.collectDailyTestProgresses(
+      await service.testProgressService.collectStoryDailyTestProgresses(
         project.stories.map((story) => story.id)
       );
 

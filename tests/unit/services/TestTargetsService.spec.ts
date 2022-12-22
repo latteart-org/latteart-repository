@@ -177,6 +177,7 @@ describe("TestMatrixService", () => {
       );
 
       const result = await new TestTargetService().patch(
+        projectEntity.id,
         testTarget.id,
         {
           name: "testTargetName2",
@@ -214,9 +215,11 @@ describe("TestMatrixService", () => {
     });
 
     it("異常系", async () => {
+      const projectId = "projectId";
       const dummyId = "dummyId";
       try {
         await new TestTargetService().patch(
+          projectId,
           dummyId,
           {
             name: "testTargetService",

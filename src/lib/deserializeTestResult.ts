@@ -17,6 +17,7 @@
 import {
   HistoryItemExportDataV1,
   TestResultExportDataV1,
+  TestResultExportDataV2,
 } from "@/services/ExportService";
 interface ElementInfo {
   tagname: string;
@@ -57,6 +58,7 @@ export interface TestStep {
     windowHandle: string;
     inputElements: ElementInfo[];
     keywordTexts: string[];
+    isAutomatic: boolean;
   };
   testPurpose: {
     id: string;
@@ -80,13 +82,15 @@ export interface TestResult {
   id: string;
   name: string;
   startTimeStamp: number;
-  endTimeStamp: number;
+  lastUpdateTimeStamp: number;
   initialUrl: string;
+  testingTime: number;
   testSteps: TestStep[];
   coverageSources: CoverageSource[];
 }
 
 export type TestResultImportDataV1 = TestResultExportDataV1;
+export type TestResultImportDataV2 = TestResultExportDataV2;
 export type HistoryItemImportDataV1 = HistoryItemExportDataV1;
 
 type HistoryItemImportDataV0 = Pick<HistoryItemExportDataV1, "testStep"> & {
@@ -112,9 +116,26 @@ export const deserializeTestResult = (testResultData: string): TestResult => {
   if (version === 1) {
     const v1FormatData = validateV1Format(testResultImportData);
     return deserializeTestResultV1(v1FormatData);
+  } else if (version === 2) {
+    const v2FormatData = validateV2Format(testResultImportData);
+    return deserializeTestResultV2(v2FormatData);
   }
 
   return deserializeTestResultV0(testResultImportData);
+};
+
+const validateV2Format = (
+  testResultImportData: any
+): TestResultImportDataV2 => {
+  if (
+    Object.values(testResultImportData.history).every((historyItem: any) => {
+      return historyItem.testPurpose !== undefined && historyItem.notes;
+    })
+  ) {
+    return testResultImportData;
+  }
+
+  throw new Error("ImportData is invalid format.");
 };
 
 const validateV1Format = (
@@ -129,6 +150,62 @@ const validateV1Format = (
   }
 
   throw new Error("ImportData is invalid format.");
+};
+
+const deserializeTestResultV2 = (
+  testResultImportData: TestResultImportDataV2
+) => {
+  const entries: [string, HistoryItemImportDataV1][] = Object.entries(
+    testResultImportData.history
+  );
+  const testSteps = entries.map(([_, item]) => {
+    const testPurpose = (() => {
+      const testPurpose = testResultImportData.notes.find(
+        (note) => note.id === item.testPurpose
+      );
+
+      return testPurpose ? testPurpose : null;
+    })();
+
+    const notes = item.notes.flatMap((noteId) => {
+      const note = testResultImportData.notes.find(
+        (note) => note.id === noteId
+      );
+
+      return note ? [note] : [];
+    });
+
+    return {
+      id: "",
+      operation: {
+        input: item.testStep.operation.input,
+        type: item.testStep.operation.type,
+        elementInfo: item.testStep.operation.elementInfo,
+        title: item.testStep.pageInfo.title,
+        url: item.testStep.pageInfo.url,
+        imageFileUrl: item.testStep.imageFileUrl,
+        timestamp: item.testStep.timestamp,
+        windowHandle: item.testStep.windowInfo.windowHandle,
+        inputElements: item.testStep.inputElements,
+        keywordTexts: item.testStep.pageInfo.keywordTexts,
+        isAutomatic: item.testStep.operation.isAutomatic ?? false,
+      },
+      testPurpose,
+      notes,
+    };
+  });
+
+  const testResult = {
+    id: testResultImportData.sessionId,
+    name: testResultImportData.name,
+    startTimeStamp: testResultImportData.startTimeStamp,
+    lastUpdateTimeStamp: testResultImportData.lastUpdateTimeStamp,
+    initialUrl: testResultImportData.initialUrl,
+    testingTime: testResultImportData.testingTime,
+    testSteps,
+    coverageSources: testResultImportData.coverageSources,
+  };
+  return testResult;
 };
 
 const deserializeTestResultV1 = (
@@ -167,18 +244,27 @@ const deserializeTestResultV1 = (
         windowHandle: item.testStep.windowInfo.windowHandle,
         inputElements: item.testStep.inputElements,
         keywordTexts: item.testStep.pageInfo.keywordTexts,
+        isAutomatic: item.testStep.operation.isAutomatic ?? false,
       },
       testPurpose,
       notes,
     };
   });
 
+  const testingTime = calculateTestingTime(
+    testSteps,
+    testResultImportData.startTimeStamp
+  );
+
   const testResult = {
     id: testResultImportData.sessionId,
     name: testResultImportData.name,
     startTimeStamp: testResultImportData.startTimeStamp,
-    endTimeStamp: testResultImportData.endTimeStamp,
+    lastUpdateTimeStamp: Number(
+      testSteps[testSteps.length - 1].operation.timestamp
+    ),
     initialUrl: testResultImportData.initialUrl,
+    testingTime,
     testSteps,
     coverageSources: testResultImportData.coverageSources,
   };
@@ -231,20 +317,72 @@ const deserializeTestResultV0 = (
         windowHandle: item.testStep.windowInfo.windowHandle,
         inputElements: item.testStep.inputElements,
         keywordTexts: item.testStep.pageInfo.keywordTexts,
+        isAutomatic: false,
       },
       testPurpose,
       notes,
     };
   });
 
+  const testingTime = calculateTestingTime(
+    testSteps,
+    testResultImportData.startTimeStamp
+  );
+
   const testResult = {
     id: testResultImportData.sessionId,
     name: testResultImportData.name,
     startTimeStamp: testResultImportData.startTimeStamp,
-    endTimeStamp: testResultImportData.endTimeStamp,
+    lastUpdateTimeStamp: Number(
+      testSteps[testSteps.length - 1].operation.timestamp
+    ),
     initialUrl: testResultImportData.initialUrl,
+    testingTime,
     testSteps,
     coverageSources: testResultImportData.coverageSources,
   };
   return testResult;
+};
+
+export const calculateTestingTime = (
+  testSteps: TestStep[],
+  startTimeStamp: number
+): number => {
+  const lastTestStartTime =
+    Number(
+      testSteps.find((testStep) => {
+        return Number(testStep.operation.timestamp) > startTimeStamp;
+      })?.operation.timestamp
+    ) ?? startTimeStamp;
+
+  const lastTestingTime = (() => {
+    const lastOperationTimestamp =
+      Number(
+        testSteps
+          .slice()
+          .reverse()
+          .find((testStep) => {
+            return testStep.operation.timestamp;
+          })?.operation.timestamp
+      ) ?? lastTestStartTime;
+
+    return lastOperationTimestamp - lastTestStartTime;
+  })();
+
+  const otherTestingTime = (() => {
+    const otherTestStep = testSteps.filter((testStep) => {
+      return Number(testStep.operation.timestamp) < lastTestStartTime;
+    });
+    if (otherTestStep.length > 0) {
+      const otherStartTime = Number(otherTestStep[0].operation.timestamp);
+      const otherEndTime = Number(
+        otherTestStep[otherTestStep.length - 1].operation.timestamp
+      );
+      return otherEndTime - otherStartTime;
+    } else {
+      return 0;
+    }
+  })();
+
+  return lastTestingTime + otherTestingTime;
 };
