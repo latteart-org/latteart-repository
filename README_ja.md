@@ -2,62 +2,16 @@
 
 LatteArt で利用するテスト情報を保存するサービスです。
 
-## プロジェクトセットアップ
-
-1. `node.js v14.15.3`をインストールします。
-1. 上記バージョンの node.js に対応した`yarn`をインストールします。
-1. ソースコードのルートディレクトリに移動します。
-1. 以下コマンドを実行します。
-
-   ```bash
-   yarn install
-   ```
-
-## ビルド
-
-1. ソースコードのルートディレクトリに移動します。
-1. 以下コマンドを実行し、バリデータを生成します。
-   ```bash
-   yarn typescript-json-validator src/lib/settings/Settings.ts
-   yarn typescript-json-validator src/lib/settings/DeviceSettings.ts
-   ```
-1. 以下コマンドを実行します。
-   ```bash
-   yarn package
-   ```
-1. `dist/latteart-repository`に以下構成のディレクトリが作成されます。
-   ```bash
-   dist/latteart-repository/
-       ├─ node_modules/ # 外部ライブラリ群
-       ├─ public/ # リソース格納用ディレクトリ
-       ├─ latteart-repository.exe # Windows用実行ファイル
-       ├─ latteart-repository # Mac用実行ファイル
-       ├─ latteart.config.json # 設定ファイル
-       ├─ latteart.device.config.json # デバイス設定ファイル
-       └─ ormconfig.json # DB設定ファイル
-   ```
-
-## ウォッチ(開発用)
-
-ソースコードの変更を検知して再ビルドします。
-
-1. ソースコードのルートディレクトリに移動します。
-1. 以下コマンドを実行し、バリデータを生成します。
-   ```bash
-   yarn typescript-json-validator src/lib/settings/Settings.ts
-   yarn typescript-json-validator src/lib/settings/DeviceSettings.ts
-   ```
-1. 以下コマンドを実行します。
-   ```bash
-   yarn watch
-   ```
-1. カレントディレクトリに`dist`ディレクトリが作成され、配下にビルドされた`index.js`が出力されます(以降ソースコードを修正すると自動的に再ビルドされます)。
-
 ## 起動
+
+### 事前準備
+
+1. 実行端末に以下をインストールし、パスを通します。
+   1. `cwebp`
 
 ### 手順
 
-1. ビルドで出力された実行ファイルをダブルクリック等で実行します。
+1. `latteart-repository`ディレクトリ配下の実行ファイルをダブルクリック等で実行します。
 1. ローカルサーバが立ち上がり、`http://127.0.0.1:3002`で待ち受けます。
 
 ## License
