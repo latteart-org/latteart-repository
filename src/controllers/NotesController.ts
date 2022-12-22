@@ -33,10 +33,10 @@ import { NotesServiceImpl } from "../services/NotesService";
 @Route("test-results/{testResultId}/notes")
 export class NotesController extends Controller {
   /**
-   * テスト結果に目的または気づきを登録する
-   * @param testResultId 対象のテスト結果ID
-   * @param requestBody 目的または気づき
-   * @returns 登録した目的または気づき
+   * Register notes (Purpose or Notices) on test results.
+   * @param testResultId Target test result id.
+   * @param requestBody Purpose or Notices.
+   * @returns Registered Purpose or Notices.
    */
   @Post()
   public async create(
@@ -83,10 +83,10 @@ export class NotesController extends Controller {
   }
 
   /**
-   * ノート(目的または気づき)を取得する
-   * @param testResultId 対象のテスト結果ID
-   * @param noteId 対象のノートID
-   * @returns 目的または気づき
+   * Get notes (Purpose or Notices).
+   * @param testResultId Target test result id.
+   * @param noteId Target note id.
+   * @returns Purpose or Notices.
    */
   @Get("{noteId}")
   public async get(
@@ -136,11 +136,11 @@ export class NotesController extends Controller {
   }
 
   /**
-   * ノート（目的または気づき）を指定のものに更新する
-   * @param testResultId 対象のテスト結果ID
-   * @param noteId 対象のノートID
-   * @param requestBody 目的または気づき
-   * @returns 更新後の目的または気づき
+   * Update notes (Purpose or Notices) to whatever you specify.
+   * @param testResultId Target test result id.
+   * @param noteId Target note id.
+   * @param requestBody Purpose or Notices
+   * @returns Updated Purpose or Notices.
    */
   @Put("{noteId}")
   public async update(
@@ -197,9 +197,9 @@ export class NotesController extends Controller {
   }
 
   /**
-   * ノート（目的または気づき）を削除する
-   * @param testResultId 対象のテスト結果ID
-   * @param noteId 対象のノートID
+   * Delete Notes (Purpose or Notices).
+   * @param testResultId Target test result id.
+   * @param noteId Target note id.
    */
   @Delete("{noteId}")
   public async delete(

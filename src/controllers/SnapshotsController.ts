@@ -44,10 +44,10 @@ import { SnapshotConfig } from "../interfaces/Configs";
 @Route("projects/{projectId}/snapshots")
 export class SnapshotsController extends Controller {
   /**
-   * スナップショットを出力する
-   * @param projectId 対象のプロジェクトID
-   * @param snapshotConfig スナップショット出力時に追加する設定
-   * @returns 出力したスナップショットのダウンロードURL
+   * Output a snapshot.
+   * @param projectId Target project id.
+   * @param snapshotConfig Settings added when exporting a snapshot.
+   * @returns Output snapshot download url.
    */
   @Post()
   public async create(

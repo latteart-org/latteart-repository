@@ -28,9 +28,9 @@ import { transactionRunner } from "..";
 @Route("/test-matrices/")
 export class TestMatricesController extends Controller {
   /**
-   * テストマトリクスを取得する
-   * @param testMatrixId 対象のテストマトリクスID
-   * @returns テストマトリクス
+   * Get test matrix.
+   * @param testMatrixId Target test matrix id.
+   * @returns Test matrix.
    */
   @Get("{testMatrixId}")
   public async get(
@@ -51,9 +51,9 @@ export class TestMatricesController extends Controller {
   }
 
   /**
-   * テストマトリクスを作成する
-   * @param body 対象のプロジェクトIDとテストマトリクス名
-   * @returns 作成したテストマトリクス
+   * Create a test matrix.
+   * @param body Target project id and test matrix name.
+   * @returns Created test matrix.
    */
   @Post()
   public async post(
@@ -74,10 +74,10 @@ export class TestMatricesController extends Controller {
   }
 
   /**
-   * テストマトリクスの一部情報を指定したものに更新する
-   * @param testMatrixId 対象のテストマトリクスID
-   * @param body テストマトリクス名
-   * @returns 更新後のテストマトリクス
+   * Update some information in the test matrix to the specified.
+   * @param testMatrixId Target test matrix id.
+   * @param body Test matrix name.
+   * @returns Updated test matrix.
    */
   @Patch("{testMatrixId}")
   public async patch(
@@ -99,8 +99,8 @@ export class TestMatricesController extends Controller {
   }
 
   /**
-   * テストマトリクスを削除する
-   * @param testMatrixId 対象のテストマトリクスID
+   * Delete test matrix.
+   * @param testMatrixId Target test matrix id.
    */
   @Delete("{testMatrixId}")
   public async delete(@Path() testMatrixId: string): Promise<void> {

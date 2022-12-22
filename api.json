@@ -1,0 +1,4284 @@
+{
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"AutofillCondition": {
+				"properties": {
+					"inputValue": {
+						"type": "string"
+					},
+					"locatorMatchType": {
+						"type": "string",
+						"enum": [
+							"equals",
+							"contains"
+						]
+					},
+					"locator": {
+						"type": "string"
+					},
+					"locatorType": {
+						"type": "string"
+					},
+					"isEnabled": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"inputValue",
+					"locatorMatchType",
+					"locator",
+					"locatorType",
+					"isEnabled"
+				],
+				"type": "object",
+				"description": "Autofill condition."
+			},
+			"AutofillConditionGroup": {
+				"description": "Autofill condition group.",
+				"properties": {
+					"isEnabled": {
+						"type": "boolean"
+					},
+					"settingName": {
+						"type": "string"
+					},
+					"url": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"inputValueConditions": {
+						"items": {
+							"$ref": "#/components/schemas/AutofillCondition"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"isEnabled",
+					"settingName",
+					"url",
+					"title",
+					"inputValueConditions"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AutofillSetting": {
+				"description": "Autofill setting.",
+				"properties": {
+					"conditionGroups": {
+						"items": {
+							"$ref": "#/components/schemas/AutofillConditionGroup"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"conditionGroups"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AutoOperationConditionGroup": {
+				"description": "Auto operation condition group.",
+				"properties": {
+					"isEnabled": {
+						"type": "boolean"
+					},
+					"settingName": {
+						"type": "string"
+					},
+					"details": {
+						"type": "string"
+					},
+					"autoOperations": {
+						"items": {},
+						"type": "array"
+					}
+				},
+				"required": [
+					"isEnabled",
+					"settingName",
+					"autoOperations"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AutoOperationSetting": {
+				"description": "Auto operation setting.",
+				"properties": {
+					"conditionGroups": {
+						"items": {
+							"$ref": "#/components/schemas/AutoOperationConditionGroup"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"conditionGroups"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ScreenDefinitionConfig": {
+				"description": "Screen definition settings.",
+				"properties": {
+					"screenDefType": {
+						"type": "string",
+						"enum": [
+							"title",
+							"url"
+						]
+					},
+					"conditionGroups": {
+						"items": {
+							"properties": {
+								"conditions": {
+									"items": {
+										"properties": {
+											"word": {
+												"type": "string"
+											},
+											"matchType": {
+												"type": "string",
+												"enum": [
+													"contains",
+													"equals",
+													"regex"
+												]
+											},
+											"definitionType": {
+												"type": "string",
+												"enum": [
+													"url",
+													"title",
+													"keyword"
+												]
+											},
+											"isEnabled": {
+												"type": "boolean"
+											}
+										},
+										"required": [
+											"word",
+											"matchType",
+											"definitionType",
+											"isEnabled"
+										],
+										"type": "object"
+									},
+									"type": "array"
+								},
+								"screenName": {
+									"type": "string"
+								},
+								"isEnabled": {
+									"type": "boolean"
+								}
+							},
+							"required": [
+								"conditions",
+								"screenName",
+								"isEnabled"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"screenDefType",
+					"conditionGroups"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Coverage": {
+				"description": "HTML tags to include in coverage.",
+				"properties": {
+					"include": {
+						"properties": {
+							"tags": {
+								"items": {
+									"type": "string"
+								},
+								"type": "array"
+							}
+						},
+						"required": [
+							"tags"
+						],
+						"type": "object"
+					}
+				},
+				"required": [
+					"include"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ProjectConfig": {
+				"description": "Project settings.",
+				"properties": {
+					"viewPointsPreset": {
+						"items": {
+							"properties": {
+								"viewPoints": {
+									"items": {
+										"properties": {
+											"description": {
+												"type": "string"
+											},
+											"name": {
+												"type": "string"
+											}
+										},
+										"required": [
+											"description",
+											"name"
+										],
+										"type": "object"
+									},
+									"type": "array"
+								},
+								"name": {
+									"type": "string"
+								},
+								"id": {
+									"type": "string"
+								}
+							},
+							"required": [
+								"viewPoints",
+								"name",
+								"id"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					},
+					"defaultTagList": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"config": {
+						"properties": {
+							"imageCompression": {
+								"properties": {
+									"isDeleteSrcImage": {
+										"type": "boolean"
+									},
+									"isEnabled": {
+										"type": "boolean"
+									}
+								},
+								"required": [
+									"isDeleteSrcImage",
+									"isEnabled"
+								],
+								"type": "object"
+							},
+							"coverage": {
+								"$ref": "#/components/schemas/Coverage"
+							},
+							"screenDefinition": {
+								"$ref": "#/components/schemas/ScreenDefinitionConfig"
+							},
+							"autoOperationSetting": {
+								"$ref": "#/components/schemas/AutoOperationSetting"
+							},
+							"autofillSetting": {
+								"$ref": "#/components/schemas/AutofillSetting"
+							}
+						},
+						"required": [
+							"imageCompression",
+							"coverage",
+							"screenDefinition",
+							"autoOperationSetting",
+							"autofillSetting"
+						],
+						"type": "object"
+					}
+				},
+				"required": [
+					"viewPointsPreset",
+					"defaultTagList",
+					"config"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ExportableConfig": {
+				"$ref": "#/components/schemas/ProjectConfig",
+				"description": "Configuration data for export."
+			},
+			"GetConfigResponse": {
+				"$ref": "#/components/schemas/ExportableConfig",
+				"description": "Current setting data."
+			},
+			"PutConfigResponse": {
+				"$ref": "#/components/schemas/ExportableConfig",
+				"description": "Updated configuration data."
+			},
+			"PutConfigDto": {
+				"$ref": "#/components/schemas/ExportableConfig",
+				"description": "Data for setting update."
+			},
+			"CreateResponseDto": {
+				"description": "Compressed image url.",
+				"properties": {
+					"imageFileUrl": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"imageFileUrl"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Note": {
+				"description": "Note date.",
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"type": {
+						"type": "string"
+					},
+					"value": {
+						"type": "string"
+					},
+					"details": {
+						"type": "string"
+					},
+					"imageFileUrl": {
+						"type": "string"
+					},
+					"tags": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"id",
+					"type",
+					"value",
+					"details",
+					"imageFileUrl",
+					"tags"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateNoteResponse": {
+				"$ref": "#/components/schemas/Note",
+				"description": "Registered note data."
+			},
+			"CreateNoteDto": {
+				"description": "Note data for new registration.",
+				"properties": {
+					"type": {
+						"type": "string"
+					},
+					"value": {
+						"type": "string"
+					},
+					"details": {
+						"type": "string"
+					},
+					"imageData": {
+						"type": "string"
+					},
+					"tags": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"type",
+					"value",
+					"details"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GetNoteResponse": {
+				"$ref": "#/components/schemas/Note",
+				"description": "Note data for the specified ID."
+			},
+			"UpdateNoteResponse": {
+				"$ref": "#/components/schemas/Note",
+				"description": "Updated note data."
+			},
+			"UpdateNoteDto": {
+				"description": "Note data for update.",
+				"properties": {
+					"type": {
+						"type": "string"
+					},
+					"value": {
+						"type": "string"
+					},
+					"details": {
+						"type": "string"
+					},
+					"tags": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"type",
+					"value",
+					"details"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateProjectExportDto": {
+				"description": "Export target flag.",
+				"properties": {
+					"includeTestResults": {
+						"type": "boolean"
+					},
+					"includeProject": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"includeTestResults",
+					"includeProject"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateProjectImportDto": {
+				"description": "Project data to import.",
+				"properties": {
+					"source": {
+						"properties": {
+							"projectFile": {
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"data": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"name",
+									"data"
+								],
+								"type": "object"
+							}
+						},
+						"required": [
+							"projectFile"
+						],
+						"type": "object"
+					},
+					"includeTestResults": {
+						"type": "boolean"
+					},
+					"includeProject": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"source",
+					"includeTestResults",
+					"includeProject"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ProjectListResponse": {
+				"description": "Project list record.",
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"createdAt": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"createdAt"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"StoryDetails": {
+				"description": "Story data.",
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"testMatrixId": {
+						"type": "string"
+					},
+					"testTargetId": {
+						"type": "string"
+					},
+					"viewPointId": {
+						"type": "string"
+					},
+					"status": {
+						"type": "string"
+					},
+					"sessions": {
+						"items": {
+							"properties": {
+								"testingTime": {
+									"type": "number",
+									"format": "double"
+								},
+								"testerName": {
+									"type": "string"
+								},
+								"testResultFiles": {
+									"items": {
+										"properties": {
+											"id": {
+												"type": "string"
+											},
+											"name": {
+												"type": "string"
+											}
+										},
+										"required": [
+											"id",
+											"name"
+										],
+										"type": "object"
+									},
+									"type": "array"
+								},
+								"testItem": {
+									"type": "string"
+								},
+								"name": {
+									"type": "string"
+								},
+								"memo": {
+									"type": "string"
+								},
+								"issues": {
+									"items": {
+										"properties": {
+											"imageFilePath": {
+												"type": "string"
+											},
+											"value": {
+												"type": "string"
+											},
+											"type": {
+												"type": "string"
+											},
+											"ticketId": {
+												"type": "string"
+											},
+											"status": {
+												"type": "string"
+											},
+											"source": {
+												"properties": {
+													"type": {
+														"type": "string"
+													},
+													"index": {
+														"type": "number",
+														"format": "double"
+													}
+												},
+												"required": [
+													"type",
+													"index"
+												],
+												"type": "object"
+											},
+											"details": {
+												"type": "string"
+											}
+										},
+										"required": [
+											"value",
+											"type",
+											"ticketId",
+											"status",
+											"source",
+											"details"
+										],
+										"type": "object"
+									},
+									"type": "array"
+								},
+								"isDone": {
+									"type": "boolean"
+								},
+								"doneDate": {
+									"type": "string"
+								},
+								"attachedFiles": {
+									"items": {
+										"properties": {
+											"fileUrl": {
+												"type": "string"
+											},
+											"name": {
+												"type": "string"
+											}
+										},
+										"required": [
+											"name"
+										],
+										"type": "object"
+									},
+									"type": "array"
+								},
+								"id": {
+									"type": "string"
+								}
+							},
+							"required": [
+								"testingTime",
+								"testerName",
+								"testItem",
+								"name",
+								"memo",
+								"issues",
+								"isDone",
+								"doneDate",
+								"attachedFiles",
+								"id"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"id",
+					"testMatrixId",
+					"testTargetId",
+					"viewPointId",
+					"status",
+					"sessions"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Project": {
+				"description": "Project data.",
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"testMatrices": {
+						"items": {
+							"properties": {
+								"viewPoints": {
+									"items": {
+										"properties": {
+											"description": {
+												"type": "string"
+											},
+											"index": {
+												"type": "number",
+												"format": "double"
+											},
+											"name": {
+												"type": "string"
+											},
+											"id": {
+												"type": "string"
+											}
+										},
+										"required": [
+											"description",
+											"index",
+											"name",
+											"id"
+										],
+										"type": "object"
+									},
+									"type": "array"
+								},
+								"groups": {
+									"items": {
+										"properties": {
+											"testTargets": {
+												"items": {
+													"properties": {
+														"plans": {
+															"items": {
+																"properties": {
+																	"value": {
+																		"type": "number",
+																		"format": "double"
+																	},
+																	"viewPointId": {
+																		"type": "string"
+																	}
+																},
+																"required": [
+																	"value",
+																	"viewPointId"
+																],
+																"type": "object"
+															},
+															"type": "array"
+														},
+														"index": {
+															"type": "number",
+															"format": "double"
+														},
+														"name": {
+															"type": "string"
+														},
+														"id": {
+															"type": "string"
+														}
+													},
+													"required": [
+														"plans",
+														"index",
+														"name",
+														"id"
+													],
+													"type": "object"
+												},
+												"type": "array"
+											},
+											"index": {
+												"type": "number",
+												"format": "double"
+											},
+											"name": {
+												"type": "string"
+											},
+											"id": {
+												"type": "string"
+											}
+										},
+										"required": [
+											"testTargets",
+											"index",
+											"name",
+											"id"
+										],
+										"type": "object"
+									},
+									"type": "array"
+								},
+								"index": {
+									"type": "number",
+									"format": "double"
+								},
+								"name": {
+									"type": "string"
+								},
+								"id": {
+									"type": "string"
+								}
+							},
+							"required": [
+								"viewPoints",
+								"groups",
+								"index",
+								"name",
+								"id"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					},
+					"stories": {
+						"items": {
+							"$ref": "#/components/schemas/StoryDetails"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"testMatrices",
+					"stories"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GetProjectResponse": {
+				"$ref": "#/components/schemas/Project",
+				"description": "Project data for the specified ID."
+			},
+			"DailyTestProgress": {
+				"properties": {
+					"storyProgresses": {
+						"items": {
+							"properties": {
+								"incompletedSessionNumber": {
+									"type": "number",
+									"format": "double"
+								},
+								"completedSessionNumber": {
+									"type": "number",
+									"format": "double"
+								},
+								"plannedSessionNumber": {
+									"type": "number",
+									"format": "double"
+								},
+								"viewPointId": {
+									"type": "string"
+								},
+								"testTargetId": {
+									"type": "string"
+								},
+								"testTargetGroupId": {
+									"type": "string"
+								},
+								"testMatrixId": {
+									"type": "string"
+								},
+								"storyId": {
+									"type": "string"
+								}
+							},
+							"required": [
+								"incompletedSessionNumber",
+								"completedSessionNumber",
+								"plannedSessionNumber",
+								"viewPointId",
+								"testTargetId",
+								"testTargetGroupId",
+								"testMatrixId",
+								"storyId"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					},
+					"date": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"storyProgresses",
+					"date"
+				],
+				"type": "object",
+				"description": "Daily test progress."
+			},
+			"GetTestProgressResponse": {
+				"$ref": "#/components/schemas/DailyTestProgress",
+				"description": "Test progress data in project."
+			},
+			"TestResultViewOption": {
+				"properties": {
+					"node": {
+						"properties": {
+							"definitions": {
+								"items": {
+									"properties": {
+										"conditions": {
+											"items": {
+												"properties": {
+													"value": {
+														"type": "string"
+													},
+													"method": {
+														"type": "string",
+														"enum": [
+															"contains",
+															"equals",
+															"regex"
+														]
+													},
+													"target": {
+														"type": "string",
+														"enum": [
+															"title",
+															"url",
+															"keyword"
+														]
+													}
+												},
+												"required": [
+													"value",
+													"method",
+													"target"
+												],
+												"type": "object"
+											},
+											"type": "array"
+										},
+										"name": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"conditions",
+										"name"
+									],
+									"type": "object"
+								},
+								"type": "array"
+							},
+							"unit": {
+								"type": "string",
+								"enum": [
+									"title",
+									"url"
+								]
+							}
+						},
+						"required": [
+							"definitions",
+							"unit"
+						],
+						"type": "object"
+					}
+				},
+				"required": [
+					"node"
+				],
+				"type": "object",
+				"description": "Screen definition settings for test scripts."
+			},
+			"TestScriptOption": {
+				"properties": {
+					"view": {
+						"$ref": "#/components/schemas/TestResultViewOption"
+					},
+					"testData": {
+						"properties": {
+							"maxGeneration": {
+								"type": "number",
+								"format": "double"
+							},
+							"useDataDriven": {
+								"type": "boolean"
+							}
+						},
+						"required": [
+							"maxGeneration",
+							"useDataDriven"
+						],
+						"type": "object"
+					},
+					"optimized": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"view",
+					"testData",
+					"optimized"
+				],
+				"type": "object",
+				"description": "Settings for test scripts."
+			},
+			"CreateTestScriptDto": {
+				"$ref": "#/components/schemas/TestScriptOption",
+				"description": "Settings for creating test scripts."
+			},
+			"Session": {
+				"properties": {
+					"testingTime": {
+						"type": "number",
+						"format": "double"
+					},
+					"testerName": {
+						"type": "string"
+					},
+					"testResultFiles": {
+						"items": {
+							"properties": {
+								"id": {
+									"type": "string"
+								},
+								"name": {
+									"type": "string"
+								}
+							},
+							"required": [
+								"id",
+								"name"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					},
+					"testItem": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"memo": {
+						"type": "string"
+					},
+					"issues": {
+						"items": {
+							"properties": {
+								"imageFilePath": {
+									"type": "string"
+								},
+								"value": {
+									"type": "string"
+								},
+								"type": {
+									"type": "string"
+								},
+								"ticketId": {
+									"type": "string"
+								},
+								"status": {
+									"type": "string"
+								},
+								"source": {
+									"properties": {
+										"type": {
+											"type": "string"
+										},
+										"index": {
+											"type": "number",
+											"format": "double"
+										}
+									},
+									"required": [
+										"type",
+										"index"
+									],
+									"type": "object"
+								},
+								"details": {
+									"type": "string"
+								}
+							},
+							"required": [
+								"value",
+								"type",
+								"ticketId",
+								"status",
+								"source",
+								"details"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					},
+					"isDone": {
+						"type": "boolean"
+					},
+					"doneDate": {
+						"type": "string"
+					},
+					"attachedFiles": {
+						"items": {
+							"properties": {
+								"fileUrl": {
+									"type": "string"
+								},
+								"name": {
+									"type": "string"
+								}
+							},
+							"required": [
+								"fileUrl",
+								"name"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					},
+					"id": {
+						"type": "string"
+					},
+					"index": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"testingTime",
+					"testerName",
+					"testResultFiles",
+					"testItem",
+					"name",
+					"memo",
+					"issues",
+					"isDone",
+					"doneDate",
+					"attachedFiles",
+					"id",
+					"index"
+				],
+				"type": "object",
+				"description": "Session."
+			},
+			"PostSessionResponse": {
+				"$ref": "#/components/schemas/Session",
+				"description": "Registered session data."
+			},
+			"PatchSessionResponse": {
+				"$ref": "#/components/schemas/Session",
+				"description": "Updated session data."
+			},
+			"PatchSessionDto": {
+				"description": "Session data for update.",
+				"properties": {
+					"attachedFiles": {
+						"items": {
+							"properties": {
+								"fileData": {
+									"type": "string"
+								},
+								"fileUrl": {
+									"type": "string"
+								},
+								"name": {
+									"type": "string"
+								}
+							},
+							"required": [
+								"name"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					},
+					"doneDate": {
+						"type": "string"
+					},
+					"isDone": {
+						"type": "boolean"
+					},
+					"issues": {
+						"items": {
+							"properties": {
+								"imageFilePath": {
+									"type": "string"
+								},
+								"value": {
+									"type": "string"
+								},
+								"type": {
+									"type": "string"
+								},
+								"ticketId": {
+									"type": "string"
+								},
+								"status": {
+									"type": "string"
+								},
+								"source": {
+									"properties": {
+										"type": {
+											"type": "string"
+										},
+										"index": {
+											"type": "number",
+											"format": "double"
+										}
+									},
+									"required": [
+										"type",
+										"index"
+									],
+									"type": "object"
+								},
+								"details": {
+									"type": "string"
+								}
+							},
+							"required": [
+								"value",
+								"type",
+								"ticketId",
+								"status",
+								"source",
+								"details"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					},
+					"memo": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"testItem": {
+						"type": "string"
+					},
+					"testResultFiles": {
+						"items": {
+							"properties": {
+								"id": {
+									"type": "string"
+								},
+								"name": {
+									"type": "string"
+								}
+							},
+							"required": [
+								"id",
+								"name"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					},
+					"testerName": {
+						"type": "string"
+					},
+					"testingTime": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateResponse": {
+				"description": "Snapshot download url.",
+				"properties": {
+					"url": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"url"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"SnapshotConfig": {
+				"properties": {
+					"locale": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"locale"
+				],
+				"type": "object",
+				"description": "Settings added when exporting a snapshot."
+			},
+			"CreateTestResultExportDto": {
+				"description": "File output destination directory.",
+				"properties": {
+					"temp": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"temp"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateTestResultImportDto": {
+				"description": "Test result data to import.",
+				"properties": {
+					"source": {
+						"properties": {
+							"testResultFile": {
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"data": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"name",
+									"data"
+								],
+								"type": "object"
+							}
+						},
+						"required": [
+							"testResultFile"
+						],
+						"type": "object"
+					},
+					"dest": {
+						"properties": {
+							"testResultId": {
+								"type": "string"
+							}
+						},
+						"type": "object"
+					}
+				},
+				"required": [
+					"source"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ListTestResultResponse": {
+				"description": "Test result list record.",
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"name"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"TestResult": {
+				"description": "Test result.",
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"startTimeStamp": {
+						"type": "number",
+						"format": "double"
+					},
+					"lastUpdateTimeStamp": {
+						"type": "number",
+						"format": "double"
+					},
+					"initialUrl": {
+						"type": "string"
+					},
+					"testingTime": {
+						"type": "number",
+						"format": "double"
+					},
+					"testSteps": {
+						"items": {
+							"properties": {
+								"notices": {
+									"items": {
+										"properties": {
+											"tags": {
+												"items": {
+													"type": "string"
+												},
+												"type": "array"
+											},
+											"imageFileUrl": {
+												"type": "string"
+											},
+											"details": {
+												"type": "string"
+											},
+											"value": {
+												"type": "string"
+											},
+											"type": {
+												"type": "string"
+											},
+											"id": {
+												"type": "string"
+											}
+										},
+										"required": [
+											"tags",
+											"imageFileUrl",
+											"details",
+											"value",
+											"type",
+											"id"
+										],
+										"type": "object"
+									},
+									"type": "array"
+								},
+								"bugs": {
+									"items": {
+										"properties": {
+											"tags": {
+												"items": {
+													"type": "string"
+												},
+												"type": "array"
+											},
+											"imageFileUrl": {
+												"type": "string"
+											},
+											"details": {
+												"type": "string"
+											},
+											"value": {
+												"type": "string"
+											},
+											"type": {
+												"type": "string"
+											},
+											"id": {
+												"type": "string"
+											}
+										},
+										"required": [
+											"tags",
+											"imageFileUrl",
+											"details",
+											"value",
+											"type",
+											"id"
+										],
+										"type": "object"
+									},
+									"type": "array"
+								},
+								"intention": {
+									"properties": {
+										"tags": {
+											"items": {
+												"type": "string"
+											},
+											"type": "array"
+										},
+										"imageFileUrl": {
+											"type": "string"
+										},
+										"details": {
+											"type": "string"
+										},
+										"value": {
+											"type": "string"
+										},
+										"type": {
+											"type": "string"
+										},
+										"id": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"tags",
+										"imageFileUrl",
+										"details",
+										"value",
+										"type",
+										"id"
+									],
+									"type": "object",
+									"nullable": true
+								},
+								"operation": {
+									"properties": {
+										"isAutomatic": {
+											"type": "boolean"
+										},
+										"keywordTexts": {
+											"items": {
+												"type": "string"
+											},
+											"type": "array"
+										},
+										"inputElements": {
+											"items": {
+												"properties": {
+													"attributes": {
+														"properties": {},
+														"additionalProperties": {
+															"type": "string"
+														},
+														"type": "object"
+													},
+													"checked": {
+														"type": "boolean"
+													},
+													"value": {
+														"type": "string"
+													},
+													"xpath": {
+														"type": "string"
+													},
+													"text": {
+														"type": "string"
+													},
+													"tagname": {
+														"type": "string"
+													}
+												},
+												"required": [
+													"attributes",
+													"checked",
+													"value",
+													"xpath",
+													"text",
+													"tagname"
+												],
+												"type": "object"
+											},
+											"type": "array"
+										},
+										"windowHandle": {
+											"type": "string"
+										},
+										"timestamp": {
+											"type": "string"
+										},
+										"imageFileUrl": {
+											"type": "string"
+										},
+										"url": {
+											"type": "string"
+										},
+										"title": {
+											"type": "string"
+										},
+										"elementInfo": {
+											"properties": {
+												"attributes": {
+													"properties": {},
+													"additionalProperties": {
+														"type": "string"
+													},
+													"type": "object"
+												},
+												"checked": {
+													"type": "boolean"
+												},
+												"value": {
+													"type": "string"
+												},
+												"xpath": {
+													"type": "string"
+												},
+												"text": {
+													"type": "string"
+												},
+												"tagname": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"attributes",
+												"checked",
+												"value",
+												"xpath",
+												"text",
+												"tagname"
+											],
+											"type": "object",
+											"nullable": true
+										},
+										"type": {
+											"type": "string"
+										},
+										"input": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"isAutomatic",
+										"inputElements",
+										"windowHandle",
+										"timestamp",
+										"imageFileUrl",
+										"url",
+										"title",
+										"elementInfo",
+										"type",
+										"input"
+									],
+									"type": "object"
+								},
+								"id": {
+									"type": "string"
+								}
+							},
+							"required": [
+								"notices",
+								"bugs",
+								"intention",
+								"operation",
+								"id"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					},
+					"coverageSources": {
+						"items": {
+							"properties": {
+								"screenElements": {
+									"items": {
+										"properties": {
+											"attributes": {
+												"properties": {},
+												"additionalProperties": {
+													"type": "string"
+												},
+												"type": "object"
+											},
+											"checked": {
+												"type": "boolean"
+											},
+											"value": {
+												"type": "string"
+											},
+											"xpath": {
+												"type": "string"
+											},
+											"text": {
+												"type": "string"
+											},
+											"tagname": {
+												"type": "string"
+											}
+										},
+										"required": [
+											"attributes",
+											"checked",
+											"value",
+											"xpath",
+											"text",
+											"tagname"
+										],
+										"type": "object"
+									},
+									"type": "array"
+								},
+								"url": {
+									"type": "string"
+								},
+								"title": {
+									"type": "string"
+								}
+							},
+							"required": [
+								"screenElements",
+								"url",
+								"title"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"startTimeStamp",
+					"lastUpdateTimeStamp",
+					"initialUrl",
+					"testingTime",
+					"testSteps",
+					"coverageSources"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GetTestResultResponse": {
+				"$ref": "#/components/schemas/TestResult",
+				"description": "Test result data for the specified ID."
+			},
+			"CreateTestResultResponse": {
+				"description": "Registered test result data.",
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"name"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateTestResultDto": {
+				"description": "Test result data for new registration.",
+				"properties": {
+					"initialUrl": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"startTimeStamp": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"PatchTestResultResponse": {
+				"$ref": "#/components/schemas/TestResult",
+				"description": "Updated test result data."
+			},
+			"ListSessionResponse": {
+				"items": {
+					"type": "string"
+				},
+				"type": "array",
+				"description": "Session ids."
+			},
+			"ElementInfo": {
+				"description": "Element information.",
+				"properties": {
+					"tagname": {
+						"type": "string"
+					},
+					"text": {
+						"type": "string",
+						"nullable": true
+					},
+					"xpath": {
+						"type": "string"
+					},
+					"value": {},
+					"checked": {
+						"type": "boolean"
+					},
+					"attributes": {
+						"properties": {},
+						"additionalProperties": {},
+						"type": "object"
+					}
+				},
+				"required": [
+					"tagname",
+					"xpath",
+					"attributes"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Operation": {
+				"description": "Operation.",
+				"properties": {
+					"input": {
+						"type": "string"
+					},
+					"type": {
+						"type": "string"
+					},
+					"elementInfo": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/ElementInfo"
+							}
+						],
+						"nullable": true
+					},
+					"title": {
+						"type": "string"
+					},
+					"url": {
+						"type": "string"
+					},
+					"imageFileUrl": {
+						"type": "string"
+					},
+					"timestamp": {
+						"type": "string"
+					},
+					"inputElements": {
+						"items": {
+							"$ref": "#/components/schemas/ElementInfo"
+						},
+						"type": "array"
+					},
+					"windowHandle": {
+						"type": "string"
+					},
+					"keywordTexts": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"isAutomatic": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"input",
+					"type",
+					"elementInfo",
+					"title",
+					"url",
+					"imageFileUrl",
+					"timestamp",
+					"inputElements",
+					"windowHandle",
+					"isAutomatic"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CoverageSource": {
+				"description": "Coverage source.",
+				"properties": {
+					"title": {
+						"type": "string"
+					},
+					"url": {
+						"type": "string"
+					},
+					"screenElements": {
+						"items": {
+							"$ref": "#/components/schemas/ElementInfo"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"title",
+					"url",
+					"screenElements"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateTestStepResponse": {
+				"properties": {
+					"coverageSource": {
+						"$ref": "#/components/schemas/CoverageSource"
+					},
+					"operation": {
+						"$ref": "#/components/schemas/Operation"
+					},
+					"id": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"coverageSource",
+					"operation",
+					"id"
+				],
+				"type": "object",
+				"description": "Registered test step and coverage data."
+			},
+			"CapturedOperation": {
+				"description": "Captured operation.",
+				"properties": {
+					"input": {
+						"type": "string"
+					},
+					"type": {
+						"type": "string"
+					},
+					"elementInfo": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/ElementInfo"
+							}
+						],
+						"nullable": true
+					},
+					"title": {
+						"type": "string"
+					},
+					"url": {
+						"type": "string"
+					},
+					"imageData": {
+						"type": "string"
+					},
+					"windowHandle": {
+						"type": "string"
+					},
+					"screenElements": {
+						"items": {
+							"$ref": "#/components/schemas/ElementInfo"
+						},
+						"type": "array"
+					},
+					"inputElements": {
+						"items": {
+							"$ref": "#/components/schemas/ElementInfo"
+						},
+						"type": "array"
+					},
+					"keywordTexts": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"timestamp": {
+						"type": "number",
+						"format": "double"
+					},
+					"pageSource": {
+						"type": "string"
+					},
+					"isAutomatic": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"input",
+					"type",
+					"elementInfo",
+					"title",
+					"url",
+					"imageData",
+					"windowHandle",
+					"screenElements",
+					"inputElements",
+					"timestamp",
+					"pageSource"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateTestStepDto": {
+				"$ref": "#/components/schemas/CapturedOperation",
+				"description": "Test step data for new registration."
+			},
+			"TestStep": {
+				"description": "Test step.",
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"operation": {
+						"$ref": "#/components/schemas/Operation"
+					},
+					"intention": {
+						"type": "string",
+						"nullable": true
+					},
+					"bugs": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"notices": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"id",
+					"operation",
+					"intention",
+					"bugs",
+					"notices"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GetTestStepResponse": {
+				"$ref": "#/components/schemas/TestStep",
+				"description": "Test step data for the specified ID."
+			},
+			"PatchTestStepResponse": {
+				"$ref": "#/components/schemas/TestStep",
+				"description": "Updated test step data."
+			},
+			"PatchTestStepDto": {
+				"description": "Test step data for update.",
+				"properties": {
+					"intention": {
+						"type": "string",
+						"nullable": true
+					},
+					"bugs": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"notices": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"TestTarget": {
+				"description": "Test target.",
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"index": {
+						"type": "number",
+						"format": "double"
+					},
+					"plans": {
+						"items": {
+							"properties": {
+								"value": {
+									"type": "number",
+									"format": "double"
+								},
+								"viewPointId": {
+									"type": "string"
+								}
+							},
+							"required": [
+								"value",
+								"viewPointId"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"index",
+					"plans"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"TestTargetGroup": {
+				"description": "Test target group.",
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"index": {
+						"type": "number",
+						"format": "double"
+					},
+					"testTargets": {
+						"items": {
+							"$ref": "#/components/schemas/TestTarget"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"index",
+					"testTargets"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ViewPoint": {
+				"description": "View point.",
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"index": {
+						"type": "number",
+						"format": "double"
+					},
+					"description": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"description"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"TestMatrix": {
+				"description": "Test matrix.",
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"index": {
+						"type": "number",
+						"format": "double"
+					},
+					"groups": {
+						"items": {
+							"$ref": "#/components/schemas/TestTargetGroup"
+						},
+						"type": "array"
+					},
+					"viewPoints": {
+						"items": {
+							"$ref": "#/components/schemas/ViewPoint"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"index",
+					"groups",
+					"viewPoints"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GetTestMatrixResponse": {
+				"$ref": "#/components/schemas/TestMatrix",
+				"description": "Test matrix data for the specified ID."
+			},
+			"PostTestMatrixResponse": {
+				"$ref": "#/components/schemas/TestMatrix",
+				"description": "Registered test matrix data."
+			},
+			"PatchTestMatrixResponse": {
+				"$ref": "#/components/schemas/TestMatrix",
+				"description": "Updated test matrix data."
+			},
+			"GetTestTargetGroupResponse": {
+				"$ref": "#/components/schemas/TestTargetGroup",
+				"description": "Test target group data for the specified ID."
+			},
+			"PostTestTargetGroupResponse": {
+				"$ref": "#/components/schemas/TestTargetGroup",
+				"description": "Registered test target group data."
+			},
+			"PatchTestTargetGroupResponse": {
+				"$ref": "#/components/schemas/TestTargetGroup",
+				"description": "Updated test target group data."
+			},
+			"GetTestTargetResponse": {
+				"$ref": "#/components/schemas/TestTarget",
+				"description": "Test target data for the specified ID."
+			},
+			"PostTestTargetResponse": {
+				"$ref": "#/components/schemas/TestTarget",
+				"description": "Registered test target data."
+			},
+			"PatchTestTargetResponse": {
+				"$ref": "#/components/schemas/TestTarget",
+				"description": "Updated test target data."
+			},
+			"GetViewPointResponse": {
+				"$ref": "#/components/schemas/ViewPoint",
+				"description": "View point data for the specified ID."
+			},
+			"PostViewPointResponse": {
+				"$ref": "#/components/schemas/ViewPoint",
+				"description": "Registered view point data."
+			},
+			"PatchViewPointResponse": {
+				"$ref": "#/components/schemas/ViewPoint",
+				"description": "Updated view point data."
+			},
+			"Story": {
+				"description": "Story.",
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"testMatrixId": {
+						"type": "string"
+					},
+					"testTargetId": {
+						"type": "string"
+					},
+					"viewPointId": {
+						"type": "string"
+					},
+					"status": {
+						"type": "string"
+					},
+					"index": {
+						"type": "number",
+						"format": "double"
+					},
+					"sessions": {
+						"items": {
+							"$ref": "#/components/schemas/Session"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"id",
+					"testMatrixId",
+					"testTargetId",
+					"viewPointId",
+					"status",
+					"index",
+					"sessions"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"PatchStoryResponse": {
+				"$ref": "#/components/schemas/Story",
+				"description": "Updated story data."
+			},
+			"PatchStoryDto": {
+				"description": "Data for story update.",
+				"properties": {
+					"status": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateCompressedImageResponse": {
+				"description": "Url of registered compressed image.",
+				"properties": {
+					"imageFileUrl": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"imageFileUrl"
+				],
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
+		"securitySchemes": {}
+	},
+	"info": {
+		"title": "latteart-repository",
+		"version": "2.7.1",
+		"contact": {}
+	},
+	"openapi": "3.0.0",
+	"paths": {
+		"/projects/{projectId}/configs": {
+			"get": {
+				"operationId": "Get",
+				"responses": {
+					"200": {
+						"description": "Project settings.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetConfigResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get project settings.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target project id.",
+						"in": "path",
+						"name": "projectId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "Update",
+				"responses": {
+					"200": {
+						"description": "Settings after update.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PutConfigResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Update project settings to specified.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target project id.",
+						"in": "path",
+						"name": "projectId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "Setting.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/PutConfigDto"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/test-results/{testResultId}/notes/{noteId}/compressed-image": {
+			"post": {
+				"operationId": "Create",
+				"responses": {
+					"200": {
+						"description": "Image url after compression.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CreateResponseDto"
+								}
+							}
+						}
+					}
+				},
+				"description": "Compress images for screenshots in notes (notices).",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target test result id.",
+						"in": "path",
+						"name": "testResultId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"description": "Target note id.",
+						"in": "path",
+						"name": "noteId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/test-results/{testResultId}/notes": {
+			"post": {
+				"operationId": "Create",
+				"responses": {
+					"200": {
+						"description": "Registered Purpose or Notices.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CreateNoteResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Register notes (Purpose or Notices) on test results.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target test result id.",
+						"in": "path",
+						"name": "testResultId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "Purpose or Notices.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateNoteDto"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/test-results/{testResultId}/notes/{noteId}": {
+			"get": {
+				"operationId": "Get",
+				"responses": {
+					"200": {
+						"description": "Purpose or Notices.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetNoteResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get notes (Purpose or Notices).",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target test result id.",
+						"in": "path",
+						"name": "testResultId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"description": "Target note id.",
+						"in": "path",
+						"name": "noteId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "Update",
+				"responses": {
+					"200": {
+						"description": "Updated Purpose or Notices.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UpdateNoteResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Update notes (Purpose or Notices) to whatever you specify.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target test result id.",
+						"in": "path",
+						"name": "testResultId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"description": "Target note id.",
+						"in": "path",
+						"name": "noteId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "Purpose or Notices",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateNoteDto"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "Delete",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "Delete Notes (Purpose or Notices).",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target test result id.",
+						"in": "path",
+						"name": "testResultId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"description": "Target note id.",
+						"in": "path",
+						"name": "noteId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/projects/{projectId}/export": {
+			"post": {
+				"operationId": "Create",
+				"responses": {
+					"200": {
+						"description": "Download url for exported project information and test result information.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"url": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"url"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Export project and test result information.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target project id.",
+						"in": "path",
+						"name": "projectId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "Flags to export.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateProjectExportDto"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/imports/projects": {
+			"post": {
+				"operationId": "Create",
+				"responses": {
+					"200": {
+						"description": "Imported project id.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"projectId": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"projectId"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Import specified project information and test result information into repository.",
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"description": "Project information and test result information to import.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateProjectImportDto"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/projects": {
+			"get": {
+				"operationId": "List",
+				"responses": {
+					"200": {
+						"description": "Project list.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ProjectListResponse"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get project list.",
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "Create",
+				"responses": {
+					"200": {
+						"description": "Created project id and project name.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"name": {
+											"type": "string"
+										},
+										"id": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"name",
+										"id"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Create a project.",
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/projects/{projectId}": {
+			"get": {
+				"operationId": "Get",
+				"responses": {
+					"200": {
+						"description": "Project information.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetProjectResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get project information.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target project id.",
+						"in": "path",
+						"name": "projectId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/projects/{projectId}/progress": {
+			"get": {
+				"operationId": "GetTestProgress",
+				"responses": {
+					"200": {
+						"description": "Test progress information.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/GetTestProgressResponse"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get test progress information within a specified period in the project.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target project id.",
+						"in": "path",
+						"name": "projectId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"description": "Start date.",
+						"in": "query",
+						"name": "since",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"description": "End date.",
+						"in": "query",
+						"name": "until",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/projects/{projectId}/test-scripts": {
+			"post": {
+				"operationId": "Create",
+				"responses": {
+					"200": {
+						"description": "Information in the output test script file.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"invalidOperationTypeExists": {
+											"type": "boolean"
+										},
+										"url": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"invalidOperationTypeExists",
+										"url"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Output test scripts based on all sessions of the specified project.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target project id.",
+						"in": "path",
+						"name": "projectId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "Test script output settings.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateTestScriptDto"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/server-name": {
+			"get": {
+				"operationId": "Get",
+				"responses": {
+					"200": {
+						"description": "The name of the server",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get server name.",
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/projects/{projectId}/sessions": {
+			"post": {
+				"operationId": "Post",
+				"responses": {
+					"200": {
+						"description": "Session created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PostSessionResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Create a session with the given story.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target project id.",
+						"in": "path",
+						"name": "projectId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "Target story id.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"storyId": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"storyId"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/projects/{projectId}/sessions/{sessionId}": {
+			"patch": {
+				"operationId": "Patch",
+				"responses": {
+					"200": {
+						"description": "Session after update.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PatchSessionResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Update some session information to the specified.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target project id.",
+						"in": "path",
+						"name": "projectId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"description": "Target session id.",
+						"in": "path",
+						"name": "sessionId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "Session.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/PatchSessionDto"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "Delete",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "Delete the session.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target project id.",
+						"in": "path",
+						"name": "projectId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"description": "Target session id.",
+						"in": "path",
+						"name": "sessionId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/projects/{projectId}/snapshots": {
+			"post": {
+				"operationId": "Create",
+				"responses": {
+					"200": {
+						"description": "Output snapshot download url.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CreateResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Output a snapshot.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target project id.",
+						"in": "path",
+						"name": "projectId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "Settings added when exporting a snapshot.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/SnapshotConfig"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/test-results/{testResultId}/export": {
+			"post": {
+				"operationId": "Create",
+				"responses": {
+					"200": {
+						"description": "Download url for exported test results.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"url": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"url"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Exporting test results.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target test result id.",
+						"in": "path",
+						"name": "testResultId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "Export settings.",
+					"required": false,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateTestResultExportDto"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/imports/test-results": {
+			"post": {
+				"operationId": "Create",
+				"responses": {
+					"200": {
+						"description": "Imported test result id.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"testResultId": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"testResultId"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Imports the specified test results into the repository.",
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"description": "Test results to import.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateTestResultImportDto"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/test-results": {
+			"get": {
+				"operationId": "List",
+				"responses": {
+					"200": {
+						"description": "List of test results.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ListTestResultResponse"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get test result list.",
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "Create",
+				"responses": {
+					"200": {
+						"description": "Created test result id/test result name.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CreateTestResultResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Create test results.",
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"description": "Test target url, Test result name, Test start date and time.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateTestResultDto"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/test-results/{testResultId}": {
+			"get": {
+				"operationId": "Get",
+				"responses": {
+					"200": {
+						"description": "Test results.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetTestResultResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get test results.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target test result id.",
+						"in": "path",
+						"name": "testResultId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"patch": {
+				"operationId": "Patch",
+				"responses": {
+					"200": {
+						"description": "Updated test results.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PatchTestResultResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Updates some information in the test result to the specified.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target test result id.",
+						"in": "path",
+						"name": "testResultId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "Test result name, Test start date and time, Test target url.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"initialUrl": {
+										"type": "string"
+									},
+									"startTime": {
+										"type": "number",
+										"format": "double"
+									},
+									"name": {
+										"type": "string"
+									}
+								},
+								"type": "object"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "Delete",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "Delete test results.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target test result id.",
+						"in": "path",
+						"name": "testResultId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/test-results/{testResultId}/sessions": {
+			"get": {
+				"operationId": "GetSessionList",
+				"responses": {
+					"200": {
+						"description": "List of session ids linked to test results.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ListSessionResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get a list of session ids associated with test results.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target test result id.",
+						"in": "path",
+						"name": "testResultId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/test-results/{testResultId}/test-scripts": {
+			"post": {
+				"operationId": "Create",
+				"responses": {
+					"200": {
+						"description": "Information in the output test script file.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"invalidOperationTypeExists": {
+											"type": "boolean"
+										},
+										"url": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"invalidOperationTypeExists",
+										"url"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Output a test script based on the specified test results.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target test result id.",
+						"in": "path",
+						"name": "testResultId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "Test script output settings.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateTestScriptDto"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/test-results/{testResultId}/test-steps": {
+			"post": {
+				"operationId": "Create",
+				"responses": {
+					"200": {
+						"description": "Added test step.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CreateTestStepResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Adds the specified operation as a test step.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target test result id.",
+						"in": "path",
+						"name": "testResultId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "Operation.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateTestStepDto"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/test-results/{testResultId}/test-steps/{testStepId}": {
+			"get": {
+				"operationId": "Get",
+				"responses": {
+					"200": {
+						"description": "Test step.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetTestStepResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get test steps.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target test result id.",
+						"in": "path",
+						"name": "testResultId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"description": "Target test step id.",
+						"in": "path",
+						"name": "testStepId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"patch": {
+				"operationId": "Patch",
+				"responses": {
+					"200": {
+						"description": "Test step after update.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PatchTestStepResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Update test step notes (Purpose or Notices) to specified.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target test result id.",
+						"in": "path",
+						"name": "testResultId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"description": "Target test step id.",
+						"in": "path",
+						"name": "testStepId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "Test step notes (Purpose or Notices).",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/PatchTestStepDto"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/test-results/{testResultId}/screenshots": {
+			"get": {
+				"operationId": "Get",
+				"responses": {
+					"200": {
+						"description": "Download url for the output screenshot file.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"url": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"url"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Output screenshot files of all test results.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target test result id.",
+						"in": "path",
+						"name": "testResultId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/test-matrices/{testMatrixId}": {
+			"get": {
+				"operationId": "Get",
+				"responses": {
+					"200": {
+						"description": "Test matrix.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetTestMatrixResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get test matrix.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target test matrix id.",
+						"in": "path",
+						"name": "testMatrixId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"patch": {
+				"operationId": "Patch",
+				"responses": {
+					"200": {
+						"description": "Updated test matrix.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PatchTestMatrixResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Update some information in the test matrix to the specified.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target test matrix id.",
+						"in": "path",
+						"name": "testMatrixId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "Test matrix name.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"name": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"name"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "Delete",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "Delete test matrix.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target test matrix id.",
+						"in": "path",
+						"name": "testMatrixId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/test-matrices": {
+			"post": {
+				"operationId": "Post",
+				"responses": {
+					"200": {
+						"description": "Created test matrix.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PostTestMatrixResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Create a test matrix.",
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"description": "Target project id and test matrix name.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"projectId": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"name",
+									"projectId"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/test-target-groups/{testTargetGroupId}": {
+			"get": {
+				"operationId": "Get",
+				"responses": {
+					"200": {
+						"description": "Test target group.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetTestTargetGroupResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get test target group.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target test target group id.",
+						"in": "path",
+						"name": "testTargetGroupId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"patch": {
+				"operationId": "Patch",
+				"responses": {
+					"200": {
+						"description": "Updated test target group.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PatchTestTargetGroupResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Update some information in the test target group to the specified.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target test target group id.",
+						"in": "path",
+						"name": "testTargetGroupId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "Test target group name.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"name": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"name"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "Delete",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "Delete test target group.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target test target group id.",
+						"in": "path",
+						"name": "testTargetGroupId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/test-target-groups": {
+			"post": {
+				"operationId": "Post",
+				"responses": {
+					"200": {
+						"description": "Created test target group.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PostTestTargetGroupResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Create a test target group.",
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"description": "Target test matrix ID/test target group name.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"testMatrixId": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"name",
+									"testMatrixId"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/projects/{projectId}/test-targets/{testTargetId}": {
+			"get": {
+				"operationId": "Get",
+				"responses": {
+					"200": {
+						"description": "Test target.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetTestTargetResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get the test target.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target project id.",
+						"in": "path",
+						"name": "projectId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"description": "Target Test Target id.",
+						"in": "path",
+						"name": "testTargetId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"patch": {
+				"operationId": "Patch",
+				"responses": {
+					"200": {
+						"description": "Updated test target.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PatchTestTargetResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Updates some information of the test target to the specified.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target project id.",
+						"in": "path",
+						"name": "projectId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"description": "Target test target id.",
+						"in": "path",
+						"name": "testTargetId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "Test target information.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"plans": {
+										"items": {
+											"properties": {
+												"value": {
+													"type": "number",
+													"format": "double"
+												},
+												"viewPointId": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"value",
+												"viewPointId"
+											],
+											"type": "object"
+										},
+										"type": "array"
+									},
+									"index": {
+										"type": "number",
+										"format": "double"
+									},
+									"name": {
+										"type": "string"
+									}
+								},
+								"type": "object"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "Delete",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "Delete test target.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target project id.",
+						"in": "path",
+						"name": "projectId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"description": "Target test target id.",
+						"in": "path",
+						"name": "testTargetId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/projects/{projectId}/test-targets": {
+			"post": {
+				"operationId": "Post",
+				"responses": {
+					"200": {
+						"description": "Created test target.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PostTestTargetResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Create a test target.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target project id.",
+						"in": "path",
+						"name": "projectId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "Target test target group id/test target name.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"testTargetGroupId": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"name",
+									"testTargetGroupId"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/view-points/{viewPointId}": {
+			"get": {
+				"operationId": "Get",
+				"responses": {
+					"200": {
+						"description": "Test perspective.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetViewPointResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get test perspective.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Test perspective id.",
+						"in": "path",
+						"name": "viewPointId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"patch": {
+				"operationId": "Patch",
+				"responses": {
+					"200": {
+						"description": "Updated test perspective.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PatchViewPointResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Updates some information in the test perspective to the specified.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target test perspective id.",
+						"in": "path",
+						"name": "viewPointId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "Test perspective.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"index": {
+										"type": "number",
+										"format": "double"
+									},
+									"description": {
+										"type": "string"
+									},
+									"name": {
+										"type": "string"
+									}
+								},
+								"type": "object"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "Delete",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "Delete test perspective.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target test perspective id.",
+						"in": "path",
+						"name": "viewPointId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/view-points": {
+			"post": {
+				"operationId": "Post",
+				"responses": {
+					"200": {
+						"description": "Created test perspective.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PostViewPointResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Create a test perspective.",
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"description": "Target test matrix id/test perspective.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"description": {
+										"type": "string"
+									},
+									"index": {
+										"type": "number",
+										"format": "double"
+									},
+									"name": {
+										"type": "string"
+									},
+									"testMatrixId": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"description",
+									"index",
+									"name",
+									"testMatrixId"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/stories/{storyId}": {
+			"patch": {
+				"operationId": "Patch",
+				"responses": {
+					"200": {
+						"description": "Story after update.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PatchStoryResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Updates some information in the story to the specified.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target story id.",
+						"in": "path",
+						"name": "storyId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "Story.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/PatchStoryDto"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/projects/{projectId}/configs/export": {
+			"post": {
+				"operationId": "Create",
+				"responses": {
+					"200": {
+						"description": "Download url for the exported configuration file.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"url": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"url"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Export project settings.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target project id.",
+						"in": "path",
+						"name": "projectId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/test-results/{testResultId}/test-steps/{testStepId}/compressed-image": {
+			"post": {
+				"operationId": "Create",
+				"responses": {
+					"200": {
+						"description": "Image url after compression.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CreateCompressedImageResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Compress images for test step screenshots.",
+				"security": [],
+				"parameters": [
+					{
+						"description": "Target test result id.",
+						"in": "path",
+						"name": "testResultId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"description": "Target test step id.",
+						"in": "path",
+						"name": "testStepId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "http://localhost:3002/api/v1"
+		}
+	]
+}

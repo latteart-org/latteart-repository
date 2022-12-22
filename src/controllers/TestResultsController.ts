@@ -36,8 +36,8 @@ import { TestResultServiceImpl } from "../services/TestResultService";
 @Route("test-results")
 export class TestResultsController extends Controller {
   /**
-   * テスト結果一覧を取得する
-   * @returns テスト結果一覧
+   * Get test result list.
+   * @returns List of test results.
    */
   @Get()
   public async list(): Promise<ListTestResultResponse[]> {
@@ -59,9 +59,9 @@ export class TestResultsController extends Controller {
   }
 
   /**
-   * テスト結果を取得する
-   * @param testResultId 対象のテスト結果ID
-   * @returns テスト結果
+   * Get test results.
+   * @param testResultId Target test result id.
+   * @returns Test results.
    */
   @Get("{testResultId}")
   public async get(
@@ -108,9 +108,9 @@ export class TestResultsController extends Controller {
   }
 
   /**
-   * テスト結果を作成する
-   * @param requestBody テスト対象URL・テスト結果名・テスト開始日時
-   * @returns 作成したテスト結果ID・テスト結果名
+   * Create test results.
+   * @param requestBody Test target url, Test result name, Test start date and time.
+   * @returns Created test result id/test result name.
    */
   @Post()
   public async create(
@@ -147,10 +147,10 @@ export class TestResultsController extends Controller {
   }
 
   /**
-   * テスト結果の一部情報を指定のものに更新する
-   * @param testResultId 対象のテスト結果ID
-   * @param requestBody テスト結果名・テスト開始日時・テスト対象URL
-   * @returns 更新後のテスト結果
+   * Updates some information in the test result to the specified.
+   * @param testResultId Target test result id.
+   * @param requestBody Test result name, Test start date and time, Test target url.
+   * @returns Updated test results.
    */
   @Patch("{testResultId}")
   public async patch(
@@ -190,8 +190,8 @@ export class TestResultsController extends Controller {
   }
 
   /**
-   * テスト結果を削除する
-   * @param testResultId 対象のテスト結果ID
+   * Delete test results.
+   * @param testResultId Target test result id.
    */
   @Delete("{testResultId}")
   public async delete(@Path() testResultId: string): Promise<void> {
@@ -226,9 +226,9 @@ export class TestResultsController extends Controller {
   }
 
   /**
-   * テスト結果に紐づくセッションID一覧を取得する
-   * @param testResultId 対象のテスト結果ID
-   * @returns テスト結果に紐づくセッションID一覧
+   * Get a list of session ids associated with test results.
+   * @param testResultId Target test result id.
+   * @returns List of session ids linked to test results.
    */
   @Get("{testResultId}/sessions")
   public async getSessionList(

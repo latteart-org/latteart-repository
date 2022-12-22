@@ -28,10 +28,10 @@ import { transactionRunner } from "..";
 @Route("projects/{projectId}/test-targets/")
 export class TestTargetsController extends Controller {
   /**
-   * テスト対象を取得する
-   * @param projectId 対象のプロジェクトID
-   * @param testTargetId 対象のテスト対象ID
-   * @returns テスト対象
+   * Get the test target.
+   * @param projectId Target project id.
+   * @param testTargetId Target Test Target id.
+   * @returns Test target.
    */
   @Get("{testTargetId}")
   public async get(
@@ -53,10 +53,10 @@ export class TestTargetsController extends Controller {
   }
 
   /**
-   * テスト対象を作成する
-   * @param projectId 対象のプロジェクトID
-   * @param body 対象のテスト対象グループID・テスト対象名
-   * @returns 作成したテスト対象
+   * Create a test target.
+   * @param projectId Target project id.
+   * @param body Target test target group id/test target name.
+   * @returns Created test target.
    */
   @Post()
   public async post(
@@ -78,11 +78,11 @@ export class TestTargetsController extends Controller {
   }
 
   /**
-   * テスト対象の一部情報を指定したものに更新する
-   * @param projectId 対象のプロジェクトID
-   * @param testTargetId 対象のテスト対象ID
-   * @param body テスト対象情報
-   * @returns 更新後のテスト対象
+   * Updates some information of the test target to the specified.
+   * @param projectId Target project id.
+   * @param testTargetId Target test target id.
+   * @param body Test target information.
+   * @returns Updated test target.
    */
   @Patch("{testTargetId}")
   public async patch(
@@ -115,9 +115,9 @@ export class TestTargetsController extends Controller {
   }
 
   /**
-   * テスト対象を削除する
-   * @param projectId 対象のプロジェクトID
-   * @param testTargetId 対象のテスト対象
+   * Delete test target.
+   * @param projectId Target project id.
+   * @param testTargetId Target test target id.
    */
   @Delete("{testTargetId}")
   public async delete(

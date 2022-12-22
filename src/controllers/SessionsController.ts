@@ -31,10 +31,10 @@ import { SessionsService } from "../services/SessionsService";
 @Route("projects/{projectId}/sessions")
 export class SessionsController extends Controller {
   /**
-   * 指定のストーリーにセッションを作成する
-   * @param projectId 対象のプロジェクトID
-   * @param requestBody 対象のストーリーID
-   * @returns 作成したセッション
+   * Create a session with the given story.
+   * @param projectId Target project id.
+   * @param requestBody Target story id.
+   * @returns Session created
    */
   @Post("")
   public async post(
@@ -60,11 +60,11 @@ export class SessionsController extends Controller {
   }
 
   /**
-   * セッションの一部情報を指定したものに更新する
-   * @param projectId 対象のプロジェクトID
-   * @param sessionId 対処のセッションID
-   * @param requestBody セッション
-   * @returns 更新後のセッション
+   * Update some session information to the specified.
+   * @param projectId Target project id.
+   * @param sessionId Target session id.
+   * @param requestBody Session.
+   * @returns Session after update.
    */
   @Patch("{sessionId}")
   public async patch(
@@ -100,9 +100,9 @@ export class SessionsController extends Controller {
   }
 
   /**
-   * セッションを削除する
-   * @param projectId 対象のプロジェクトID
-   * @param sessionId 対象のセッションID
+   * Delete the session.
+   * @param projectId Target project id.
+   * @param sessionId Target session id.
    */
   @Delete("{sessionId}")
   public async delete(

@@ -36,9 +36,9 @@ import { TestPurposeServiceImpl } from "@/services/TestPurposeService";
 @Route("imports/projects")
 export class ProjectImportController extends Controller {
   /**
-   * 指定のプロジェクト情報とテスト結果情報をリポジトリにインポートする
-   * @param requestBody インポートするプロジェクト情報・テスト結果情報
-   * @returns インポートしたプロジェクトID
+   * Import specified project information and test result information into repository.
+   * @param requestBody Project information and test result information to import.
+   * @returns Imported project id.
    */
   @Post()
   public async create(

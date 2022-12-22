@@ -28,9 +28,9 @@ import { transactionRunner } from "..";
 @Route("/view-points/")
 export class ViewPointsController extends Controller {
   /**
-   * テスト観点を取得する
-   * @param viewPointId テスト観点ID
-   * @returns テスト観点
+   * Get test perspective.
+   * @param viewPointId Test perspective id.
+   * @returns Test perspective.
    */
   @Get("{viewPointId}")
   public async get(@Path() viewPointId: string): Promise<GetViewPointResponse> {
@@ -49,9 +49,9 @@ export class ViewPointsController extends Controller {
   }
 
   /**
-   * テスト観点を作成する
-   * @param body 対象のテストマトリクスID・テスト観点
-   * @returns 作成したテスト観点
+   * Create a test perspective.
+   * @param body Target test matrix id/test perspective.
+   * @returns Created test perspective.
    */
   @Post()
   public async post(
@@ -78,10 +78,10 @@ export class ViewPointsController extends Controller {
   }
 
   /**
-   * テスト観点の一部情報を指定したものに更新する
-   * @param viewPointId 対象のテスト観点ID
-   * @param body テスト観点
-   * @returns 更新後のテスト観点
+   * Updates some information in the test perspective to the specified.
+   * @param viewPointId Target test perspective id.
+   * @param body Test perspective.
+   * @returns Updated test perspective.
    */
   @Patch("{viewPointId}")
   public async patch(
@@ -104,8 +104,8 @@ export class ViewPointsController extends Controller {
   }
 
   /**
-   * テスト観点を削除する
-   * @param viewPointId 対象のテスト観点ID
+   * Delete test perspective.
+   * @param viewPointId Target test perspective id.
    */
   @Delete("{viewPointId}")
   public async delete(@Path() viewPointId: string): Promise<void> {

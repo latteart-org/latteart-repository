@@ -24,9 +24,9 @@ import { screenshotDirectoryService, tempDirectoryService } from "..";
 @Route("test-results/{testResultId}/screenshots")
 export class ScreenshotsController extends Controller {
   /**
-   * テスト結果内のスクリーンショットファイルを出力する
-   * @param testResultId 対象のテスト結果ID
-   * @returns 出力したスクリーンショットファイルのダウンロードURL
+   * Output screenshot files of all test results.
+   * @param testResultId Target test result id.
+   * @returns Download url for the output screenshot file.
    */
   @Get()
   public async get(@Path() testResultId: string): Promise<{ url: string }> {

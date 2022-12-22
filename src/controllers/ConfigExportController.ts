@@ -26,9 +26,9 @@ import { ConfigExportService } from "@/services/ConfigExportService";
 @Route("projects/{projectId}/configs/export")
 export class ConfigExportController extends Controller {
   /**
-   * プロジェクトの設定をエクスポートする
-   * @param projectId 対象のプロジェクトID
-   * @returns エクスポートした設定ファイルのダウンロードURL
+   * Export project settings.
+   * @param projectId Target project id.
+   * @returns Download url for the exported configuration file.
    */
   @Post()
   public async create(@Path() projectId: string): Promise<{ url: string }> {

@@ -23,10 +23,10 @@ import { Controller, Body, Patch, Route, Path } from "tsoa";
 @Route("stories")
 export class StoriesController extends Controller {
   /**
-   * ストーリーの一部情報を指定したものに更新する
-   * @param storyId 対象のストーリーID
-   * @param requestBody ストーリー
-   * @returns 更新後のストーリー
+   * Updates some information in the story to the specified.
+   * @param storyId Target story id.
+   * @param requestBody Story.
+   * @returns Story after update.
    */
   @Patch("{storyId}")
   public async patch(

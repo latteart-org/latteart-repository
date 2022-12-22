@@ -22,8 +22,8 @@ import { ServerNameService } from "../services/ServerNameService";
 @Route("server-name")
 export class ServerNameController {
   /**
-   * サーバー名を取得する
-   * @returns サーバー名
+   * Get server name.
+   * @returns The name of the server
    */
   @Get()
   public async get(): Promise<string> {

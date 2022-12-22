@@ -33,10 +33,10 @@ import {
 @Route("test-results/{testResultId}/test-steps")
 export class TestStepsController extends Controller {
   /**
-   * 指定の操作をテストステップとして追加する
-   * @param testResultId 対象のテスト結果ID
-   * @param requestBody 操作
-   * @returns 追加したテストステップ
+   * Adds the specified operation as a test step.
+   * @param testResultId Target test result id.
+   * @param requestBody Operation.
+   * @returns Added test step.
    */
   @Post()
   public async create(
@@ -68,10 +68,10 @@ export class TestStepsController extends Controller {
   }
 
   /**
-   * テストステップを取得する
-   * @param testResultId 対象のテスト結果ID
-   * @param testStepId 対象のテストステップID
-   * @returns テストステップ
+   * Get test steps.
+   * @param testResultId Target test result id.
+   * @param testStepId Target test step id.
+   * @returns Test step.
    */
   @Get("{testStepId}")
   public async get(
@@ -107,11 +107,11 @@ export class TestStepsController extends Controller {
   }
 
   /**
-   * テストステップの目的または気づきを指定のものに更新する
-   * @param testResultId 対象のテスト結果ID
-   * @param testStepId 対象のテストステップID
-   * @param requestBody テストステップの目的または気づき
-   * @returns 更新後のテストステップ
+   * Update test step notes (Purpose or Notices) to specified.
+   * @param testResultId Target test result id.
+   * @param testStepId Target test step id.
+   * @param requestBody Test step notes (Purpose or Notices).
+   * @returns Test step after update.
    */
   @Patch("{testStepId}")
   public async patch(

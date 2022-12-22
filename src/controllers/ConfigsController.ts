@@ -28,9 +28,9 @@ import { convertToExportableConfig } from "@/lib/settings/settingsConverter";
 @Route("projects/{projectId}/configs")
 export class ConfigsController {
   /**
-   * プロジェクトの設定を取得する
-   * @param projectId 対象のプロジェクトID
-   * @returns プロジェクトの設定
+   * Get project settings.
+   * @param projectId Target project id.
+   * @returns Project settings.
    */
   @Get()
   public async get(@Path() projectId: string): Promise<GetConfigResponse> {
@@ -50,10 +50,10 @@ export class ConfigsController {
   }
 
   /**
-   * プロジェクトの設定を指定のものに更新する
-   * @param projectId 対象のプロジェクトID
-   * @param requestBody 設定
-   * @returns 更新後の設定
+   * Update project settings to specified.
+   * @param projectId Target project id.
+   * @param requestBody Setting.
+   * @returns Settings after update.
    */
   @Put()
   public async update(
