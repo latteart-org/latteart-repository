@@ -9,13 +9,13 @@
     "watch": "webpack -w --config webpack.dev.js",
     "test": "jest --runInBand",
     "package": "yarn package:win & yarn package:mac",
-    "package:win": "nexe dist/index.js -o dist/latteart-repository/latteart-repository --target windows-x64-14.15.3",
-    "package:mac": "nexe dist/index.js -o dist/latteart-repository/latteart-repository --target macos-x64-14.15.3",
+    "package:win": "pkg -t node16-win-x64 .",
+    "package:mac": "pkg -t node16-macos-x64 .",
     "prepackage:win": "yarn prepackage:settings && yarn prepackage:dependencies:win && yarn build",
     "prepackage:mac": "yarn prepackage:settings && yarn prepackage:dependencies:mac && yarn build",
-    "prepackage:settings": "cpx \"latteart*.config.json\" dist/latteart-repository && cpx ormconfig.json dist/latteart-repository",
-    "prepackage:dependencies:win": "cpx externals/package.json dist/latteart-repository && cd dist/latteart-repository && yarn install --ignore-engines && ./node_modules/.bin/node-pre-gyp install --directory=./node_modules/sqlite3 --target_platform=win32 --target_libc=unknown --target_arch=x64 && rimraf package.json && rimraf yarn.lock",
-    "prepackage:dependencies:mac": "cpx externals/package.json dist/latteart-repository && cd dist/latteart-repository && yarn install --ignore-engines && ./node_modules/.bin/node-pre-gyp install --directory=./node_modules/sqlite3 --target_platform=darwin --target_libc=unknown --target_arch=x64 && rimraf package.json && rimraf yarn.lock",
+    "prepackage:settings": "cpx \"latteart*.config.json\" dist/latteart/latteart-repository",
+    "prepackage:dependencies:win": "./node_modules/.bin/node-pre-gyp install --directory=./node_modules/sqlite3 --target_platform=win32 --target_libc=unknown --target_arch=x64",
+    "prepackage:dependencies:mac": "./node_modules/.bin/node-pre-gyp install --directory=./node_modules/sqlite3 --target_platform=darwin --target_libc=unknown --target_arch=x64",
     "lint": "eslint src",
     "fix": "yarn fix:lint && yarn fix:format",
     "fix:lint": "eslint --fix src tests/unit",
@@ -25,12 +25,21 @@
     "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js --config cli_ormconfig.ts",
     "generate:migration": "yarn typeorm migration:generate"
   },
+  "bin": {
+    "latteart-repository": "dist/index.js"
+  },
   "devDependencies": {
+    "@types/archiver": "^3.1.1",
+    "@types/encoding-japanese": "^1.0.16",
+    "@types/express": "4.17.13",
+    "@types/fs-extra": "^9.0.3",
+    "@types/log4js": "^2.3.5",
+    "@types/uuid": "^8.3.4",
     "@types/adm-zip": "^0.4.34",
     "@types/body-parser": "^1.19.1",
     "@types/jest": "^26.0.15",
     "@types/multer": "^1.4.7",
-    "@types/node": "^12.12.70",
+    "@types/node": "^16.11.7",
     "@typescript-eslint/eslint-plugin": "^4.15.1",
     "@typescript-eslint/parser": "^4.15.1",
     "cpx": "^1.5.0",
@@ -40,7 +49,7 @@
     "jest": "^26.6.3",
     "lint-staged": "^10.5.4",
     "mkdirp": "^1.0.4",
-    "nexe": "^4.0.0-beta.19",
+    "pkg": "^5.8.0",
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
     "ts-jest": "^26.4.4",
@@ -54,12 +63,6 @@
     "webpack-node-externals": "^2.5.2"
   },
   "dependencies": {
-    "@types/archiver": "^3.1.1",
-    "@types/encoding-japanese": "^1.0.16",
-    "@types/express": "4.17.13",
-    "@types/fs-extra": "^9.0.3",
-    "@types/log4js": "^2.3.5",
-    "@types/uuid": "^8.3.4",
     "adm-zip": "^0.5.9",
     "archiver": "^5.0.2",
     "axios": "^0.21.2",
@@ -94,6 +97,16 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
+  },
+  "pkg": {
+    "assets": [
+      "ormconfig.json",
+      "dist/index.js",
+      "./node_modules/sqlite3/lib/binding/**/*",
+      "./node_modules/jsdoc-api/node_modules/**/*"
+    ],
+    "outputPath": "dist/latteart/latteart-repository",
+    "name": "latteart-repository"
   },
   "lint-staged": {
     "*": [

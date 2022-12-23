@@ -15,10 +15,12 @@
  */
 
 import path from "path";
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const executablePath = (process as any).pkg?.entrypoint;
 
 export const appRootPath = path.relative(
   process.cwd(),
-  path.dirname(__dirname)
+  path.dirname(executablePath ? process.argv[0] : __dirname)
 );
 export const publicDirPath = path.join(appRootPath, "public");
 export const configFilePath = path.join(appRootPath, "latteart.config.json");
