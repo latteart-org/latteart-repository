@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-import { PatchStoryDto, PatchStoryResponse } from "../interfaces/Stories";
+import {
+  GetStoryResponse,
+  PatchStoryDto,
+  PatchStoryResponse,
+} from "../interfaces/Stories";
 import LoggingService from "@/logger/LoggingService";
 import { ServerError, ServerErrorData } from "../ServerError";
 import { StoriesService } from "@/services/StoriesService";
@@ -27,6 +31,7 @@ import {
   Tags,
   Response,
   SuccessResponse,
+  Get,
 } from "tsoa";
 
 @Route("stories")
@@ -53,6 +58,29 @@ export class StoriesController extends Controller {
 
         throw new ServerError(500, {
           code: "patch_story_failed",
+        });
+      }
+      throw error;
+    }
+  }
+
+  /**
+   * Get the specified story data.
+   * @param storyId Target story id.
+   * @returns Story.
+   */
+  @Response<ServerErrorData<"get_story_failed">>(500, "Get story failed")
+  @SuccessResponse(200, "Success")
+  @Get("{storyId}")
+  public async getStory(@Path() storyId: string): Promise<GetStoryResponse> {
+    try {
+      return await new StoriesService().getStory(storyId);
+    } catch (error) {
+      if (error instanceof Error) {
+        LoggingService.error("Get story failed.", error);
+
+        throw new ServerError(500, {
+          code: "get_story_failed",
         });
       }
       throw error;

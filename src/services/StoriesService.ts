@@ -15,7 +15,11 @@
  */
 
 import { StoryEntity } from "../entities/StoryEntity";
-import { PatchStoryDto, PatchStoryResponse } from "../interfaces/Stories";
+import {
+  GetStoryResponse,
+  PatchStoryDto,
+  PatchStoryResponse,
+} from "../interfaces/Stories";
 import { storyEntityToResponse } from "../lib/entityToResponse";
 import { getRepository } from "typeorm";
 
@@ -34,10 +38,10 @@ export class StoriesService {
       story.status = requestBody.status;
       await storyRepository.save(story);
     }
-    return await this.getStoryResponse(storyId);
+    return await this.getStory(storyId);
   }
 
-  private async getStoryResponse(id: string) {
+  public async getStory(id: string): Promise<GetStoryResponse> {
     const story = await getRepository(StoryEntity).findOne(id, {
       relations: [
         "sessions",

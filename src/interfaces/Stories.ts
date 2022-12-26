@@ -17,6 +17,11 @@
 import { Session } from "./Sessions";
 
 /**
+ * Story data.
+ */
+export type GetStoryResponse = Story;
+
+/**
  * Updated story data.
  */
 export type PatchStoryResponse = Story;
