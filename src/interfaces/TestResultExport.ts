@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/**
+ * File output destination directory.
+ */
 export interface CreateTestResultExportDto {
   temp: boolean;
 }

@@ -16,6 +16,9 @@
 
 import { TestTarget } from "./TestTargets";
 
+/**
+ * Test target group.
+ */
 export interface TestTargetGroup {
   id: string;
   name: string;
@@ -23,6 +26,17 @@ export interface TestTargetGroup {
   testTargets: TestTarget[];
 }
 
+/**
+ * Test target group data for the specified ID.
+ */
 export type GetTestTargetGroupResponse = TestTargetGroup;
+
+/**
+ * Registered test target group data.
+ */
 export type PostTestTargetGroupResponse = TestTargetGroup;
+
+/**
+ * Updated test target group data.
+ */
 export type PatchTestTargetGroupResponse = TestTargetGroup;

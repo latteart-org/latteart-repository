@@ -32,6 +32,9 @@ import { ProjectsServiceImpl } from "./ProjectsService";
 import { TimestampServiceImpl } from "./TimestampService";
 import { TransactionRunner } from "@/TransactionRunner";
 
+/**
+ * Daily test progress.
+ */
 export type DailyTestProgress = {
   date: string;
   storyProgresses: {

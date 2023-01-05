@@ -18,7 +18,7 @@ import LoggingService from "@/logger/LoggingService";
 import { ServerErrorCode, ServerError } from "@/ServerError";
 import { TestProgressServiceImpl } from "@/services/TestProgressService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
-import { Controller, Body, Get, Put, Post, Route, Path, Query } from "tsoa";
+import { Controller, Get, Post, Route, Path, Query } from "tsoa";
 import { transactionRunner } from "..";
 import {
   ProjectListResponse,
@@ -29,6 +29,10 @@ import { ProjectsServiceImpl } from "../services/ProjectsService";
 
 @Route("projects")
 export class ProjectsController extends Controller {
+  /**
+   * Get project list.
+   * @returns Project list.
+   */
   @Get()
   public async list(): Promise<ProjectListResponse[]> {
     return new ProjectsServiceImpl(
@@ -40,6 +44,10 @@ export class ProjectsController extends Controller {
     ).getProjectIdentifiers();
   }
 
+  /**
+   * Create a project.
+   * @returns Created project id and project name.
+   */
   @Post()
   public async create(): Promise<{ id: string; name: string }> {
     try {
@@ -62,6 +70,11 @@ export class ProjectsController extends Controller {
     }
   }
 
+  /**
+   * Get project information.
+   * @param projectId Target project id.
+   * @returns Project information.
+   */
   @Get("{projectId}")
   public async get(@Path() projectId: string): Promise<GetProjectResponse> {
     try {
@@ -85,6 +98,13 @@ export class ProjectsController extends Controller {
     }
   }
 
+  /**
+   * Get test progress information within a specified period in the project.
+   * @param projectId Target project id.
+   * @param since Start date.
+   * @param until End date.
+   * @returns Test progress information.
+   */
   @Get("{projectId}/progress")
   public async getTestProgress(
     @Path() projectId: string,

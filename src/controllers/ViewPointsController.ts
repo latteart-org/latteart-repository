@@ -27,6 +27,11 @@ import { transactionRunner } from "..";
 
 @Route("/view-points/")
 export class ViewPointsController extends Controller {
+  /**
+   * Get test perspective.
+   * @param viewPointId Test perspective id.
+   * @returns Test perspective.
+   */
   @Get("{viewPointId}")
   public async get(@Path() viewPointId: string): Promise<GetViewPointResponse> {
     try {
@@ -43,6 +48,11 @@ export class ViewPointsController extends Controller {
     }
   }
 
+  /**
+   * Create a test perspective.
+   * @param body Target test matrix id/test perspective.
+   * @returns Created test perspective.
+   */
   @Post()
   public async post(
     @Body()
@@ -67,6 +77,12 @@ export class ViewPointsController extends Controller {
     }
   }
 
+  /**
+   * Updates some information in the test perspective to the specified.
+   * @param viewPointId Target test perspective id.
+   * @param body Test perspective.
+   * @returns Updated test perspective.
+   */
   @Patch("{viewPointId}")
   public async patch(
     @Path() viewPointId: string,
@@ -87,6 +103,10 @@ export class ViewPointsController extends Controller {
     }
   }
 
+  /**
+   * Delete test perspective.
+   * @param viewPointId Target test perspective id.
+   */
   @Delete("{viewPointId}")
   public async delete(@Path() viewPointId: string): Promise<void> {
     try {

@@ -27,6 +27,11 @@ import { transactionRunner } from "..";
 
 @Route("/test-target-groups/")
 export class TestTargetGroupsController extends Controller {
+  /**
+   * Get test target group.
+   * @param testTargetGroupId Target test target group id.
+   * @returns Test target group.
+   */
   @Get("{testTargetGroupId}")
   public async get(
     @Path() testTargetGroupId: string
@@ -45,6 +50,11 @@ export class TestTargetGroupsController extends Controller {
     }
   }
 
+  /**
+   * Create a test target group.
+   * @param body Target test matrix ID/test target group name.
+   * @returns Created test target group.
+   */
   @Post()
   public async post(
     @Body() body: { testMatrixId: string; name: string }
@@ -63,6 +73,12 @@ export class TestTargetGroupsController extends Controller {
     }
   }
 
+  /**
+   * Update some information in the test target group to the specified.
+   * @param testTargetGroupId Target test target group id.
+   * @param body Test target group name.
+   * @returns Updated test target group.
+   */
   @Patch("{testTargetGroupId}")
   public async patch(
     @Path() testTargetGroupId: string,
@@ -82,6 +98,10 @@ export class TestTargetGroupsController extends Controller {
     }
   }
 
+  /**
+   * Delete test target group.
+   * @param testTargetGroupId Target test target group id.
+   */
   @Delete("{testTargetGroupId}")
   public async delete(@Path() testTargetGroupId: string): Promise<void> {
     try {

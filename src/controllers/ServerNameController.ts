@@ -21,6 +21,10 @@ import { ServerNameService } from "../services/ServerNameService";
 
 @Route("server-name")
 export class ServerNameController {
+  /**
+   * Get server name.
+   * @returns The name of the server
+   */
   @Get()
   public async get(): Promise<string> {
     try {

@@ -19,8 +19,6 @@ export enum ServerErrorCode {
   GET_PROJECT_FAILED = "get_project_failed",
   GET_SETTINGS_FAILED = "get_settings_failed",
   SAVE_SETTINGS_FAILED = "save_settings_failed",
-  GET_DEVICE_SETTINGS_FAILED = "get_device_settings_failed",
-  SAVE_DEVICE_SETTINGS_FAILED = "save_device_settings_failed",
   SAVE_TEST_SCRIPT_FAILED = "save_test_script_failed",
   SAVE_SNAPSHOT_FAILED = "save_snapshot_failed",
   CREATE_TEST_RESULT_FAILED = "save_test_result_failed",

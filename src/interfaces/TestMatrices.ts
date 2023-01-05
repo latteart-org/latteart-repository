@@ -17,6 +17,9 @@
 import { TestTargetGroup } from "./TestTargetGroups";
 import { ViewPoint } from "./ViewPoints";
 
+/**
+ * Test matrix.
+ */
 export interface TestMatrix {
   id: string;
   name: string;
@@ -25,6 +28,17 @@ export interface TestMatrix {
   viewPoints: ViewPoint[];
 }
 
+/**
+ * Test matrix data for the specified ID.
+ */
 export type GetTestMatrixResponse = TestMatrix;
+
+/**
+ * Registered test matrix data.
+ */
 export type PostTestMatrixResponse = TestMatrix;
+
+/**
+ * Updated test matrix data.
+ */
 export type PatchTestMatrixResponse = TestMatrix;

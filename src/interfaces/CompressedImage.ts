@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/**
+ * Url of registered compressed image.
+ */
 export interface CreateCompressedImageResponse {
   imageFileUrl: string;
 }

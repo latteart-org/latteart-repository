@@ -24,13 +24,8 @@ import { ValidateError } from "tsoa";
 import LoggingService from "./logger/LoggingService";
 import StandardLogger, { RunningMode } from "./logger/StandardLogger";
 import bodyParser from "body-parser";
-import { SettingsType, SettingsUtility } from "./lib/settings/SettingsUtility";
-import {
-  appRootPath,
-  configFilePath,
-  deviceConfigFilePath,
-  publicDirPath,
-} from "./common";
+import { SettingsUtility } from "./lib/settings/SettingsUtility";
+import { appRootPath, configFilePath, publicDirPath } from "./common";
 import { createConnection, getConnectionOptions } from "typeorm";
 import { NoteEntity } from "./entities/NoteEntity";
 import { TagEntity } from "./entities/TagEntity";
@@ -109,7 +104,6 @@ export const transactionRunner = new TransactionRunner();
 
 (async () => {
   SettingsUtility.loadFile(configFilePath);
-  SettingsUtility.loadFile(deviceConfigFilePath, SettingsType.device);
 
   const ormConnectionName = "default";
 

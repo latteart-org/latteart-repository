@@ -27,11 +27,6 @@ export class SnapshotsService {
     }
   ) {}
 
-  public async getSnapshotUrl(projectId: string): Promise<string[]> {
-    console.log(projectId);
-    return [];
-  }
-
   public async createSnapshot(
     projectId: string,
     snapshotConfig: SnapshotConfig

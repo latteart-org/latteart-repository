@@ -27,6 +27,12 @@ import { transactionRunner } from "..";
 
 @Route("projects/{projectId}/test-targets/")
 export class TestTargetsController extends Controller {
+  /**
+   * Get the test target.
+   * @param projectId Target project id.
+   * @param testTargetId Target Test Target id.
+   * @returns Test target.
+   */
   @Get("{testTargetId}")
   public async get(
     @Path() projectId: string,
@@ -46,6 +52,12 @@ export class TestTargetsController extends Controller {
     }
   }
 
+  /**
+   * Create a test target.
+   * @param projectId Target project id.
+   * @param body Target test target group id/test target name.
+   * @returns Created test target.
+   */
   @Post()
   public async post(
     @Path() projectId: string,
@@ -65,6 +77,13 @@ export class TestTargetsController extends Controller {
     }
   }
 
+  /**
+   * Updates some information of the test target to the specified.
+   * @param projectId Target project id.
+   * @param testTargetId Target test target id.
+   * @param body Test target information.
+   * @returns Updated test target.
+   */
   @Patch("{testTargetId}")
   public async patch(
     @Path() projectId: string,
@@ -95,6 +114,11 @@ export class TestTargetsController extends Controller {
     }
   }
 
+  /**
+   * Delete test target.
+   * @param projectId Target project id.
+   * @param testTargetId Target test target id.
+   */
   @Delete("{testTargetId}")
   public async delete(
     @Path() projectId: string,

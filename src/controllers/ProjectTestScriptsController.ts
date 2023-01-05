@@ -30,6 +30,12 @@ import { TestScriptsService } from "../services/TestScriptsService";
 
 @Route("projects/{projectId}/test-scripts")
 export class ProjectTestScriptsController extends Controller {
+  /**
+   * Output test scripts based on all sessions of the specified project.
+   * @param projectId Target project id.
+   * @param requestBody Test script output settings.
+   * @returns Information in the output test script file.
+   */
   @Post()
   public async create(
     @Path() projectId: string,

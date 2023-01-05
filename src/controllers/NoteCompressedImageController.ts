@@ -30,6 +30,12 @@ import { CompressedImageService } from "../services/CompressedImageService";
 
 @Route("test-results/{testResultId}/notes/{noteId}/compressed-image")
 export class NoteCompressedImageController extends Controller {
+  /**
+   * Compress images for screenshots in notes (notices).
+   * @param testResultId Target test result id.
+   * @param noteId Target note id.
+   * @returns Image url after compression.
+   */
   @Post()
   public async create(
     @Path() testResultId: string,

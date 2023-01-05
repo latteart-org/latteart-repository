@@ -27,7 +27,7 @@ import { TestPurposeServiceImpl } from "@/services/TestPurposeService";
 import { TestResultServiceImpl } from "@/services/TestResultService";
 import { TestStepServiceImpl } from "@/services/TestStepService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
-import { Controller, Get, Post, Route, Path, Body } from "tsoa";
+import { Controller, Post, Route, Path, Body } from "tsoa";
 import {
   attachedFileDirectoryService,
   screenshotDirectoryService,
@@ -43,11 +43,12 @@ import { SnapshotConfig } from "../interfaces/Configs";
 
 @Route("projects/{projectId}/snapshots")
 export class SnapshotsController extends Controller {
-  @Get()
-  public async get(@Path() projectId: string): Promise<string[]> {
-    return this.createSnapshotsService().getSnapshotUrl(projectId);
-  }
-
+  /**
+   * Output a snapshot.
+   * @param projectId Target project id.
+   * @param snapshotConfig Settings added when exporting a snapshot.
+   * @returns Output snapshot download url.
+   */
   @Post()
   public async create(
     @Path() projectId: string,

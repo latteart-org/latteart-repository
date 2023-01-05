@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/**
+ * Snapshot download url.
+ */
 export interface CreateResponse {
   url: string;
 }

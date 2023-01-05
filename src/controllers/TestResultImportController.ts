@@ -26,6 +26,11 @@ import { CreateTestResultImportDto } from "../interfaces/TesResultImport";
 
 @Route("imports/test-results")
 export class TestResultImportController extends Controller {
+  /**
+   * Imports the specified test results into the repository.
+   * @param requestBody Test results to import.
+   * @returns Imported test result id.
+   */
   @Post()
   public async create(
     @Body() requestBody: CreateTestResultImportDto

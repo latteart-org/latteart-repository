@@ -37,6 +37,10 @@ import { TestResultServiceImpl } from "../services/TestResultService";
 
 @Route("test-results")
 export class TestResultsController extends Controller {
+  /**
+   * Get test result list.
+   * @returns List of test results.
+   */
   @Get()
   public async list(): Promise<ListTestResultResponse[]> {
     console.log("TestResultsController - getTestResults");
@@ -56,6 +60,11 @@ export class TestResultsController extends Controller {
     }).getTestResultIdentifiers();
   }
 
+  /**
+   * Get test results.
+   * @param testResultId Target test result id.
+   * @returns Test results.
+   */
   @Get("{testResultId}")
   public async get(
     @Path() testResultId: string
@@ -100,6 +109,11 @@ export class TestResultsController extends Controller {
     });
   }
 
+  /**
+   * Create test results.
+   * @param requestBody Test target url, Test result name, Test start date and time.
+   * @returns Created test result id/test result name.
+   */
   @Post()
   public async create(
     @Body() requestBody: CreateTestResultDto
@@ -134,6 +148,12 @@ export class TestResultsController extends Controller {
     }
   }
 
+  /**
+   * Updates some information in the test result to the specified.
+   * @param testResultId Target test result id.
+   * @param requestBody Test result name, Test start date and time, Test target url.
+   * @returns Updated test results.
+   */
   @Patch("{testResultId}")
   public async patch(
     @Path() testResultId: string,
@@ -170,6 +190,11 @@ export class TestResultsController extends Controller {
       throw error;
     }
   }
+
+  /**
+   * Delete test results.
+   * @param testResultId Target test result id.
+   */
   @Delete("{testResultId}")
   public async delete(@Path() testResultId: string): Promise<void> {
     const timestampService = new TimestampServiceImpl();
@@ -201,6 +226,12 @@ export class TestResultsController extends Controller {
       throw error;
     }
   }
+
+  /**
+   * Get a list of session ids associated with test results.
+   * @param testResultId Target test result id.
+   * @returns List of session ids linked to test results.
+   */
   @Get("{testResultId}/sessions")
   public async getSessionList(
     @Path() testResultId: string

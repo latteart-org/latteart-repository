@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/**
+ * Project data to import.
+ */
 export interface CreateProjectImportDto {
   source: { projectFile: { data: string; name: string } };
   includeTestResults: boolean;

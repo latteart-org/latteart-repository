@@ -32,6 +32,12 @@ import { NotesServiceImpl } from "../services/NotesService";
 
 @Route("test-results/{testResultId}/notes")
 export class NotesController extends Controller {
+  /**
+   * Register notes (Purpose or Notices) on test results.
+   * @param testResultId Target test result id.
+   * @param requestBody Purpose or Notices.
+   * @returns Registered Purpose or Notices.
+   */
   @Post()
   public async create(
     @Path() testResultId: string,
@@ -76,6 +82,12 @@ export class NotesController extends Controller {
     }
   }
 
+  /**
+   * Get notes (Purpose or Notices).
+   * @param testResultId Target test result id.
+   * @param noteId Target note id.
+   * @returns Purpose or Notices.
+   */
   @Get("{noteId}")
   public async get(
     @Path() testResultId: string,
@@ -123,6 +135,13 @@ export class NotesController extends Controller {
     });
   }
 
+  /**
+   * Update notes (Purpose or Notices) to whatever you specify.
+   * @param testResultId Target test result id.
+   * @param noteId Target note id.
+   * @param requestBody Purpose or Notices
+   * @returns Updated Purpose or Notices.
+   */
   @Put("{noteId}")
   public async update(
     @Path() testResultId: string,
@@ -177,6 +196,11 @@ export class NotesController extends Controller {
     });
   }
 
+  /**
+   * Delete Notes (Purpose or Notices).
+   * @param testResultId Target test result id.
+   * @param noteId Target note id.
+   */
   @Delete("{noteId}")
   public async delete(
     @Path() testResultId: string,

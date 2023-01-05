@@ -21,7 +21,6 @@ COPY yarn.lock ./
 COPY externals/ ./externals/
 RUN yarn install
 RUN yarn typescript-json-validator src/lib/settings/Settings.ts
-RUN yarn typescript-json-validator src/lib/settings/DeviceSettings.ts
 RUN yarn package:win
 # RUN yarn package:mac
 

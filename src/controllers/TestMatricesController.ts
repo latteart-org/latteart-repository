@@ -27,6 +27,11 @@ import { transactionRunner } from "..";
 
 @Route("/test-matrices/")
 export class TestMatricesController extends Controller {
+  /**
+   * Get test matrix.
+   * @param testMatrixId Target test matrix id.
+   * @returns Test matrix.
+   */
   @Get("{testMatrixId}")
   public async get(
     @Path() testMatrixId: string
@@ -45,6 +50,11 @@ export class TestMatricesController extends Controller {
     }
   }
 
+  /**
+   * Create a test matrix.
+   * @param body Target project id and test matrix name.
+   * @returns Created test matrix.
+   */
   @Post()
   public async post(
     @Body() body: { projectId: string; name: string }
@@ -63,6 +73,12 @@ export class TestMatricesController extends Controller {
     }
   }
 
+  /**
+   * Update some information in the test matrix to the specified.
+   * @param testMatrixId Target test matrix id.
+   * @param body Test matrix name.
+   * @returns Updated test matrix.
+   */
   @Patch("{testMatrixId}")
   public async patch(
     @Path() testMatrixId: string,
@@ -82,6 +98,10 @@ export class TestMatricesController extends Controller {
     }
   }
 
+  /**
+   * Delete test matrix.
+   * @param testMatrixId Target test matrix id.
+   */
   @Delete("{testMatrixId}")
   public async delete(@Path() testMatrixId: string): Promise<void> {
     try {

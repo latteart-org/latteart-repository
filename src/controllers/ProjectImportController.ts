@@ -32,11 +32,14 @@ import { TestStepServiceImpl } from "@/services/TestStepService";
 import { ConfigsService } from "@/services/ConfigsService";
 import { NotesServiceImpl } from "@/services/NotesService";
 import { TestPurposeServiceImpl } from "@/services/TestPurposeService";
-import { TestResultImportService } from "@/services/TestResultImportService";
-import { ImportFileRepositoryServiceImpl } from "@/services/ImportFileRepositoryService";
 
 @Route("imports/projects")
 export class ProjectImportController extends Controller {
+  /**
+   * Import specified project information and test result information into repository.
+   * @param requestBody Project information and test result information to import.
+   * @returns Imported project id.
+   */
   @Post()
   public async create(
     @Body() requestBody: CreateProjectImportDto

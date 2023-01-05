@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/**
+ * View point.
+ */
 export interface ViewPoint {
   id: string;
   name: string;
@@ -21,6 +24,17 @@ export interface ViewPoint {
   description: string;
 }
 
+/**
+ * View point data for the specified ID.
+ */
 export type GetViewPointResponse = ViewPoint;
+
+/**
+ * Registered view point data.
+ */
 export type PostViewPointResponse = ViewPoint;
+
+/**
+ * Updated view point data.
+ */
 export type PatchViewPointResponse = ViewPoint;

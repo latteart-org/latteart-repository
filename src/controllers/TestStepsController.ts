@@ -32,6 +32,12 @@ import {
 
 @Route("test-results/{testResultId}/test-steps")
 export class TestStepsController extends Controller {
+  /**
+   * Adds the specified operation as a test step.
+   * @param testResultId Target test result id.
+   * @param requestBody Operation.
+   * @returns Added test step.
+   */
   @Post()
   public async create(
     @Path() testResultId: string,
@@ -61,6 +67,12 @@ export class TestStepsController extends Controller {
     }
   }
 
+  /**
+   * Get test steps.
+   * @param testResultId Target test result id.
+   * @param testStepId Target test step id.
+   * @returns Test step.
+   */
   @Get("{testStepId}")
   public async get(
     @Path() testResultId: string,
@@ -94,6 +106,13 @@ export class TestStepsController extends Controller {
     }
   }
 
+  /**
+   * Update test step notes (Purpose or Notices) to specified.
+   * @param testResultId Target test result id.
+   * @param testStepId Target test step id.
+   * @param requestBody Test step notes (Purpose or Notices).
+   * @returns Test step after update.
+   */
   @Patch("{testStepId}")
   public async patch(
     @Path() testResultId: string,

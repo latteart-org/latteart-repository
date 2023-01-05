@@ -16,15 +16,28 @@
 
 import { DailyTestProgress } from "../services/TestProgressService";
 
+/**
+ * Project list record.
+ */
 export interface ProjectListResponse {
   id: string;
   name: string;
   createdAt: string;
 }
 
+/**
+ * Project data for the specified ID.
+ */
 export type GetProjectResponse = Project;
+
+/**
+ * Test progress data in project.
+ */
 export type GetTestProgressResponse = DailyTestProgress;
 
+/**
+ * Project data.
+ */
 export interface Project {
   id: string;
   name: string;
@@ -56,6 +69,9 @@ export interface Project {
   stories: StoryDetails[];
 }
 
+/**
+ * Story data.
+ */
 interface StoryDetails {
   id: string;
   testMatrixId: string;
@@ -94,6 +110,9 @@ interface StoryDetails {
   }[];
 }
 
+/**
+ * Test progress data for the specified ID.
+ */
 export interface ProgressData {
   testMatrixId: string;
   testMatrixProgressDatas: {
@@ -112,40 +131,4 @@ export interface ProgressData {
       }[];
     }[];
   }[];
-}
-
-export interface CreateProjectResponse {
-  testMatrices: {
-    id: string;
-    name: string;
-    groups: {
-      id: string;
-      name: string;
-      testTargets: {
-        id: string;
-        name: string;
-        plans: {
-          viewPointId: string;
-          value: number;
-        };
-      }[];
-    }[];
-    stories: {
-      id: string;
-      name: string;
-    }[];
-  }[];
-  sequences: {
-    group: number;
-    viewPoint: number;
-    testMatrix: number;
-    testTarget: number;
-    session: any;
-  };
-}
-
-export interface ViewPoint {
-  id: string | null;
-  name: string;
-  index: number;
 }

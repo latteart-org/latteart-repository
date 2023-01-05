@@ -27,6 +27,11 @@ import { convertToExportableConfig } from "@/lib/settings/settingsConverter";
 
 @Route("projects/{projectId}/configs")
 export class ConfigsController {
+  /**
+   * Get project settings.
+   * @param projectId Target project id.
+   * @returns Project settings.
+   */
   @Get()
   public async get(@Path() projectId: string): Promise<GetConfigResponse> {
     try {
@@ -44,6 +49,12 @@ export class ConfigsController {
     }
   }
 
+  /**
+   * Update project settings to specified.
+   * @param projectId Target project id.
+   * @param requestBody Setting.
+   * @returns Settings after update.
+   */
   @Put()
   public async update(
     @Path() projectId: string,
