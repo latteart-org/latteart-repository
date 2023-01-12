@@ -30,6 +30,8 @@ import {
   GetTestResultResponse,
   PatchTestResultResponse,
   CreateTestResultDto,
+  GetSequenceViewDto,
+  GetSequenceViewResponse,
 } from "../interfaces/TestResults";
 import { TestResultServiceImpl } from "../services/TestResultService";
 
@@ -206,5 +208,38 @@ export class TestResultsController extends Controller {
     console.log("TestResultsController - getSessionIds");
 
     return new SessionsService().getSessionIdentifiers(testResultId);
+  }
+
+  @Post("{testResultId}/sequence-views")
+  public async getSequenceView(
+    @Path() testResultId: string,
+    @Body() requestBody: GetSequenceViewDto
+  ): Promise<GetSequenceViewResponse> {
+    console.log("TestResultsController - getSequenceView");
+
+    const timestampService = new TimestampServiceImpl();
+    const imageFileRepositoryService = new ImageFileRepositoryServiceImpl({
+      staticDirectory: screenshotDirectoryService,
+    });
+    const service = new TestResultServiceImpl({
+      timestamp: timestampService,
+      testStep: new TestStepServiceImpl({
+        imageFileRepository: imageFileRepositoryService,
+        timestamp: timestampService,
+        config: new ConfigsService(),
+      }),
+    });
+
+    try {
+      return await service.getSequenceView(testResultId, requestBody);
+    } catch (error) {
+      if (error instanceof Error) {
+        LoggingService.error("Get sequence view failed.", error);
+        throw new ServerError(500, {
+          code: ServerErrorCode.GET_SEQUENCE_VIEW_FAILED,
+        });
+      }
+      throw error;
+    }
   }
 }

@@ -70,6 +70,7 @@ export enum ServerErrorCode {
   GET_TEST_PROGRESS_FAILED = "get_test_progress_failed",
   PATCH_STORY_FAILED = "patch_story_failed",
   EXPORT_CONFIG_FAILED = "export_config_failed",
+  GET_SEQUENCE_VIEW_FAILED = "get_sequence_view_failed",
 }
 
 export interface ServerErrorData {

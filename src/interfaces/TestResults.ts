@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { SequenceView } from "../services/TestResultService";
+
 export interface CreateTestResultDto {
   initialUrl?: string;
   name?: string;
@@ -113,3 +115,21 @@ interface TestResult {
     }[];
   }[];
 }
+
+export type TestResultViewOption = {
+  node: {
+    unit: "title" | "url";
+    definitions: {
+      name: string;
+      conditions: {
+        target: "title" | "url" | "keyword";
+        method: "contains" | "equals" | "regex";
+        value: string;
+      }[];
+    }[];
+  };
+};
+
+export type GetSequenceViewDto = TestResultViewOption;
+
+export type GetSequenceViewResponse = SequenceView;
