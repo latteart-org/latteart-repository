@@ -116,6 +116,9 @@ interface TestResult {
   }[];
 }
 
+/**
+ * Test result view option.
+ */
 export type TestResultViewOption = {
   node: {
     unit: "title" | "url";
@@ -130,6 +133,12 @@ export type TestResultViewOption = {
   };
 };
 
+/**
+ * Sequence view generation option.
+ */
 export type GetSequenceViewDto = TestResultViewOption;
 
+/**
+ * Generated sequence view.
+ */
 export type GetSequenceViewResponse = SequenceView;

@@ -210,10 +210,16 @@ export class TestResultsController extends Controller {
     return new SessionsService().getSessionIdentifiers(testResultId);
   }
 
+  /**
+   * Generate sequence view model of test result.
+   * @param testResultId Target test result id.
+   * @param requestBody Test result view option.
+   * @returns Generated sequence view model.
+   */
   @Post("{testResultId}/sequence-views")
-  public async getSequenceView(
+  public async generateSequenceView(
     @Path() testResultId: string,
-    @Body() requestBody: GetSequenceViewDto
+    @Body() requestBody?: GetSequenceViewDto
   ): Promise<GetSequenceViewResponse> {
     console.log("TestResultsController - getSequenceView");
 
@@ -231,12 +237,12 @@ export class TestResultsController extends Controller {
     });
 
     try {
-      return await service.getSequenceView(testResultId, requestBody);
+      return await service.generateSequenceView(testResultId, requestBody);
     } catch (error) {
       if (error instanceof Error) {
-        LoggingService.error("Get sequence view failed.", error);
+        LoggingService.error("Generate sequence view failed.", error);
         throw new ServerError(500, {
-          code: ServerErrorCode.GET_SEQUENCE_VIEW_FAILED,
+          code: ServerErrorCode.GENERATE_SEQUENCE_VIEW_FAILED,
         });
       }
       throw error;

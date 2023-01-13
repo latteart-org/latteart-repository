@@ -42,7 +42,7 @@ describe("IssueReportService", () => {
         collectAllTestStepIds: jest.fn().mockResolvedValue(expectedTestStepIds),
         collectAllTestPurposeIds: jest.fn(),
         collectAllTestStepScreenshots: jest.fn(),
-        getSequenceView: jest.fn(),
+        generateSequenceView: jest.fn(),
       };
 
       const testStepService: TestStepService = {

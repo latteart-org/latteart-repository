@@ -2599,7 +2599,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/test-results/:testResultId/sequence-views",
 
-    function TestResultsController_getSequenceView(
+    function TestResultsController_generateSequenceView(
       request: any,
       response: any,
       next: any
@@ -2614,7 +2614,6 @@ export function RegisterRoutes(app: express.Router) {
         requestBody: {
           in: "body",
           name: "requestBody",
-          required: true,
           ref: "GetSequenceViewDto",
         },
       };
@@ -2627,7 +2626,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestResultsController();
 
-        const promise = controller.getSequenceView.apply(
+        const promise = controller.generateSequenceView.apply(
           controller,
           validatedArgs as any
         );

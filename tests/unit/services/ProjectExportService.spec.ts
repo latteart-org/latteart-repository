@@ -61,7 +61,7 @@ describe("ProjectExportService", () => {
           fileUrl: "fileUrl",
         },
       ]),
-      getSequenceView: jest.fn(),
+      generateSequenceView: jest.fn(),
     };
 
     const exportFileRepositoryService: ExportFileRepositoryService = {

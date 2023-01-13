@@ -39,7 +39,7 @@ export const createTestResultServiceMock = (): TestResultService => {
     collectAllTestStepIds: jest.fn(),
     collectAllTestPurposeIds: jest.fn(),
     collectAllTestStepScreenshots: jest.fn(),
-    getSequenceView: jest.fn(),
+    generateSequenceView: jest.fn(),
   };
 };
 

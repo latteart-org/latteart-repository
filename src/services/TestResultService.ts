@@ -39,6 +39,9 @@ import ScreenDefFactory, {
   ScreenDefinitionConfig,
 } from "@/lib/ScreenDefFactory";
 
+/**
+ * Sequence view.
+ */
 export type SequenceView = {
   windows: { id: string; name: string }[];
   screens: { id: string; name: string }[];
@@ -48,6 +51,9 @@ export type SequenceView = {
   }[];
 };
 
+/**
+ * Sequence view node.
+ */
 export type SequenceViewNode = {
   windowId: string;
   screenId: string;
@@ -85,9 +91,9 @@ export interface TestResultService {
     testResultId: string
   ): Promise<{ id: string; fileUrl: string }[]>;
 
-  getSequenceView(
+  generateSequenceView(
     testResultId: string,
-    option: TestResultViewOption
+    option?: TestResultViewOption
   ): Promise<SequenceView>;
 }
 
@@ -322,9 +328,9 @@ export class TestResultServiceImpl implements TestResultService {
     return screenshots;
   }
 
-  public async getSequenceView(
+  public async generateSequenceView(
     testResultId: string,
-    option: TestResultViewOption
+    option: TestResultViewOption = { node: { unit: "title", definitions: [] } }
   ): Promise<SequenceView> {
     const screenDefinitionConfig: ScreenDefinitionConfig = {
       screenDefType: option.node.unit,
