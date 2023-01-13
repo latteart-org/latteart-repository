@@ -34,13 +34,13 @@ import { CreateTestResultExportDto } from "../interfaces/TestResultExport";
 @Route("test-results/{testResultId}/export")
 export class TestResultExportController extends Controller {
   /**
-   * Exporting test results.
+   * Export test result.
    * @param testResultId Target test result id.
    * @param requestBody Export settings.
-   * @returns Download url for exported test results.
+   * @returns Download url for exported test result.
    */
   @Post()
-  public async create(
+  public async exportTestResult(
     @Path() testResultId: string,
     @Body() requestBody?: CreateTestResultExportDto
   ): Promise<{ url: string }> {

@@ -44,7 +44,7 @@ export class ProjectExportController extends Controller {
    * @returns Download url for exported project information and test result information.
    */
   @Post()
-  public async create(
+  public async exportProject(
     @Path() projectId: string,
     @Body() requestBody: CreateProjectExportDto
   ): Promise<{ url: string }> {

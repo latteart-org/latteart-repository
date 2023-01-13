@@ -27,12 +27,12 @@ import { CreateTestResultImportDto } from "../interfaces/TesResultImport";
 @Route("imports/test-results")
 export class TestResultImportController extends Controller {
   /**
-   * Imports the specified test results into the repository.
+   * Import test result into the repository.
    * @param requestBody Test results to import.
    * @returns Imported test result id.
    */
   @Post()
-  public async create(
+  public async importTestResult(
     @Body() requestBody: CreateTestResultImportDto
   ): Promise<{ testResultId: string }> {
     const timestampService = new TimestampServiceImpl();

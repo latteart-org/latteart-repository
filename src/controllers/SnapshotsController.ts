@@ -44,13 +44,13 @@ import { SnapshotConfig } from "../interfaces/Configs";
 @Route("projects/{projectId}/snapshots")
 export class SnapshotsController extends Controller {
   /**
-   * Output a snapshot.
+   * Output project snapshot.
    * @param projectId Target project id.
    * @param snapshotConfig Settings added when exporting a snapshot.
    * @returns Output snapshot download url.
    */
   @Post()
-  public async create(
+  public async outputProjectSnapshot(
     @Path() projectId: string,
     @Body() snapshotConfig: SnapshotConfig
   ): Promise<CreateResponse> {

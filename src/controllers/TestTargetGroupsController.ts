@@ -33,7 +33,7 @@ export class TestTargetGroupsController extends Controller {
    * @returns Test target group.
    */
   @Get("{testTargetGroupId}")
-  public async get(
+  public async getTestTargetGroup(
     @Path() testTargetGroupId: string
   ): Promise<GetTestTargetGroupResponse> {
     try {
@@ -51,12 +51,12 @@ export class TestTargetGroupsController extends Controller {
   }
 
   /**
-   * Create a test target group.
+   * Create test target group.
    * @param body Target test matrix ID/test target group name.
    * @returns Created test target group.
    */
   @Post()
-  public async post(
+  public async createTestTargetGroup(
     @Body() body: { testMatrixId: string; name: string }
   ): Promise<PostTestTargetGroupResponse> {
     try {
@@ -80,7 +80,7 @@ export class TestTargetGroupsController extends Controller {
    * @returns Updated test target group.
    */
   @Patch("{testTargetGroupId}")
-  public async patch(
+  public async updateTestTargetGroup(
     @Path() testTargetGroupId: string,
     @Body() body: { name: string }
   ): Promise<PatchTestTargetGroupResponse> {
@@ -103,7 +103,9 @@ export class TestTargetGroupsController extends Controller {
    * @param testTargetGroupId Target test target group id.
    */
   @Delete("{testTargetGroupId}")
-  public async delete(@Path() testTargetGroupId: string): Promise<void> {
+  public async deleteTestTargetGroup(
+    @Path() testTargetGroupId: string
+  ): Promise<void> {
     try {
       return await new TestTargetGroupsService().delete(
         testTargetGroupId,

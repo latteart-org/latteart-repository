@@ -31,17 +31,17 @@ import { CompressedImageService } from "../services/CompressedImageService";
 @Route("test-results/{testResultId}/notes/{noteId}/compressed-image")
 export class NoteCompressedImageController extends Controller {
   /**
-   * Compress images for screenshots in notes (notices).
+   * Compress note screenshot (notice).
    * @param testResultId Target test result id.
    * @param noteId Target note id.
    * @returns Image url after compression.
    */
   @Post()
-  public async create(
+  public async compressNoteScreenshot(
     @Path() testResultId: string,
     @Path() noteId: string
   ): Promise<CreateResponseDto> {
-    console.log("NoteCompressedImageController - compressImage");
+    console.log("NoteCompressedImageController - compressNoteScreenshot");
 
     const timestampService = new TimestampServiceImpl();
     const imageFileRepositoryService = new ImageFileRepositoryServiceImpl({

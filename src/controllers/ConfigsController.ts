@@ -33,7 +33,9 @@ export class ConfigsController {
    * @returns Project settings.
    */
   @Get()
-  public async get(@Path() projectId: string): Promise<GetConfigResponse> {
+  public async getProjectSettings(
+    @Path() projectId: string
+  ): Promise<GetConfigResponse> {
     try {
       const config = await new ConfigsService().getConfig(projectId);
       return convertToExportableConfig(config);
@@ -56,7 +58,7 @@ export class ConfigsController {
    * @returns Settings after update.
    */
   @Put()
-  public async update(
+  public async updateProjectSettings(
     @Path() projectId: string,
     @Body() requestBody: PutConfigDto
   ): Promise<PutConfigResponse> {

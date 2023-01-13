@@ -33,17 +33,17 @@ import { NotesServiceImpl } from "../services/NotesService";
 @Route("test-results/{testResultId}/notes")
 export class NotesController extends Controller {
   /**
-   * Register notes (Purpose or Notices) on test results.
+   * Add note (Purpose or Notice) on test results.
    * @param testResultId Target test result id.
    * @param requestBody Purpose or Notices.
    * @returns Registered Purpose or Notices.
    */
   @Post()
-  public async create(
+  public async addNote(
     @Path() testResultId: string,
     @Body() requestBody: CreateNoteDto
   ): Promise<CreateNoteResponse> {
-    console.log("NotesController - create");
+    console.log("NotesController - addNote");
 
     const timestampService = new TimestampServiceImpl();
     const imageFileRepositoryService = new ImageFileRepositoryServiceImpl({
@@ -83,17 +83,17 @@ export class NotesController extends Controller {
   }
 
   /**
-   * Get notes (Purpose or Notices).
+   * Get note (Purpose or Notice).
    * @param testResultId Target test result id.
    * @param noteId Target note id.
-   * @returns Purpose or Notices.
+   * @returns Purpose or Notice.
    */
   @Get("{noteId}")
-  public async get(
+  public async getNote(
     @Path() testResultId: string,
     @Path() noteId: string
   ): Promise<GetNoteResponse> {
-    console.log("NotesController - get");
+    console.log("NotesController - getNote");
 
     const timestampService = new TimestampServiceImpl();
     const imageFileRepositoryService = new ImageFileRepositoryServiceImpl({
@@ -136,19 +136,19 @@ export class NotesController extends Controller {
   }
 
   /**
-   * Update notes (Purpose or Notices) to whatever you specify.
+   * Update note (Purpose or Notice) to whatever you specify.
    * @param testResultId Target test result id.
    * @param noteId Target note id.
    * @param requestBody Purpose or Notices
    * @returns Updated Purpose or Notices.
    */
   @Put("{noteId}")
-  public async update(
+  public async updateNote(
     @Path() testResultId: string,
     @Path() noteId: string,
     @Body() requestBody: UpdateNoteDto
   ): Promise<UpdateNoteResponse> {
-    console.log("NotesController - update");
+    console.log("NotesController - updateNote");
 
     const timestampService = new TimestampServiceImpl();
     const imageFileRepositoryService = new ImageFileRepositoryServiceImpl({
@@ -197,16 +197,16 @@ export class NotesController extends Controller {
   }
 
   /**
-   * Delete Notes (Purpose or Notices).
+   * Delete note (Purpose or Notice).
    * @param testResultId Target test result id.
    * @param noteId Target note id.
    */
   @Delete("{noteId}")
-  public async delete(
+  public async deleteNote(
     @Path() testResultId: string,
     @Path() noteId: string
   ): Promise<void> {
-    console.log("NotesController - delete");
+    console.log("NotesController - deleteNote");
 
     const timestampService = new TimestampServiceImpl();
     const imageFileRepositoryService = new ImageFileRepositoryServiceImpl({

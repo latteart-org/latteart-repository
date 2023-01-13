@@ -28,13 +28,13 @@ import { transactionRunner } from "..";
 @Route("projects/{projectId}/test-targets/")
 export class TestTargetsController extends Controller {
   /**
-   * Get the test target.
+   * Get test target.
    * @param projectId Target project id.
    * @param testTargetId Target Test Target id.
    * @returns Test target.
    */
   @Get("{testTargetId}")
-  public async get(
+  public async getTestTarget(
     @Path() projectId: string,
     @Path() testTargetId: string
   ): Promise<GetTestTargetResponse> {
@@ -53,13 +53,13 @@ export class TestTargetsController extends Controller {
   }
 
   /**
-   * Create a test target.
+   * Create test target.
    * @param projectId Target project id.
    * @param body Target test target group id/test target name.
    * @returns Created test target.
    */
   @Post()
-  public async post(
+  public async createTestTarget(
     @Path() projectId: string,
     @Body() body: { testTargetGroupId: string; name: string }
   ): Promise<PostTestTargetResponse> {
@@ -78,14 +78,14 @@ export class TestTargetsController extends Controller {
   }
 
   /**
-   * Updates some information of the test target to the specified.
+   * Update some information of the test target to the specified.
    * @param projectId Target project id.
    * @param testTargetId Target test target id.
    * @param body Test target information.
    * @returns Updated test target.
    */
   @Patch("{testTargetId}")
-  public async patch(
+  public async updateTestTarget(
     @Path() projectId: string,
     @Path() testTargetId: string,
     @Body()
@@ -120,7 +120,7 @@ export class TestTargetsController extends Controller {
    * @param testTargetId Target test target id.
    */
   @Delete("{testTargetId}")
-  public async delete(
+  public async deleteTestTarget(
     @Path() projectId: string,
     @Path() testTargetId: string
   ): Promise<void> {

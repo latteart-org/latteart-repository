@@ -33,17 +33,17 @@ import {
 @Route("test-results/{testResultId}/test-steps")
 export class TestStepsController extends Controller {
   /**
-   * Adds the specified operation as a test step.
+   * Add test step to test result.
    * @param testResultId Target test result id.
    * @param requestBody Operation.
    * @returns Added test step.
    */
   @Post()
-  public async create(
+  public async addTestStep(
     @Path() testResultId: string,
     @Body() requestBody: CreateTestStepDto
   ): Promise<CreateTestStepResponse> {
-    console.log("TestStepsController - createTestStep");
+    console.log("TestStepsController - addTestStep");
 
     const imageFileRepositoryService = new ImageFileRepositoryServiceImpl({
       staticDirectory: screenshotDirectoryService,
@@ -68,13 +68,13 @@ export class TestStepsController extends Controller {
   }
 
   /**
-   * Get test steps.
+   * Get test step.
    * @param testResultId Target test result id.
    * @param testStepId Target test step id.
    * @returns Test step.
    */
   @Get("{testStepId}")
-  public async get(
+  public async getTestStep(
     @Path() testResultId: string,
     @Path() testStepId: string
   ): Promise<GetTestStepResponse> {
@@ -107,14 +107,14 @@ export class TestStepsController extends Controller {
   }
 
   /**
-   * Update test step notes (Purpose or Notices) to specified.
+   * Update test step notes (Purposes or Notices) to specified.
    * @param testResultId Target test result id.
    * @param testStepId Target test step id.
    * @param requestBody Test step notes (Purpose or Notices).
-   * @returns Test step after update.
+   * @returns Updated test step.
    */
   @Patch("{testStepId}")
-  public async patch(
+  public async updateTestStepNotes(
     @Path() testResultId: string,
     @Path() testStepId: string,
     @Body() requestBody: PatchTestStepDto

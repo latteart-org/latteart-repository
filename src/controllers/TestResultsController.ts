@@ -38,12 +38,12 @@ import { TestResultServiceImpl } from "../services/TestResultService";
 @Route("test-results")
 export class TestResultsController extends Controller {
   /**
-   * Get test result list.
-   * @returns List of test results.
+   * Get test result identifiers.
+   * @returns Test result identifiers.
    */
   @Get()
-  public async list(): Promise<ListTestResultResponse[]> {
-    console.log("TestResultsController - getTestResults");
+  public async getTestResultIdentifiers(): Promise<ListTestResultResponse[]> {
+    console.log("TestResultsController - getTestResultIdentifiers");
 
     const timestampService = new TimestampServiceImpl();
     const imageFileRepositoryService = new ImageFileRepositoryServiceImpl({
@@ -61,12 +61,12 @@ export class TestResultsController extends Controller {
   }
 
   /**
-   * Get test results.
+   * Get test result.
    * @param testResultId Target test result id.
-   * @returns Test results.
+   * @returns Test result.
    */
   @Get("{testResultId}")
-  public async get(
+  public async getTestResult(
     @Path() testResultId: string
   ): Promise<GetTestResultResponse> {
     console.log("TestResultsController - getTestResult");
@@ -110,15 +110,15 @@ export class TestResultsController extends Controller {
   }
 
   /**
-   * Create test results.
+   * Create test result.
    * @param requestBody Test target url, Test result name, Test start date and time.
    * @returns Created test result id/test result name.
    */
   @Post()
-  public async create(
+  public async createTestResult(
     @Body() requestBody: CreateTestResultDto
   ): Promise<CreateTestResultResponse> {
-    console.log("TestResultsController - create");
+    console.log("TestResultsController - createTestResult");
 
     const timestampService = new TimestampServiceImpl();
     const imageFileRepositoryService = new ImageFileRepositoryServiceImpl({
@@ -149,18 +149,18 @@ export class TestResultsController extends Controller {
   }
 
   /**
-   * Updates some information in the test result to the specified.
+   * Update some information in the test result to the specified.
    * @param testResultId Target test result id.
    * @param requestBody Test result name, Test start date and time, Test target url.
-   * @returns Updated test results.
+   * @returns Updated test result.
    */
   @Patch("{testResultId}")
-  public async patch(
+  public async updateTestResult(
     @Path() testResultId: string,
     @Body()
     requestBody: { name?: string; startTime?: number; initialUrl?: string }
   ): Promise<PatchTestResultResponse> {
-    console.log("TestResultsController - patchTestResult");
+    console.log("TestResultsController - updateTestResult");
 
     const timestampService = new TimestampServiceImpl();
     const imageFileRepositoryService = new ImageFileRepositoryServiceImpl({
@@ -192,11 +192,11 @@ export class TestResultsController extends Controller {
   }
 
   /**
-   * Delete test results.
+   * Delete test result.
    * @param testResultId Target test result id.
    */
   @Delete("{testResultId}")
-  public async delete(@Path() testResultId: string): Promise<void> {
+  public async deleteTestResult(@Path() testResultId: string): Promise<void> {
     const timestampService = new TimestampServiceImpl();
     const imageFileRepositoryService = new ImageFileRepositoryServiceImpl({
       staticDirectory: screenshotDirectoryService,
@@ -228,12 +228,12 @@ export class TestResultsController extends Controller {
   }
 
   /**
-   * Get a list of session ids associated with test results.
+   * Get session ids associated with test results.
    * @param testResultId Target test result id.
-   * @returns List of session ids linked to test results.
+   * @returns Session ids linked to test results.
    */
   @Get("{testResultId}/sessions")
-  public async getSessionList(
+  public async getSessionIds(
     @Path() testResultId: string
   ): Promise<ListSessionResponse> {
     console.log("TestResultsController - getSessionIds");

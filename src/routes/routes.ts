@@ -1526,7 +1526,11 @@ export function RegisterRoutes(app: express.Router) {
   app.get(
     "/api/v1/projects/:projectId/configs",
 
-    function ConfigsController_get(request: any, response: any, next: any) {
+    function ConfigsController_getProjectSettings(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         projectId: {
           in: "path",
@@ -1544,7 +1548,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new ConfigsController();
 
-        const promise = controller.get.apply(controller, validatedArgs as any);
+        const promise = controller.getProjectSettings.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -1555,7 +1562,11 @@ export function RegisterRoutes(app: express.Router) {
   app.put(
     "/api/v1/projects/:projectId/configs",
 
-    function ConfigsController_update(request: any, response: any, next: any) {
+    function ConfigsController_updateProjectSettings(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         projectId: {
           in: "path",
@@ -1579,7 +1590,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new ConfigsController();
 
-        const promise = controller.update.apply(
+        const promise = controller.updateProjectSettings.apply(
           controller,
           validatedArgs as any
         );
@@ -1593,7 +1604,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/test-results/:testResultId/notes/:noteId/compressed-image",
 
-    function NoteCompressedImageController_create(
+    function NoteCompressedImageController_compressNoteScreenshot(
       request: any,
       response: any,
       next: any
@@ -1621,7 +1632,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new NoteCompressedImageController();
 
-        const promise = controller.create.apply(
+        const promise = controller.compressNoteScreenshot.apply(
           controller,
           validatedArgs as any
         );
@@ -1635,7 +1646,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/test-results/:testResultId/notes",
 
-    function NotesController_create(request: any, response: any, next: any) {
+    function NotesController_addNote(request: any, response: any, next: any) {
       const args = {
         testResultId: {
           in: "path",
@@ -1659,7 +1670,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new NotesController();
 
-        const promise = controller.create.apply(
+        const promise = controller.addNote.apply(
           controller,
           validatedArgs as any
         );
@@ -1673,7 +1684,7 @@ export function RegisterRoutes(app: express.Router) {
   app.get(
     "/api/v1/test-results/:testResultId/notes/:noteId",
 
-    function NotesController_get(request: any, response: any, next: any) {
+    function NotesController_getNote(request: any, response: any, next: any) {
       const args = {
         testResultId: {
           in: "path",
@@ -1697,7 +1708,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new NotesController();
 
-        const promise = controller.get.apply(controller, validatedArgs as any);
+        const promise = controller.getNote.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -1708,7 +1722,11 @@ export function RegisterRoutes(app: express.Router) {
   app.put(
     "/api/v1/test-results/:testResultId/notes/:noteId",
 
-    function NotesController_update(request: any, response: any, next: any) {
+    function NotesController_updateNote(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         testResultId: {
           in: "path",
@@ -1738,7 +1756,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new NotesController();
 
-        const promise = controller.update.apply(
+        const promise = controller.updateNote.apply(
           controller,
           validatedArgs as any
         );
@@ -1752,7 +1770,11 @@ export function RegisterRoutes(app: express.Router) {
   app.delete(
     "/api/v1/test-results/:testResultId/notes/:noteId",
 
-    function NotesController_delete(request: any, response: any, next: any) {
+    function NotesController_deleteNote(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         testResultId: {
           in: "path",
@@ -1776,7 +1798,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new NotesController();
 
-        const promise = controller.delete.apply(
+        const promise = controller.deleteNote.apply(
           controller,
           validatedArgs as any
         );
@@ -1790,7 +1812,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/projects/:projectId/export",
 
-    function ProjectExportController_create(
+    function ProjectExportController_exportProject(
       request: any,
       response: any,
       next: any
@@ -1818,7 +1840,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new ProjectExportController();
 
-        const promise = controller.create.apply(
+        const promise = controller.exportProject.apply(
           controller,
           validatedArgs as any
         );
@@ -1832,7 +1854,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/imports/projects",
 
-    function ProjectImportController_create(
+    function ProjectImportController_importProject(
       request: any,
       response: any,
       next: any
@@ -1854,7 +1876,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new ProjectImportController();
 
-        const promise = controller.create.apply(
+        const promise = controller.importProject.apply(
           controller,
           validatedArgs as any
         );
@@ -1868,7 +1890,11 @@ export function RegisterRoutes(app: express.Router) {
   app.get(
     "/api/v1/projects",
 
-    function ProjectsController_list(request: any, response: any, next: any) {
+    function ProjectsController_getProjectIdentifiers(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {};
 
       // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1879,7 +1905,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new ProjectsController();
 
-        const promise = controller.list.apply(controller, validatedArgs as any);
+        const promise = controller.getProjectIdentifiers.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -1890,7 +1919,11 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/projects",
 
-    function ProjectsController_create(request: any, response: any, next: any) {
+    function ProjectsController_createProject(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {};
 
       // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1901,7 +1934,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new ProjectsController();
 
-        const promise = controller.create.apply(
+        const promise = controller.createProject.apply(
           controller,
           validatedArgs as any
         );
@@ -1915,7 +1948,11 @@ export function RegisterRoutes(app: express.Router) {
   app.get(
     "/api/v1/projects/:projectId",
 
-    function ProjectsController_get(request: any, response: any, next: any) {
+    function ProjectsController_getProject(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         projectId: {
           in: "path",
@@ -1933,7 +1970,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new ProjectsController();
 
-        const promise = controller.get.apply(controller, validatedArgs as any);
+        const promise = controller.getProject.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -1982,7 +2022,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/projects/:projectId/test-scripts",
 
-    function ProjectTestScriptsController_create(
+    function ProjectTestScriptsController_generateProjectTestScript(
       request: any,
       response: any,
       next: any
@@ -2010,7 +2050,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new ProjectTestScriptsController();
 
-        const promise = controller.create.apply(
+        const promise = controller.generateProjectTestScript.apply(
           controller,
           validatedArgs as any
         );
@@ -2024,7 +2064,11 @@ export function RegisterRoutes(app: express.Router) {
   app.get(
     "/api/v1/server-name",
 
-    function ServerNameController_get(request: any, response: any, next: any) {
+    function ServerNameController_getServerName(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {};
 
       // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -2035,7 +2079,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new ServerNameController();
 
-        const promise = controller.get.apply(controller, validatedArgs as any);
+        const promise = controller.getServerName.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -2046,7 +2093,11 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/projects/:projectId/sessions",
 
-    function SessionsController_post(request: any, response: any, next: any) {
+    function SessionsController_createSession(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         projectId: {
           in: "path",
@@ -2071,7 +2122,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new SessionsController();
 
-        const promise = controller.post.apply(controller, validatedArgs as any);
+        const promise = controller.createSession.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -2082,7 +2136,11 @@ export function RegisterRoutes(app: express.Router) {
   app.patch(
     "/api/v1/projects/:projectId/sessions/:sessionId",
 
-    function SessionsController_patch(request: any, response: any, next: any) {
+    function SessionsController_updateSession(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         projectId: {
           in: "path",
@@ -2112,7 +2170,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new SessionsController();
 
-        const promise = controller.patch.apply(
+        const promise = controller.updateSession.apply(
           controller,
           validatedArgs as any
         );
@@ -2126,7 +2184,11 @@ export function RegisterRoutes(app: express.Router) {
   app.delete(
     "/api/v1/projects/:projectId/sessions/:sessionId",
 
-    function SessionsController_delete(request: any, response: any, next: any) {
+    function SessionsController_deleteSession(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         projectId: {
           in: "path",
@@ -2150,7 +2212,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new SessionsController();
 
-        const promise = controller.delete.apply(
+        const promise = controller.deleteSession.apply(
           controller,
           validatedArgs as any
         );
@@ -2164,7 +2226,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/projects/:projectId/snapshots",
 
-    function SnapshotsController_create(
+    function SnapshotsController_outputProjectSnapshot(
       request: any,
       response: any,
       next: any
@@ -2192,7 +2254,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new SnapshotsController();
 
-        const promise = controller.create.apply(
+        const promise = controller.outputProjectSnapshot.apply(
           controller,
           validatedArgs as any
         );
@@ -2206,7 +2268,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/test-results/:testResultId/export",
 
-    function TestResultExportController_create(
+    function TestResultExportController_exportTestResult(
       request: any,
       response: any,
       next: any
@@ -2233,7 +2295,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestResultExportController();
 
-        const promise = controller.create.apply(
+        const promise = controller.exportTestResult.apply(
           controller,
           validatedArgs as any
         );
@@ -2247,7 +2309,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/imports/test-results",
 
-    function TestResultImportController_create(
+    function TestResultImportController_importTestResult(
       request: any,
       response: any,
       next: any
@@ -2269,7 +2331,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestResultImportController();
 
-        const promise = controller.create.apply(
+        const promise = controller.importTestResult.apply(
           controller,
           validatedArgs as any
         );
@@ -2283,7 +2345,7 @@ export function RegisterRoutes(app: express.Router) {
   app.get(
     "/api/v1/test-results",
 
-    function TestResultsController_list(
+    function TestResultsController_getTestResultIdentifiers(
       request: any,
       response: any,
       next: any
@@ -2298,7 +2360,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestResultsController();
 
-        const promise = controller.list.apply(controller, validatedArgs as any);
+        const promise = controller.getTestResultIdentifiers.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -2309,7 +2374,11 @@ export function RegisterRoutes(app: express.Router) {
   app.get(
     "/api/v1/test-results/:testResultId",
 
-    function TestResultsController_get(request: any, response: any, next: any) {
+    function TestResultsController_getTestResult(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         testResultId: {
           in: "path",
@@ -2327,7 +2396,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestResultsController();
 
-        const promise = controller.get.apply(controller, validatedArgs as any);
+        const promise = controller.getTestResult.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -2338,7 +2410,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/test-results",
 
-    function TestResultsController_create(
+    function TestResultsController_createTestResult(
       request: any,
       response: any,
       next: any
@@ -2360,7 +2432,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestResultsController();
 
-        const promise = controller.create.apply(
+        const promise = controller.createTestResult.apply(
           controller,
           validatedArgs as any
         );
@@ -2374,7 +2446,7 @@ export function RegisterRoutes(app: express.Router) {
   app.patch(
     "/api/v1/test-results/:testResultId",
 
-    function TestResultsController_patch(
+    function TestResultsController_updateTestResult(
       request: any,
       response: any,
       next: any
@@ -2407,7 +2479,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestResultsController();
 
-        const promise = controller.patch.apply(
+        const promise = controller.updateTestResult.apply(
           controller,
           validatedArgs as any
         );
@@ -2421,7 +2493,7 @@ export function RegisterRoutes(app: express.Router) {
   app.delete(
     "/api/v1/test-results/:testResultId",
 
-    function TestResultsController_delete(
+    function TestResultsController_deleteTestResult(
       request: any,
       response: any,
       next: any
@@ -2443,7 +2515,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestResultsController();
 
-        const promise = controller.delete.apply(
+        const promise = controller.deleteTestResult.apply(
           controller,
           validatedArgs as any
         );
@@ -2457,7 +2529,7 @@ export function RegisterRoutes(app: express.Router) {
   app.get(
     "/api/v1/test-results/:testResultId/sessions",
 
-    function TestResultsController_getSessionList(
+    function TestResultsController_getSessionIds(
       request: any,
       response: any,
       next: any
@@ -2479,7 +2551,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestResultsController();
 
-        const promise = controller.getSessionList.apply(
+        const promise = controller.getSessionIds.apply(
           controller,
           validatedArgs as any
         );
@@ -2534,7 +2606,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/test-results/:testResultId/test-scripts",
 
-    function TestScriptsController_create(
+    function TestScriptsController_generateTestResultTestScript(
       request: any,
       response: any,
       next: any
@@ -2562,7 +2634,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestScriptsController();
 
-        const promise = controller.create.apply(
+        const promise = controller.generateTestResultTestScript.apply(
           controller,
           validatedArgs as any
         );
@@ -2576,7 +2648,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/test-results/:testResultId/test-steps",
 
-    function TestStepsController_create(
+    function TestStepsController_addTestStep(
       request: any,
       response: any,
       next: any
@@ -2604,7 +2676,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestStepsController();
 
-        const promise = controller.create.apply(
+        const promise = controller.addTestStep.apply(
           controller,
           validatedArgs as any
         );
@@ -2618,7 +2690,11 @@ export function RegisterRoutes(app: express.Router) {
   app.get(
     "/api/v1/test-results/:testResultId/test-steps/:testStepId",
 
-    function TestStepsController_get(request: any, response: any, next: any) {
+    function TestStepsController_getTestStep(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         testResultId: {
           in: "path",
@@ -2642,7 +2718,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestStepsController();
 
-        const promise = controller.get.apply(controller, validatedArgs as any);
+        const promise = controller.getTestStep.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -2653,7 +2732,11 @@ export function RegisterRoutes(app: express.Router) {
   app.patch(
     "/api/v1/test-results/:testResultId/test-steps/:testStepId",
 
-    function TestStepsController_patch(request: any, response: any, next: any) {
+    function TestStepsController_updateTestStepNotes(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         testResultId: {
           in: "path",
@@ -2683,7 +2766,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestStepsController();
 
-        const promise = controller.patch.apply(
+        const promise = controller.updateTestStepNotes.apply(
           controller,
           validatedArgs as any
         );
@@ -2697,7 +2780,11 @@ export function RegisterRoutes(app: express.Router) {
   app.get(
     "/api/v1/test-results/:testResultId/screenshots",
 
-    function ScreenshotsController_get(request: any, response: any, next: any) {
+    function ScreenshotsController_outputTestResultScreenshots(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         testResultId: {
           in: "path",
@@ -2715,7 +2802,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new ScreenshotsController();
 
-        const promise = controller.get.apply(controller, validatedArgs as any);
+        const promise = controller.outputTestResultScreenshots.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -2726,7 +2816,7 @@ export function RegisterRoutes(app: express.Router) {
   app.get(
     "/api/v1/test-matrices/:testMatrixId",
 
-    function TestMatricesController_get(
+    function TestMatricesController_getTestMatrix(
       request: any,
       response: any,
       next: any
@@ -2748,7 +2838,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestMatricesController();
 
-        const promise = controller.get.apply(controller, validatedArgs as any);
+        const promise = controller.getTestMatrix.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -2759,7 +2852,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/test-matrices",
 
-    function TestMatricesController_post(
+    function TestMatricesController_createTestMatrix(
       request: any,
       response: any,
       next: any
@@ -2785,7 +2878,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestMatricesController();
 
-        const promise = controller.post.apply(controller, validatedArgs as any);
+        const promise = controller.createTestMatrix.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -2796,7 +2892,7 @@ export function RegisterRoutes(app: express.Router) {
   app.patch(
     "/api/v1/test-matrices/:testMatrixId",
 
-    function TestMatricesController_patch(
+    function TestMatricesController_updateTestMatrix(
       request: any,
       response: any,
       next: any
@@ -2825,7 +2921,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestMatricesController();
 
-        const promise = controller.patch.apply(
+        const promise = controller.updateTestMatrix.apply(
           controller,
           validatedArgs as any
         );
@@ -2839,7 +2935,7 @@ export function RegisterRoutes(app: express.Router) {
   app.delete(
     "/api/v1/test-matrices/:testMatrixId",
 
-    function TestMatricesController_delete(
+    function TestMatricesController_deleteTestMatrix(
       request: any,
       response: any,
       next: any
@@ -2861,7 +2957,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestMatricesController();
 
-        const promise = controller.delete.apply(
+        const promise = controller.deleteTestMatrix.apply(
           controller,
           validatedArgs as any
         );
@@ -2875,7 +2971,7 @@ export function RegisterRoutes(app: express.Router) {
   app.get(
     "/api/v1/test-target-groups/:testTargetGroupId",
 
-    function TestTargetGroupsController_get(
+    function TestTargetGroupsController_getTestTargetGroup(
       request: any,
       response: any,
       next: any
@@ -2897,7 +2993,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestTargetGroupsController();
 
-        const promise = controller.get.apply(controller, validatedArgs as any);
+        const promise = controller.getTestTargetGroup.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -2908,7 +3007,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/test-target-groups",
 
-    function TestTargetGroupsController_post(
+    function TestTargetGroupsController_createTestTargetGroup(
       request: any,
       response: any,
       next: any
@@ -2934,7 +3033,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestTargetGroupsController();
 
-        const promise = controller.post.apply(controller, validatedArgs as any);
+        const promise = controller.createTestTargetGroup.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -2945,7 +3047,7 @@ export function RegisterRoutes(app: express.Router) {
   app.patch(
     "/api/v1/test-target-groups/:testTargetGroupId",
 
-    function TestTargetGroupsController_patch(
+    function TestTargetGroupsController_updateTestTargetGroup(
       request: any,
       response: any,
       next: any
@@ -2974,7 +3076,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestTargetGroupsController();
 
-        const promise = controller.patch.apply(
+        const promise = controller.updateTestTargetGroup.apply(
           controller,
           validatedArgs as any
         );
@@ -2988,7 +3090,7 @@ export function RegisterRoutes(app: express.Router) {
   app.delete(
     "/api/v1/test-target-groups/:testTargetGroupId",
 
-    function TestTargetGroupsController_delete(
+    function TestTargetGroupsController_deleteTestTargetGroup(
       request: any,
       response: any,
       next: any
@@ -3010,7 +3112,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestTargetGroupsController();
 
-        const promise = controller.delete.apply(
+        const promise = controller.deleteTestTargetGroup.apply(
           controller,
           validatedArgs as any
         );
@@ -3024,7 +3126,11 @@ export function RegisterRoutes(app: express.Router) {
   app.get(
     "/api/v1/projects/:projectId/test-targets/:testTargetId",
 
-    function TestTargetsController_get(request: any, response: any, next: any) {
+    function TestTargetsController_getTestTarget(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         projectId: {
           in: "path",
@@ -3048,7 +3154,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestTargetsController();
 
-        const promise = controller.get.apply(controller, validatedArgs as any);
+        const promise = controller.getTestTarget.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -3059,7 +3168,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/projects/:projectId/test-targets",
 
-    function TestTargetsController_post(
+    function TestTargetsController_createTestTarget(
       request: any,
       response: any,
       next: any
@@ -3091,7 +3200,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestTargetsController();
 
-        const promise = controller.post.apply(controller, validatedArgs as any);
+        const promise = controller.createTestTarget.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -3102,7 +3214,7 @@ export function RegisterRoutes(app: express.Router) {
   app.patch(
     "/api/v1/projects/:projectId/test-targets/:testTargetId",
 
-    function TestTargetsController_patch(
+    function TestTargetsController_updateTestTarget(
       request: any,
       response: any,
       next: any
@@ -3150,7 +3262,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestTargetsController();
 
-        const promise = controller.patch.apply(
+        const promise = controller.updateTestTarget.apply(
           controller,
           validatedArgs as any
         );
@@ -3164,7 +3276,7 @@ export function RegisterRoutes(app: express.Router) {
   app.delete(
     "/api/v1/projects/:projectId/test-targets/:testTargetId",
 
-    function TestTargetsController_delete(
+    function TestTargetsController_deleteTestTarget(
       request: any,
       response: any,
       next: any
@@ -3192,7 +3304,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestTargetsController();
 
-        const promise = controller.delete.apply(
+        const promise = controller.deleteTestTarget.apply(
           controller,
           validatedArgs as any
         );
@@ -3206,7 +3318,11 @@ export function RegisterRoutes(app: express.Router) {
   app.get(
     "/api/v1/view-points/:viewPointId",
 
-    function ViewPointsController_get(request: any, response: any, next: any) {
+    function ViewPointsController_getTestViewPoint(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         viewPointId: {
           in: "path",
@@ -3224,7 +3340,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new ViewPointsController();
 
-        const promise = controller.get.apply(controller, validatedArgs as any);
+        const promise = controller.getTestViewPoint.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -3235,7 +3354,11 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/view-points",
 
-    function ViewPointsController_post(request: any, response: any, next: any) {
+    function ViewPointsController_addViewPoint(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         body: {
           in: "body",
@@ -3259,7 +3382,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new ViewPointsController();
 
-        const promise = controller.post.apply(controller, validatedArgs as any);
+        const promise = controller.addViewPoint.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -3270,7 +3396,7 @@ export function RegisterRoutes(app: express.Router) {
   app.patch(
     "/api/v1/view-points/:viewPointId",
 
-    function ViewPointsController_patch(
+    function ViewPointsController_updateViewPoint(
       request: any,
       response: any,
       next: any
@@ -3303,7 +3429,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new ViewPointsController();
 
-        const promise = controller.patch.apply(
+        const promise = controller.updateViewPoint.apply(
           controller,
           validatedArgs as any
         );
@@ -3317,7 +3443,7 @@ export function RegisterRoutes(app: express.Router) {
   app.delete(
     "/api/v1/view-points/:viewPointId",
 
-    function ViewPointsController_delete(
+    function ViewPointsController_deleteViewPoint(
       request: any,
       response: any,
       next: any
@@ -3339,7 +3465,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new ViewPointsController();
 
-        const promise = controller.delete.apply(
+        const promise = controller.deleteViewPoint.apply(
           controller,
           validatedArgs as any
         );
@@ -3353,7 +3479,11 @@ export function RegisterRoutes(app: express.Router) {
   app.patch(
     "/api/v1/stories/:storyId",
 
-    function StoriesController_patch(request: any, response: any, next: any) {
+    function StoriesController_updateStory(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         storyId: {
           in: "path",
@@ -3377,7 +3507,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new StoriesController();
 
-        const promise = controller.patch.apply(
+        const promise = controller.updateStory.apply(
           controller,
           validatedArgs as any
         );
@@ -3391,7 +3521,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/projects/:projectId/configs/export",
 
-    function ConfigExportController_create(
+    function ConfigExportController_exportProjectSettings(
       request: any,
       response: any,
       next: any
@@ -3413,7 +3543,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new ConfigExportController();
 
-        const promise = controller.create.apply(
+        const promise = controller.exportProjectSettings.apply(
           controller,
           validatedArgs as any
         );
@@ -3427,7 +3557,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/test-results/:testResultId/test-steps/:testStepId/compressed-image",
 
-    function CompressedImageController_create(
+    function CompressedImageController_compressTestStepScreenshot(
       request: any,
       response: any,
       next: any
@@ -3455,7 +3585,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new CompressedImageController();
 
-        const promise = controller.create.apply(
+        const promise = controller.compressTestStepScreenshot.apply(
           controller,
           validatedArgs as any
         );

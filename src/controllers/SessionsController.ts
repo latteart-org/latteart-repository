@@ -31,13 +31,13 @@ import { SessionsService } from "../services/SessionsService";
 @Route("projects/{projectId}/sessions")
 export class SessionsController extends Controller {
   /**
-   * Create a session with the given story.
+   * Create session with the given story.
    * @param projectId Target project id.
    * @param requestBody Target story id.
-   * @returns Session created
+   * @returns Created session
    */
   @Post("")
-  public async post(
+  public async createSession(
     @Path() projectId: string,
     @Body() requestBody: { storyId: string }
   ): Promise<PostSessionResponse> {
@@ -64,10 +64,10 @@ export class SessionsController extends Controller {
    * @param projectId Target project id.
    * @param sessionId Target session id.
    * @param requestBody Session.
-   * @returns Session after update.
+   * @returns Updated session.
    */
   @Patch("{sessionId}")
-  public async patch(
+  public async updateSession(
     @Path() projectId: string,
     @Path() sessionId: string,
     @Body() requestBody: PatchSessionDto
@@ -105,7 +105,7 @@ export class SessionsController extends Controller {
    * @param sessionId Target session id.
    */
   @Delete("{sessionId}")
-  public async delete(
+  public async deleteSession(
     @Path() projectId: string,
     @Path() sessionId: string
   ): Promise<void> {

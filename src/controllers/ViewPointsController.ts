@@ -28,12 +28,14 @@ import { transactionRunner } from "..";
 @Route("/view-points/")
 export class ViewPointsController extends Controller {
   /**
-   * Get test perspective.
-   * @param viewPointId Test perspective id.
-   * @returns Test perspective.
+   * Get test view point.
+   * @param viewPointId Test view point id.
+   * @returns Test view point.
    */
   @Get("{viewPointId}")
-  public async get(@Path() viewPointId: string): Promise<GetViewPointResponse> {
+  public async getTestViewPoint(
+    @Path() viewPointId: string
+  ): Promise<GetViewPointResponse> {
     try {
       return await new ViewPointsService().get(viewPointId);
     } catch (error) {
@@ -49,12 +51,12 @@ export class ViewPointsController extends Controller {
   }
 
   /**
-   * Create a test perspective.
-   * @param body Target test matrix id/test perspective.
-   * @returns Created test perspective.
+   * Add test view point to test matrix.
+   * @param body Target test matrix id/test view point.
+   * @returns Created test view point.
    */
   @Post()
-  public async post(
+  public async addViewPoint(
     @Body()
     body: {
       testMatrixId: string;
@@ -78,13 +80,13 @@ export class ViewPointsController extends Controller {
   }
 
   /**
-   * Updates some information in the test perspective to the specified.
-   * @param viewPointId Target test perspective id.
-   * @param body Test perspective.
-   * @returns Updated test perspective.
+   * Update some information in the test view point to the specified.
+   * @param viewPointId Target test view point id.
+   * @param body Test view point.
+   * @returns Updated test view point.
    */
   @Patch("{viewPointId}")
-  public async patch(
+  public async updateViewPoint(
     @Path() viewPointId: string,
     @Body()
     body: { name?: string; description?: string; index?: number }
@@ -104,11 +106,11 @@ export class ViewPointsController extends Controller {
   }
 
   /**
-   * Delete test perspective.
-   * @param viewPointId Target test perspective id.
+   * Delete test view point.
+   * @param viewPointId Target test view point id.
    */
   @Delete("{viewPointId}")
-  public async delete(@Path() viewPointId: string): Promise<void> {
+  public async deleteViewPoint(@Path() viewPointId: string): Promise<void> {
     try {
       return await new ViewPointsService().delete(viewPointId);
     } catch (error) {

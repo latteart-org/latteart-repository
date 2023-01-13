@@ -29,7 +29,9 @@ export class ScreenshotsController extends Controller {
    * @returns Download url for the output screenshot file.
    */
   @Get()
-  public async get(@Path() testResultId: string): Promise<{ url: string }> {
+  public async outputTestResultScreenshots(
+    @Path() testResultId: string
+  ): Promise<{ url: string }> {
     const timestampService = new TimestampServiceImpl();
     try {
       const url = await new ScreenshotsService().getScreenshots(

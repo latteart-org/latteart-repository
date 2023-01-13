@@ -31,7 +31,9 @@ export class ConfigExportController extends Controller {
    * @returns Download url for the exported configuration file.
    */
   @Post()
-  public async create(@Path() projectId: string): Promise<{ url: string }> {
+  public async exportProjectSettings(
+    @Path() projectId: string
+  ): Promise<{ url: string }> {
     const result = await new ConfigExportService().export(projectId, {
       configService: new ConfigsService(),
       timestampService: new TimestampServiceImpl(),

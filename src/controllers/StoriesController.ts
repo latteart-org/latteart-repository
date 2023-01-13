@@ -23,13 +23,13 @@ import { Controller, Body, Patch, Route, Path } from "tsoa";
 @Route("stories")
 export class StoriesController extends Controller {
   /**
-   * Updates some information in the story to the specified.
+   * Update some information in the story to the specified.
    * @param storyId Target story id.
    * @param requestBody Story.
-   * @returns Story after update.
+   * @returns Updated story.
    */
   @Patch("{storyId}")
-  public async patch(
+  public async updateStory(
     @Path() storyId: string,
     @Body() requestBody: PatchStoryDto
   ): Promise<PatchStoryResponse> {
@@ -40,7 +40,7 @@ export class StoriesController extends Controller {
         LoggingService.error("Patch story failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.PATCH_SESSION_FAILED,
+          code: ServerErrorCode.PATCH_STORY_FAILED,
         });
       }
       throw error;

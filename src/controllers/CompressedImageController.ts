@@ -30,17 +30,17 @@ import { ServerErrorCode, ServerError } from "@/ServerError";
 @Route("test-results/{testResultId}/test-steps/{testStepId}/compressed-image")
 export class CompressedImageController extends Controller {
   /**
-   * Compress images for test step screenshots.
+   * Compress test step screenshot.
    * @param testResultId Target test result id.
    * @param testStepId Target test step id.
    * @returns Image url after compression.
    */
   @Post()
-  public async create(
+  public async compressTestStepScreenshot(
     @Path() testResultId: string,
     @Path() testStepId: string
   ): Promise<CreateCompressedImageResponse> {
-    console.log("CompressedImageController - compressImage");
+    console.log("CompressedImageController - compressTestStepScreenshot");
 
     const timestampService = new TimestampServiceImpl();
     const imageFileRepositoryService = new ImageFileRepositoryServiceImpl({

@@ -33,7 +33,7 @@ export class TestMatricesController extends Controller {
    * @returns Test matrix.
    */
   @Get("{testMatrixId}")
-  public async get(
+  public async getTestMatrix(
     @Path() testMatrixId: string
   ): Promise<GetTestMatrixResponse> {
     try {
@@ -51,12 +51,12 @@ export class TestMatricesController extends Controller {
   }
 
   /**
-   * Create a test matrix.
+   * Create test matrix.
    * @param body Target project id and test matrix name.
    * @returns Created test matrix.
    */
   @Post()
-  public async post(
+  public async createTestMatrix(
     @Body() body: { projectId: string; name: string }
   ): Promise<PostTestMatrixResponse> {
     try {
@@ -80,7 +80,7 @@ export class TestMatricesController extends Controller {
    * @returns Updated test matrix.
    */
   @Patch("{testMatrixId}")
-  public async patch(
+  public async updateTestMatrix(
     @Path() testMatrixId: string,
     @Body() body: { name: string }
   ): Promise<PatchTestMatrixResponse> {
@@ -103,7 +103,7 @@ export class TestMatricesController extends Controller {
    * @param testMatrixId Target test matrix id.
    */
   @Delete("{testMatrixId}")
-  public async delete(@Path() testMatrixId: string): Promise<void> {
+  public async deleteTestMatrix(@Path() testMatrixId: string): Promise<void> {
     try {
       return await new TestMatricesService().delete(
         testMatrixId,

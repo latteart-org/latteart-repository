@@ -31,13 +31,13 @@ import { TestScriptsService } from "../services/TestScriptsService";
 @Route("projects/{projectId}/test-scripts")
 export class ProjectTestScriptsController extends Controller {
   /**
-   * Output test scripts based on all sessions of the specified project.
+   * Generate test script from project.
    * @param projectId Target project id.
    * @param requestBody Test script output settings.
    * @returns Information in the output test script file.
    */
   @Post()
-  public async create(
+  public async generateProjectTestScript(
     @Path() projectId: string,
     @Body() requestBody: CreateTestScriptDto
   ): Promise<{ url: string; invalidOperationTypeExists: boolean }> {

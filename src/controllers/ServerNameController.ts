@@ -26,7 +26,7 @@ export class ServerNameController {
    * @returns The name of the server
    */
   @Get()
-  public async get(): Promise<string> {
+  public async getServerName(): Promise<string> {
     try {
       return new ServerNameService().getServerName();
     } catch (error) {

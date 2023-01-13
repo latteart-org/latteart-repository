@@ -30,11 +30,11 @@ import { ProjectsServiceImpl } from "../services/ProjectsService";
 @Route("projects")
 export class ProjectsController extends Controller {
   /**
-   * Get project list.
-   * @returns Project list.
+   * Get project identifiers.
+   * @returns Project identifiers.
    */
   @Get()
-  public async list(): Promise<ProjectListResponse[]> {
+  public async getProjectIdentifiers(): Promise<ProjectListResponse[]> {
     return new ProjectsServiceImpl(
       {
         timestamp: new TimestampServiceImpl(),
@@ -45,11 +45,11 @@ export class ProjectsController extends Controller {
   }
 
   /**
-   * Create a project.
+   * Create project.
    * @returns Created project id and project name.
    */
   @Post()
-  public async create(): Promise<{ id: string; name: string }> {
+  public async createProject(): Promise<{ id: string; name: string }> {
     try {
       return await new ProjectsServiceImpl(
         {
@@ -76,7 +76,9 @@ export class ProjectsController extends Controller {
    * @returns Project information.
    */
   @Get("{projectId}")
-  public async get(@Path() projectId: string): Promise<GetProjectResponse> {
+  public async getProject(
+    @Path() projectId: string
+  ): Promise<GetProjectResponse> {
     try {
       return await new ProjectsServiceImpl(
         {
