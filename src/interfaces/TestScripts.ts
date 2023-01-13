@@ -14,19 +14,7 @@
  * limitations under the License.
  */
 
-type TestResultViewOption = {
-  node: {
-    unit: "title" | "url";
-    definitions: {
-      name: string;
-      conditions: {
-        target: "title" | "url" | "keyword";
-        method: "contains" | "equals" | "regex";
-        value: string;
-      }[];
-    }[];
-  };
-};
+import { TestResultViewOption } from "./TestResults";
 
 export type TestScriptOption = {
   optimized: boolean;
