@@ -51,4 +51,4 @@ dist/
 
 ## API ドキュメント
 
-- REST API リファレンス
+- [REST API リファレンス](https://latteart-org.github.io/latteart-repository/)
