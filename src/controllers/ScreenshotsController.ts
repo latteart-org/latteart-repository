@@ -37,8 +37,11 @@ export class ScreenshotsController extends Controller {
    * @param testResultId Target test result id.
    * @returns Download url for the output screenshot file.
    */
-  @Response<ServerErrorData<"get_screenshots_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"get_screenshots_failed">>(
+    500,
+    "Get screenshots failed"
+  )
+  @SuccessResponse(200, "Success")
   @Get()
   public async outputTestResultScreenshots(
     @Path() testResultId: string

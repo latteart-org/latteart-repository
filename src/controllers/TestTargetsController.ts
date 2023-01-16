@@ -46,8 +46,11 @@ export class TestTargetsController extends Controller {
    * @param testTargetId Target Test Target id.
    * @returns Test target.
    */
-  @Response<ServerErrorData<"get_test_target_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"get_test_target_failed">>(
+    500,
+    "Get testTarget failed"
+  )
+  @SuccessResponse(200, "Success")
   @Get("{testTargetId}")
   public async getTestTarget(
     @Path() projectId: string,
@@ -73,8 +76,11 @@ export class TestTargetsController extends Controller {
    * @param body Target test target group id/test target name.
    * @returns Created test target.
    */
-  @Response<ServerErrorData<"post_test_target_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"post_test_target_failed">>(
+    500,
+    "Post testTarget failed"
+  )
+  @SuccessResponse(200, "Success")
   @Post()
   public async createTestTarget(
     @Path() projectId: string,
@@ -101,8 +107,11 @@ export class TestTargetsController extends Controller {
    * @param body Test target information.
    * @returns Updated test target.
    */
-  @Response<ServerErrorData<"patch_test_target_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"patch_test_target_failed">>(
+    500,
+    "Patch testTarget failed"
+  )
+  @SuccessResponse(200, "Success")
   @Patch("{testTargetId}")
   public async updateTestTarget(
     @Path() projectId: string,
@@ -138,8 +147,11 @@ export class TestTargetsController extends Controller {
    * @param projectId Target project id.
    * @param testTargetId Target test target id.
    */
-  @Response<ServerErrorData<"delete_test_target_failed">>(500)
-  @SuccessResponse(204)
+  @Response<ServerErrorData<"delete_test_target_failed">>(
+    500,
+    "Delete testTarget failed"
+  )
+  @SuccessResponse(204, "Success")
   @Delete("{testTargetId}")
   public async deleteTestTarget(
     @Path() projectId: string,

@@ -53,8 +53,11 @@ export class ProjectExportController extends Controller {
    * @param requestBody Flags to export.
    * @returns Download url for exported project information and test result information.
    */
-  @Response<ServerErrorData<"export_project_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"export_project_failed">>(
+    500,
+    "Export project failed"
+  )
+  @SuccessResponse(200, "Success")
   @Post()
   public async exportProject(
     @Path() projectId: string,

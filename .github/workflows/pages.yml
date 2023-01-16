@@ -59,7 +59,7 @@ jobs:
           tar -xvf v4.15.5.tar.gz swagger-ui-4.15.5/dist
           mkdir -p ./docs/api
           cp swagger-ui-4.15.5/dist/* ./docs/api
-          sed -i "s#https://petstore\.swagger\.io/v2/swagger\.json#api\.json#g" ./docs/api/swagger-initializer.js
+          sed -i "s#https://petstore\.swagger\.io/v2/swagger\.json#api\.yaml#g" ./docs/api/swagger-initializer.js
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1

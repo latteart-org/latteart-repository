@@ -44,8 +44,11 @@ export class CompressedImageController extends Controller {
    * @param testStepId Target test step id.
    * @returns Image url after compression.
    */
-  @Response<ServerErrorData<"compress_test_step_image_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"compress_test_step_image_failed">>(
+    500,
+    "Compress test step image failed"
+  )
+  @SuccessResponse(200, "Success")
   @Post()
   public async compressTestStepScreenshot(
     @Path() testResultId: string,

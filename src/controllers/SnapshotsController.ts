@@ -59,8 +59,11 @@ export class SnapshotsController extends Controller {
    * @param snapshotConfig Settings added when exporting a snapshot.
    * @returns Output snapshot download url.
    */
-  @Response<ServerErrorData<"save_snapshot_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"save_snapshot_failed">>(
+    500,
+    "Save snapshot failed"
+  )
+  @SuccessResponse(200, "Success")
   @Post()
   public async outputProjectSnapshot(
     @Path() projectId: string,

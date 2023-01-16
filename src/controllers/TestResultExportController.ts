@@ -49,8 +49,11 @@ export class TestResultExportController extends Controller {
    * @param requestBody Export settings.
    * @returns Download url for exported test result.
    */
-  @Response<ServerErrorData<"export_test_result_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"export_test_result_failed">>(
+    500,
+    "Export test result failed"
+  )
+  @SuccessResponse(200, "Success")
   @Post()
   public async exportTestResult(
     @Path() testResultId: string,

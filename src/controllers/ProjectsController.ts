@@ -44,7 +44,7 @@ export class ProjectsController extends Controller {
    * Get project identifiers.
    * @returns Project identifiers.
    */
-  @SuccessResponse(200)
+  @SuccessResponse(200, "Success")
   @Get()
   public async getProjectIdentifiers(): Promise<ProjectListResponse[]> {
     return new ProjectsServiceImpl(
@@ -60,8 +60,8 @@ export class ProjectsController extends Controller {
    * Create project.
    * @returns Created project id and project name.
    */
-  @Response<ServerErrorData<"save_project_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"save_project_failed">>(500, "Save project failed")
+  @SuccessResponse(200, "Success")
   @Post()
   public async createProject(): Promise<{ id: string; name: string }> {
     try {
@@ -89,8 +89,8 @@ export class ProjectsController extends Controller {
    * @param projectId Target project id.
    * @returns Project information.
    */
-  @Response<ServerErrorData<"get_project_failed">>(404)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"get_project_failed">>(404, "Get project failed")
+  @SuccessResponse(200, "Success")
   @Get("{projectId}")
   public async getProject(
     @Path() projectId: string
@@ -123,8 +123,11 @@ export class ProjectsController extends Controller {
    * @param until End date.
    * @returns Test progress information.
    */
-  @Response<ServerErrorData<"get_test_progress_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"get_test_progress_failed">>(
+    500,
+    "Get test progress failed"
+  )
+  @SuccessResponse(200, "Success")
   @Get("{projectId}/progress")
   public async getTestProgress(
     @Path() projectId: string,

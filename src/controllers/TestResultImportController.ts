@@ -40,8 +40,11 @@ export class TestResultImportController extends Controller {
    * @param requestBody Test results to import.
    * @returns Imported test result id.
    */
-  @Response<ServerErrorData<"import_test_result_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"import_test_result_failed">>(
+    500,
+    "Import test result failed"
+  )
+  @SuccessResponse(200, "Success")
   @Post()
   public async importTestResult(
     @Body() requestBody: CreateTestResultImportDto

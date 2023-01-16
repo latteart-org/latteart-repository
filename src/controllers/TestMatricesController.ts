@@ -45,8 +45,11 @@ export class TestMatricesController extends Controller {
    * @param testMatrixId Target test matrix id.
    * @returns Test matrix.
    */
-  @Response<ServerErrorData<"get_test_matrix_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"get_test_matrix_failed">>(
+    500,
+    "Get testMatrix failed"
+  )
+  @SuccessResponse(200, "Success")
   @Get("{testMatrixId}")
   public async getTestMatrix(
     @Path() testMatrixId: string
@@ -70,8 +73,11 @@ export class TestMatricesController extends Controller {
    * @param body Target project id and test matrix name.
    * @returns Created test matrix.
    */
-  @Response<ServerErrorData<"get_test_matrix_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"get_test_matrix_failed">>(
+    500,
+    "Post testMatrix failed"
+  )
+  @SuccessResponse(200, "Success")
   @Post()
   public async createTestMatrix(
     @Body() body: { projectId: string; name: string }
@@ -96,8 +102,11 @@ export class TestMatricesController extends Controller {
    * @param body Test matrix name.
    * @returns Updated test matrix.
    */
-  @Response<ServerErrorData<"get_test_matrix_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"get_test_matrix_failed">>(
+    500,
+    "Patch testMatrix failed"
+  )
+  @SuccessResponse(200, "Success")
   @Patch("{testMatrixId}")
   public async updateTestMatrix(
     @Path() testMatrixId: string,
@@ -121,8 +130,11 @@ export class TestMatricesController extends Controller {
    * Delete test matrix.
    * @param testMatrixId Target test matrix id.
    */
-  @Response<ServerErrorData<"delete_test_matrix_failed">>(500)
-  @SuccessResponse(204)
+  @Response<ServerErrorData<"delete_test_matrix_failed">>(
+    500,
+    "Delete testMatrix failed"
+  )
+  @SuccessResponse(204, "Success")
   @Delete("{testMatrixId}")
   public async deleteTestMatrix(@Path() testMatrixId: string): Promise<void> {
     try {

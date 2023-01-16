@@ -25,8 +25,11 @@ export class ServerNameController {
    * Get server name.
    * @returns The name of the server
    */
-  @Response<ServerErrorData<"get_servername_failed">>(404)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"get_servername_failed">>(
+    404,
+    "Get server name failed"
+  )
+  @SuccessResponse(200, "Success")
   @Get()
   public async getServerName(): Promise<string> {
     try {

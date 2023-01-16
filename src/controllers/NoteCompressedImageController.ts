@@ -45,8 +45,11 @@ export class NoteCompressedImageController extends Controller {
    * @param noteId Target note id.
    * @returns Image url after compression.
    */
-  @Response<ServerErrorData<"compress_note_image_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"compress_note_image_failed">>(
+    500,
+    "Compress note image failed"
+  )
+  @SuccessResponse(200, "Success")
   @Post()
   public async compressNoteScreenshot(
     @Path() testResultId: string,

@@ -49,10 +49,19 @@ export class ProjectImportController extends Controller {
    * @param requestBody Project information and test result information to import.
    * @returns Imported project id.
    */
-  @Response<ServerErrorData<"import_test_result_not_exist">>(500)
-  @Response<ServerErrorData<"import_project_not_exist">>(500)
-  @Response<ServerErrorData<"import_project_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"import_test_result_not_exist">>(
+    500,
+    "Test result information does not exist"
+  )
+  @Response<ServerErrorData<"import_project_not_exist">>(
+    500,
+    "Project information does not exist"
+  )
+  @Response<ServerErrorData<"import_project_failed">>(
+    500,
+    "Import project failed"
+  )
+  @SuccessResponse(200, "Success")
   @Post()
   public async importProject(
     @Body() requestBody: CreateProjectImportDto

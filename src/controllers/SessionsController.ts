@@ -48,8 +48,8 @@ export class SessionsController extends Controller {
    * @param requestBody Target story id.
    * @returns Created session
    */
-  @Response<ServerErrorData<"post_session_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"post_session_failed">>(500, "Post session failed")
+  @SuccessResponse(200, "Success")
   @Post("")
   public async createSession(
     @Path() projectId: string,
@@ -80,8 +80,11 @@ export class SessionsController extends Controller {
    * @param requestBody Session.
    * @returns Updated session.
    */
-  @Response<ServerErrorData<"patch_session_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"patch_session_failed">>(
+    500,
+    "Patch session failed"
+  )
+  @SuccessResponse(200, "Success")
   @Patch("{sessionId}")
   public async updateSession(
     @Path() projectId: string,
@@ -120,8 +123,11 @@ export class SessionsController extends Controller {
    * @param projectId Target project id.
    * @param sessionId Target session id.
    */
-  @Response<ServerErrorData<"delete_session_failed">>(500)
-  @SuccessResponse(204)
+  @Response<ServerErrorData<"delete_session_failed">>(
+    500,
+    "Delete session failed"
+  )
+  @SuccessResponse(204, "Success")
   @Delete("{sessionId}")
   public async deleteSession(
     @Path() projectId: string,

@@ -45,8 +45,11 @@ export class TestTargetGroupsController extends Controller {
    * @param testTargetGroupId Target test target group id.
    * @returns Test target group.
    */
-  @Response<ServerErrorData<"get_test_target_group_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"get_test_target_group_failed">>(
+    500,
+    "Get testTargetGroup failed"
+  )
+  @SuccessResponse(200, "Success")
   @Get("{testTargetGroupId}")
   public async getTestTargetGroup(
     @Path() testTargetGroupId: string
@@ -70,8 +73,11 @@ export class TestTargetGroupsController extends Controller {
    * @param body Target test matrix ID/test target group name.
    * @returns Created test target group.
    */
-  @Response<ServerErrorData<"post_test_target_group_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"post_test_target_group_failed">>(
+    500,
+    "Post testTargetGroup failed"
+  )
+  @SuccessResponse(200, "Success")
   @Post()
   public async createTestTargetGroup(
     @Body() body: { testMatrixId: string; name: string }
@@ -96,8 +102,11 @@ export class TestTargetGroupsController extends Controller {
    * @param body Test target group name.
    * @returns Updated test target group.
    */
-  @Response<ServerErrorData<"patch_test_target_group_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"patch_test_target_group_failed">>(
+    500,
+    "Patch targetGroup failed"
+  )
+  @SuccessResponse(200, "Success")
   @Patch("{testTargetGroupId}")
   public async updateTestTargetGroup(
     @Path() testTargetGroupId: string,
@@ -121,8 +130,11 @@ export class TestTargetGroupsController extends Controller {
    * Delete test target group.
    * @param testTargetGroupId Target test target group id.
    */
-  @Response<ServerErrorData<"delete_test_target_group_failed">>(500)
-  @SuccessResponse(204)
+  @Response<ServerErrorData<"delete_test_target_group_failed">>(
+    500,
+    "Delete testTargetGroup failed"
+  )
+  @SuccessResponse(204, "Success")
   @Delete("{testTargetGroupId}")
   public async deleteTestTargetGroup(
     @Path() testTargetGroupId: string

@@ -50,8 +50,11 @@ export class TestStepsController extends Controller {
    * @param requestBody Operation.
    * @returns Added test step.
    */
-  @Response<ServerErrorData<"add_test_step_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"add_test_step_failed">>(
+    500,
+    "Add test step failed"
+  )
+  @SuccessResponse(200, "Success")
   @Post()
   public async addTestStep(
     @Path() testResultId: string,
@@ -87,8 +90,11 @@ export class TestStepsController extends Controller {
    * @param testStepId Target test step id.
    * @returns Test step.
    */
-  @Response<ServerErrorData<"get_test_step_failed">>(404)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"get_test_step_failed">>(
+    404,
+    "Get test step failed"
+  )
+  @SuccessResponse(200, "Success")
   @Get("{testStepId}")
   public async getTestStep(
     @Path() testResultId: string,
@@ -129,8 +135,11 @@ export class TestStepsController extends Controller {
    * @param requestBody Test step notes (Purpose or Notices).
    * @returns Updated test step.
    */
-  @Response<ServerErrorData<"edit_test_step_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"edit_test_step_failed">>(
+    500,
+    "Edit test step failed"
+  )
+  @SuccessResponse(200, "Success")
   @Patch("{testStepId}")
   public async updateTestStepNotes(
     @Path() testResultId: string,

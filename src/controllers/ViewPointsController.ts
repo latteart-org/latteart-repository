@@ -45,8 +45,11 @@ export class ViewPointsController extends Controller {
    * @param viewPointId Test view point id.
    * @returns Test view point.
    */
-  @Response<ServerErrorData<"get_view_point_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"get_view_point_failed">>(
+    500,
+    "Get viewPoint failed"
+  )
+  @SuccessResponse(200, "Success")
   @Get("{viewPointId}")
   public async getTestViewPoint(
     @Path() viewPointId: string
@@ -70,8 +73,11 @@ export class ViewPointsController extends Controller {
    * @param body Target test matrix id/test view point.
    * @returns Created test view point.
    */
-  @Response<ServerErrorData<"post_view_point_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"post_view_point_failed">>(
+    500,
+    "Post viewPoint failed"
+  )
+  @SuccessResponse(200, "Success")
   @Post()
   public async addViewPoint(
     @Body()
@@ -102,8 +108,11 @@ export class ViewPointsController extends Controller {
    * @param body Test view point.
    * @returns Updated test view point.
    */
-  @Response<ServerErrorData<"patch_view_point_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"patch_view_point_failed">>(
+    500,
+    "Patch viewPoint failed"
+  )
+  @SuccessResponse(200, "Success")
   @Patch("{viewPointId}")
   public async updateViewPoint(
     @Path() viewPointId: string,
@@ -128,8 +137,11 @@ export class ViewPointsController extends Controller {
    * Delete test view point.
    * @param viewPointId Target test view point id.
    */
-  @Response<ServerErrorData<"delete_view_point_failed">>(500)
-  @SuccessResponse(204)
+  @Response<ServerErrorData<"delete_view_point_failed">>(
+    500,
+    "Delete viewPoint failed"
+  )
+  @SuccessResponse(204, "Success")
   @Delete("{viewPointId}")
   public async deleteViewPoint(@Path() viewPointId: string): Promise<void> {
     try {

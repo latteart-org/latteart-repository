@@ -42,8 +42,8 @@ export class ConfigsController {
    * @param projectId Target project id.
    * @returns Project settings.
    */
-  @Response<ServerErrorData<"get_settings_failed">>(404)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"get_settings_failed">>(404, "Get settings failed")
+  @SuccessResponse(200, "Success")
   @Get()
   public async getProjectSettings(
     @Path() projectId: string
@@ -69,8 +69,11 @@ export class ConfigsController {
    * @param requestBody Setting.
    * @returns Settings after update.
    */
-  @Response<ServerErrorData<"save_settings_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"save_settings_failed">>(
+    500,
+    "Save settings failed"
+  )
+  @SuccessResponse(200, "Success")
   @Put()
   public async updateProjectSettings(
     @Path() projectId: string,

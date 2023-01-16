@@ -223,9 +223,9 @@ export class NotesController extends Controller {
    * @param testResultId Target test result id.
    * @param noteId Target note id.
    */
-  @Response<ServerErrorData<"delete_note_failed">>(404)
-  @Response<ServerErrorData<"delete_note_failed">>(500)
-  @SuccessResponse(204)
+  @Response<ServerErrorData<"delete_note_failed">>(404, "Note not found")
+  @Response<ServerErrorData<"delete_note_failed">>(500, "Delete note failed")
+  @SuccessResponse(204, "Success")
   @Delete("{noteId}")
   public async deleteNote(
     @Path() testResultId: string,

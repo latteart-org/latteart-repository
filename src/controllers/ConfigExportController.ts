@@ -39,8 +39,11 @@ export class ConfigExportController extends Controller {
    * @param projectId Target project id.
    * @returns Download url for the exported configuration file.
    */
-  @Response<ServerErrorData<"export_config_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"export_config_failed">>(
+    500,
+    "Export config failed"
+  )
+  @SuccessResponse(200, "Success")
   @Post()
   public async exportProjectSettings(
     @Path() projectId: string

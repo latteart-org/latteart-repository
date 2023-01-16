@@ -46,8 +46,11 @@ export class TestScriptsController extends Controller {
    * @param requestBody Test script output settings.
    * @returns Information in the output test script file.
    */
-  @Response<ServerErrorData<"save_test_script_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"save_test_script_failed">>(
+    500,
+    "Save test script failed"
+  )
+  @SuccessResponse(200, "Success")
   @Post()
   public async generateTestResultTestScript(
     @Path() testResultId: string,

@@ -54,7 +54,7 @@ export class TestResultsController extends Controller {
    * Get test result identifiers.
    * @returns Test result identifiers.
    */
-  @SuccessResponse(200)
+  @SuccessResponse(200, "Success")
   @Get()
   public async getTestResultIdentifiers(): Promise<ListTestResultResponse[]> {
     console.log("TestResultsController - getTestResultIdentifiers");
@@ -79,9 +79,15 @@ export class TestResultsController extends Controller {
    * @param testResultId Target test result id.
    * @returns Test result.
    */
-  @Response<ServerErrorData<"get_test_result_failed">>(404)
-  @Response<ServerErrorData<"get_test_result_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"get_test_result_failed">>(
+    404,
+    "Test result not found"
+  )
+  @Response<ServerErrorData<"get_test_result_failed">>(
+    500,
+    "Get test result failed"
+  )
+  @SuccessResponse(200, "Success")
   @Get("{testResultId}")
   public async getTestResult(
     @Path() testResultId: string
@@ -131,8 +137,11 @@ export class TestResultsController extends Controller {
    * @param requestBody Test target url, Test result name, Test start date and time.
    * @returns Created test result id/test result name.
    */
-  @Response<ServerErrorData<"save_test_result_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"save_test_result_failed">>(
+    500,
+    "Create test result failed"
+  )
+  @SuccessResponse(200, "Success")
   @Post()
   public async createTestResult(
     @Body() requestBody: CreateTestResultDto
@@ -173,8 +182,11 @@ export class TestResultsController extends Controller {
    * @param requestBody Test result name, Test start date and time, Test target url.
    * @returns Updated test result.
    */
-  @Response<ServerErrorData<"update_test_result_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"update_test_result_failed">>(
+    500,
+    "Update test result failed"
+  )
+  @SuccessResponse(200, "Success")
   @Patch("{testResultId}")
   public async updateTestResult(
     @Path() testResultId: string,
@@ -216,8 +228,11 @@ export class TestResultsController extends Controller {
    * Delete test result.
    * @param testResultId Target test result id.
    */
-  @Response<ServerErrorData<"delete_test_result_failed">>(500)
-  @SuccessResponse(204)
+  @Response<ServerErrorData<"delete_test_result_failed">>(
+    500,
+    "Delete test result failed"
+  )
+  @SuccessResponse(204, "Success")
   @Delete("{testResultId}")
   public async deleteTestResult(@Path() testResultId: string): Promise<void> {
     const timestampService = new TimestampServiceImpl();
@@ -255,7 +270,7 @@ export class TestResultsController extends Controller {
    * @param testResultId Target test result id.
    * @returns Session ids linked to test results.
    */
-  @SuccessResponse(200)
+  @SuccessResponse(200, "Success")
   @Get("{testResultId}/sessions")
   public async getSessionIds(
     @Path() testResultId: string
@@ -271,8 +286,11 @@ export class TestResultsController extends Controller {
    * @param requestBody Test result view option.
    * @returns Generated sequence view model.
    */
-  @Response<ServerErrorData<"generate_sequence_view_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"generate_sequence_view_failed">>(
+    500,
+    "Generate sequence view failed"
+  )
+  @SuccessResponse(200, "Success")
   @Post("{testResultId}/sequence-views")
   public async generateSequenceView(
     @Path() testResultId: string,

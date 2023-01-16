@@ -38,8 +38,8 @@ export class StoriesController extends Controller {
    * @param requestBody Story.
    * @returns Updated story.
    */
-  @Response<ServerErrorData<"patch_story_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"patch_story_failed">>(500, "Patch story failed")
+  @SuccessResponse(200, "Success")
   @Patch("{storyId}")
   public async updateStory(
     @Path() storyId: string,

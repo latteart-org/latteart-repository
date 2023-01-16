@@ -65,6 +65,9 @@ export type ServerErrorCode =
   | "export_config_failed"
   | "generate_sequence_view_failed";
 
+/**
+ * Server error data.
+ */
 export type ServerErrorData<T extends ServerErrorCode> = {
   code: T;
   message?: string;
