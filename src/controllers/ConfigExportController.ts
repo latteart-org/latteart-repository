@@ -15,21 +15,32 @@
  */
 
 import LoggingService from "@/logger/LoggingService";
-import { ServerError, ServerErrorCode } from "@/ServerError";
+import { ServerError, ServerErrorData } from "../ServerError";
 import { ConfigsService } from "@/services/ConfigsService";
 
 import { TimestampServiceImpl } from "@/services/TimestampService";
-import { Controller, Post, Route, Path } from "tsoa";
+import {
+  Controller,
+  Post,
+  Route,
+  Path,
+  Response,
+  Tags,
+  SuccessResponse,
+} from "tsoa";
 import { exportDirectoryService } from "..";
 import { ConfigExportService } from "@/services/ConfigExportService";
 
 @Route("projects/{projectId}/configs/export")
+@Tags("projects")
 export class ConfigExportController extends Controller {
   /**
    * Export project settings.
    * @param projectId Target project id.
    * @returns Download url for the exported configuration file.
    */
+  @Response<ServerErrorData<"export_config_failed">>(500)
+  @SuccessResponse(200)
   @Post()
   public async exportProjectSettings(
     @Path() projectId: string
@@ -46,7 +57,7 @@ export class ConfigExportController extends Controller {
       if (error instanceof Error) {
         LoggingService.error("Export config failed.", error);
         throw new ServerError(500, {
-          code: ServerErrorCode.EXPORT_CONFIG_FAILED,
+          code: "export_config_failed",
         });
       }
       throw error;

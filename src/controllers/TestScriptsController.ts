@@ -15,7 +15,7 @@
  */
 
 import LoggingService from "@/logger/LoggingService";
-import { ServerError, ServerErrorCode } from "@/ServerError";
+import { ServerError, ServerErrorData } from "../ServerError";
 import { ConfigsService } from "@/services/ConfigsService";
 import { ImageFileRepositoryServiceImpl } from "@/services/ImageFileRepositoryService";
 import { TestResultServiceImpl } from "@/services/TestResultService";
@@ -23,12 +23,22 @@ import { TestScriptJSDocRenderingService } from "@/services/testScriptDocRenderi
 import { TestScriptFileRepositoryServiceImpl } from "@/services/TestScriptFileRepositoryService";
 import { TestStepServiceImpl } from "@/services/TestStepService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
-import { Controller, Post, Route, Path, Body } from "tsoa";
+import {
+  Controller,
+  Post,
+  Route,
+  Path,
+  Body,
+  Tags,
+  Response,
+  SuccessResponse,
+} from "tsoa";
 import { screenshotDirectoryService, testScriptDirectoryService } from "..";
 import { CreateTestScriptDto } from "../interfaces/TestScripts";
 import { TestScriptsService } from "../services/TestScriptsService";
 
 @Route("test-results/{testResultId}/test-scripts")
+@Tags("test-results")
 export class TestScriptsController extends Controller {
   /**
    * Generate test script from test result.
@@ -36,6 +46,8 @@ export class TestScriptsController extends Controller {
    * @param requestBody Test script output settings.
    * @returns Information in the output test script file.
    */
+  @Response<ServerErrorData<"save_test_script_failed">>(500)
+  @SuccessResponse(200)
   @Post()
   public async generateTestResultTestScript(
     @Path() testResultId: string,
@@ -78,7 +90,7 @@ export class TestScriptsController extends Controller {
         LoggingService.error("Save test script failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.SAVE_TEST_SCRIPT_FAILED,
+          code: "save_test_script_failed",
         });
       }
 

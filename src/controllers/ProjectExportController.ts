@@ -16,10 +16,19 @@
 
 import { CreateProjectExportDto } from "../interfaces/ProjectExport";
 import LoggingService from "@/logger/LoggingService";
-import { ServerError, ServerErrorCode } from "@/ServerError";
+import { ServerError, ServerErrorData } from "../ServerError";
 import { ProjectExportService } from "@/services/ProjectExportService";
 
-import { Body, Controller, Path, Post, Route } from "tsoa";
+import {
+  Body,
+  Controller,
+  Path,
+  Post,
+  Response,
+  Route,
+  SuccessResponse,
+  Tags,
+} from "tsoa";
 import {
   exportDirectoryService,
   screenshotDirectoryService,
@@ -36,6 +45,7 @@ import { ProjectsServiceImpl } from "@/services/ProjectsService";
 import { TestProgressServiceImpl } from "@/services/TestProgressService";
 
 @Route("projects/{projectId}/export")
+@Tags("projects")
 export class ProjectExportController extends Controller {
   /**
    * Export project and test result information.
@@ -43,6 +53,8 @@ export class ProjectExportController extends Controller {
    * @param requestBody Flags to export.
    * @returns Download url for exported project information and test result information.
    */
+  @Response<ServerErrorData<"export_project_failed">>(500)
+  @SuccessResponse(200)
   @Post()
   public async exportProject(
     @Path() projectId: string,
@@ -103,7 +115,7 @@ export class ProjectExportController extends Controller {
       if (error instanceof Error) {
         LoggingService.error("Export project failed.", error);
         throw new ServerError(500, {
-          code: ServerErrorCode.EXPORT_PROJECT_FAILED,
+          code: "export_project_failed",
         });
       }
       throw error;

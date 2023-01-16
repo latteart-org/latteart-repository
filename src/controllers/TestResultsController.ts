@@ -16,13 +16,25 @@
 
 import { ListSessionResponse } from "../interfaces/Sessions";
 import LoggingService from "@/logger/LoggingService";
-import { ServerErrorCode, ServerError } from "@/ServerError";
+import { ServerError, ServerErrorData } from "../ServerError";
 import { ConfigsService } from "@/services/ConfigsService";
 import { ImageFileRepositoryServiceImpl } from "@/services/ImageFileRepositoryService";
 import { SessionsService } from "@/services/SessionsService";
 import { TestStepServiceImpl } from "@/services/TestStepService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
-import { Controller, Get, Post, Patch, Route, Path, Body, Delete } from "tsoa";
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Route,
+  Path,
+  Body,
+  Delete,
+  Tags,
+  Response,
+  SuccessResponse,
+} from "tsoa";
 import { screenshotDirectoryService, transactionRunner } from "..";
 import {
   ListTestResultResponse,
@@ -36,11 +48,13 @@ import {
 import { TestResultServiceImpl } from "../services/TestResultService";
 
 @Route("test-results")
+@Tags("test-results")
 export class TestResultsController extends Controller {
   /**
    * Get test result identifiers.
    * @returns Test result identifiers.
    */
+  @SuccessResponse(200)
   @Get()
   public async getTestResultIdentifiers(): Promise<ListTestResultResponse[]> {
     console.log("TestResultsController - getTestResultIdentifiers");
@@ -65,6 +79,9 @@ export class TestResultsController extends Controller {
    * @param testResultId Target test result id.
    * @returns Test result.
    */
+  @Response<ServerErrorData<"get_test_result_failed">>(404)
+  @Response<ServerErrorData<"get_test_result_failed">>(500)
+  @SuccessResponse(200)
   @Get("{testResultId}")
   public async getTestResult(
     @Path() testResultId: string
@@ -94,7 +111,7 @@ export class TestResultsController extends Controller {
         LoggingService.error("Get test result failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.GET_TEST_RESULT_FAILED,
+          code: "get_test_result_failed",
         });
       }
       throw error;
@@ -105,7 +122,7 @@ export class TestResultsController extends Controller {
     );
 
     throw new ServerError(404, {
-      code: ServerErrorCode.GET_TEST_RESULT_FAILED,
+      code: "get_test_result_failed",
     });
   }
 
@@ -114,6 +131,8 @@ export class TestResultsController extends Controller {
    * @param requestBody Test target url, Test result name, Test start date and time.
    * @returns Created test result id/test result name.
    */
+  @Response<ServerErrorData<"save_test_result_failed">>(500)
+  @SuccessResponse(200)
   @Post()
   public async createTestResult(
     @Body() requestBody: CreateTestResultDto
@@ -141,7 +160,7 @@ export class TestResultsController extends Controller {
         LoggingService.error("Create test result failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.CREATE_TEST_RESULT_FAILED,
+          code: "save_test_result_failed",
         });
       }
       throw error;
@@ -154,6 +173,8 @@ export class TestResultsController extends Controller {
    * @param requestBody Test result name, Test start date and time, Test target url.
    * @returns Updated test result.
    */
+  @Response<ServerErrorData<"update_test_result_failed">>(500)
+  @SuccessResponse(200)
   @Patch("{testResultId}")
   public async updateTestResult(
     @Path() testResultId: string,
@@ -184,7 +205,7 @@ export class TestResultsController extends Controller {
         LoggingService.error("Update test result failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.UPDATE_TEST_RESULT_FAILED,
+          code: "update_test_result_failed",
         });
       }
       throw error;
@@ -195,6 +216,8 @@ export class TestResultsController extends Controller {
    * Delete test result.
    * @param testResultId Target test result id.
    */
+  @Response<ServerErrorData<"delete_test_result_failed">>(500)
+  @SuccessResponse(204)
   @Delete("{testResultId}")
   public async deleteTestResult(@Path() testResultId: string): Promise<void> {
     const timestampService = new TimestampServiceImpl();
@@ -220,7 +243,7 @@ export class TestResultsController extends Controller {
       if (error instanceof Error) {
         LoggingService.error("Delete test result failed.", error);
         throw new ServerError(500, {
-          code: ServerErrorCode.DELETE_TEST_RESULT_FAILED,
+          code: "delete_test_result_failed",
         });
       }
       throw error;
@@ -232,6 +255,7 @@ export class TestResultsController extends Controller {
    * @param testResultId Target test result id.
    * @returns Session ids linked to test results.
    */
+  @SuccessResponse(200)
   @Get("{testResultId}/sessions")
   public async getSessionIds(
     @Path() testResultId: string
@@ -247,6 +271,8 @@ export class TestResultsController extends Controller {
    * @param requestBody Test result view option.
    * @returns Generated sequence view model.
    */
+  @Response<ServerErrorData<"generate_sequence_view_failed">>(500)
+  @SuccessResponse(200)
   @Post("{testResultId}/sequence-views")
   public async generateSequenceView(
     @Path() testResultId: string,
@@ -273,7 +299,7 @@ export class TestResultsController extends Controller {
       if (error instanceof Error) {
         LoggingService.error("Generate sequence view failed.", error);
         throw new ServerError(500, {
-          code: ServerErrorCode.GENERATE_SEQUENCE_VIEW_FAILED,
+          code: "generate_sequence_view_failed",
         });
       }
       throw error;

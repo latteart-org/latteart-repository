@@ -15,8 +15,8 @@
  */
 
 import LoggingService from "@/logger/LoggingService";
-import { ServerError, ServerErrorCode } from "@/ServerError";
-import { Get, Route } from "tsoa";
+import { ServerError, ServerErrorData } from "../ServerError";
+import { Get, Response, Route, SuccessResponse } from "tsoa";
 import { ServerNameService } from "../services/ServerNameService";
 
 @Route("server-name")
@@ -25,6 +25,8 @@ export class ServerNameController {
    * Get server name.
    * @returns The name of the server
    */
+  @Response<ServerErrorData<"get_servername_failed">>(404)
+  @SuccessResponse(200)
   @Get()
   public async getServerName(): Promise<string> {
     try {
@@ -34,7 +36,7 @@ export class ServerNameController {
         LoggingService.error("Get server name failed.", error);
 
         throw new ServerError(404, {
-          code: ServerErrorCode.GET_SERVERNAME_FAILED,
+          code: "get_servername_failed",
         });
       }
       throw error;

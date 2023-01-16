@@ -20,18 +20,33 @@ import {
   PostViewPointResponse,
 } from "../interfaces/ViewPoints";
 import LoggingService from "@/logger/LoggingService";
-import { ServerError, ServerErrorCode } from "@/ServerError";
+import { ServerError, ServerErrorData } from "../ServerError";
 import { ViewPointsService } from "@/services/ViewPointsService";
-import { Controller, Body, Patch, Route, Path, Get, Post, Delete } from "tsoa";
+import {
+  Controller,
+  Body,
+  Patch,
+  Route,
+  Path,
+  Get,
+  Post,
+  Delete,
+  Tags,
+  Response,
+  SuccessResponse,
+} from "tsoa";
 import { transactionRunner } from "..";
 
 @Route("/view-points/")
+@Tags("view-points")
 export class ViewPointsController extends Controller {
   /**
    * Get test view point.
    * @param viewPointId Test view point id.
    * @returns Test view point.
    */
+  @Response<ServerErrorData<"get_view_point_failed">>(500)
+  @SuccessResponse(200)
   @Get("{viewPointId}")
   public async getTestViewPoint(
     @Path() viewPointId: string
@@ -43,7 +58,7 @@ export class ViewPointsController extends Controller {
         LoggingService.error("Get viewPoint failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.GET_VIEW_POINT_FAILED,
+          code: "get_view_point_failed",
         });
       }
       throw error;
@@ -55,6 +70,8 @@ export class ViewPointsController extends Controller {
    * @param body Target test matrix id/test view point.
    * @returns Created test view point.
    */
+  @Response<ServerErrorData<"post_view_point_failed">>(500)
+  @SuccessResponse(200)
   @Post()
   public async addViewPoint(
     @Body()
@@ -72,7 +89,7 @@ export class ViewPointsController extends Controller {
         LoggingService.error("Post viewPoint failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.POST_VIEW_POINT_FAILED,
+          code: "post_view_point_failed",
         });
       }
       throw error;
@@ -85,6 +102,8 @@ export class ViewPointsController extends Controller {
    * @param body Test view point.
    * @returns Updated test view point.
    */
+  @Response<ServerErrorData<"patch_view_point_failed">>(500)
+  @SuccessResponse(200)
   @Patch("{viewPointId}")
   public async updateViewPoint(
     @Path() viewPointId: string,
@@ -98,7 +117,7 @@ export class ViewPointsController extends Controller {
         LoggingService.error("Patch viewPoint failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.PATCH_VIEW_POINT_FAILED,
+          code: "patch_view_point_failed",
         });
       }
       throw error;
@@ -109,6 +128,8 @@ export class ViewPointsController extends Controller {
    * Delete test view point.
    * @param viewPointId Target test view point id.
    */
+  @Response<ServerErrorData<"delete_view_point_failed">>(500)
+  @SuccessResponse(204)
   @Delete("{viewPointId}")
   public async deleteViewPoint(@Path() viewPointId: string): Promise<void> {
     try {
@@ -118,7 +139,7 @@ export class ViewPointsController extends Controller {
         LoggingService.error("Delete viewPoint failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.DELETE_VIEW_POINT_FAILED,
+          code: "delete_view_point_failed",
         });
       }
       throw error;

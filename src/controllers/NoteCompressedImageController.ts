@@ -16,19 +16,28 @@
 
 import { SettingsUtility } from "@/lib/settings/SettingsUtility";
 import LoggingService from "@/logger/LoggingService";
-import { ServerErrorCode, ServerError } from "@/ServerError";
+import { ServerError, ServerErrorData } from "../ServerError";
 import { CommandExecutionServiceImpl } from "@/services/CommandExecutionService";
 import { ConfigsService } from "@/services/ConfigsService";
 import { ImageFileRepositoryServiceImpl } from "@/services/ImageFileRepositoryService";
 import { NotesServiceImpl } from "@/services/NotesService";
 import { TestStepServiceImpl } from "@/services/TestStepService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
-import { Controller, Post, Route, Path } from "tsoa";
+import {
+  Controller,
+  Post,
+  Route,
+  Path,
+  Tags,
+  Response,
+  SuccessResponse,
+} from "tsoa";
 import { screenshotDirectoryService } from "..";
 import { CreateResponseDto } from "../interfaces/NoteCompressedImage";
 import { CompressedImageService } from "../services/CompressedImageService";
 
 @Route("test-results/{testResultId}/notes/{noteId}/compressed-image")
+@Tags("test-results")
 export class NoteCompressedImageController extends Controller {
   /**
    * Compress note screenshot (notice).
@@ -36,6 +45,8 @@ export class NoteCompressedImageController extends Controller {
    * @param noteId Target note id.
    * @returns Image url after compression.
    */
+  @Response<ServerErrorData<"compress_note_image_failed">>(500)
+  @SuccessResponse(200)
   @Post()
   public async compressNoteScreenshot(
     @Path() testResultId: string,
@@ -74,7 +85,7 @@ export class NoteCompressedImageController extends Controller {
         LoggingService.error("Compress note image failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.COMPRESS_NOTE_IMAGE_FAILED,
+          code: "compress_note_image_failed",
         });
       }
       throw error;

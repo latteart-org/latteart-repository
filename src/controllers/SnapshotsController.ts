@@ -15,7 +15,7 @@
  */
 
 import LoggingService from "@/logger/LoggingService";
-import { ServerError, ServerErrorCode } from "@/ServerError";
+import { ServerError, ServerErrorData } from "../ServerError";
 import { ConfigsService } from "@/services/ConfigsService";
 import { ImageFileRepositoryServiceImpl } from "@/services/ImageFileRepositoryService";
 import { IssueReportOutputServiceImpl } from "@/services/IssueReportOutputService";
@@ -27,7 +27,16 @@ import { TestPurposeServiceImpl } from "@/services/TestPurposeService";
 import { TestResultServiceImpl } from "@/services/TestResultService";
 import { TestStepServiceImpl } from "@/services/TestStepService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
-import { Controller, Post, Route, Path, Body } from "tsoa";
+import {
+  Controller,
+  Post,
+  Route,
+  Path,
+  Body,
+  Tags,
+  Response,
+  SuccessResponse,
+} from "tsoa";
 import {
   attachedFileDirectoryService,
   screenshotDirectoryService,
@@ -42,6 +51,7 @@ import { TestProgressServiceImpl } from "@/services/TestProgressService";
 import { SnapshotConfig } from "../interfaces/Configs";
 
 @Route("projects/{projectId}/snapshots")
+@Tags("projects")
 export class SnapshotsController extends Controller {
   /**
    * Output project snapshot.
@@ -49,6 +59,8 @@ export class SnapshotsController extends Controller {
    * @param snapshotConfig Settings added when exporting a snapshot.
    * @returns Output snapshot download url.
    */
+  @Response<ServerErrorData<"save_snapshot_failed">>(500)
+  @SuccessResponse(200)
   @Post()
   public async outputProjectSnapshot(
     @Path() projectId: string,
@@ -64,7 +76,7 @@ export class SnapshotsController extends Controller {
         LoggingService.error("Save snapshot failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.SAVE_SNAPSHOT_FAILED,
+          code: "save_snapshot_failed",
         });
       }
       throw error;

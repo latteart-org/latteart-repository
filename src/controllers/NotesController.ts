@@ -15,11 +15,23 @@
  */
 
 import LoggingService from "@/logger/LoggingService";
-import { ServerErrorCode, ServerError } from "@/ServerError";
+import { ServerError, ServerErrorData } from "../ServerError";
 import { ImageFileRepositoryServiceImpl } from "@/services/ImageFileRepositoryService";
 import { TestPurposeServiceImpl } from "@/services/TestPurposeService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
-import { Controller, Get, Put, Delete, Body, Post, Route, Path } from "tsoa";
+import {
+  Controller,
+  Get,
+  Put,
+  Delete,
+  Body,
+  Post,
+  Route,
+  Path,
+  Tags,
+  Response,
+  SuccessResponse,
+} from "tsoa";
 import { screenshotDirectoryService } from "..";
 import {
   CreateNoteDto,
@@ -31,6 +43,7 @@ import {
 import { NotesServiceImpl } from "../services/NotesService";
 
 @Route("test-results/{testResultId}/notes")
+@Tags("test-results")
 export class NotesController extends Controller {
   /**
    * Add note (Purpose or Notice) on test results.
@@ -38,6 +51,9 @@ export class NotesController extends Controller {
    * @param requestBody Purpose or Notices.
    * @returns Registered Purpose or Notices.
    */
+  @Response<ServerErrorData<"add_note_failed">>(400)
+  @Response<ServerErrorData<"add_note_failed">>(500)
+  @SuccessResponse(200)
   @Post()
   public async addNote(
     @Path() testResultId: string,
@@ -54,7 +70,7 @@ export class NotesController extends Controller {
       LoggingService.error(`invalid note type: ${requestBody.type}`);
 
       throw new ServerError(400, {
-        code: ServerErrorCode.ADD_NOTE_FAILED,
+        code: "add_note_failed",
       });
     }
 
@@ -75,7 +91,7 @@ export class NotesController extends Controller {
         LoggingService.error("Add note failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.ADD_NOTE_FAILED,
+          code: "add_note_failed",
         });
       }
       throw error;
@@ -88,6 +104,9 @@ export class NotesController extends Controller {
    * @param noteId Target note id.
    * @returns Purpose or Notice.
    */
+  @Response<ServerErrorData<"get_note_failed">>(404)
+  @Response<ServerErrorData<"get_note_failed">>(500)
+  @SuccessResponse(200)
   @Get("{noteId}")
   public async getNote(
     @Path() testResultId: string,
@@ -122,7 +141,7 @@ export class NotesController extends Controller {
         LoggingService.error("Get note failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.GET_NOTE_FAILED,
+          code: "get_note_failed",
         });
       }
       throw error;
@@ -131,7 +150,7 @@ export class NotesController extends Controller {
     LoggingService.error(`Note not found. noteId: ${noteId}`);
 
     throw new ServerError(404, {
-      code: ServerErrorCode.GET_NOTE_FAILED,
+      code: "get_note_failed",
     });
   }
 
@@ -142,6 +161,9 @@ export class NotesController extends Controller {
    * @param requestBody Purpose or Notices
    * @returns Updated Purpose or Notices.
    */
+  @Response<ServerErrorData<"edit_note_failed">>(404)
+  @Response<ServerErrorData<"edit_note_failed">>(500)
+  @SuccessResponse(200)
   @Put("{noteId}")
   public async updateNote(
     @Path() testResultId: string,
@@ -183,7 +205,7 @@ export class NotesController extends Controller {
         LoggingService.error("Edit note failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.EDIT_NOTE_FAILED,
+          code: "edit_note_failed",
         });
       }
       throw error;
@@ -192,7 +214,7 @@ export class NotesController extends Controller {
     LoggingService.error(`Note not found. noteId: ${noteId}`);
 
     throw new ServerError(404, {
-      code: ServerErrorCode.EDIT_NOTE_FAILED,
+      code: "edit_note_failed",
     });
   }
 
@@ -201,6 +223,9 @@ export class NotesController extends Controller {
    * @param testResultId Target test result id.
    * @param noteId Target note id.
    */
+  @Response<ServerErrorData<"delete_note_failed">>(404)
+  @Response<ServerErrorData<"delete_note_failed">>(500)
+  @SuccessResponse(204)
   @Delete("{noteId}")
   public async deleteNote(
     @Path() testResultId: string,
@@ -238,7 +263,7 @@ export class NotesController extends Controller {
         LoggingService.error("Delete note failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.DELETE_NOTE_FAILED,
+          code: "delete_note_failed",
         });
       }
       throw error;
@@ -247,7 +272,7 @@ export class NotesController extends Controller {
     LoggingService.error(`Note not found. noteId: ${noteId}`);
 
     throw new ServerError(404, {
-      code: ServerErrorCode.DELETE_NOTE_FAILED,
+      code: "delete_note_failed",
     });
   }
 }

@@ -20,12 +20,25 @@ import {
   PostTestTargetResponse,
 } from "../interfaces/TestTargets";
 import LoggingService from "@/logger/LoggingService";
-import { ServerError, ServerErrorCode } from "@/ServerError";
+import { ServerError, ServerErrorData } from "../ServerError";
 import { TestTargetService } from "@/services/TestTargetsService";
-import { Controller, Body, Patch, Route, Path, Get, Post, Delete } from "tsoa";
+import {
+  Controller,
+  Body,
+  Patch,
+  Route,
+  Path,
+  Get,
+  Post,
+  Delete,
+  Tags,
+  Response,
+  SuccessResponse,
+} from "tsoa";
 import { transactionRunner } from "..";
 
 @Route("projects/{projectId}/test-targets/")
+@Tags("projects")
 export class TestTargetsController extends Controller {
   /**
    * Get test target.
@@ -33,6 +46,8 @@ export class TestTargetsController extends Controller {
    * @param testTargetId Target Test Target id.
    * @returns Test target.
    */
+  @Response<ServerErrorData<"get_test_target_failed">>(500)
+  @SuccessResponse(200)
   @Get("{testTargetId}")
   public async getTestTarget(
     @Path() projectId: string,
@@ -45,7 +60,7 @@ export class TestTargetsController extends Controller {
         LoggingService.error("Get testTarget failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.GET_TEST_TARGET_FAILED,
+          code: "get_test_target_failed",
         });
       }
       throw error;
@@ -58,6 +73,8 @@ export class TestTargetsController extends Controller {
    * @param body Target test target group id/test target name.
    * @returns Created test target.
    */
+  @Response<ServerErrorData<"post_test_target_failed">>(500)
+  @SuccessResponse(200)
   @Post()
   public async createTestTarget(
     @Path() projectId: string,
@@ -70,7 +87,7 @@ export class TestTargetsController extends Controller {
         LoggingService.error("Post testTarget failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.POST_TEST_TARGET_FAILED,
+          code: "post_test_target_failed",
         });
       }
       throw error;
@@ -84,6 +101,8 @@ export class TestTargetsController extends Controller {
    * @param body Test target information.
    * @returns Updated test target.
    */
+  @Response<ServerErrorData<"patch_test_target_failed">>(500)
+  @SuccessResponse(200)
   @Patch("{testTargetId}")
   public async updateTestTarget(
     @Path() projectId: string,
@@ -107,7 +126,7 @@ export class TestTargetsController extends Controller {
         LoggingService.error("Patch testTarget failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.PATCH_TEST_TARGET_FAILED,
+          code: "patch_test_target_failed",
         });
       }
       throw error;
@@ -119,6 +138,8 @@ export class TestTargetsController extends Controller {
    * @param projectId Target project id.
    * @param testTargetId Target test target id.
    */
+  @Response<ServerErrorData<"delete_test_target_failed">>(500)
+  @SuccessResponse(204)
   @Delete("{testTargetId}")
   public async deleteTestTarget(
     @Path() projectId: string,
@@ -134,7 +155,7 @@ export class TestTargetsController extends Controller {
         LoggingService.error("Delete testTarget failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.DELETE_TEST_TARGET_FAILED,
+          code: "delete_test_target_failed",
         });
       }
       throw error;

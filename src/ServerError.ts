@@ -14,75 +14,69 @@
  * limitations under the License.
  */
 
-export enum ServerErrorCode {
-  SAVE_PROJECT_FAILED = "save_project_failed",
-  GET_PROJECT_FAILED = "get_project_failed",
-  GET_SETTINGS_FAILED = "get_settings_failed",
-  SAVE_SETTINGS_FAILED = "save_settings_failed",
-  SAVE_TEST_SCRIPT_FAILED = "save_test_script_failed",
-  SAVE_SNAPSHOT_FAILED = "save_snapshot_failed",
-  CREATE_TEST_RESULT_FAILED = "save_test_result_failed",
-  GET_TEST_RESULT_FAILED = "get_test_result_failed",
-  ADD_TEST_STEP_FAILED = "add_test_step_failed",
-  GET_TEST_STEP_FAILED = "get_test_step_failed",
-  EDIT_TEST_STEP_FAILED = "edit_test_step_failed",
-  ADD_NOTE_FAILED = "add_note_failed",
-  GET_NOTE_FAILED = "get_note_failed",
-  EDIT_NOTE_FAILED = "edit_note_failed",
-  DELETE_NOTE_FAILED = "delete_note_failed",
-  COMPRESS_NOTE_IMAGE_FAILED = "compress_note_image_failed",
-  COMPRESS_TEST_STEP_IMAGE_FAILED = "compress_test_step_image_failed",
-  UPDATE_TEST_RESULT_FAILED = "update_test_result_failed",
-  DELETE_TEST_RESULT_FAILED = "delete_test_result_failed",
-  POST_SESSION_FAILED = "post_session_failed",
-  PATCH_SESSION_FAILED = "patch_session_failed",
-  DELETE_SESSION_FAILED = "delete_session_failed",
-  GET_SESSION_FAILED = "get_session_failed",
-  GET_SERVERNAME_FAILED = "get_servername_failed",
-  EXPORT_TEST_RESULT_FAILED = "export_test_result_failed",
-  IMPORT_TEST_RESULT_FAILED = "import_test_result_failed",
-  EXPORT_PROJECT_FAILED = "export_project_failed",
-  IMPORT_PROJECT_FAILED = "import_project_failed",
-  IMPORT_PROJECT_NOT_EXIST = "import_project_not_exist",
-  IMPORT_TEST_RESULT_NOT_EXIST = "import_test_result_not_exist",
-  FILE_UPLOAD_REQUEST_FAILED = "upload_request_failed",
-  FILE_UPLOAD_FAILED = "upload_failed",
-  GET_SCREENSHOTS_FAILED = "get_screenshots_failed",
-  GET_TEST_MATRIX_FAILED = "get_test_matrix_failed",
-  POST_TEST_MATRIX_FAILED = "post_test_matrix_failed",
-  PATCH_TEST_MATRIX_FAILED = "patch_test_matrix_failed",
-  DELETE_TEST_MATRIX_FAILED = "delete_test_matrix_failed",
-  GET_TEST_TARGET_GROUP_FAILED = "get_test_target_group_failed",
-  POST_TEST_TARGET_GROUP_FAILED = "post_test_target_group_failed",
-  PATCH_TEST_TARGET_GROUP_FAILED = "patch_test_target_group_failed",
-  DELETE_TEST_TARGET_GROUP_FAILED = "delete_test_target_group_failed",
-  GET_TEST_TARGET_FAILED = "get_test_target_failed",
-  POST_TEST_TARGET_FAILED = "post_test_target_failed",
-  PATCH_TEST_TARGET_FAILED = "patch_test_target_failed",
-  DELETE_TEST_TARGET_FAILED = "delete_test_target_failed",
-  GET_VIEW_POINT_FAILED = "get_view_point_failed",
-  POST_VIEW_POINT_FAILED = "post_view_point_failed",
-  PATCH_VIEW_POINT_FAILED = "patch_view_point_failed",
-  DELETE_VIEW_POINT_FAILED = "delete_view_point_failed",
-  NO_TEST_CASES_GENERATED = "no_test_cases_generated",
-  GET_TEST_PROGRESS_FAILED = "get_test_progress_failed",
-  PATCH_STORY_FAILED = "patch_story_failed",
-  EXPORT_CONFIG_FAILED = "export_config_failed",
-  GENERATE_SEQUENCE_VIEW_FAILED = "generate_sequence_view_failed",
-}
+export type ServerErrorCode =
+  | "save_project_failed"
+  | "get_project_failed"
+  | "get_settings_failed"
+  | "save_settings_failed"
+  | "save_test_script_failed"
+  | "save_snapshot_failed"
+  | "save_test_result_failed"
+  | "get_test_result_failed"
+  | "add_test_step_failed"
+  | "get_test_step_failed"
+  | "edit_test_step_failed"
+  | "add_note_failed"
+  | "get_note_failed"
+  | "edit_note_failed"
+  | "delete_note_failed"
+  | "compress_note_image_failed"
+  | "compress_test_step_image_failed"
+  | "update_test_result_failed"
+  | "delete_test_result_failed"
+  | "post_session_failed"
+  | "patch_session_failed"
+  | "delete_session_failed"
+  | "get_servername_failed"
+  | "export_test_result_failed"
+  | "import_test_result_failed"
+  | "export_project_failed"
+  | "import_project_failed"
+  | "import_project_not_exist"
+  | "import_test_result_not_exist"
+  | "get_screenshots_failed"
+  | "get_test_matrix_failed"
+  | "delete_test_matrix_failed"
+  | "get_test_target_group_failed"
+  | "post_test_target_group_failed"
+  | "patch_test_target_group_failed"
+  | "delete_test_target_group_failed"
+  | "get_test_target_failed"
+  | "post_test_target_failed"
+  | "patch_test_target_failed"
+  | "delete_test_target_failed"
+  | "get_view_point_failed"
+  | "post_view_point_failed"
+  | "patch_view_point_failed"
+  | "delete_view_point_failed"
+  | "no_test_cases_generated"
+  | "get_test_progress_failed"
+  | "patch_story_failed"
+  | "export_config_failed"
+  | "generate_sequence_view_failed";
 
-export interface ServerErrorData {
-  code: ServerErrorCode;
+export type ServerErrorData<T extends ServerErrorCode> = {
+  code: T;
   message?: string;
   details?: Array<{
     code: string;
     message: string;
     target: string;
   }>;
-}
+};
 
-export class ServerError extends Error {
-  constructor(public statusCode: number, public data?: ServerErrorData) {
+export class ServerError<T extends ServerErrorCode> extends Error {
+  constructor(public statusCode: number, public data?: ServerErrorData<T>) {
     super(data?.message ?? "");
   }
 }

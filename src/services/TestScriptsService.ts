@@ -26,7 +26,7 @@ import ScreenDefFactory, {
 import { invalidOperationTypeExists } from "@/lib/scriptGenerator/model/pageObject/method/operation/PageObjectOperation";
 import { TestScript } from "@/lib/scriptGenerator/TestScript";
 import { TestScriptGeneratorImpl } from "@/lib/scriptGenerator/TestScriptGenerator";
-import { ServerError, ServerErrorCode } from "@/ServerError";
+import { ServerError } from "@/ServerError";
 import { getRepository } from "typeorm";
 import { TestResultService } from "./TestResultService";
 import { TestScriptFileRepositoryService } from "./TestScriptFileRepositoryService";
@@ -65,7 +65,7 @@ export class TestScriptsService {
 
     if (!testScript.testSuite) {
       throw new ServerError(500, {
-        code: ServerErrorCode.NO_TEST_CASES_GENERATED,
+        code: "no_test_cases_generated",
       });
     }
 
@@ -99,7 +99,7 @@ export class TestScriptsService {
 
     if (!testScript.testSuite) {
       throw new ServerError(500, {
-        code: ServerErrorCode.NO_TEST_CASES_GENERATED,
+        code: "no_test_cases_generated",
       });
     }
 

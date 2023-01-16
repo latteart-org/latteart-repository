@@ -15,10 +15,21 @@
  */
 
 import LoggingService from "@/logger/LoggingService";
-import { ServerError, ServerErrorCode } from "@/ServerError";
+import { ServerError, ServerErrorData } from "../ServerError";
 import { ImageFileRepositoryServiceImpl } from "@/services/ImageFileRepositoryService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
-import { Controller, Body, Patch, Route, Path, Post, Delete } from "tsoa";
+import {
+  Controller,
+  Body,
+  Patch,
+  Route,
+  Path,
+  Post,
+  Delete,
+  Tags,
+  Response,
+  SuccessResponse,
+} from "tsoa";
 import { attachedFileDirectoryService, transactionRunner } from "..";
 
 import {
@@ -29,6 +40,7 @@ import {
 import { SessionsService } from "../services/SessionsService";
 
 @Route("projects/{projectId}/sessions")
+@Tags("projects")
 export class SessionsController extends Controller {
   /**
    * Create session with the given story.
@@ -36,6 +48,8 @@ export class SessionsController extends Controller {
    * @param requestBody Target story id.
    * @returns Created session
    */
+  @Response<ServerErrorData<"post_session_failed">>(500)
+  @SuccessResponse(200)
   @Post("")
   public async createSession(
     @Path() projectId: string,
@@ -52,7 +66,7 @@ export class SessionsController extends Controller {
         LoggingService.error("Post session failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.POST_SESSION_FAILED,
+          code: "post_session_failed",
         });
       }
       throw error;
@@ -66,6 +80,8 @@ export class SessionsController extends Controller {
    * @param requestBody Session.
    * @returns Updated session.
    */
+  @Response<ServerErrorData<"patch_session_failed">>(500)
+  @SuccessResponse(200)
   @Patch("{sessionId}")
   public async updateSession(
     @Path() projectId: string,
@@ -92,7 +108,7 @@ export class SessionsController extends Controller {
         LoggingService.error("Patch session failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.PATCH_SESSION_FAILED,
+          code: "patch_session_failed",
         });
       }
       throw error;
@@ -104,6 +120,8 @@ export class SessionsController extends Controller {
    * @param projectId Target project id.
    * @param sessionId Target session id.
    */
+  @Response<ServerErrorData<"delete_session_failed">>(500)
+  @SuccessResponse(204)
   @Delete("{sessionId}")
   public async deleteSession(
     @Path() projectId: string,
@@ -121,7 +139,7 @@ export class SessionsController extends Controller {
         LoggingService.error("Delete session failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.DELETE_SESSION_FAILED,
+          code: "delete_session_failed",
         });
       }
       throw error;

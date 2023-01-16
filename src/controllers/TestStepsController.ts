@@ -15,12 +15,23 @@
  */
 
 import LoggingService from "@/logger/LoggingService";
-import { ServerErrorCode, ServerError } from "@/ServerError";
+import { ServerError, ServerErrorData } from "../ServerError";
 import { ConfigsService } from "@/services/ConfigsService";
 import { ImageFileRepositoryServiceImpl } from "@/services/ImageFileRepositoryService";
 import { TestStepServiceImpl } from "@/services/TestStepService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
-import { Controller, Get, Post, Patch, Route, Path, Body } from "tsoa";
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Route,
+  Path,
+  Body,
+  Tags,
+  Response,
+  SuccessResponse,
+} from "tsoa";
 import { screenshotDirectoryService } from "..";
 import {
   PatchTestStepDto,
@@ -31,6 +42,7 @@ import {
 } from "../interfaces/TestSteps";
 
 @Route("test-results/{testResultId}/test-steps")
+@Tags("test-results")
 export class TestStepsController extends Controller {
   /**
    * Add test step to test result.
@@ -38,6 +50,8 @@ export class TestStepsController extends Controller {
    * @param requestBody Operation.
    * @returns Added test step.
    */
+  @Response<ServerErrorData<"add_test_step_failed">>(500)
+  @SuccessResponse(200)
   @Post()
   public async addTestStep(
     @Path() testResultId: string,
@@ -60,7 +74,7 @@ export class TestStepsController extends Controller {
         LoggingService.error("Add test step failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.ADD_TEST_STEP_FAILED,
+          code: "add_test_step_failed",
         });
       }
       throw error;
@@ -73,6 +87,8 @@ export class TestStepsController extends Controller {
    * @param testStepId Target test step id.
    * @returns Test step.
    */
+  @Response<ServerErrorData<"get_test_step_failed">>(404)
+  @SuccessResponse(200)
   @Get("{testStepId}")
   public async getTestStep(
     @Path() testResultId: string,
@@ -99,7 +115,7 @@ export class TestStepsController extends Controller {
         LoggingService.error("Get test step failed.", error);
 
         throw new ServerError(404, {
-          code: ServerErrorCode.GET_TEST_STEP_FAILED,
+          code: "get_test_step_failed",
         });
       }
       throw error;
@@ -113,6 +129,8 @@ export class TestStepsController extends Controller {
    * @param requestBody Test step notes (Purpose or Notices).
    * @returns Updated test step.
    */
+  @Response<ServerErrorData<"edit_test_step_failed">>(500)
+  @SuccessResponse(200)
   @Patch("{testStepId}")
   public async updateTestStepNotes(
     @Path() testResultId: string,
@@ -156,7 +174,7 @@ export class TestStepsController extends Controller {
         LoggingService.error("Edit test step failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.EDIT_TEST_STEP_FAILED,
+          code: "edit_test_step_failed",
         });
       }
       throw error;
