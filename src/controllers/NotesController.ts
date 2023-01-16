@@ -51,9 +51,9 @@ export class NotesController extends Controller {
    * @param requestBody Purpose or Notices.
    * @returns Registered Purpose or Notices.
    */
-  @Response<ServerErrorData<"add_note_failed">>(400)
-  @Response<ServerErrorData<"add_note_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"add_note_failed">>(400, "Invalid note type")
+  @Response<ServerErrorData<"add_note_failed">>(500, "Add note failed")
+  @SuccessResponse(200, "Success")
   @Post()
   public async addNote(
     @Path() testResultId: string,
@@ -104,9 +104,9 @@ export class NotesController extends Controller {
    * @param noteId Target note id.
    * @returns Purpose or Notice.
    */
-  @Response<ServerErrorData<"get_note_failed">>(404)
-  @Response<ServerErrorData<"get_note_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"get_note_failed">>(404, "Note not found")
+  @Response<ServerErrorData<"get_note_failed">>(500, "Get note failed")
+  @SuccessResponse(200, "Success")
   @Get("{noteId}")
   public async getNote(
     @Path() testResultId: string,
@@ -161,9 +161,9 @@ export class NotesController extends Controller {
    * @param requestBody Purpose or Notices
    * @returns Updated Purpose or Notices.
    */
-  @Response<ServerErrorData<"edit_note_failed">>(404)
-  @Response<ServerErrorData<"edit_note_failed">>(500)
-  @SuccessResponse(200)
+  @Response<ServerErrorData<"edit_note_failed">>(404, "Note not found")
+  @Response<ServerErrorData<"edit_note_failed">>(500, "Edit note failed")
+  @SuccessResponse(200, "Success")
   @Put("{noteId}")
   public async updateNote(
     @Path() testResultId: string,
