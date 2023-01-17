@@ -1,7 +1,7 @@
 import { GetTestResultResponse } from "@/interfaces/TestResults";
 import { CreateTestScriptDto } from "@/interfaces/TestScripts";
 import { TestScript } from "@/lib/scriptGenerator/TestScript";
-import { ServerError, ServerErrorCode } from "@/ServerError";
+import { ServerError } from "@/ServerError";
 import { TestResultService } from "@/services/TestResultService";
 import { TestScriptFileRepositoryService } from "@/services/TestScriptFileRepositoryService";
 import { TestScriptsService } from "@/services/TestScriptsService";
@@ -395,7 +395,7 @@ describe('TestSuite1', () => {
           )
         ).rejects.toThrow(
           new ServerError(500, {
-            code: ServerErrorCode.NO_TEST_CASES_GENERATED,
+            code: "no_test_cases_generated",
           })
         );
 

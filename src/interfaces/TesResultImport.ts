@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/**
+ * Test result data to import.
+ */
 export interface CreateTestResultImportDto {
   source: {
     testResultFile: { data: string; name: string };

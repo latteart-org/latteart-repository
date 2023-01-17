@@ -20,15 +20,38 @@ import {
   PostTestTargetGroupResponse,
 } from "../interfaces/TestTargetGroups";
 import LoggingService from "@/logger/LoggingService";
-import { ServerError, ServerErrorCode } from "@/ServerError";
+import { ServerError, ServerErrorData } from "../ServerError";
 import { TestTargetGroupsService } from "@/services/TestTargetGroupsService";
-import { Controller, Body, Patch, Route, Path, Get, Post, Delete } from "tsoa";
+import {
+  Controller,
+  Body,
+  Patch,
+  Route,
+  Path,
+  Get,
+  Post,
+  Delete,
+  Tags,
+  Response,
+  SuccessResponse,
+} from "tsoa";
 import { transactionRunner } from "..";
 
 @Route("/test-target-groups/")
+@Tags("test-target-groups")
 export class TestTargetGroupsController extends Controller {
+  /**
+   * Get test target group.
+   * @param testTargetGroupId Target test target group id.
+   * @returns Test target group.
+   */
+  @Response<ServerErrorData<"get_test_target_group_failed">>(
+    500,
+    "Get testTargetGroup failed"
+  )
+  @SuccessResponse(200, "Success")
   @Get("{testTargetGroupId}")
-  public async get(
+  public async getTestTargetGroup(
     @Path() testTargetGroupId: string
   ): Promise<GetTestTargetGroupResponse> {
     try {
@@ -38,15 +61,25 @@ export class TestTargetGroupsController extends Controller {
         LoggingService.error("Get testTargetGroup failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.GET_TEST_TARGET_GROUP_FAILED,
+          code: "get_test_target_group_failed",
         });
       }
       throw error;
     }
   }
 
+  /**
+   * Create test target group.
+   * @param body Target test matrix ID/test target group name.
+   * @returns Created test target group.
+   */
+  @Response<ServerErrorData<"post_test_target_group_failed">>(
+    500,
+    "Post testTargetGroup failed"
+  )
+  @SuccessResponse(200, "Success")
   @Post()
-  public async post(
+  public async createTestTargetGroup(
     @Body() body: { testMatrixId: string; name: string }
   ): Promise<PostTestTargetGroupResponse> {
     try {
@@ -56,15 +89,26 @@ export class TestTargetGroupsController extends Controller {
         LoggingService.error("Post testTargetGroup failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.POST_TEST_TARGET_GROUP_FAILED,
+          code: "post_test_target_group_failed",
         });
       }
       throw error;
     }
   }
 
+  /**
+   * Update some information in the test target group to the specified.
+   * @param testTargetGroupId Target test target group id.
+   * @param body Test target group name.
+   * @returns Updated test target group.
+   */
+  @Response<ServerErrorData<"patch_test_target_group_failed">>(
+    500,
+    "Patch targetGroup failed"
+  )
+  @SuccessResponse(200, "Success")
   @Patch("{testTargetGroupId}")
-  public async patch(
+  public async updateTestTargetGroup(
     @Path() testTargetGroupId: string,
     @Body() body: { name: string }
   ): Promise<PatchTestTargetGroupResponse> {
@@ -75,15 +119,26 @@ export class TestTargetGroupsController extends Controller {
         LoggingService.error("Patch targetGroup failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.PATCH_TEST_TARGET_GROUP_FAILED,
+          code: "patch_test_target_group_failed",
         });
       }
       throw error;
     }
   }
 
+  /**
+   * Delete test target group.
+   * @param testTargetGroupId Target test target group id.
+   */
+  @Response<ServerErrorData<"delete_test_target_group_failed">>(
+    500,
+    "Delete testTargetGroup failed"
+  )
+  @SuccessResponse(204, "Success")
   @Delete("{testTargetGroupId}")
-  public async delete(@Path() testTargetGroupId: string): Promise<void> {
+  public async deleteTestTargetGroup(
+    @Path() testTargetGroupId: string
+  ): Promise<void> {
     try {
       return await new TestTargetGroupsService().delete(
         testTargetGroupId,
@@ -94,7 +149,7 @@ export class TestTargetGroupsController extends Controller {
         LoggingService.error("Delete testTargetGroup failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.DELETE_TEST_TARGET_GROUP_FAILED,
+          code: "delete_test_target_group_failed",
         });
       }
       throw error;

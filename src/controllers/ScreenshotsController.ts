@@ -15,16 +15,37 @@
  */
 
 import LoggingService from "@/logger/LoggingService";
-import { ServerError, ServerErrorCode } from "@/ServerError";
+import { ServerError, ServerErrorData } from "../ServerError";
 import { ScreenshotsService } from "@/services/ScreenshotsService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
-import { Controller, Route, Path, Get } from "tsoa";
+import {
+  Controller,
+  Route,
+  Path,
+  Get,
+  Tags,
+  Response,
+  SuccessResponse,
+} from "tsoa";
 import { screenshotDirectoryService, tempDirectoryService } from "..";
 
 @Route("test-results/{testResultId}/screenshots")
+@Tags("test-results")
 export class ScreenshotsController extends Controller {
+  /**
+   * Output screenshot files of all test results.
+   * @param testResultId Target test result id.
+   * @returns Download url for the output screenshot file.
+   */
+  @Response<ServerErrorData<"get_screenshots_failed">>(
+    500,
+    "Get screenshots failed"
+  )
+  @SuccessResponse(200, "Success")
   @Get()
-  public async get(@Path() testResultId: string): Promise<{ url: string }> {
+  public async outputTestResultScreenshots(
+    @Path() testResultId: string
+  ): Promise<{ url: string }> {
     const timestampService = new TimestampServiceImpl();
     try {
       const url = await new ScreenshotsService().getScreenshots(
@@ -39,7 +60,7 @@ export class ScreenshotsController extends Controller {
         LoggingService.error("Get screenshots failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.GET_SCREENSHOTS_FAILED,
+          code: "get_screenshots_failed",
         });
       }
       throw error;

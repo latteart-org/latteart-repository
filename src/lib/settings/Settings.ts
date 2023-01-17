@@ -92,31 +92,49 @@ export default class Settings {
   }
 }
 
+/**
+ * Autofill setting.
+ */
 export interface AutofillSetting {
   conditionGroups: AutofillConditionGroup[];
 }
 
+/**
+ * Auto operation setting.
+ */
 export interface AutoOperationSetting {
   conditionGroups: AutoOperationConditionGroup[];
 }
 
+/**
+ * Screen definition settings.
+ */
 export interface ScreenDefinition {
   screenDefType: ScreenDefType;
   conditionGroups: ScreenDefinitionConditionGroup[];
 }
 
+/**
+ * HTML tags to include in coverage.
+ */
 export interface Coverage {
   include: {
     tags: string[];
   };
 }
 
+/**
+ * Image compression settings.
+ */
 export interface ImageCompression {
   isEnabled: boolean;
   isDeleteSrcImage: boolean;
   command: string;
 }
 
+/**
+ * Autofill condition group.
+ */
 export interface AutofillConditionGroup {
   isEnabled: boolean;
   settingName: string;
@@ -125,6 +143,9 @@ export interface AutofillConditionGroup {
   inputValueConditions: Array<AutofillCondition>;
 }
 
+/**
+ * Autofill condition.
+ */
 export type AutofillCondition = {
   isEnabled: boolean;
   locatorType: string;
@@ -133,6 +154,9 @@ export type AutofillCondition = {
   inputValue: string;
 };
 
+/**
+ * Auto operation condition group.
+ */
 export interface AutoOperationConditionGroup {
   isEnabled: boolean;
   settingName: string;
@@ -140,6 +164,9 @@ export interface AutoOperationConditionGroup {
   autoOperations: any[];
 }
 
+/**
+ * Screen definition condition group.
+ */
 export interface ScreenDefinitionConditionGroup {
   isEnabled: boolean;
   screenName: string;

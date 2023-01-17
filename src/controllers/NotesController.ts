@@ -15,11 +15,23 @@
  */
 
 import LoggingService from "@/logger/LoggingService";
-import { ServerErrorCode, ServerError } from "@/ServerError";
+import { ServerError, ServerErrorData } from "../ServerError";
 import { ImageFileRepositoryServiceImpl } from "@/services/ImageFileRepositoryService";
 import { TestPurposeServiceImpl } from "@/services/TestPurposeService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
-import { Controller, Get, Put, Delete, Body, Post, Route, Path } from "tsoa";
+import {
+  Controller,
+  Get,
+  Put,
+  Delete,
+  Body,
+  Post,
+  Route,
+  Path,
+  Tags,
+  Response,
+  SuccessResponse,
+} from "tsoa";
 import { screenshotDirectoryService } from "..";
 import {
   CreateNoteDto,
@@ -31,13 +43,23 @@ import {
 import { NotesServiceImpl } from "../services/NotesService";
 
 @Route("test-results/{testResultId}/notes")
+@Tags("test-results")
 export class NotesController extends Controller {
+  /**
+   * Add note (Purpose or Notice) on test results.
+   * @param testResultId Target test result id.
+   * @param requestBody Purpose or Notices.
+   * @returns Registered Purpose or Notices.
+   */
+  @Response<ServerErrorData<"add_note_failed">>(400, "Invalid note type")
+  @Response<ServerErrorData<"add_note_failed">>(500, "Add note failed")
+  @SuccessResponse(200, "Success")
   @Post()
-  public async create(
+  public async addNote(
     @Path() testResultId: string,
     @Body() requestBody: CreateNoteDto
   ): Promise<CreateNoteResponse> {
-    console.log("NotesController - create");
+    console.log("NotesController - addNote");
 
     const timestampService = new TimestampServiceImpl();
     const imageFileRepositoryService = new ImageFileRepositoryServiceImpl({
@@ -48,7 +70,7 @@ export class NotesController extends Controller {
       LoggingService.error(`invalid note type: ${requestBody.type}`);
 
       throw new ServerError(400, {
-        code: ServerErrorCode.ADD_NOTE_FAILED,
+        code: "add_note_failed",
       });
     }
 
@@ -69,19 +91,28 @@ export class NotesController extends Controller {
         LoggingService.error("Add note failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.ADD_NOTE_FAILED,
+          code: "add_note_failed",
         });
       }
       throw error;
     }
   }
 
+  /**
+   * Get note (Purpose or Notice).
+   * @param testResultId Target test result id.
+   * @param noteId Target note id.
+   * @returns Purpose or Notice.
+   */
+  @Response<ServerErrorData<"get_note_failed">>(404, "Note not found")
+  @Response<ServerErrorData<"get_note_failed">>(500, "Get note failed")
+  @SuccessResponse(200, "Success")
   @Get("{noteId}")
-  public async get(
+  public async getNote(
     @Path() testResultId: string,
     @Path() noteId: string
   ): Promise<GetNoteResponse> {
-    console.log("NotesController - get");
+    console.log("NotesController - getNote");
 
     const timestampService = new TimestampServiceImpl();
     const imageFileRepositoryService = new ImageFileRepositoryServiceImpl({
@@ -110,7 +141,7 @@ export class NotesController extends Controller {
         LoggingService.error("Get note failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.GET_NOTE_FAILED,
+          code: "get_note_failed",
         });
       }
       throw error;
@@ -119,17 +150,27 @@ export class NotesController extends Controller {
     LoggingService.error(`Note not found. noteId: ${noteId}`);
 
     throw new ServerError(404, {
-      code: ServerErrorCode.GET_NOTE_FAILED,
+      code: "get_note_failed",
     });
   }
 
+  /**
+   * Update note (Purpose or Notice) to whatever you specify.
+   * @param testResultId Target test result id.
+   * @param noteId Target note id.
+   * @param requestBody Purpose or Notices
+   * @returns Updated Purpose or Notices.
+   */
+  @Response<ServerErrorData<"edit_note_failed">>(404, "Note not found")
+  @Response<ServerErrorData<"edit_note_failed">>(500, "Edit note failed")
+  @SuccessResponse(200, "Success")
   @Put("{noteId}")
-  public async update(
+  public async updateNote(
     @Path() testResultId: string,
     @Path() noteId: string,
     @Body() requestBody: UpdateNoteDto
   ): Promise<UpdateNoteResponse> {
-    console.log("NotesController - update");
+    console.log("NotesController - updateNote");
 
     const timestampService = new TimestampServiceImpl();
     const imageFileRepositoryService = new ImageFileRepositoryServiceImpl({
@@ -164,7 +205,7 @@ export class NotesController extends Controller {
         LoggingService.error("Edit note failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.EDIT_NOTE_FAILED,
+          code: "edit_note_failed",
         });
       }
       throw error;
@@ -173,16 +214,24 @@ export class NotesController extends Controller {
     LoggingService.error(`Note not found. noteId: ${noteId}`);
 
     throw new ServerError(404, {
-      code: ServerErrorCode.EDIT_NOTE_FAILED,
+      code: "edit_note_failed",
     });
   }
 
+  /**
+   * Delete note (Purpose or Notice).
+   * @param testResultId Target test result id.
+   * @param noteId Target note id.
+   */
+  @Response<ServerErrorData<"delete_note_failed">>(404, "Note not found")
+  @Response<ServerErrorData<"delete_note_failed">>(500, "Delete note failed")
+  @SuccessResponse(204, "Success")
   @Delete("{noteId}")
-  public async delete(
+  public async deleteNote(
     @Path() testResultId: string,
     @Path() noteId: string
   ): Promise<void> {
-    console.log("NotesController - delete");
+    console.log("NotesController - deleteNote");
 
     const timestampService = new TimestampServiceImpl();
     const imageFileRepositoryService = new ImageFileRepositoryServiceImpl({
@@ -214,7 +263,7 @@ export class NotesController extends Controller {
         LoggingService.error("Delete note failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.DELETE_NOTE_FAILED,
+          code: "delete_note_failed",
         });
       }
       throw error;
@@ -223,7 +272,7 @@ export class NotesController extends Controller {
     LoggingService.error(`Note not found. noteId: ${noteId}`);
 
     throw new ServerError(404, {
-      code: ServerErrorCode.DELETE_NOTE_FAILED,
+      code: "delete_note_failed",
     });
   }
 }

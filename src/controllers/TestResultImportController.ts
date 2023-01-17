@@ -15,19 +15,38 @@
  */
 
 import LoggingService from "@/logger/LoggingService";
-import { ServerError, ServerErrorCode } from "@/ServerError";
+import { ServerError, ServerErrorData } from "../ServerError";
 import { ImageFileRepositoryServiceImpl } from "@/services/ImageFileRepositoryService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
-import { Controller, Post, Route, Body } from "tsoa";
+import {
+  Controller,
+  Post,
+  Route,
+  Body,
+  Tags,
+  Response,
+  SuccessResponse,
+} from "tsoa";
 import { screenshotDirectoryService, tempDirectoryService } from "..";
 import { ImportFileRepositoryServiceImpl } from "@/services/ImportFileRepositoryService";
 import { TestResultImportService } from "@/services/TestResultImportService";
 import { CreateTestResultImportDto } from "../interfaces/TesResultImport";
 
 @Route("imports/test-results")
+@Tags("imports")
 export class TestResultImportController extends Controller {
+  /**
+   * Import test result into the repository.
+   * @param requestBody Test results to import.
+   * @returns Imported test result id.
+   */
+  @Response<ServerErrorData<"import_test_result_failed">>(
+    500,
+    "Import test result failed"
+  )
+  @SuccessResponse(200, "Success")
   @Post()
-  public async create(
+  public async importTestResult(
     @Body() requestBody: CreateTestResultImportDto
   ): Promise<{ testResultId: string }> {
     const timestampService = new TimestampServiceImpl();
@@ -58,7 +77,7 @@ export class TestResultImportController extends Controller {
         LoggingService.error("Import test result failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.IMPORT_TEST_RESULT_FAILED,
+          code: "import_test_result_failed",
         });
       }
       throw error;

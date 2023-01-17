@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/**
+ * Screen definition settings.
+ */
 export interface ScreenDefinitionConfig {
   screenDefType: "title" | "url";
   conditionGroups: {

@@ -15,7 +15,15 @@
  */
 
 import { CreateCompressedImageResponse } from "../interfaces/CompressedImage";
-import { Controller, Post, Route, Path } from "tsoa";
+import {
+  Controller,
+  Post,
+  Route,
+  Path,
+  Response,
+  SuccessResponse,
+  Tags,
+} from "tsoa";
 import { CompressedImageService } from "../services/CompressedImageService";
 import { CommandExecutionServiceImpl } from "@/services/CommandExecutionService";
 import { TestStepServiceImpl } from "@/services/TestStepService";
@@ -25,16 +33,28 @@ import { TimestampServiceImpl } from "@/services/TimestampService";
 import { ImageFileRepositoryServiceImpl } from "@/services/ImageFileRepositoryService";
 import { screenshotDirectoryService } from "..";
 import LoggingService from "@/logger/LoggingService";
-import { ServerErrorCode, ServerError } from "@/ServerError";
+import { ServerError, ServerErrorData } from "../ServerError";
 
 @Route("test-results/{testResultId}/test-steps/{testStepId}/compressed-image")
+@Tags("test-results")
 export class CompressedImageController extends Controller {
+  /**
+   * Compress test step screenshot.
+   * @param testResultId Target test result id.
+   * @param testStepId Target test step id.
+   * @returns Image url after compression.
+   */
+  @Response<ServerErrorData<"compress_test_step_image_failed">>(
+    500,
+    "Compress test step image failed"
+  )
+  @SuccessResponse(200, "Success")
   @Post()
-  public async create(
+  public async compressTestStepScreenshot(
     @Path() testResultId: string,
     @Path() testStepId: string
   ): Promise<CreateCompressedImageResponse> {
-    console.log("CompressedImageController - compressImage");
+    console.log("CompressedImageController - compressTestStepScreenshot");
 
     const timestampService = new TimestampServiceImpl();
     const imageFileRepositoryService = new ImageFileRepositoryServiceImpl({
@@ -66,7 +86,7 @@ export class CompressedImageController extends Controller {
         LoggingService.error("Compress test step image failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.COMPRESS_TEST_STEP_IMAGE_FAILED,
+          code: "compress_test_step_image_failed",
         });
       }
       throw error;

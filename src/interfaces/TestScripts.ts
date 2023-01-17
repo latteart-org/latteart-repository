@@ -16,10 +16,16 @@
 
 import { TestResultViewOption } from "./TestResults";
 
+/**
+ * Settings for test scripts.
+ */
 export type TestScriptOption = {
   optimized: boolean;
   testData: { useDataDriven: boolean; maxGeneration: number };
   view: TestResultViewOption;
 };
 
+/**
+ * Settings for creating test scripts.
+ */
 export type CreateTestScriptDto = TestScriptOption;

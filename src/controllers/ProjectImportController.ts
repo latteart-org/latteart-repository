@@ -14,7 +14,15 @@
  * limitations under the License.
  */
 
-import { Body, Controller, Post, Route } from "tsoa";
+import {
+  Body,
+  Controller,
+  Post,
+  Response,
+  Route,
+  SuccessResponse,
+  Tags,
+} from "tsoa";
 import {
   attachedFileDirectoryService,
   screenshotDirectoryService,
@@ -24,7 +32,7 @@ import {
 import { ProjectImportService } from "@/services/ProjectImportService";
 import { CreateProjectImportDto } from "../interfaces/ProjectImport";
 import LoggingService from "@/logger/LoggingService";
-import { ServerError, ServerErrorCode } from "@/ServerError";
+import { ServerError, ServerErrorData } from "../ServerError";
 import { TimestampServiceImpl } from "@/services/TimestampService";
 import { ImageFileRepositoryServiceImpl } from "@/services/ImageFileRepositoryService";
 import { TestResultServiceImpl } from "@/services/TestResultService";
@@ -32,13 +40,30 @@ import { TestStepServiceImpl } from "@/services/TestStepService";
 import { ConfigsService } from "@/services/ConfigsService";
 import { NotesServiceImpl } from "@/services/NotesService";
 import { TestPurposeServiceImpl } from "@/services/TestPurposeService";
-import { TestResultImportService } from "@/services/TestResultImportService";
-import { ImportFileRepositoryServiceImpl } from "@/services/ImportFileRepositoryService";
 
 @Route("imports/projects")
+@Tags("imports")
 export class ProjectImportController extends Controller {
+  /**
+   * Import project information and test result information into repository.
+   * @param requestBody Project information and test result information to import.
+   * @returns Imported project id.
+   */
+  @Response<ServerErrorData<"import_test_result_not_exist">>(
+    500,
+    "Test result information does not exist"
+  )
+  @Response<ServerErrorData<"import_project_not_exist">>(
+    500,
+    "Project information does not exist"
+  )
+  @Response<ServerErrorData<"import_project_failed">>(
+    500,
+    "Import project failed"
+  )
+  @SuccessResponse(200, "Success")
   @Post()
-  public async create(
+  public async importProject(
     @Body() requestBody: CreateProjectImportDto
   ): Promise<{ projectId: string }> {
     try {
@@ -96,16 +121,16 @@ export class ProjectImportController extends Controller {
         LoggingService.error("Import project failed.", error);
         if (error.message === "Test result information does not exist.") {
           throw new ServerError(500, {
-            code: ServerErrorCode.IMPORT_TEST_RESULT_NOT_EXIST,
+            code: "import_test_result_not_exist",
           });
         }
         if (error.message === "Project information does not exist.") {
           throw new ServerError(500, {
-            code: ServerErrorCode.IMPORT_PROJECT_NOT_EXIST,
+            code: "import_project_not_exist",
           });
         }
         throw new ServerError(500, {
-          code: ServerErrorCode.IMPORT_PROJECT_FAILED,
+          code: "import_project_failed",
         });
       }
       throw error;

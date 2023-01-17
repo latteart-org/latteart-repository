@@ -13,8 +13,6 @@ import {
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { ConfigsController } from "./../controllers/ConfigsController";
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { DeviceConfigsController } from "./../controllers/DeviceConfigsController";
-// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { NoteCompressedImageController } from "./../controllers/NoteCompressedImageController";
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { NotesController } from "./../controllers/NotesController";
@@ -275,9 +273,63 @@ const models: TsoaRoute.Models = {
     type: { ref: "ExportableConfig", validators: {} },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_get_settings_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["get_settings_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   PutConfigResponse: {
     dataType: "refAlias",
     type: { ref: "ExportableConfig", validators: {} },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_save_settings_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["save_settings_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   PutConfigDto: {
@@ -291,6 +343,33 @@ const models: TsoaRoute.Models = {
       imageFileUrl: { dataType: "string", required: true },
     },
     additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_compress_note_image_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["compress_note_image_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   Note: {
@@ -315,6 +394,29 @@ const models: TsoaRoute.Models = {
     type: { ref: "Note", validators: {} },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_add_note_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: { dataType: "enum", enums: ["add_note_failed"], required: true },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   CreateNoteDto: {
     dataType: "refObject",
     properties: {
@@ -332,9 +434,55 @@ const models: TsoaRoute.Models = {
     type: { ref: "Note", validators: {} },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_get_note_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: { dataType: "enum", enums: ["get_note_failed"], required: true },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   UpdateNoteResponse: {
     dataType: "refAlias",
     type: { ref: "Note", validators: {} },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_edit_note_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: { dataType: "enum", enums: ["edit_note_failed"], required: true },
+      },
+      validators: {},
+    },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   UpdateNoteDto: {
@@ -348,6 +496,60 @@ const models: TsoaRoute.Models = {
     additionalProperties: false,
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_delete_note_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["delete_note_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_export_project_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["export_project_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   CreateProjectExportDto: {
     dataType: "refObject",
     properties: {
@@ -355,6 +557,87 @@ const models: TsoaRoute.Models = {
       includeProject: { dataType: "boolean", required: true },
     },
     additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_import_test_result_not_exist_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["import_test_result_not_exist"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_import_project_not_exist_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["import_project_not_exist"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_import_project_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["import_project_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   CreateProjectImportDto: {
@@ -388,6 +671,33 @@ const models: TsoaRoute.Models = {
       createdAt: { dataType: "string", required: true },
     },
     additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_save_project_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["save_project_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   StoryDetails: {
@@ -545,6 +855,33 @@ const models: TsoaRoute.Models = {
     type: { ref: "Project", validators: {} },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_get_project_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["get_project_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   DailyTestProgress: {
     dataType: "refAlias",
     type: {
@@ -576,6 +913,60 @@ const models: TsoaRoute.Models = {
   GetTestProgressResponse: {
     dataType: "refAlias",
     type: { ref: "DailyTestProgress", validators: {} },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_get_test_progress_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["get_test_progress_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_save_test_script_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["save_test_script_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   TestResultViewOption: {
@@ -665,6 +1056,33 @@ const models: TsoaRoute.Models = {
     type: { ref: "TestScriptOption", validators: {} },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_get_servername_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["get_servername_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   Session: {
     dataType: "refAlias",
     type: {
@@ -734,9 +1152,63 @@ const models: TsoaRoute.Models = {
     type: { ref: "Session", validators: {} },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_post_session_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["post_session_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   PatchSessionResponse: {
     dataType: "refAlias",
     type: { ref: "Session", validators: {} },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_patch_session_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["patch_session_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   PatchSessionDto: {
@@ -796,12 +1268,66 @@ const models: TsoaRoute.Models = {
     additionalProperties: false,
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_delete_session_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["delete_session_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   CreateResponse: {
     dataType: "refObject",
     properties: {
       url: { dataType: "string", required: true },
     },
     additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_save_snapshot_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["save_snapshot_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   SnapshotConfig: {
@@ -813,12 +1339,66 @@ const models: TsoaRoute.Models = {
     },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_export_test_result_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["export_test_result_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   CreateTestResultExportDto: {
     dataType: "refObject",
     properties: {
       temp: { dataType: "boolean", required: true },
     },
     additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_import_test_result_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["import_test_result_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   CreateTestResultImportDto: {
@@ -1035,6 +1615,33 @@ const models: TsoaRoute.Models = {
     type: { ref: "TestResult", validators: {} },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_get_test_result_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["get_test_result_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   CreateTestResultResponse: {
     dataType: "refObject",
     properties: {
@@ -1042,6 +1649,33 @@ const models: TsoaRoute.Models = {
       name: { dataType: "string", required: true },
     },
     additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_save_test_result_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["save_test_result_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   CreateTestResultDto: {
@@ -1057,6 +1691,60 @@ const models: TsoaRoute.Models = {
   PatchTestResultResponse: {
     dataType: "refAlias",
     type: { ref: "TestResult", validators: {} },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_update_test_result_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["update_test_result_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_delete_test_result_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["delete_test_result_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   ListSessionResponse: {
@@ -1171,6 +1859,33 @@ const models: TsoaRoute.Models = {
     type: { ref: "SequenceView", validators: {} },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_generate_sequence_view_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["generate_sequence_view_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   GetSequenceViewDto: {
     dataType: "refAlias",
     type: { ref: "TestResultViewOption", validators: {} },
@@ -1256,6 +1971,33 @@ const models: TsoaRoute.Models = {
     },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_add_test_step_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["add_test_step_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   CapturedOperation: {
     dataType: "refObject",
     properties: {
@@ -1328,9 +2070,63 @@ const models: TsoaRoute.Models = {
     type: { ref: "TestStep", validators: {} },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_get_test_step_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["get_test_step_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   PatchTestStepResponse: {
     dataType: "refAlias",
     type: { ref: "TestStep", validators: {} },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_edit_test_step_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["edit_test_step_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   PatchTestStepDto: {
@@ -1347,6 +2143,33 @@ const models: TsoaRoute.Models = {
       notices: { dataType: "array", array: { dataType: "string" } },
     },
     additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_get_screenshots_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["get_screenshots_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   TestTarget: {
@@ -1421,6 +2244,33 @@ const models: TsoaRoute.Models = {
     type: { ref: "TestMatrix", validators: {} },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_get_test_matrix_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["get_test_matrix_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   PostTestMatrixResponse: {
     dataType: "refAlias",
     type: { ref: "TestMatrix", validators: {} },
@@ -1431,9 +2281,63 @@ const models: TsoaRoute.Models = {
     type: { ref: "TestMatrix", validators: {} },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_delete_test_matrix_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["delete_test_matrix_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   GetTestTargetGroupResponse: {
     dataType: "refAlias",
     type: { ref: "TestTargetGroup", validators: {} },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_get_test_target_group_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["get_test_target_group_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   PostTestTargetGroupResponse: {
@@ -1441,9 +2345,90 @@ const models: TsoaRoute.Models = {
     type: { ref: "TestTargetGroup", validators: {} },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_post_test_target_group_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["post_test_target_group_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   PatchTestTargetGroupResponse: {
     dataType: "refAlias",
     type: { ref: "TestTargetGroup", validators: {} },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_patch_test_target_group_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["patch_test_target_group_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_delete_test_target_group_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["delete_test_target_group_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   GetTestTargetResponse: {
@@ -1451,9 +2436,63 @@ const models: TsoaRoute.Models = {
     type: { ref: "TestTarget", validators: {} },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_get_test_target_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["get_test_target_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   PostTestTargetResponse: {
     dataType: "refAlias",
     type: { ref: "TestTarget", validators: {} },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_post_test_target_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["post_test_target_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   PatchTestTargetResponse: {
@@ -1461,9 +2500,90 @@ const models: TsoaRoute.Models = {
     type: { ref: "TestTarget", validators: {} },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_patch_test_target_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["patch_test_target_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_delete_test_target_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["delete_test_target_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   GetViewPointResponse: {
     dataType: "refAlias",
     type: { ref: "ViewPoint", validators: {} },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_get_view_point_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["get_view_point_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   PostViewPointResponse: {
@@ -1471,9 +2591,90 @@ const models: TsoaRoute.Models = {
     type: { ref: "ViewPoint", validators: {} },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_post_view_point_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["post_view_point_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   PatchViewPointResponse: {
     dataType: "refAlias",
     type: { ref: "ViewPoint", validators: {} },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_patch_view_point_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["patch_view_point_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_delete_view_point_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["delete_view_point_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   Story: {
@@ -1499,6 +2700,33 @@ const models: TsoaRoute.Models = {
     type: { ref: "Story", validators: {} },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_patch_story_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["patch_story_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   PatchStoryDto: {
     dataType: "refObject",
     properties: {
@@ -1507,12 +2735,66 @@ const models: TsoaRoute.Models = {
     additionalProperties: false,
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_export_config_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["export_config_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   CreateCompressedImageResponse: {
     dataType: "refObject",
     properties: {
       imageFileUrl: { dataType: "string", required: true },
     },
     additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ServerErrorData_compress_test_step_image_failed_: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        details: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              target: { dataType: "string", required: true },
+              message: { dataType: "string", required: true },
+              code: { dataType: "string", required: true },
+            },
+          },
+        },
+        message: { dataType: "string" },
+        code: {
+          dataType: "enum",
+          enums: ["compress_test_step_image_failed"],
+          required: true,
+        },
+      },
+      validators: {},
+    },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 };
@@ -1528,7 +2810,11 @@ export function RegisterRoutes(app: express.Router) {
   app.get(
     "/api/v1/projects/:projectId/configs",
 
-    function ConfigsController_get(request: any, response: any, next: any) {
+    function ConfigsController_getProjectSettings(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         projectId: {
           in: "path",
@@ -1546,7 +2832,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new ConfigsController();
 
-        const promise = controller.get.apply(controller, validatedArgs as any);
+        const promise = controller.getProjectSettings.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -1557,7 +2846,11 @@ export function RegisterRoutes(app: express.Router) {
   app.put(
     "/api/v1/projects/:projectId/configs",
 
-    function ConfigsController_update(request: any, response: any, next: any) {
+    function ConfigsController_updateProjectSettings(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         projectId: {
           in: "path",
@@ -1581,82 +2874,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new ConfigsController();
 
-        const promise = controller.update.apply(
-          controller,
-          validatedArgs as any
-        );
-        promiseHandler(controller, promise, response, undefined, next);
-      } catch (err) {
-        return next(err);
-      }
-    }
-  );
-  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  app.get(
-    "/api/v1/projects/:projectId/device-configs",
-
-    function DeviceConfigsController_get(
-      request: any,
-      response: any,
-      next: any
-    ) {
-      const args = {
-        projectId: {
-          in: "path",
-          name: "projectId",
-          required: true,
-          dataType: "string",
-        },
-      };
-
-      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-      let validatedArgs: any[] = [];
-      try {
-        validatedArgs = getValidatedArgs(args, request, response);
-
-        const controller = new DeviceConfigsController();
-
-        const promise = controller.get.apply(controller, validatedArgs as any);
-        promiseHandler(controller, promise, response, undefined, next);
-      } catch (err) {
-        return next(err);
-      }
-    }
-  );
-  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  app.put(
-    "/api/v1/projects/:projectId/device-configs",
-
-    function DeviceConfigsController_update(
-      request: any,
-      response: any,
-      next: any
-    ) {
-      const args = {
-        projectId: {
-          in: "path",
-          name: "projectId",
-          required: true,
-          dataType: "string",
-        },
-        requestBody: {
-          in: "body",
-          name: "requestBody",
-          required: true,
-          dataType: "any",
-        },
-      };
-
-      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-      let validatedArgs: any[] = [];
-      try {
-        validatedArgs = getValidatedArgs(args, request, response);
-
-        const controller = new DeviceConfigsController();
-
-        const promise = controller.update.apply(
+        const promise = controller.updateProjectSettings.apply(
           controller,
           validatedArgs as any
         );
@@ -1670,7 +2888,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/test-results/:testResultId/notes/:noteId/compressed-image",
 
-    function NoteCompressedImageController_create(
+    function NoteCompressedImageController_compressNoteScreenshot(
       request: any,
       response: any,
       next: any
@@ -1698,7 +2916,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new NoteCompressedImageController();
 
-        const promise = controller.create.apply(
+        const promise = controller.compressNoteScreenshot.apply(
           controller,
           validatedArgs as any
         );
@@ -1712,7 +2930,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/test-results/:testResultId/notes",
 
-    function NotesController_create(request: any, response: any, next: any) {
+    function NotesController_addNote(request: any, response: any, next: any) {
       const args = {
         testResultId: {
           in: "path",
@@ -1736,7 +2954,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new NotesController();
 
-        const promise = controller.create.apply(
+        const promise = controller.addNote.apply(
           controller,
           validatedArgs as any
         );
@@ -1750,7 +2968,7 @@ export function RegisterRoutes(app: express.Router) {
   app.get(
     "/api/v1/test-results/:testResultId/notes/:noteId",
 
-    function NotesController_get(request: any, response: any, next: any) {
+    function NotesController_getNote(request: any, response: any, next: any) {
       const args = {
         testResultId: {
           in: "path",
@@ -1774,7 +2992,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new NotesController();
 
-        const promise = controller.get.apply(controller, validatedArgs as any);
+        const promise = controller.getNote.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -1785,7 +3006,11 @@ export function RegisterRoutes(app: express.Router) {
   app.put(
     "/api/v1/test-results/:testResultId/notes/:noteId",
 
-    function NotesController_update(request: any, response: any, next: any) {
+    function NotesController_updateNote(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         testResultId: {
           in: "path",
@@ -1815,7 +3040,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new NotesController();
 
-        const promise = controller.update.apply(
+        const promise = controller.updateNote.apply(
           controller,
           validatedArgs as any
         );
@@ -1829,7 +3054,11 @@ export function RegisterRoutes(app: express.Router) {
   app.delete(
     "/api/v1/test-results/:testResultId/notes/:noteId",
 
-    function NotesController_delete(request: any, response: any, next: any) {
+    function NotesController_deleteNote(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         testResultId: {
           in: "path",
@@ -1853,7 +3082,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new NotesController();
 
-        const promise = controller.delete.apply(
+        const promise = controller.deleteNote.apply(
           controller,
           validatedArgs as any
         );
@@ -1867,7 +3096,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/projects/:projectId/export",
 
-    function ProjectExportController_create(
+    function ProjectExportController_exportProject(
       request: any,
       response: any,
       next: any
@@ -1895,7 +3124,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new ProjectExportController();
 
-        const promise = controller.create.apply(
+        const promise = controller.exportProject.apply(
           controller,
           validatedArgs as any
         );
@@ -1909,7 +3138,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/imports/projects",
 
-    function ProjectImportController_create(
+    function ProjectImportController_importProject(
       request: any,
       response: any,
       next: any
@@ -1931,7 +3160,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new ProjectImportController();
 
-        const promise = controller.create.apply(
+        const promise = controller.importProject.apply(
           controller,
           validatedArgs as any
         );
@@ -1945,7 +3174,11 @@ export function RegisterRoutes(app: express.Router) {
   app.get(
     "/api/v1/projects",
 
-    function ProjectsController_list(request: any, response: any, next: any) {
+    function ProjectsController_getProjectIdentifiers(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {};
 
       // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1956,7 +3189,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new ProjectsController();
 
-        const promise = controller.list.apply(controller, validatedArgs as any);
+        const promise = controller.getProjectIdentifiers.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -1967,7 +3203,11 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/projects",
 
-    function ProjectsController_create(request: any, response: any, next: any) {
+    function ProjectsController_createProject(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {};
 
       // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -1978,7 +3218,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new ProjectsController();
 
-        const promise = controller.create.apply(
+        const promise = controller.createProject.apply(
           controller,
           validatedArgs as any
         );
@@ -1992,7 +3232,11 @@ export function RegisterRoutes(app: express.Router) {
   app.get(
     "/api/v1/projects/:projectId",
 
-    function ProjectsController_get(request: any, response: any, next: any) {
+    function ProjectsController_getProject(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         projectId: {
           in: "path",
@@ -2010,7 +3254,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new ProjectsController();
 
-        const promise = controller.get.apply(controller, validatedArgs as any);
+        const promise = controller.getProject.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -2059,7 +3306,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/projects/:projectId/test-scripts",
 
-    function ProjectTestScriptsController_create(
+    function ProjectTestScriptsController_generateProjectTestScript(
       request: any,
       response: any,
       next: any
@@ -2087,7 +3334,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new ProjectTestScriptsController();
 
-        const promise = controller.create.apply(
+        const promise = controller.generateProjectTestScript.apply(
           controller,
           validatedArgs as any
         );
@@ -2101,7 +3348,11 @@ export function RegisterRoutes(app: express.Router) {
   app.get(
     "/api/v1/server-name",
 
-    function ServerNameController_get(request: any, response: any, next: any) {
+    function ServerNameController_getServerName(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {};
 
       // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -2112,7 +3363,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new ServerNameController();
 
-        const promise = controller.get.apply(controller, validatedArgs as any);
+        const promise = controller.getServerName.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -2123,7 +3377,11 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/projects/:projectId/sessions",
 
-    function SessionsController_post(request: any, response: any, next: any) {
+    function SessionsController_createSession(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         projectId: {
           in: "path",
@@ -2148,7 +3406,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new SessionsController();
 
-        const promise = controller.post.apply(controller, validatedArgs as any);
+        const promise = controller.createSession.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -2159,7 +3420,11 @@ export function RegisterRoutes(app: express.Router) {
   app.patch(
     "/api/v1/projects/:projectId/sessions/:sessionId",
 
-    function SessionsController_patch(request: any, response: any, next: any) {
+    function SessionsController_updateSession(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         projectId: {
           in: "path",
@@ -2189,7 +3454,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new SessionsController();
 
-        const promise = controller.patch.apply(
+        const promise = controller.updateSession.apply(
           controller,
           validatedArgs as any
         );
@@ -2203,7 +3468,11 @@ export function RegisterRoutes(app: express.Router) {
   app.delete(
     "/api/v1/projects/:projectId/sessions/:sessionId",
 
-    function SessionsController_delete(request: any, response: any, next: any) {
+    function SessionsController_deleteSession(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         projectId: {
           in: "path",
@@ -2227,7 +3496,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new SessionsController();
 
-        const promise = controller.delete.apply(
+        const promise = controller.deleteSession.apply(
           controller,
           validatedArgs as any
         );
@@ -2238,39 +3507,10 @@ export function RegisterRoutes(app: express.Router) {
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  app.get(
-    "/api/v1/projects/:projectId/snapshots",
-
-    function SnapshotsController_get(request: any, response: any, next: any) {
-      const args = {
-        projectId: {
-          in: "path",
-          name: "projectId",
-          required: true,
-          dataType: "string",
-        },
-      };
-
-      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-      let validatedArgs: any[] = [];
-      try {
-        validatedArgs = getValidatedArgs(args, request, response);
-
-        const controller = new SnapshotsController();
-
-        const promise = controller.get.apply(controller, validatedArgs as any);
-        promiseHandler(controller, promise, response, undefined, next);
-      } catch (err) {
-        return next(err);
-      }
-    }
-  );
-  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   app.post(
     "/api/v1/projects/:projectId/snapshots",
 
-    function SnapshotsController_create(
+    function SnapshotsController_outputProjectSnapshot(
       request: any,
       response: any,
       next: any
@@ -2298,7 +3538,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new SnapshotsController();
 
-        const promise = controller.create.apply(
+        const promise = controller.outputProjectSnapshot.apply(
           controller,
           validatedArgs as any
         );
@@ -2312,7 +3552,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/test-results/:testResultId/export",
 
-    function TestResultExportController_create(
+    function TestResultExportController_exportTestResult(
       request: any,
       response: any,
       next: any
@@ -2339,7 +3579,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestResultExportController();
 
-        const promise = controller.create.apply(
+        const promise = controller.exportTestResult.apply(
           controller,
           validatedArgs as any
         );
@@ -2353,7 +3593,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/imports/test-results",
 
-    function TestResultImportController_create(
+    function TestResultImportController_importTestResult(
       request: any,
       response: any,
       next: any
@@ -2375,7 +3615,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestResultImportController();
 
-        const promise = controller.create.apply(
+        const promise = controller.importTestResult.apply(
           controller,
           validatedArgs as any
         );
@@ -2389,7 +3629,7 @@ export function RegisterRoutes(app: express.Router) {
   app.get(
     "/api/v1/test-results",
 
-    function TestResultsController_list(
+    function TestResultsController_getTestResultIdentifiers(
       request: any,
       response: any,
       next: any
@@ -2404,7 +3644,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestResultsController();
 
-        const promise = controller.list.apply(controller, validatedArgs as any);
+        const promise = controller.getTestResultIdentifiers.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -2415,7 +3658,11 @@ export function RegisterRoutes(app: express.Router) {
   app.get(
     "/api/v1/test-results/:testResultId",
 
-    function TestResultsController_get(request: any, response: any, next: any) {
+    function TestResultsController_getTestResult(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         testResultId: {
           in: "path",
@@ -2433,7 +3680,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestResultsController();
 
-        const promise = controller.get.apply(controller, validatedArgs as any);
+        const promise = controller.getTestResult.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -2444,7 +3694,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/test-results",
 
-    function TestResultsController_create(
+    function TestResultsController_createTestResult(
       request: any,
       response: any,
       next: any
@@ -2466,7 +3716,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestResultsController();
 
-        const promise = controller.create.apply(
+        const promise = controller.createTestResult.apply(
           controller,
           validatedArgs as any
         );
@@ -2480,7 +3730,7 @@ export function RegisterRoutes(app: express.Router) {
   app.patch(
     "/api/v1/test-results/:testResultId",
 
-    function TestResultsController_patch(
+    function TestResultsController_updateTestResult(
       request: any,
       response: any,
       next: any
@@ -2513,7 +3763,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestResultsController();
 
-        const promise = controller.patch.apply(
+        const promise = controller.updateTestResult.apply(
           controller,
           validatedArgs as any
         );
@@ -2527,7 +3777,7 @@ export function RegisterRoutes(app: express.Router) {
   app.delete(
     "/api/v1/test-results/:testResultId",
 
-    function TestResultsController_delete(
+    function TestResultsController_deleteTestResult(
       request: any,
       response: any,
       next: any
@@ -2549,7 +3799,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestResultsController();
 
-        const promise = controller.delete.apply(
+        const promise = controller.deleteTestResult.apply(
           controller,
           validatedArgs as any
         );
@@ -2563,7 +3813,7 @@ export function RegisterRoutes(app: express.Router) {
   app.get(
     "/api/v1/test-results/:testResultId/sessions",
 
-    function TestResultsController_getSessionList(
+    function TestResultsController_getSessionIds(
       request: any,
       response: any,
       next: any
@@ -2585,7 +3835,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestResultsController();
 
-        const promise = controller.getSessionList.apply(
+        const promise = controller.getSessionIds.apply(
           controller,
           validatedArgs as any
         );
@@ -2640,7 +3890,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/test-results/:testResultId/test-scripts",
 
-    function TestScriptsController_create(
+    function TestScriptsController_generateTestResultTestScript(
       request: any,
       response: any,
       next: any
@@ -2668,7 +3918,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestScriptsController();
 
-        const promise = controller.create.apply(
+        const promise = controller.generateTestResultTestScript.apply(
           controller,
           validatedArgs as any
         );
@@ -2682,7 +3932,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/test-results/:testResultId/test-steps",
 
-    function TestStepsController_create(
+    function TestStepsController_addTestStep(
       request: any,
       response: any,
       next: any
@@ -2710,7 +3960,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestStepsController();
 
-        const promise = controller.create.apply(
+        const promise = controller.addTestStep.apply(
           controller,
           validatedArgs as any
         );
@@ -2724,7 +3974,11 @@ export function RegisterRoutes(app: express.Router) {
   app.get(
     "/api/v1/test-results/:testResultId/test-steps/:testStepId",
 
-    function TestStepsController_get(request: any, response: any, next: any) {
+    function TestStepsController_getTestStep(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         testResultId: {
           in: "path",
@@ -2748,7 +4002,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestStepsController();
 
-        const promise = controller.get.apply(controller, validatedArgs as any);
+        const promise = controller.getTestStep.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -2759,7 +4016,11 @@ export function RegisterRoutes(app: express.Router) {
   app.patch(
     "/api/v1/test-results/:testResultId/test-steps/:testStepId",
 
-    function TestStepsController_patch(request: any, response: any, next: any) {
+    function TestStepsController_updateTestStepNotes(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         testResultId: {
           in: "path",
@@ -2789,7 +4050,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestStepsController();
 
-        const promise = controller.patch.apply(
+        const promise = controller.updateTestStepNotes.apply(
           controller,
           validatedArgs as any
         );
@@ -2803,7 +4064,11 @@ export function RegisterRoutes(app: express.Router) {
   app.get(
     "/api/v1/test-results/:testResultId/screenshots",
 
-    function ScreenshotsController_get(request: any, response: any, next: any) {
+    function ScreenshotsController_outputTestResultScreenshots(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         testResultId: {
           in: "path",
@@ -2821,7 +4086,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new ScreenshotsController();
 
-        const promise = controller.get.apply(controller, validatedArgs as any);
+        const promise = controller.outputTestResultScreenshots.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -2832,7 +4100,7 @@ export function RegisterRoutes(app: express.Router) {
   app.get(
     "/api/v1/test-matrices/:testMatrixId",
 
-    function TestMatricesController_get(
+    function TestMatricesController_getTestMatrix(
       request: any,
       response: any,
       next: any
@@ -2854,7 +4122,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestMatricesController();
 
-        const promise = controller.get.apply(controller, validatedArgs as any);
+        const promise = controller.getTestMatrix.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -2865,7 +4136,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/test-matrices",
 
-    function TestMatricesController_post(
+    function TestMatricesController_createTestMatrix(
       request: any,
       response: any,
       next: any
@@ -2891,7 +4162,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestMatricesController();
 
-        const promise = controller.post.apply(controller, validatedArgs as any);
+        const promise = controller.createTestMatrix.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -2902,7 +4176,7 @@ export function RegisterRoutes(app: express.Router) {
   app.patch(
     "/api/v1/test-matrices/:testMatrixId",
 
-    function TestMatricesController_patch(
+    function TestMatricesController_updateTestMatrix(
       request: any,
       response: any,
       next: any
@@ -2931,7 +4205,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestMatricesController();
 
-        const promise = controller.patch.apply(
+        const promise = controller.updateTestMatrix.apply(
           controller,
           validatedArgs as any
         );
@@ -2945,7 +4219,7 @@ export function RegisterRoutes(app: express.Router) {
   app.delete(
     "/api/v1/test-matrices/:testMatrixId",
 
-    function TestMatricesController_delete(
+    function TestMatricesController_deleteTestMatrix(
       request: any,
       response: any,
       next: any
@@ -2967,7 +4241,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestMatricesController();
 
-        const promise = controller.delete.apply(
+        const promise = controller.deleteTestMatrix.apply(
           controller,
           validatedArgs as any
         );
@@ -2981,7 +4255,7 @@ export function RegisterRoutes(app: express.Router) {
   app.get(
     "/api/v1/test-target-groups/:testTargetGroupId",
 
-    function TestTargetGroupsController_get(
+    function TestTargetGroupsController_getTestTargetGroup(
       request: any,
       response: any,
       next: any
@@ -3003,7 +4277,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestTargetGroupsController();
 
-        const promise = controller.get.apply(controller, validatedArgs as any);
+        const promise = controller.getTestTargetGroup.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -3014,7 +4291,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/test-target-groups",
 
-    function TestTargetGroupsController_post(
+    function TestTargetGroupsController_createTestTargetGroup(
       request: any,
       response: any,
       next: any
@@ -3040,7 +4317,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestTargetGroupsController();
 
-        const promise = controller.post.apply(controller, validatedArgs as any);
+        const promise = controller.createTestTargetGroup.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -3051,7 +4331,7 @@ export function RegisterRoutes(app: express.Router) {
   app.patch(
     "/api/v1/test-target-groups/:testTargetGroupId",
 
-    function TestTargetGroupsController_patch(
+    function TestTargetGroupsController_updateTestTargetGroup(
       request: any,
       response: any,
       next: any
@@ -3080,7 +4360,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestTargetGroupsController();
 
-        const promise = controller.patch.apply(
+        const promise = controller.updateTestTargetGroup.apply(
           controller,
           validatedArgs as any
         );
@@ -3094,7 +4374,7 @@ export function RegisterRoutes(app: express.Router) {
   app.delete(
     "/api/v1/test-target-groups/:testTargetGroupId",
 
-    function TestTargetGroupsController_delete(
+    function TestTargetGroupsController_deleteTestTargetGroup(
       request: any,
       response: any,
       next: any
@@ -3116,7 +4396,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestTargetGroupsController();
 
-        const promise = controller.delete.apply(
+        const promise = controller.deleteTestTargetGroup.apply(
           controller,
           validatedArgs as any
         );
@@ -3130,7 +4410,11 @@ export function RegisterRoutes(app: express.Router) {
   app.get(
     "/api/v1/projects/:projectId/test-targets/:testTargetId",
 
-    function TestTargetsController_get(request: any, response: any, next: any) {
+    function TestTargetsController_getTestTarget(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         projectId: {
           in: "path",
@@ -3154,7 +4438,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestTargetsController();
 
-        const promise = controller.get.apply(controller, validatedArgs as any);
+        const promise = controller.getTestTarget.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -3165,7 +4452,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/projects/:projectId/test-targets",
 
-    function TestTargetsController_post(
+    function TestTargetsController_createTestTarget(
       request: any,
       response: any,
       next: any
@@ -3197,7 +4484,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestTargetsController();
 
-        const promise = controller.post.apply(controller, validatedArgs as any);
+        const promise = controller.createTestTarget.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -3208,7 +4498,7 @@ export function RegisterRoutes(app: express.Router) {
   app.patch(
     "/api/v1/projects/:projectId/test-targets/:testTargetId",
 
-    function TestTargetsController_patch(
+    function TestTargetsController_updateTestTarget(
       request: any,
       response: any,
       next: any
@@ -3256,7 +4546,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestTargetsController();
 
-        const promise = controller.patch.apply(
+        const promise = controller.updateTestTarget.apply(
           controller,
           validatedArgs as any
         );
@@ -3270,7 +4560,7 @@ export function RegisterRoutes(app: express.Router) {
   app.delete(
     "/api/v1/projects/:projectId/test-targets/:testTargetId",
 
-    function TestTargetsController_delete(
+    function TestTargetsController_deleteTestTarget(
       request: any,
       response: any,
       next: any
@@ -3298,7 +4588,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new TestTargetsController();
 
-        const promise = controller.delete.apply(
+        const promise = controller.deleteTestTarget.apply(
           controller,
           validatedArgs as any
         );
@@ -3312,7 +4602,11 @@ export function RegisterRoutes(app: express.Router) {
   app.get(
     "/api/v1/view-points/:viewPointId",
 
-    function ViewPointsController_get(request: any, response: any, next: any) {
+    function ViewPointsController_getTestViewPoint(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         viewPointId: {
           in: "path",
@@ -3330,7 +4624,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new ViewPointsController();
 
-        const promise = controller.get.apply(controller, validatedArgs as any);
+        const promise = controller.getTestViewPoint.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -3341,7 +4638,11 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/view-points",
 
-    function ViewPointsController_post(request: any, response: any, next: any) {
+    function ViewPointsController_addViewPoint(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         body: {
           in: "body",
@@ -3365,7 +4666,10 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new ViewPointsController();
 
-        const promise = controller.post.apply(controller, validatedArgs as any);
+        const promise = controller.addViewPoint.apply(
+          controller,
+          validatedArgs as any
+        );
         promiseHandler(controller, promise, response, undefined, next);
       } catch (err) {
         return next(err);
@@ -3376,7 +4680,7 @@ export function RegisterRoutes(app: express.Router) {
   app.patch(
     "/api/v1/view-points/:viewPointId",
 
-    function ViewPointsController_patch(
+    function ViewPointsController_updateViewPoint(
       request: any,
       response: any,
       next: any
@@ -3409,7 +4713,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new ViewPointsController();
 
-        const promise = controller.patch.apply(
+        const promise = controller.updateViewPoint.apply(
           controller,
           validatedArgs as any
         );
@@ -3423,7 +4727,7 @@ export function RegisterRoutes(app: express.Router) {
   app.delete(
     "/api/v1/view-points/:viewPointId",
 
-    function ViewPointsController_delete(
+    function ViewPointsController_deleteViewPoint(
       request: any,
       response: any,
       next: any
@@ -3445,7 +4749,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new ViewPointsController();
 
-        const promise = controller.delete.apply(
+        const promise = controller.deleteViewPoint.apply(
           controller,
           validatedArgs as any
         );
@@ -3459,7 +4763,11 @@ export function RegisterRoutes(app: express.Router) {
   app.patch(
     "/api/v1/stories/:storyId",
 
-    function StoriesController_patch(request: any, response: any, next: any) {
+    function StoriesController_updateStory(
+      request: any,
+      response: any,
+      next: any
+    ) {
       const args = {
         storyId: {
           in: "path",
@@ -3483,7 +4791,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new StoriesController();
 
-        const promise = controller.patch.apply(
+        const promise = controller.updateStory.apply(
           controller,
           validatedArgs as any
         );
@@ -3497,7 +4805,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/projects/:projectId/configs/export",
 
-    function ConfigExportController_create(
+    function ConfigExportController_exportProjectSettings(
       request: any,
       response: any,
       next: any
@@ -3519,7 +4827,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new ConfigExportController();
 
-        const promise = controller.create.apply(
+        const promise = controller.exportProjectSettings.apply(
           controller,
           validatedArgs as any
         );
@@ -3533,7 +4841,7 @@ export function RegisterRoutes(app: express.Router) {
   app.post(
     "/api/v1/test-results/:testResultId/test-steps/:testStepId/compressed-image",
 
-    function CompressedImageController_create(
+    function CompressedImageController_compressTestStepScreenshot(
       request: any,
       response: any,
       next: any
@@ -3561,7 +4869,7 @@ export function RegisterRoutes(app: express.Router) {
 
         const controller = new CompressedImageController();
 
-        const promise = controller.create.apply(
+        const promise = controller.compressTestStepScreenshot.apply(
           controller,
           validatedArgs as any
         );

@@ -35,5 +35,4 @@ jobs:
 
       - run: |
           yarn typescript-json-validator src/lib/settings/Settings.ts
-          yarn typescript-json-validator src/lib/settings/DeviceSettings.ts
           yarn test

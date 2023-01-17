@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/**
+ * Export target flag.
+ */
 export interface CreateProjectExportDto {
   includeTestResults: boolean;
   includeProject: boolean;

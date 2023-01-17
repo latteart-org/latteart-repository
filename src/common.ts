@@ -24,7 +24,3 @@ export const appRootPath = path.relative(
 );
 export const publicDirPath = path.join(appRootPath, "public");
 export const configFilePath = path.join(appRootPath, "latteart.config.json");
-export const deviceConfigFilePath = path.join(
-  appRootPath,
-  "latteart.device.config.json"
-);

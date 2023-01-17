@@ -16,14 +16,32 @@
 
 import { PatchStoryDto, PatchStoryResponse } from "../interfaces/Stories";
 import LoggingService from "@/logger/LoggingService";
-import { ServerError, ServerErrorCode } from "@/ServerError";
+import { ServerError, ServerErrorData } from "../ServerError";
 import { StoriesService } from "@/services/StoriesService";
-import { Controller, Body, Patch, Route, Path } from "tsoa";
+import {
+  Controller,
+  Body,
+  Patch,
+  Route,
+  Path,
+  Tags,
+  Response,
+  SuccessResponse,
+} from "tsoa";
 
 @Route("stories")
+@Tags("stories")
 export class StoriesController extends Controller {
+  /**
+   * Update some information in the story to the specified.
+   * @param storyId Target story id.
+   * @param requestBody Story.
+   * @returns Updated story.
+   */
+  @Response<ServerErrorData<"patch_story_failed">>(500, "Patch story failed")
+  @SuccessResponse(200, "Success")
   @Patch("{storyId}")
-  public async patch(
+  public async updateStory(
     @Path() storyId: string,
     @Body() requestBody: PatchStoryDto
   ): Promise<PatchStoryResponse> {
@@ -34,7 +52,7 @@ export class StoriesController extends Controller {
         LoggingService.error("Patch story failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.PATCH_SESSION_FAILED,
+          code: "patch_story_failed",
         });
       }
       throw error;

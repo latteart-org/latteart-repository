@@ -14,22 +14,42 @@
  * limitations under the License.
  */
 
+/**
+ * Test step data for new registration.
+ */
 export type CreateTestStepDto = CapturedOperation;
 
+/**
+ * Test step data for the specified ID.
+ */
 export type GetTestStepResponse = TestStep;
+
+/**
+ * Registered test step and coverage data.
+ */
 export type CreateTestStepResponse = {
   id: string;
   operation: Operation;
   coverageSource: CoverageSource;
 };
+
+/**
+ * Updated test step data.
+ */
 export type PatchTestStepResponse = TestStep;
 
+/**
+ * Coverage source.
+ */
 export interface CoverageSource {
   title: string;
   url: string;
   screenElements: ElementInfo[];
 }
 
+/**
+ * Element information.
+ */
 export interface ElementInfo {
   tagname: string;
   text?: string | null;
@@ -39,6 +59,9 @@ export interface ElementInfo {
   attributes: { [key: string]: any };
 }
 
+/**
+ * Captured operation.
+ */
 interface CapturedOperation {
   input: string;
   type: string;
@@ -55,6 +78,9 @@ interface CapturedOperation {
   isAutomatic?: boolean;
 }
 
+/**
+ * Operation.
+ */
 interface Operation {
   input: string;
   type: string;
@@ -69,6 +95,9 @@ interface Operation {
   isAutomatic: boolean;
 }
 
+/**
+ * Test step.
+ */
 interface TestStep {
   id: string;
   operation: Operation;
@@ -77,6 +106,9 @@ interface TestStep {
   notices: string[];
 }
 
+/**
+ * Test step data for update.
+ */
 export interface PatchTestStepDto {
   intention?: string | null;
   bugs?: string[];

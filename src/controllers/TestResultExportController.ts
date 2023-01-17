@@ -15,7 +15,7 @@
  */
 
 import LoggingService from "@/logger/LoggingService";
-import { ServerError, ServerErrorCode } from "@/ServerError";
+import { ServerError, ServerErrorData } from "../ServerError";
 import { ConfigsService } from "@/services/ConfigsService";
 import { ExportServiceImpl } from "@/services/ExportService";
 import { ImageFileRepositoryServiceImpl } from "@/services/ImageFileRepositoryService";
@@ -23,7 +23,16 @@ import { TestResultServiceImpl } from "@/services/TestResultService";
 import { ExportFileRepositoryServiceImpl } from "@/services/ExportFileRepositoryService";
 import { TestStepServiceImpl } from "@/services/TestStepService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
-import { Controller, Post, Route, Path, Body } from "tsoa";
+import {
+  Controller,
+  Post,
+  Route,
+  Path,
+  Body,
+  Tags,
+  Response,
+  SuccessResponse,
+} from "tsoa";
 import {
   exportDirectoryService,
   screenshotDirectoryService,
@@ -32,9 +41,21 @@ import {
 import { CreateTestResultExportDto } from "../interfaces/TestResultExport";
 
 @Route("test-results/{testResultId}/export")
+@Tags("test-results")
 export class TestResultExportController extends Controller {
+  /**
+   * Export test result.
+   * @param testResultId Target test result id.
+   * @param requestBody Export settings.
+   * @returns Download url for exported test result.
+   */
+  @Response<ServerErrorData<"export_test_result_failed">>(
+    500,
+    "Export test result failed"
+  )
+  @SuccessResponse(200, "Success")
   @Post()
-  public async create(
+  public async exportTestResult(
     @Path() testResultId: string,
     @Body() requestBody?: CreateTestResultExportDto
   ): Promise<{ url: string }> {
@@ -70,7 +91,7 @@ export class TestResultExportController extends Controller {
       if (error instanceof Error) {
         LoggingService.error("Export test result failed.", error);
         throw new ServerError(500, {
-          code: ServerErrorCode.EXPORT_TEST_RESULT_FAILED,
+          code: "export_test_result_failed",
         });
       }
       throw error;

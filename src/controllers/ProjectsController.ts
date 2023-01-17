@@ -15,10 +15,20 @@
  */
 
 import LoggingService from "@/logger/LoggingService";
-import { ServerErrorCode, ServerError } from "@/ServerError";
+import { ServerError, ServerErrorData } from "../ServerError";
 import { TestProgressServiceImpl } from "@/services/TestProgressService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
-import { Controller, Body, Get, Put, Post, Route, Path, Query } from "tsoa";
+import {
+  Controller,
+  Get,
+  Post,
+  Route,
+  Path,
+  Query,
+  Tags,
+  Response,
+  SuccessResponse,
+} from "tsoa";
 import { transactionRunner } from "..";
 import {
   ProjectListResponse,
@@ -28,9 +38,15 @@ import {
 import { ProjectsServiceImpl } from "../services/ProjectsService";
 
 @Route("projects")
+@Tags("projects")
 export class ProjectsController extends Controller {
+  /**
+   * Get project identifiers.
+   * @returns Project identifiers.
+   */
+  @SuccessResponse(200, "Success")
   @Get()
-  public async list(): Promise<ProjectListResponse[]> {
+  public async getProjectIdentifiers(): Promise<ProjectListResponse[]> {
     return new ProjectsServiceImpl(
       {
         timestamp: new TimestampServiceImpl(),
@@ -40,8 +56,14 @@ export class ProjectsController extends Controller {
     ).getProjectIdentifiers();
   }
 
+  /**
+   * Create project.
+   * @returns Created project id and project name.
+   */
+  @Response<ServerErrorData<"save_project_failed">>(500, "Save project failed")
+  @SuccessResponse(200, "Success")
   @Post()
-  public async create(): Promise<{ id: string; name: string }> {
+  public async createProject(): Promise<{ id: string; name: string }> {
     try {
       return await new ProjectsServiceImpl(
         {
@@ -54,7 +76,7 @@ export class ProjectsController extends Controller {
       if (error instanceof Error) {
         LoggingService.error("Save project failed.", error);
         throw new ServerError(500, {
-          code: ServerErrorCode.SAVE_PROJECT_FAILED,
+          code: "save_project_failed",
         });
       } else {
         throw error;
@@ -62,8 +84,17 @@ export class ProjectsController extends Controller {
     }
   }
 
+  /**
+   * Get project information.
+   * @param projectId Target project id.
+   * @returns Project information.
+   */
+  @Response<ServerErrorData<"get_project_failed">>(404, "Get project failed")
+  @SuccessResponse(200, "Success")
   @Get("{projectId}")
-  public async get(@Path() projectId: string): Promise<GetProjectResponse> {
+  public async getProject(
+    @Path() projectId: string
+  ): Promise<GetProjectResponse> {
     try {
       return await new ProjectsServiceImpl(
         {
@@ -77,7 +108,7 @@ export class ProjectsController extends Controller {
         LoggingService.error("Get project failed.", error);
 
         throw new ServerError(404, {
-          code: ServerErrorCode.GET_PROJECT_FAILED,
+          code: "get_project_failed",
         });
       } else {
         throw error;
@@ -85,6 +116,18 @@ export class ProjectsController extends Controller {
     }
   }
 
+  /**
+   * Get test progress information within a specified period in the project.
+   * @param projectId Target project id.
+   * @param since Start date.
+   * @param until End date.
+   * @returns Test progress information.
+   */
+  @Response<ServerErrorData<"get_test_progress_failed">>(
+    500,
+    "Get test progress failed"
+  )
+  @SuccessResponse(200, "Success")
   @Get("{projectId}/progress")
   public async getTestProgress(
     @Path() projectId: string,
@@ -101,7 +144,7 @@ export class ProjectsController extends Controller {
         LoggingService.error("Get test progress failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.GET_TEST_PROGRESS_FAILED,
+          code: "get_test_progress_failed",
         });
       } else {
         throw error;

@@ -20,15 +20,38 @@ import {
   PostTestMatrixResponse,
 } from "../interfaces/TestMatrices";
 import LoggingService from "@/logger/LoggingService";
-import { ServerError, ServerErrorCode } from "@/ServerError";
+import { ServerError, ServerErrorData } from "../ServerError";
 import { TestMatricesService } from "@/services/TestMatricesService";
-import { Controller, Body, Patch, Route, Path, Get, Post, Delete } from "tsoa";
+import {
+  Controller,
+  Body,
+  Patch,
+  Route,
+  Path,
+  Get,
+  Post,
+  Delete,
+  Tags,
+  Response,
+  SuccessResponse,
+} from "tsoa";
 import { transactionRunner } from "..";
 
 @Route("/test-matrices/")
+@Tags("test-matrices")
 export class TestMatricesController extends Controller {
+  /**
+   * Get test matrix.
+   * @param testMatrixId Target test matrix id.
+   * @returns Test matrix.
+   */
+  @Response<ServerErrorData<"get_test_matrix_failed">>(
+    500,
+    "Get testMatrix failed"
+  )
+  @SuccessResponse(200, "Success")
   @Get("{testMatrixId}")
-  public async get(
+  public async getTestMatrix(
     @Path() testMatrixId: string
   ): Promise<GetTestMatrixResponse> {
     try {
@@ -38,15 +61,25 @@ export class TestMatricesController extends Controller {
         LoggingService.error("Get testMatrix failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.GET_TEST_MATRIX_FAILED,
+          code: "get_test_matrix_failed",
         });
       }
       throw error;
     }
   }
 
+  /**
+   * Create test matrix.
+   * @param body Target project id and test matrix name.
+   * @returns Created test matrix.
+   */
+  @Response<ServerErrorData<"get_test_matrix_failed">>(
+    500,
+    "Post testMatrix failed"
+  )
+  @SuccessResponse(200, "Success")
   @Post()
-  public async post(
+  public async createTestMatrix(
     @Body() body: { projectId: string; name: string }
   ): Promise<PostTestMatrixResponse> {
     try {
@@ -56,15 +89,26 @@ export class TestMatricesController extends Controller {
         LoggingService.error("Post testMatrix failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.GET_TEST_MATRIX_FAILED,
+          code: "get_test_matrix_failed",
         });
       }
       throw error;
     }
   }
 
+  /**
+   * Update some information in the test matrix to the specified.
+   * @param testMatrixId Target test matrix id.
+   * @param body Test matrix name.
+   * @returns Updated test matrix.
+   */
+  @Response<ServerErrorData<"get_test_matrix_failed">>(
+    500,
+    "Patch testMatrix failed"
+  )
+  @SuccessResponse(200, "Success")
   @Patch("{testMatrixId}")
-  public async patch(
+  public async updateTestMatrix(
     @Path() testMatrixId: string,
     @Body() body: { name: string }
   ): Promise<PatchTestMatrixResponse> {
@@ -75,15 +119,24 @@ export class TestMatricesController extends Controller {
         LoggingService.error("Patch testMatrix failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.GET_TEST_MATRIX_FAILED,
+          code: "get_test_matrix_failed",
         });
       }
       throw error;
     }
   }
 
+  /**
+   * Delete test matrix.
+   * @param testMatrixId Target test matrix id.
+   */
+  @Response<ServerErrorData<"delete_test_matrix_failed">>(
+    500,
+    "Delete testMatrix failed"
+  )
+  @SuccessResponse(204, "Success")
   @Delete("{testMatrixId}")
-  public async delete(@Path() testMatrixId: string): Promise<void> {
+  public async deleteTestMatrix(@Path() testMatrixId: string): Promise<void> {
     try {
       return await new TestMatricesService().delete(
         testMatrixId,
@@ -94,7 +147,7 @@ export class TestMatricesController extends Controller {
         LoggingService.error("Delete testMatrix failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.DELETE_TEST_MATRIX_FAILED,
+          code: "delete_test_matrix_failed",
         });
       }
       throw error;

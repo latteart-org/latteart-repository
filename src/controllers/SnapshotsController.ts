@@ -15,7 +15,7 @@
  */
 
 import LoggingService from "@/logger/LoggingService";
-import { ServerError, ServerErrorCode } from "@/ServerError";
+import { ServerError, ServerErrorData } from "../ServerError";
 import { ConfigsService } from "@/services/ConfigsService";
 import { ImageFileRepositoryServiceImpl } from "@/services/ImageFileRepositoryService";
 import { IssueReportOutputServiceImpl } from "@/services/IssueReportOutputService";
@@ -27,7 +27,16 @@ import { TestPurposeServiceImpl } from "@/services/TestPurposeService";
 import { TestResultServiceImpl } from "@/services/TestResultService";
 import { TestStepServiceImpl } from "@/services/TestStepService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
-import { Controller, Get, Post, Route, Path, Body } from "tsoa";
+import {
+  Controller,
+  Post,
+  Route,
+  Path,
+  Body,
+  Tags,
+  Response,
+  SuccessResponse,
+} from "tsoa";
 import {
   attachedFileDirectoryService,
   screenshotDirectoryService,
@@ -42,14 +51,21 @@ import { TestProgressServiceImpl } from "@/services/TestProgressService";
 import { SnapshotConfig } from "../interfaces/Configs";
 
 @Route("projects/{projectId}/snapshots")
+@Tags("projects")
 export class SnapshotsController extends Controller {
-  @Get()
-  public async get(@Path() projectId: string): Promise<string[]> {
-    return this.createSnapshotsService().getSnapshotUrl(projectId);
-  }
-
+  /**
+   * Output project snapshot.
+   * @param projectId Target project id.
+   * @param snapshotConfig Settings added when exporting a snapshot.
+   * @returns Output snapshot download url.
+   */
+  @Response<ServerErrorData<"save_snapshot_failed">>(
+    500,
+    "Save snapshot failed"
+  )
+  @SuccessResponse(200, "Success")
   @Post()
-  public async create(
+  public async outputProjectSnapshot(
     @Path() projectId: string,
     @Body() snapshotConfig: SnapshotConfig
   ): Promise<CreateResponse> {
@@ -63,7 +79,7 @@ export class SnapshotsController extends Controller {
         LoggingService.error("Save snapshot failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.SAVE_SNAPSHOT_FAILED,
+          code: "save_snapshot_failed",
         });
       }
       throw error;

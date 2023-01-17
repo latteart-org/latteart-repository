@@ -15,12 +15,23 @@
  */
 
 import LoggingService from "@/logger/LoggingService";
-import { ServerErrorCode, ServerError } from "@/ServerError";
+import { ServerError, ServerErrorData } from "../ServerError";
 import { ConfigsService } from "@/services/ConfigsService";
 import { ImageFileRepositoryServiceImpl } from "@/services/ImageFileRepositoryService";
 import { TestStepServiceImpl } from "@/services/TestStepService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
-import { Controller, Get, Post, Patch, Route, Path, Body } from "tsoa";
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Route,
+  Path,
+  Body,
+  Tags,
+  Response,
+  SuccessResponse,
+} from "tsoa";
 import { screenshotDirectoryService } from "..";
 import {
   PatchTestStepDto,
@@ -31,13 +42,25 @@ import {
 } from "../interfaces/TestSteps";
 
 @Route("test-results/{testResultId}/test-steps")
+@Tags("test-results")
 export class TestStepsController extends Controller {
+  /**
+   * Add test step to test result.
+   * @param testResultId Target test result id.
+   * @param requestBody Operation.
+   * @returns Added test step.
+   */
+  @Response<ServerErrorData<"add_test_step_failed">>(
+    500,
+    "Add test step failed"
+  )
+  @SuccessResponse(200, "Success")
   @Post()
-  public async create(
+  public async addTestStep(
     @Path() testResultId: string,
     @Body() requestBody: CreateTestStepDto
   ): Promise<CreateTestStepResponse> {
-    console.log("TestStepsController - createTestStep");
+    console.log("TestStepsController - addTestStep");
 
     const imageFileRepositoryService = new ImageFileRepositoryServiceImpl({
       staticDirectory: screenshotDirectoryService,
@@ -54,15 +77,26 @@ export class TestStepsController extends Controller {
         LoggingService.error("Add test step failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.ADD_TEST_STEP_FAILED,
+          code: "add_test_step_failed",
         });
       }
       throw error;
     }
   }
 
+  /**
+   * Get test step.
+   * @param testResultId Target test result id.
+   * @param testStepId Target test step id.
+   * @returns Test step.
+   */
+  @Response<ServerErrorData<"get_test_step_failed">>(
+    404,
+    "Get test step failed"
+  )
+  @SuccessResponse(200, "Success")
   @Get("{testStepId}")
-  public async get(
+  public async getTestStep(
     @Path() testResultId: string,
     @Path() testStepId: string
   ): Promise<GetTestStepResponse> {
@@ -87,15 +121,27 @@ export class TestStepsController extends Controller {
         LoggingService.error("Get test step failed.", error);
 
         throw new ServerError(404, {
-          code: ServerErrorCode.GET_TEST_STEP_FAILED,
+          code: "get_test_step_failed",
         });
       }
       throw error;
     }
   }
 
+  /**
+   * Update test step notes (Purposes or Notices) to specified.
+   * @param testResultId Target test result id.
+   * @param testStepId Target test step id.
+   * @param requestBody Test step notes (Purpose or Notices).
+   * @returns Updated test step.
+   */
+  @Response<ServerErrorData<"edit_test_step_failed">>(
+    500,
+    "Edit test step failed"
+  )
+  @SuccessResponse(200, "Success")
   @Patch("{testStepId}")
-  public async patch(
+  public async updateTestStepNotes(
     @Path() testResultId: string,
     @Path() testStepId: string,
     @Body() requestBody: PatchTestStepDto
@@ -137,7 +183,7 @@ export class TestStepsController extends Controller {
         LoggingService.error("Edit test step failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.EDIT_TEST_STEP_FAILED,
+          code: "edit_test_step_failed",
         });
       }
       throw error;

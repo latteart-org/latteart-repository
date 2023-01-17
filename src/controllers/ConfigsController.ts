@@ -20,15 +20,34 @@ import {
   PutConfigResponse,
 } from "../interfaces/Configs";
 import LoggingService from "@/logger/LoggingService";
-import { ServerError, ServerErrorCode } from "@/ServerError";
-import { Get, Route, Path, Put, Body } from "tsoa";
+import { ServerError, ServerErrorData } from "../ServerError";
+import {
+  Get,
+  Route,
+  Path,
+  Put,
+  Body,
+  Response,
+  Tags,
+  SuccessResponse,
+} from "tsoa";
 import { ConfigsService } from "../services/ConfigsService";
 import { convertToExportableConfig } from "@/lib/settings/settingsConverter";
 
 @Route("projects/{projectId}/configs")
+@Tags("projects")
 export class ConfigsController {
+  /**
+   * Get project settings.
+   * @param projectId Target project id.
+   * @returns Project settings.
+   */
+  @Response<ServerErrorData<"get_settings_failed">>(404, "Get settings failed")
+  @SuccessResponse(200, "Success")
   @Get()
-  public async get(@Path() projectId: string): Promise<GetConfigResponse> {
+  public async getProjectSettings(
+    @Path() projectId: string
+  ): Promise<GetConfigResponse> {
     try {
       const config = await new ConfigsService().getConfig(projectId);
       return convertToExportableConfig(config);
@@ -37,15 +56,26 @@ export class ConfigsController {
         LoggingService.error("Get settings failed.", error);
 
         throw new ServerError(404, {
-          code: ServerErrorCode.GET_SETTINGS_FAILED,
+          code: "get_settings_failed",
         });
       }
       throw error;
     }
   }
 
+  /**
+   * Update project settings to specified.
+   * @param projectId Target project id.
+   * @param requestBody Setting.
+   * @returns Settings after update.
+   */
+  @Response<ServerErrorData<"save_settings_failed">>(
+    500,
+    "Save settings failed"
+  )
+  @SuccessResponse(200, "Success")
   @Put()
-  public async update(
+  public async updateProjectSettings(
     @Path() projectId: string,
     @Body() requestBody: PutConfigDto
   ): Promise<PutConfigResponse> {
@@ -60,7 +90,7 @@ export class ConfigsController {
         LoggingService.error("Save settings failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.SAVE_SETTINGS_FAILED,
+          code: "save_settings_failed",
         });
       }
       throw error;

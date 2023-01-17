@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/**
+ * Test target.
+ */
 export interface TestTarget {
   id: string;
   name: string;
@@ -24,6 +27,17 @@ export interface TestTarget {
   }[];
 }
 
+/**
+ * Test target data for the specified ID.
+ */
 export type GetTestTargetResponse = TestTarget;
+
+/**
+ * Registered test target data.
+ */
 export type PostTestTargetResponse = TestTarget;
+
+/**
+ * Updated test target data.
+ */
 export type PatchTestTargetResponse = TestTarget;

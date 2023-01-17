@@ -15,7 +15,7 @@
  */
 
 import LoggingService from "@/logger/LoggingService";
-import { ServerError, ServerErrorCode } from "@/ServerError";
+import { ServerError, ServerErrorData } from "../ServerError";
 import { ConfigsService } from "@/services/ConfigsService";
 import { ImageFileRepositoryServiceImpl } from "@/services/ImageFileRepositoryService";
 import { TestResultServiceImpl } from "@/services/TestResultService";
@@ -23,15 +23,36 @@ import { TestScriptJSDocRenderingService } from "@/services/testScriptDocRenderi
 import { TestScriptFileRepositoryServiceImpl } from "@/services/TestScriptFileRepositoryService";
 import { TestStepServiceImpl } from "@/services/TestStepService";
 import { TimestampServiceImpl } from "@/services/TimestampService";
-import { Controller, Post, Route, Path, Body } from "tsoa";
+import {
+  Controller,
+  Post,
+  Route,
+  Path,
+  Body,
+  Tags,
+  Response,
+  SuccessResponse,
+} from "tsoa";
 import { screenshotDirectoryService, testScriptDirectoryService } from "..";
 import { CreateTestScriptDto } from "../interfaces/TestScripts";
 import { TestScriptsService } from "../services/TestScriptsService";
 
 @Route("projects/{projectId}/test-scripts")
+@Tags("projects")
 export class ProjectTestScriptsController extends Controller {
+  /**
+   * Generate test script from project.
+   * @param projectId Target project id.
+   * @param requestBody Test script output settings.
+   * @returns Information in the output test script file.
+   */
+  @Response<ServerErrorData<"save_test_script_failed">>(
+    500,
+    "Save test script failed"
+  )
+  @SuccessResponse(200, "Success")
   @Post()
-  public async create(
+  public async generateProjectTestScript(
     @Path() projectId: string,
     @Body() requestBody: CreateTestScriptDto
   ): Promise<{ url: string; invalidOperationTypeExists: boolean }> {
@@ -71,7 +92,7 @@ export class ProjectTestScriptsController extends Controller {
         LoggingService.error("Save test script failed.", error);
 
         throw new ServerError(500, {
-          code: ServerErrorCode.SAVE_TEST_SCRIPT_FAILED,
+          code: "save_test_script_failed",
         });
       }
 
