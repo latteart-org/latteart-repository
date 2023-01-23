@@ -64,6 +64,7 @@ export type SequenceViewNode = {
     element?: { xpath: string; tagname: string; text: string };
     notes?: { id: string; value: string; details?: string; tags: string[] }[];
   }[];
+  disabled: boolean;
 };
 
 export interface TestResultService {
@@ -408,7 +409,27 @@ export class TestResultServiceImpl implements TestResultService {
             })
           )?.id;
           if (screenId) {
-            if (
+            if (testStep.operation.type === "resume_capturing") {
+              acc.at(-1)?.nodes.push({
+                windowId: testStep.operation.windowHandle,
+                screenId,
+                testSteps: [],
+                disabled: false,
+              });
+            } else if (
+              (lastNode?.testSteps.at(-1)?.type === "pause_capturing" ||
+                lastNode?.disabled) &&
+              (lastNode === undefined ||
+                lastNode.windowId !== testStep.operation.windowHandle ||
+                testStep.operation.type === "screen_transition")
+            ) {
+              acc.at(-1)?.nodes.push({
+                windowId: testStep.operation.windowHandle,
+                screenId,
+                testSteps: [],
+                disabled: true,
+              });
+            } else if (
               lastNode === undefined ||
               lastNode.windowId !== testStep.operation.windowHandle ||
               testStep.operation.type === "screen_transition"
@@ -417,6 +438,7 @@ export class TestResultServiceImpl implements TestResultService {
                 windowId: testStep.operation.windowHandle,
                 screenId,
                 testSteps: [],
+                disabled: false,
               });
             }
           }

@@ -1757,6 +1757,7 @@ const models: TsoaRoute.Models = {
     type: {
       dataType: "nestedObjectLiteral",
       nestedProperties: {
+        disabled: { dataType: "boolean", required: true },
         testSteps: {
           dataType: "array",
           array: {
