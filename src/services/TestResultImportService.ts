@@ -18,8 +18,8 @@ import path from "path";
 import { ImportFileRepositoryService } from "./ImportFileRepositoryService";
 import {
   deserializeTestResult,
-  TestResult,
-  TestStep,
+  DeserializedTestResult,
+  DeserializedTestStep,
 } from "@/lib/deserializeTestResult";
 import { getRepository } from "typeorm";
 import { TestResultEntity } from "@/entities/TestResultEntity";
@@ -145,7 +145,7 @@ export class TestResultImportService {
   }
 
   private createTestResultEntity(
-    testResult: TestResult,
+    testResult: DeserializedTestResult,
     screenshotFilePathToEntity: Map<string, ScreenshotEntity>,
     tagNameToEntity: Map<string, TagEntity>
   ) {
@@ -192,7 +192,7 @@ export class TestResultImportService {
   }
 
   private createTestStepEntity(
-    testStep: TestStep,
+    testStep: DeserializedTestStep,
     screenshotFilePathToEntity: Map<string, ScreenshotEntity>,
     tagNameToEntity: Map<string, TagEntity>
   ) {

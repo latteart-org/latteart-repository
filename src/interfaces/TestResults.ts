@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { SequenceView } from "../services/TestResultService";
+import { SequenceView } from "../lib/sequenceViewGenerator";
 
 /**
  * Test result data for new registration.
@@ -54,71 +54,14 @@ export type PatchTestResultResponse = TestResult;
 /**
  * Test result.
  */
-interface TestResult {
+export type TestResult = {
   id: string;
   name: string;
   startTimeStamp: number;
   lastUpdateTimeStamp: number;
   initialUrl: string;
   testingTime: number;
-  testSteps: {
-    id: string;
-    operation: {
-      input: string;
-      type: string;
-      elementInfo: {
-        tagname: string;
-        text: string;
-        xpath: string;
-        value: string;
-        checked: boolean;
-        attributes: {
-          [key: string]: string;
-        };
-      } | null;
-      title: string;
-      url: string;
-      imageFileUrl: string;
-      timestamp: string;
-      windowHandle: string;
-      inputElements: {
-        tagname: string;
-        text: string;
-        xpath: string;
-        value: string;
-        checked: boolean;
-        attributes: {
-          [key: string]: string;
-        };
-      }[];
-      keywordTexts?: string[];
-      isAutomatic: boolean;
-    };
-    intention: {
-      id: string;
-      type: string;
-      value: string;
-      details: string;
-      imageFileUrl: string;
-      tags: string[];
-    } | null;
-    bugs: {
-      id: string;
-      type: string;
-      value: string;
-      details: string;
-      imageFileUrl: string;
-      tags: string[];
-    }[];
-    notices: {
-      id: string;
-      type: string;
-      value: string;
-      details: string;
-      imageFileUrl: string;
-      tags: string[];
-    }[];
-  }[];
+  testSteps: TestStep[];
   coverageSources: {
     title: string;
     url: string;
@@ -133,7 +76,69 @@ interface TestResult {
       };
     }[];
   }[];
-}
+};
+
+/**
+ * Test step.
+ */
+export type TestStep = {
+  id: string;
+  operation: {
+    input: string;
+    type: string;
+    elementInfo: {
+      tagname: string;
+      text: string;
+      xpath: string;
+      value: string;
+      checked: boolean;
+      attributes: {
+        [key: string]: string;
+      };
+    } | null;
+    title: string;
+    url: string;
+    imageFileUrl: string;
+    timestamp: string;
+    windowHandle: string;
+    inputElements: {
+      tagname: string;
+      text: string;
+      xpath: string;
+      value: string;
+      checked: boolean;
+      attributes: {
+        [key: string]: string;
+      };
+    }[];
+    keywordTexts?: string[];
+    isAutomatic: boolean;
+  };
+  intention: {
+    id: string;
+    type: string;
+    value: string;
+    details: string;
+    imageFileUrl: string;
+    tags: string[];
+  } | null;
+  bugs: {
+    id: string;
+    type: string;
+    value: string;
+    details: string;
+    imageFileUrl: string;
+    tags: string[];
+  }[];
+  notices: {
+    id: string;
+    type: string;
+    value: string;
+    details: string;
+    imageFileUrl: string;
+    tags: string[];
+  }[];
+};
 
 /**
  * Test result view option.
