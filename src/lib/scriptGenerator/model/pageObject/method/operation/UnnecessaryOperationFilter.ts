@@ -20,6 +20,10 @@ import { PageObjectOperation, ElementType } from "./PageObjectOperation";
 export class UnnecessaryOperationFilter implements OperationFilter {
   public filter(operations: PageObjectOperation[]): PageObjectOperation[] {
     return operations.filter((operation) => {
+      if (operation.type === "skiped_operations") {
+        return true;
+      }
+
       if (operation.type === "switch_window") {
         return true;
       }
