@@ -30,6 +30,7 @@ export type OperationType =
   | "dismiss_alert"
   | "browser_back"
   | "browser_forward"
+  | "skipped_operations"
   | "other";
 
 export interface PageObjectElement {
@@ -53,5 +54,6 @@ export function invalidOperationTypeExists(type: string): boolean {
     "dismiss_alert",
     "browser_back",
     "browser_forward",
+    "skipped_operations",
   ].includes(type);
 }
