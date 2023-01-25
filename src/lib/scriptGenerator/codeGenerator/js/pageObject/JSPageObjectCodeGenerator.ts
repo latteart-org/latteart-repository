@@ -216,7 +216,7 @@ set_${identifier}(isClick) {
             return [`// Please insert code for 'browser_forward' here.`];
           }
 
-          if (operation.type === "skiped_operations") {
+          if (operation.type === "skipped_operations") {
             return [`// Please insert code for operations while pausing here.`];
           }
 

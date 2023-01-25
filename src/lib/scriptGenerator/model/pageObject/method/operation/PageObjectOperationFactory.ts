@@ -56,7 +56,7 @@ export class PageObjectOperationFactoryImpl
       "dismiss_alert",
       "browser_back",
       "browser_forward",
-      "skiped_operations",
+      "skipped_operations",
     ];
 
     if (operationTypeList.includes(operationType)) {

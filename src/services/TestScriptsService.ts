@@ -186,7 +186,7 @@ export class TestScriptsService {
               isPauseCapturing = true;
               acc.push({
                 input: operation.input,
-                type: "skiped_operations",
+                type: "skipped_operations",
                 elementInfo,
                 url,
                 screenDef,
@@ -194,10 +194,10 @@ export class TestScriptsService {
               });
             } else if (operation.type === "resume_capturing") {
               isPauseCapturing = false;
-              if (acc.at(-1)?.type !== "skiped_operations") {
+              if (acc.at(-1)?.type !== "skipped_operations") {
                 acc.push({
                   input: operation.input,
-                  type: "skiped_operations",
+                  type: "skipped_operations",
                   elementInfo,
                   url,
                   screenDef,
@@ -220,7 +220,7 @@ export class TestScriptsService {
               });
               acc.push({
                 input: operation.input,
-                type: "skiped_operations",
+                type: "skipped_operations",
                 elementInfo,
                 url,
                 screenDef,

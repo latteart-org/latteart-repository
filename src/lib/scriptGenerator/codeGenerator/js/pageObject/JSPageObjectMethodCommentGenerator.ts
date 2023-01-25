@@ -97,7 +97,7 @@ ${paramsText}`;
       return "Browser forward";
     }
 
-    if (type === "skiped_operations") {
+    if (type === "skipped_operations") {
       return "Some operations while pausing";
     }
 
