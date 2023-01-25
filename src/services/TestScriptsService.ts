@@ -26,6 +26,7 @@ import ScreenDefFactory, {
 import { invalidOperationTypeExists } from "@/lib/scriptGenerator/model/pageObject/method/operation/PageObjectOperation";
 import { TestScript } from "@/lib/scriptGenerator/TestScript";
 import { TestScriptGeneratorImpl } from "@/lib/scriptGenerator/TestScriptGenerator";
+import { TestScriptSourceOperation } from "@/lib/scriptGenerator/TestScriptSourceOperation";
 import { ServerError } from "@/ServerError";
 import { getRepository } from "typeorm";
 import { TestResultService } from "./TestResultService";
@@ -157,36 +158,88 @@ export class TestScriptsService {
       createWDIOLocatorFormatter()
     );
 
+    let isPauseCapturing = false;
+
     const sources = testResults.map(({ initialUrl, testSteps }) => {
       return {
         initialUrl,
-        history: testSteps.map(({ operation }) => {
-          const url = operation.url;
-          const title = operation.title;
-          const keywordTexts: string[] = operation.keywordTexts ?? [];
-          const screenDef = new ScreenDefFactory(screenDefinitionConfig).create(
-            {
+        history: testSteps.reduce(
+          (acc: TestScriptSourceOperation[], { operation }, index) => {
+            const url = operation.url;
+            const title = operation.title;
+            const keywordTexts: string[] = operation.keywordTexts ?? [];
+            const screenDef = new ScreenDefFactory(
+              screenDefinitionConfig
+            ).create({
               url,
               title,
               keywordSet: new Set(keywordTexts),
-            }
-          );
-          const elementInfo = operation.elementInfo
-            ? {
-                ...operation.elementInfo,
-                locator: locatorGenerator.generateFrom(operation.elementInfo),
-              }
-            : null;
+            });
+            const elementInfo = operation.elementInfo
+              ? {
+                  ...operation.elementInfo,
+                  locator: locatorGenerator.generateFrom(operation.elementInfo),
+                }
+              : null;
 
-          return {
-            input: operation.input,
-            type: operation.type,
-            elementInfo,
-            url,
-            screenDef,
-            imageFilePath: operation.imageFileUrl,
-          };
-        }),
+            if (operation.type === "pause_capturing") {
+              isPauseCapturing = true;
+              acc.push({
+                input: operation.input,
+                type: "skiped_operations",
+                elementInfo,
+                url,
+                screenDef,
+                imageFilePath: operation.imageFileUrl,
+              });
+            } else if (operation.type === "resume_capturing") {
+              isPauseCapturing = false;
+              if (acc.at(-1)?.type !== "skiped_operations") {
+                acc.push({
+                  input: operation.input,
+                  type: "skiped_operations",
+                  elementInfo,
+                  url,
+                  screenDef,
+                  imageFilePath: operation.imageFileUrl,
+                });
+              }
+            } else if (
+              isPauseCapturing &&
+              operation.type === "screen_transition" &&
+              typeof testSteps.at(index + 1) !== "undefined" &&
+              testSteps.at(index + 1)?.operation.type !== "resume_capturing"
+            ) {
+              acc.push({
+                input: operation.input,
+                type: operation.type,
+                elementInfo,
+                url,
+                screenDef,
+                imageFilePath: operation.imageFileUrl,
+              });
+              acc.push({
+                input: operation.input,
+                type: "skiped_operations",
+                elementInfo,
+                url,
+                screenDef,
+                imageFilePath: operation.imageFileUrl,
+              });
+            } else {
+              acc.push({
+                input: operation.input,
+                type: operation.type,
+                elementInfo,
+                url,
+                screenDef,
+                imageFilePath: operation.imageFileUrl,
+              });
+            }
+            return acc;
+          },
+          []
+        ),
       };
     });
 

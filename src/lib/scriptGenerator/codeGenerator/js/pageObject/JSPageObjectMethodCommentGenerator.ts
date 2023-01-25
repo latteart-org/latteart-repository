@@ -97,6 +97,10 @@ ${paramsText}`;
       return "Browser forward";
     }
 
+    if (type === "skiped_operations") {
+      return "Some operations while pausing";
+    }
+
     if (type === "other") {
       return "Operate";
     }
