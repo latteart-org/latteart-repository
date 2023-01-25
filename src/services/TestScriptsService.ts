@@ -207,7 +207,7 @@ export class TestScriptsService {
             } else if (
               isPauseCapturing &&
               operation.type === "screen_transition" &&
-              typeof testSteps.at(index + 1) !== "undefined" &&
+              testSteps.at(index + 1) !== undefined &&
               testSteps.at(index + 1)?.operation.type !== "resume_capturing"
             ) {
               acc.push({
