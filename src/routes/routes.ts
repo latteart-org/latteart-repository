@@ -1435,152 +1435,77 @@ const models: TsoaRoute.Models = {
     additionalProperties: false,
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  TestResult: {
-    dataType: "refObject",
-    properties: {
-      id: { dataType: "string", required: true },
-      name: { dataType: "string", required: true },
-      startTimeStamp: { dataType: "double", required: true },
-      lastUpdateTimeStamp: { dataType: "double", required: true },
-      initialUrl: { dataType: "string", required: true },
-      testingTime: { dataType: "double", required: true },
-      testSteps: {
-        dataType: "array",
-        array: {
-          dataType: "nestedObjectLiteral",
-          nestedProperties: {
-            notices: {
-              dataType: "array",
-              array: {
-                dataType: "nestedObjectLiteral",
-                nestedProperties: {
-                  tags: {
-                    dataType: "array",
-                    array: { dataType: "string" },
-                    required: true,
-                  },
-                  imageFileUrl: { dataType: "string", required: true },
-                  details: { dataType: "string", required: true },
-                  value: { dataType: "string", required: true },
-                  type: { dataType: "string", required: true },
-                  id: { dataType: "string", required: true },
-                },
+  TestStep: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        notices: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              tags: {
+                dataType: "array",
+                array: { dataType: "string" },
+                required: true,
               },
-              required: true,
+              imageFileUrl: { dataType: "string", required: true },
+              details: { dataType: "string", required: true },
+              value: { dataType: "string", required: true },
+              type: { dataType: "string", required: true },
+              id: { dataType: "string", required: true },
             },
-            bugs: {
-              dataType: "array",
-              array: {
-                dataType: "nestedObjectLiteral",
-                nestedProperties: {
-                  tags: {
-                    dataType: "array",
-                    array: { dataType: "string" },
-                    required: true,
-                  },
-                  imageFileUrl: { dataType: "string", required: true },
-                  details: { dataType: "string", required: true },
-                  value: { dataType: "string", required: true },
-                  type: { dataType: "string", required: true },
-                  id: { dataType: "string", required: true },
-                },
+          },
+          required: true,
+        },
+        bugs: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              tags: {
+                dataType: "array",
+                array: { dataType: "string" },
+                required: true,
               },
-              required: true,
+              imageFileUrl: { dataType: "string", required: true },
+              details: { dataType: "string", required: true },
+              value: { dataType: "string", required: true },
+              type: { dataType: "string", required: true },
+              id: { dataType: "string", required: true },
             },
-            intention: {
-              dataType: "union",
-              subSchemas: [
-                {
-                  dataType: "nestedObjectLiteral",
-                  nestedProperties: {
-                    tags: {
-                      dataType: "array",
-                      array: { dataType: "string" },
-                      required: true,
-                    },
-                    imageFileUrl: { dataType: "string", required: true },
-                    details: { dataType: "string", required: true },
-                    value: { dataType: "string", required: true },
-                    type: { dataType: "string", required: true },
-                    id: { dataType: "string", required: true },
-                  },
-                },
-                { dataType: "enum", enums: [null] },
-              ],
-              required: true,
-            },
-            operation: {
+          },
+          required: true,
+        },
+        intention: {
+          dataType: "union",
+          subSchemas: [
+            {
               dataType: "nestedObjectLiteral",
               nestedProperties: {
-                isAutomatic: { dataType: "boolean", required: true },
-                keywordTexts: {
+                tags: {
                   dataType: "array",
                   array: { dataType: "string" },
-                },
-                inputElements: {
-                  dataType: "array",
-                  array: {
-                    dataType: "nestedObjectLiteral",
-                    nestedProperties: {
-                      attributes: {
-                        dataType: "nestedObjectLiteral",
-                        nestedProperties: {},
-                        additionalProperties: { dataType: "string" },
-                        required: true,
-                      },
-                      checked: { dataType: "boolean", required: true },
-                      value: { dataType: "string", required: true },
-                      xpath: { dataType: "string", required: true },
-                      text: { dataType: "string", required: true },
-                      tagname: { dataType: "string", required: true },
-                    },
-                  },
                   required: true,
                 },
-                windowHandle: { dataType: "string", required: true },
-                timestamp: { dataType: "string", required: true },
                 imageFileUrl: { dataType: "string", required: true },
-                url: { dataType: "string", required: true },
-                title: { dataType: "string", required: true },
-                elementInfo: {
-                  dataType: "union",
-                  subSchemas: [
-                    {
-                      dataType: "nestedObjectLiteral",
-                      nestedProperties: {
-                        attributes: {
-                          dataType: "nestedObjectLiteral",
-                          nestedProperties: {},
-                          additionalProperties: { dataType: "string" },
-                          required: true,
-                        },
-                        checked: { dataType: "boolean", required: true },
-                        value: { dataType: "string", required: true },
-                        xpath: { dataType: "string", required: true },
-                        text: { dataType: "string", required: true },
-                        tagname: { dataType: "string", required: true },
-                      },
-                    },
-                    { dataType: "enum", enums: [null] },
-                  ],
-                  required: true,
-                },
+                details: { dataType: "string", required: true },
+                value: { dataType: "string", required: true },
                 type: { dataType: "string", required: true },
-                input: { dataType: "string", required: true },
+                id: { dataType: "string", required: true },
               },
-              required: true,
             },
-            id: { dataType: "string", required: true },
-          },
+            { dataType: "enum", enums: [null] },
+          ],
+          required: true,
         },
-        required: true,
-      },
-      coverageSources: {
-        dataType: "array",
-        array: {
+        operation: {
           dataType: "nestedObjectLiteral",
           nestedProperties: {
-            screenElements: {
+            isAutomatic: { dataType: "boolean", required: true },
+            keywordTexts: { dataType: "array", array: { dataType: "string" } },
+            inputElements: {
               dataType: "array",
               array: {
                 dataType: "nestedObjectLiteral",
@@ -1600,14 +1525,95 @@ const models: TsoaRoute.Models = {
               },
               required: true,
             },
+            windowHandle: { dataType: "string", required: true },
+            timestamp: { dataType: "string", required: true },
+            imageFileUrl: { dataType: "string", required: true },
             url: { dataType: "string", required: true },
             title: { dataType: "string", required: true },
+            elementInfo: {
+              dataType: "union",
+              subSchemas: [
+                {
+                  dataType: "nestedObjectLiteral",
+                  nestedProperties: {
+                    attributes: {
+                      dataType: "nestedObjectLiteral",
+                      nestedProperties: {},
+                      additionalProperties: { dataType: "string" },
+                      required: true,
+                    },
+                    checked: { dataType: "boolean", required: true },
+                    value: { dataType: "string", required: true },
+                    xpath: { dataType: "string", required: true },
+                    text: { dataType: "string", required: true },
+                    tagname: { dataType: "string", required: true },
+                  },
+                },
+                { dataType: "enum", enums: [null] },
+              ],
+              required: true,
+            },
+            type: { dataType: "string", required: true },
+            input: { dataType: "string", required: true },
           },
+          required: true,
         },
-        required: true,
+        id: { dataType: "string", required: true },
       },
+      validators: {},
     },
-    additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  TestResult: {
+    dataType: "refAlias",
+    type: {
+      dataType: "nestedObjectLiteral",
+      nestedProperties: {
+        coverageSources: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              screenElements: {
+                dataType: "array",
+                array: {
+                  dataType: "nestedObjectLiteral",
+                  nestedProperties: {
+                    attributes: {
+                      dataType: "nestedObjectLiteral",
+                      nestedProperties: {},
+                      additionalProperties: { dataType: "string" },
+                      required: true,
+                    },
+                    checked: { dataType: "boolean", required: true },
+                    value: { dataType: "string", required: true },
+                    xpath: { dataType: "string", required: true },
+                    text: { dataType: "string", required: true },
+                    tagname: { dataType: "string", required: true },
+                  },
+                },
+                required: true,
+              },
+              url: { dataType: "string", required: true },
+              title: { dataType: "string", required: true },
+            },
+          },
+          required: true,
+        },
+        testSteps: {
+          dataType: "array",
+          array: { dataType: "refAlias", ref: "TestStep" },
+          required: true,
+        },
+        testingTime: { dataType: "double", required: true },
+        initialUrl: { dataType: "string", required: true },
+        lastUpdateTimeStamp: { dataType: "double", required: true },
+        startTimeStamp: { dataType: "double", required: true },
+        name: { dataType: "string", required: true },
+        id: { dataType: "string", required: true },
+      },
+      validators: {},
+    },
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   GetTestResultResponse: {
@@ -1757,6 +1763,7 @@ const models: TsoaRoute.Models = {
     type: {
       dataType: "nestedObjectLiteral",
       nestedProperties: {
+        disabled: { dataType: "boolean" },
         testSteps: {
           dataType: "array",
           array: {
@@ -2036,33 +2043,6 @@ const models: TsoaRoute.Models = {
   CreateTestStepDto: {
     dataType: "refAlias",
     type: { ref: "CapturedOperation", validators: {} },
-  },
-  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  TestStep: {
-    dataType: "refObject",
-    properties: {
-      id: { dataType: "string", required: true },
-      operation: { ref: "Operation", required: true },
-      intention: {
-        dataType: "union",
-        subSchemas: [
-          { dataType: "string" },
-          { dataType: "enum", enums: [null] },
-        ],
-        required: true,
-      },
-      bugs: {
-        dataType: "array",
-        array: { dataType: "string" },
-        required: true,
-      },
-      notices: {
-        dataType: "array",
-        array: { dataType: "string" },
-        required: true,
-      },
-    },
-    additionalProperties: false,
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   GetTestStepResponse: {

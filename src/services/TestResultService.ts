@@ -38,33 +38,10 @@ import path from "path";
 import ScreenDefFactory, {
   ScreenDefinitionConfig,
 } from "@/lib/ScreenDefFactory";
-
-/**
- * Sequence view.
- */
-export type SequenceView = {
-  windows: { id: string; name: string }[];
-  screens: { id: string; name: string }[];
-  scenarios: {
-    testPurpose?: { id: string; value: string; details?: string };
-    nodes: SequenceViewNode[];
-  }[];
-};
-
-/**
- * Sequence view node.
- */
-export type SequenceViewNode = {
-  windowId: string;
-  screenId: string;
-  testSteps: {
-    id: string;
-    type: string;
-    input?: string;
-    element?: { xpath: string; tagname: string; text: string };
-    notes?: { id: string; value: string; details?: string; tags: string[] }[];
-  }[];
-};
+import {
+  generateSequenceView,
+  SequenceView,
+} from "@/lib/sequenceViewGenerator";
 
 export interface TestResultService {
   getTestResultIdentifiers(): Promise<ListTestResultResponse[]>;
@@ -357,103 +334,18 @@ export class TestResultServiceImpl implements TestResultService {
     }
 
     const screenDefFactory = new ScreenDefFactory(screenDefinitionConfig);
-    const screenDefToScreenId = new Map(
-      testResult.testSteps
-        .map(({ operation }) =>
-          screenDefFactory.create({
-            url: operation.url,
-            title: operation.title,
-            keywordSet: new Set(operation.keywordTexts),
-          })
-        )
-        .filter((screenDef, index, screenDefs) => {
-          return screenDefs.indexOf(screenDef) === index;
-        })
-        .map((screenDef, index) => {
-          return [screenDef, { id: `s${index}`, name: screenDef }];
-        })
-    );
-
-    return {
-      windows: testResult.testSteps
-        .map(({ operation }) => operation.windowHandle)
-        .filter((windowHandle, index, array) => {
-          return array.indexOf(windowHandle) === index;
-        })
-        .map((windowHandle, index) => {
-          return { id: windowHandle, name: `window${index + 1}` };
+    const testStepWithScreenDefs = testResult.testSteps.map((testStep) => {
+      return {
+        ...testStep,
+        screenDef: screenDefFactory.create({
+          url: testStep.operation.url,
+          title: testStep.operation.title,
+          keywordSet: new Set(testStep.operation.keywordTexts),
         }),
-      screens: [...screenDefToScreenId.values()],
-      scenarios: testResult.testSteps.reduce(
-        (acc: SequenceView["scenarios"], testStep) => {
-          const lastScenario = acc.at(-1);
-          const isNewTestPurpose =
-            !lastScenario ||
-            (testStep.intention !== null &&
-              lastScenario.testPurpose?.id !== testStep.intention.id);
-          if (isNewTestPurpose) {
-            acc.push({
-              testPurpose: testStep.intention
-                ? { ...testStep.intention, id: testStep.intention.id ?? "" }
-                : undefined,
-              nodes: [],
-            });
-          }
-          const lastNode = acc.at(-1)?.nodes.at(-1);
-          const screenId = screenDefToScreenId.get(
-            screenDefFactory.create({
-              url: testStep.operation.url,
-              title: testStep.operation.title,
-              keywordSet: new Set(testStep.operation.keywordTexts),
-            })
-          )?.id;
-          if (screenId) {
-            if (
-              lastNode === undefined ||
-              lastNode.windowId !== testStep.operation.windowHandle ||
-              testStep.operation.type === "screen_transition"
-            ) {
-              acc.at(-1)?.nodes.push({
-                windowId: testStep.operation.windowHandle,
-                screenId,
-                testSteps: [],
-              });
-            }
-          }
-          acc
-            .at(-1)
-            ?.nodes.at(-1)
-            ?.testSteps.push({
-              id: testStep.id,
-              type: testStep.operation.type,
-              input: testStep.operation.input,
-              element: testStep.operation.elementInfo
-                ? {
-                    xpath: testStep.operation.elementInfo.xpath,
-                    tagname: testStep.operation.elementInfo.tagname,
-                    text: (({ elementInfo }) => {
-                      if (!elementInfo) {
-                        return "";
-                      }
-                      if (elementInfo.text) {
-                        return elementInfo.text;
-                      }
-                      return `${elementInfo.attributes.value ?? ""}`;
-                    })(testStep.operation),
-                  }
-                : undefined,
-              notes: [
-                ...(testStep.bugs ?? []),
-                ...(testStep.notices ?? []),
-              ].map((note) => {
-                return { ...note, id: note.id ?? "" };
-              }),
-            });
-          return acc;
-        },
-        []
-      ),
-    };
+      };
+    });
+
+    return generateSequenceView(testStepWithScreenDefs);
   }
 
   private async convertTestResultEntityToTestResult(

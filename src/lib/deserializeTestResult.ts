@@ -19,7 +19,7 @@ import {
   TestResultExportDataV1,
   TestResultExportDataV2,
 } from "@/services/ExportService";
-interface ElementInfo {
+interface DeserializedElementInfo {
   tagname: string;
   text: string;
   xpath: string;
@@ -30,7 +30,7 @@ interface ElementInfo {
   };
 }
 
-interface CoverageSource {
+interface DeserializedCoverageSource {
   title: string;
   url: string;
   screenElements: {
@@ -45,18 +45,18 @@ interface CoverageSource {
   }[];
 }
 
-export interface TestStep {
+export interface DeserializedTestStep {
   id: string;
   operation: {
     input: string;
     type: string;
-    elementInfo: ElementInfo | null;
+    elementInfo: DeserializedElementInfo | null;
     title: string;
     url: string;
     imageFileUrl: string;
     timestamp: string;
     windowHandle: string;
-    inputElements: ElementInfo[];
+    inputElements: DeserializedElementInfo[];
     keywordTexts: string[];
     isAutomatic: boolean;
   };
@@ -78,15 +78,15 @@ export interface TestStep {
   }[];
 }
 
-export interface TestResult {
+export interface DeserializedTestResult {
   id: string;
   name: string;
   startTimeStamp: number;
   lastUpdateTimeStamp: number;
   initialUrl: string;
   testingTime: number;
-  testSteps: TestStep[];
-  coverageSources: CoverageSource[];
+  testSteps: DeserializedTestStep[];
+  coverageSources: DeserializedCoverageSource[];
 }
 
 export type TestResultImportDataV1 = TestResultExportDataV1;
@@ -108,7 +108,9 @@ export type TestResultImportDataV0 = Omit<
   };
 };
 
-export const deserializeTestResult = (testResultData: string): TestResult => {
+export const deserializeTestResult = (
+  testResultData: string
+): DeserializedTestResult => {
   const testResultImportData = JSON.parse(testResultData);
 
   const version: number = testResultImportData.version ?? 0;
@@ -345,7 +347,7 @@ const deserializeTestResultV0 = (
 };
 
 export const calculateTestingTime = (
-  testSteps: TestStep[],
+  testSteps: DeserializedTestStep[],
   startTimeStamp: number
 ): number => {
   const lastTestStartTime =
