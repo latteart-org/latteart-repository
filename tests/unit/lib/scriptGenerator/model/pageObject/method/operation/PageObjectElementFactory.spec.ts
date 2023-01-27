@@ -20,7 +20,7 @@ describe("PageObjectElementFactoryImpl", () => {
           locator: "locator",
         };
 
-        expect(factory.createFrom(targetElement, imageUrl)).toEqual({
+        expect(factory.createFrom(targetElement, imageUrl, new Set())).toEqual({
           identifier: expect.any(String),
           type: ElementType.RadioButton,
           locator: "locator",
@@ -38,7 +38,7 @@ describe("PageObjectElementFactoryImpl", () => {
           locator: "locator",
         };
 
-        expect(factory.createFrom(targetElement, imageUrl)).toEqual({
+        expect(factory.createFrom(targetElement, imageUrl, new Set())).toEqual({
           identifier: expect.any(String),
           type: ElementType.CheckBox,
           locator: "locator",
@@ -56,7 +56,7 @@ describe("PageObjectElementFactoryImpl", () => {
           locator: "locator",
         };
 
-        expect(factory.createFrom(targetElement, imageUrl)).toEqual({
+        expect(factory.createFrom(targetElement, imageUrl, new Set())).toEqual({
           identifier: expect.any(String),
           type: ElementType.SelectBox,
           locator: "locator",
@@ -74,7 +74,7 @@ describe("PageObjectElementFactoryImpl", () => {
           locator: "locator",
         };
 
-        expect(factory.createFrom(targetElement, imageUrl)).toEqual({
+        expect(factory.createFrom(targetElement, imageUrl, new Set())).toEqual({
           identifier: expect.any(String),
           type: ElementType.Link,
           locator: "locator",
@@ -92,7 +92,7 @@ describe("PageObjectElementFactoryImpl", () => {
           locator: "locator",
         };
 
-        expect(factory.createFrom(targetElement, imageUrl)).toEqual({
+        expect(factory.createFrom(targetElement, imageUrl, new Set())).toEqual({
           identifier: expect.any(String),
           type: ElementType.Other,
           locator: "locator",

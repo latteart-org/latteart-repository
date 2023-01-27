@@ -20,7 +20,7 @@ import { Sequence } from "../../sequencePath/Sequence";
 import { OperationFilter } from "./operation/OperationFilter";
 
 export interface PageObjectMethodFactory {
-  create(sequence: Sequence): PageObjectMethod;
+  create(sequence: Sequence, indetiferSet: Set<string>): PageObjectMethod;
 }
 
 export class PageObjectMethodFactoryImpl implements PageObjectMethodFactory {
@@ -34,11 +34,15 @@ export class PageObjectMethodFactoryImpl implements PageObjectMethodFactory {
     this.operationFilters = operationFilters;
   }
 
-  public create(sequence: Sequence): PageObjectMethod {
+  public create(
+    sequence: Sequence,
+    identifierSet: Set<string>
+  ): PageObjectMethod {
     const operations = sequence.operations.map((operation) => {
       return this.operationFactory.createFrom(
         operation,
-        sequence.destinationUrl
+        sequence.destinationUrl,
+        identifierSet
       );
     });
 

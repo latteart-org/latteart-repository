@@ -21,14 +21,16 @@ import { TestScriptSourceElement } from "../../../../TestScriptSourceOperation";
 export interface PageObjectElementFactory {
   createFrom(
     element: TestScriptSourceElement | null,
-    imageUrl: string
+    imageUrl: string,
+    identifierSet: Set<string>
   ): PageObjectElement;
 }
 
 export class PageObjectElementFactoryImpl implements PageObjectElementFactory {
   public createFrom(
     element: TestScriptSourceElement | null,
-    imageUrl: string
+    imageUrl: string,
+    identifierSet: Set<string>
   ): PageObjectElement {
     if (!element) {
       return {
@@ -40,8 +42,10 @@ export class PageObjectElementFactoryImpl implements PageObjectElementFactory {
         imageUrl,
       };
     }
-
-    const identifier = IdentifierUtil.generateIdentifierFromElement(element);
+    const identifier = IdentifierUtil.generateIdentifierFromElement(
+      element,
+      identifierSet
+    );
 
     return {
       identifier,

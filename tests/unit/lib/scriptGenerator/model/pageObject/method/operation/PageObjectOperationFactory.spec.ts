@@ -38,7 +38,8 @@ describe("PageObjectOperationFactoryImpl", () => {
       expect(
         factory.createFrom(
           { ...emptyOperation, type: "click", input: "input" },
-          ""
+          "",
+          new Set()
         )
       ).toEqual({
         target,
@@ -49,7 +50,8 @@ describe("PageObjectOperationFactoryImpl", () => {
       expect(
         factory.createFrom(
           { ...emptyOperation, type: "change", input: "input" },
-          ""
+          "",
+          new Set()
         )
       ).toEqual({
         target,
@@ -60,7 +62,8 @@ describe("PageObjectOperationFactoryImpl", () => {
       expect(
         factory.createFrom(
           { ...emptyOperation, type: "switch_window", input: "input" },
-          "destinationUrl"
+          "destinationUrl",
+          new Set()
         )
       ).toEqual({
         target,
@@ -71,7 +74,8 @@ describe("PageObjectOperationFactoryImpl", () => {
       expect(
         factory.createFrom(
           { ...emptyOperation, type: "hogehoge", input: "input" },
-          ""
+          "",
+          new Set()
         )
       ).toEqual({
         target,

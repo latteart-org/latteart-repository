@@ -45,10 +45,11 @@ export class PageObjectFactory {
     id: string,
     url: string,
     imageUrl: string,
-    sequences: Sequence[]
+    sequences: Sequence[],
+    indetiferSet: Set<string>
   ): PageObject {
     const methods = sequences.map((sequence) =>
-      this.methodFactory.create(sequence)
+      this.methodFactory.create(sequence, indetiferSet)
     );
 
     return new PageObjectImpl(

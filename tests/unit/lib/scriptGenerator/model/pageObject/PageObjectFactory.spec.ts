@@ -51,7 +51,8 @@ describe("PageObjectFactory", () => {
         sequence1.className,
         sequence1.url,
         sequence1.imageUrl,
-        [sequence1]
+        [sequence1],
+        new Set()
       );
 
       const expectedPageObject = new PageObjectImpl(
@@ -66,7 +67,7 @@ describe("PageObjectFactory", () => {
         }
       );
 
-      expect(methodFactory.create).toBeCalledWith(sequence1);
+      expect(methodFactory.create).toBeCalledWith(sequence1, new Set());
 
       expect(pageObject).toEqual(expectedPageObject);
     });

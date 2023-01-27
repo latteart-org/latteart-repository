@@ -43,6 +43,8 @@ export class TestScriptModelGeneratorImpl implements TestScriptModelGenerator {
     private testSuiteFactory: TestSuiteFactory
   ) {}
 
+  private indetiferSet = new Set<string>();
+
   public generate(
     sources: { initialUrl: string; history: TestScriptSourceOperation[] }[]
   ): TestScriptModel {
@@ -99,7 +101,8 @@ export class TestScriptModelGeneratorImpl implements TestScriptModelGenerator {
           pageName,
           sequences[0].url,
           sequences[0].imageUrl,
-          sequences
+          sequences,
+          this.indetiferSet
         );
       }
     );

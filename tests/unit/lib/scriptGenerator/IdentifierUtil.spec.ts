@@ -1,5 +1,6 @@
 import { IdentifierUtil } from "@/lib/scriptGenerator/IdentifierUtil";
 import { TestScriptSourceElement } from "@/lib/scriptGenerator/TestScriptSourceOperation";
+import { createHash } from "crypto";
 
 describe("IdentifierUtilクラスの", () => {
   describe("normalizeIdentifierは識別子の正規化ができ，仮の区切り文字として$が用いられる", () => {
@@ -48,7 +49,10 @@ describe("IdentifierUtilクラスの", () => {
         },
         locator: "locator",
       };
-      const identifier = IdentifierUtil.generateIdentifierFromElement(element);
+      const identifier = IdentifierUtil.generateIdentifierFromElement(
+        element,
+        new Set()
+      );
       expect(identifier).toBe("name1");
     });
 
@@ -60,7 +64,10 @@ describe("IdentifierUtilクラスの", () => {
         attributes: { name: "name1", id: "id1", value: "value1" },
         locator: "locator",
       };
-      const identifier = IdentifierUtil.generateIdentifierFromElement(element);
+      const identifier = IdentifierUtil.generateIdentifierFromElement(
+        element,
+        new Set()
+      );
       expect(identifier).toBe("id1");
     });
 
@@ -72,7 +79,10 @@ describe("IdentifierUtilクラスの", () => {
         attributes: { name: "name1", value: "" },
         locator: "locator",
       };
-      const identifier = IdentifierUtil.generateIdentifierFromElement(element);
+      const identifier = IdentifierUtil.generateIdentifierFromElement(
+        element,
+        new Set()
+      );
       expect(identifier).toBe("name1");
     });
 
@@ -84,7 +94,10 @@ describe("IdentifierUtilクラスの", () => {
         attributes: { name: "name1", value: "value1" },
         locator: "locator",
       };
-      const identifier = IdentifierUtil.generateIdentifierFromElement(element);
+      const identifier = IdentifierUtil.generateIdentifierFromElement(
+        element,
+        new Set()
+      );
       expect(identifier).toBe("name1value1");
     });
 
@@ -96,7 +109,10 @@ describe("IdentifierUtilクラスの", () => {
         attributes: { value: "value1" },
         locator: "locator",
       };
-      const identifier = IdentifierUtil.generateIdentifierFromElement(element);
+      const identifier = IdentifierUtil.generateIdentifierFromElement(
+        element,
+        new Set()
+      );
       expect(identifier).toBe("text1");
     });
 
@@ -108,7 +124,10 @@ describe("IdentifierUtilクラスの", () => {
         attributes: { value: "value1" },
         locator: "locator",
       };
-      const identifier = IdentifierUtil.generateIdentifierFromElement(element);
+      const identifier = IdentifierUtil.generateIdentifierFromElement(
+        element,
+        new Set()
+      );
       expect(identifier).toBe("value1");
     });
 
@@ -120,7 +139,10 @@ describe("IdentifierUtilクラスの", () => {
         attributes: { name: "name1", id: "test  id!{> \t1  ", value: "value1" },
         locator: "locator",
       };
-      const identifier = IdentifierUtil.generateIdentifierFromElement(element);
+      const identifier = IdentifierUtil.generateIdentifierFromElement(
+        element,
+        new Set()
+      );
       expect(identifier).toBe("testId1");
     });
 
@@ -132,8 +154,31 @@ describe("IdentifierUtilクラスの", () => {
         attributes: { name: "name1", id: "01", value: "value1" },
         locator: "locator",
       };
-      const identifier = IdentifierUtil.generateIdentifierFromElement(element);
+      const identifier = IdentifierUtil.generateIdentifierFromElement(
+        element,
+        new Set()
+      );
       expect(identifier).toBe("_01");
+    });
+
+    it("identifierが重複する場合、identifierの後にhashが付く", () => {
+      const element: TestScriptSourceElement = {
+        tagname: "input",
+        text: "text1",
+        xpath: "xpath1",
+        attributes: { name: "name1", id: "id", value: "value1" },
+        locator: "locator",
+      };
+      const set = new Set<string>();
+      set.add("id");
+
+      const identifier = IdentifierUtil.generateIdentifierFromElement(
+        element,
+        set
+      );
+      expect(identifier).toBe(
+        `id${createHash("md5").update(element.xpath).digest("hex")}`
+      );
     });
   });
 

@@ -21,7 +21,8 @@ import { TestScriptSourceOperation } from "../../../../TestScriptSourceOperation
 export interface PageObjectOperationFactory {
   createFrom(
     operation: TestScriptSourceOperation,
-    destinationUrl: string
+    destinationUrl: string,
+    identifierSet: Set<string>
   ): PageObjectOperation;
 }
 
@@ -32,11 +33,13 @@ export class PageObjectOperationFactoryImpl
 
   public createFrom(
     operation: TestScriptSourceOperation,
-    destinationUrl: string
+    destinationUrl: string,
+    identifierSet: Set<string>
   ): PageObjectOperation {
     const target = this.elementFactory.createFrom(
       operation.elementInfo,
-      operation.imageFilePath
+      operation.imageFilePath,
+      identifierSet
     );
 
     return {

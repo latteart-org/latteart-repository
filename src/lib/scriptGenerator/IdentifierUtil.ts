@@ -28,39 +28,48 @@ export class IdentifierUtil {
    */
   public static generateIdentifierFromElement(
     elem: TestScriptSourceElement,
+    identifierSet: Set<string>,
     isUpper = false
   ): string {
     const attr = elem.attributes;
 
-    let identifier = "";
-
+    let tempIdentifier = "";
     if (attr.type && attr.type === "radio") {
       // radio buttons are distinguished by name if they have different id
       // because arguments determine the operation target.
-      identifier = attr.name;
+      tempIdentifier = attr.name;
     } else if (attr.id) {
-      identifier = attr.id;
+      tempIdentifier = attr.id;
     } else if (attr.type === "submit" && attr.value) {
-      identifier = attr.value;
+      tempIdentifier = attr.value;
     } else if (attr.name) {
       if (attr.value) {
-        identifier = attr.name + attr.value;
+        tempIdentifier = attr.name + attr.value;
       } else {
-        identifier = attr.name;
+        tempIdentifier = attr.name;
       }
     } else if (elem.text) {
-      identifier = elem.text;
+      tempIdentifier = elem.text;
     } else if (attr.value) {
-      identifier = attr.value;
+      tempIdentifier = attr.value;
     } else if (attr.href) {
-      identifier = attr.href;
+      tempIdentifier = attr.href;
     } else if (attr.alt) {
-      identifier = attr.alt;
+      tempIdentifier = attr.alt;
     } else if (attr.src) {
-      identifier = attr.src;
+      tempIdentifier = attr.src;
     } else {
-      identifier =
-        "noName" + createHash("md5").update(elem.xpath).digest("hex");
+      tempIdentifier = "noName";
+    }
+
+    let identifier = "";
+    if (identifierSet.has(tempIdentifier)) {
+      identifier = `${tempIdentifier}${createHash("md5")
+        .update(elem.xpath)
+        .digest("hex")}`;
+    } else {
+      identifierSet.add(tempIdentifier);
+      identifier = tempIdentifier;
     }
 
     identifier = IdentifierUtil.normalizeAndToCamelCase(identifier, isUpper);
