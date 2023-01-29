@@ -17,8 +17,9 @@
 import { createHash } from "crypto";
 import { TestScriptSourceElement } from "./TestScriptSourceOperation";
 
-export class IdentifierUtil {
-  public static maxIdentifierLength = 100;
+export class IdentifierGenerator {
+  public maxIdentifierLength = 100;
+  public identifierSet = new Set<string>();
 
   /**
    * Generate identifier string from element information.
@@ -26,9 +27,8 @@ export class IdentifierUtil {
    * @param isUpper whether to capitalize the first letter
    * @return identifier string
    */
-  public static generateIdentifierFromElement(
+  public generateIdentifierFromElement(
     elem: TestScriptSourceElement,
-    identifierSet: Set<string>,
     isUpper = false
   ): string {
     const attr = elem.attributes;
@@ -63,16 +63,16 @@ export class IdentifierUtil {
     }
 
     let identifier = "";
-    if (identifierSet.has(tempIdentifier)) {
+    if (this.identifierSet.has(tempIdentifier)) {
       identifier = `${tempIdentifier}${createHash("md5")
         .update(elem.xpath)
         .digest("hex")}`;
     } else {
-      identifierSet.add(tempIdentifier);
+      this.identifierSet.add(tempIdentifier);
       identifier = tempIdentifier;
     }
 
-    identifier = IdentifierUtil.normalizeAndToCamelCase(identifier, isUpper);
+    identifier = this.normalizeAndToCamelCase(identifier, isUpper);
 
     if (identifier.match(/^[0-9]/)) {
       return "_" + identifier;
@@ -87,11 +87,8 @@ export class IdentifierUtil {
    * @param isUpper whether to capitalize the first letter
    * @returns identifier string
    */
-  public static normalizeAndToCamelCase(
-    identifier: string,
-    isUpper = false
-  ): string {
-    const normalized = IdentifierUtil.normalizeIdentifier(identifier);
+  public normalizeAndToCamelCase(identifier: string, isUpper = false): string {
+    const normalized = this.normalizeIdentifier(identifier);
     const splitStr = normalized.split("$");
     const camelCase = splitStr
       .map(
@@ -111,7 +108,7 @@ export class IdentifierUtil {
     }
   }
 
-  private static normalizeIdentifier(identifier: string) {
+  private normalizeIdentifier(identifier: string) {
     // Turn white space and single-byte symbols that is likely to
     // be used in title or URL into temporally delimiter '$'.
     // Double-byte symbols that is likely to be used in title or URL

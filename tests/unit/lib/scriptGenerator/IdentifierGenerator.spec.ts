@@ -1,4 +1,4 @@
-import { IdentifierUtil } from "@/lib/scriptGenerator/IdentifierUtil";
+import { IdentifierGenerator } from "@/lib/scriptGenerator/IdentifierGenerator";
 import { TestScriptSourceElement } from "@/lib/scriptGenerator/TestScriptSourceOperation";
 import { createHash } from "crypto";
 
@@ -6,21 +6,23 @@ describe("IdentifierUtilクラスの", () => {
   describe("normalizeIdentifierは識別子の正規化ができ，仮の区切り文字として$が用いられる", () => {
     it("前後の空白は削除される", () => {
       expect(
-        (IdentifierUtil as any).normalizeIdentifier(`  test_identifier\t \n
+        (new IdentifierGenerator() as any)
+          .normalizeIdentifier(`  test_identifier\t \n
         `)
       ).toBe("test$identifier");
     });
 
     it("空白,/,?,-,| は$に変換される", () => {
       expect(
-        (IdentifierUtil as any).normalizeIdentifier(`test identifier/?-|_ \n
+        (new IdentifierGenerator() as any)
+          .normalizeIdentifier(`test identifier/?-|_ \n
        1`)
       ).toBe("test$identifier$1");
     });
 
     it("？・〜｜＿→はアンダーバーに変換される", () => {
       expect(
-        (IdentifierUtil as any).normalizeIdentifier(
+        (new IdentifierGenerator() as any).normalizeIdentifier(
           `テストﾃｽﾄ＿・？〜識別子｜→1`
         )
       ).toBe("テストﾃｽﾄ_識別子_1");
@@ -28,7 +30,7 @@ describe("IdentifierUtilクラスの", () => {
 
     it("その他記号は削除される", () => {
       expect(
-        (IdentifierUtil as any).normalizeIdentifier(
+        (new IdentifierGenerator() as any).normalizeIdentifier(
           `tes!@#$%^&*(){};:'",.<>\`!+=\\t_identifie−〒§【】r`
         )
       ).toBe("test$identifier");
@@ -49,10 +51,8 @@ describe("IdentifierUtilクラスの", () => {
         },
         locator: "locator",
       };
-      const identifier = IdentifierUtil.generateIdentifierFromElement(
-        element,
-        new Set()
-      );
+      const identifier =
+        new IdentifierGenerator().generateIdentifierFromElement(element);
       expect(identifier).toBe("name1");
     });
 
@@ -64,10 +64,8 @@ describe("IdentifierUtilクラスの", () => {
         attributes: { name: "name1", id: "id1", value: "value1" },
         locator: "locator",
       };
-      const identifier = IdentifierUtil.generateIdentifierFromElement(
-        element,
-        new Set()
-      );
+      const identifier =
+        new IdentifierGenerator().generateIdentifierFromElement(element);
       expect(identifier).toBe("id1");
     });
 
@@ -79,10 +77,8 @@ describe("IdentifierUtilクラスの", () => {
         attributes: { name: "name1", value: "" },
         locator: "locator",
       };
-      const identifier = IdentifierUtil.generateIdentifierFromElement(
-        element,
-        new Set()
-      );
+      const identifier =
+        new IdentifierGenerator().generateIdentifierFromElement(element);
       expect(identifier).toBe("name1");
     });
 
@@ -94,10 +90,8 @@ describe("IdentifierUtilクラスの", () => {
         attributes: { name: "name1", value: "value1" },
         locator: "locator",
       };
-      const identifier = IdentifierUtil.generateIdentifierFromElement(
-        element,
-        new Set()
-      );
+      const identifier =
+        new IdentifierGenerator().generateIdentifierFromElement(element);
       expect(identifier).toBe("name1value1");
     });
 
@@ -109,10 +103,8 @@ describe("IdentifierUtilクラスの", () => {
         attributes: { value: "value1" },
         locator: "locator",
       };
-      const identifier = IdentifierUtil.generateIdentifierFromElement(
-        element,
-        new Set()
-      );
+      const identifier =
+        new IdentifierGenerator().generateIdentifierFromElement(element);
       expect(identifier).toBe("text1");
     });
 
@@ -124,10 +116,8 @@ describe("IdentifierUtilクラスの", () => {
         attributes: { value: "value1" },
         locator: "locator",
       };
-      const identifier = IdentifierUtil.generateIdentifierFromElement(
-        element,
-        new Set()
-      );
+      const identifier =
+        new IdentifierGenerator().generateIdentifierFromElement(element);
       expect(identifier).toBe("value1");
     });
 
@@ -139,10 +129,8 @@ describe("IdentifierUtilクラスの", () => {
         attributes: { name: "name1", id: "test  id!{> \t1  ", value: "value1" },
         locator: "locator",
       };
-      const identifier = IdentifierUtil.generateIdentifierFromElement(
-        element,
-        new Set()
-      );
+      const identifier =
+        new IdentifierGenerator().generateIdentifierFromElement(element);
       expect(identifier).toBe("testId1");
     });
 
@@ -154,10 +142,8 @@ describe("IdentifierUtilクラスの", () => {
         attributes: { name: "name1", id: "01", value: "value1" },
         locator: "locator",
       };
-      const identifier = IdentifierUtil.generateIdentifierFromElement(
-        element,
-        new Set()
-      );
+      const identifier =
+        new IdentifierGenerator().generateIdentifierFromElement(element);
       expect(identifier).toBe("_01");
     });
 
@@ -169,13 +155,11 @@ describe("IdentifierUtilクラスの", () => {
         attributes: { name: "name1", id: "id", value: "value1" },
         locator: "locator",
       };
-      const set = new Set<string>();
-      set.add("id");
 
-      const identifier = IdentifierUtil.generateIdentifierFromElement(
-        element,
-        set
-      );
+      const generator = new IdentifierGenerator();
+
+      generator.generateIdentifierFromElement(element);
+      const identifier = generator.generateIdentifierFromElement(element);
       expect(identifier).toBe(
         `id${createHash("md5").update(element.xpath).digest("hex")}`
       );
@@ -184,7 +168,7 @@ describe("IdentifierUtilクラスの", () => {
 
   describe("normalizeAndToCamelCaseは，正規化したcamel caseがの識別子が生成でき，", () => {
     it("第2引数をtrueにすることで，第1引数の文字列がupper camel caseになる", () => {
-      const identifier = IdentifierUtil.normalizeAndToCamelCase(
+      const identifier = new IdentifierGenerator().normalizeAndToCamelCase(
         "TEST_Abc_ | dEF  ",
         true
       );
@@ -192,13 +176,14 @@ describe("IdentifierUtilクラスの", () => {
     });
 
     it("第2引数を空にすることで，第1引数の文字列がlower camel caseになる", () => {
-      const identifier =
-        IdentifierUtil.normalizeAndToCamelCase("TEST_Abc_ | dEF  ");
+      const identifier = new IdentifierGenerator().normalizeAndToCamelCase(
+        "TEST_Abc_ | dEF  "
+      );
       expect(identifier).toBe("testAbcDef");
     });
 
     it("数字が入っていた場合，数字の前後は1つの単語とみなされる", () => {
-      const identifier = IdentifierUtil.normalizeAndToCamelCase(
+      const identifier = new IdentifierGenerator().normalizeAndToCamelCase(
         "ABC123DEF",
         true
       );
@@ -206,7 +191,7 @@ describe("IdentifierUtilクラスの", () => {
     });
 
     it("記号のみで構築される文字が与えられるとアンダーバーを返す", () => {
-      const identifier = IdentifierUtil.normalizeAndToCamelCase(
+      const identifier = new IdentifierGenerator().normalizeAndToCamelCase(
         "/$#)@! )(*",
         true
       );
@@ -214,7 +199,7 @@ describe("IdentifierUtilクラスの", () => {
     });
 
     it("日本語の場合は正規化のみ行う", () => {
-      const identifier = IdentifierUtil.normalizeAndToCamelCase(
+      const identifier = new IdentifierGenerator().normalizeAndToCamelCase(
         "テストタイトル｜ログイン画面",
         true
       );
@@ -222,7 +207,7 @@ describe("IdentifierUtilクラスの", () => {
     });
 
     it("文字数が100文字を超える場合は100文字までで切る", () => {
-      const identifier = IdentifierUtil.normalizeAndToCamelCase(
+      const identifier = new IdentifierGenerator().normalizeAndToCamelCase(
         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
         true
       );

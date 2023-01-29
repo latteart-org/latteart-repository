@@ -17,12 +17,13 @@
 import { OperationType, PageObjectOperation } from "./PageObjectOperation";
 import { PageObjectElementFactory } from "./PageObjectElementFactory";
 import { TestScriptSourceOperation } from "../../../../TestScriptSourceOperation";
+import { IdentifierGenerator } from "@/lib/scriptGenerator/IdentifierGenerator";
 
 export interface PageObjectOperationFactory {
   createFrom(
     operation: TestScriptSourceOperation,
     destinationUrl: string,
-    identifierSet: Set<string>
+    identifierGenerator: IdentifierGenerator
   ): PageObjectOperation;
 }
 
@@ -34,12 +35,12 @@ export class PageObjectOperationFactoryImpl
   public createFrom(
     operation: TestScriptSourceOperation,
     destinationUrl: string,
-    identifierSet: Set<string>
+    identifierGenerator: IdentifierGenerator
   ): PageObjectOperation {
     const target = this.elementFactory.createFrom(
       operation.elementInfo,
       operation.imageFilePath,
-      identifierSet
+      identifierGenerator
     );
 
     return {

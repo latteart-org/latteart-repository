@@ -17,7 +17,7 @@
 import { Sequence } from "./Sequence";
 import { SequenceSourceFactory } from "./SequenceSourceFactory";
 import { SequenceSource } from "./SequenceSourceFactory";
-import { IdentifierUtil } from "../../IdentifierUtil";
+import { IdentifierGenerator } from "../../IdentifierGenerator";
 import { TestScriptSourceOperation } from "../../TestScriptSourceOperation";
 
 export type SequencePath = Sequence[];
@@ -55,7 +55,10 @@ export class SequencePathBuilder {
     const screenDefClassMap: Map<string, string> = new Map();
 
     const generateClassName = (screenDef: string) => {
-      let className = IdentifierUtil.normalizeAndToCamelCase(screenDef, true);
+      let className = new IdentifierGenerator().normalizeAndToCamelCase(
+        screenDef,
+        true
+      );
 
       if (className.match(/^[0-9]/)) {
         className = "_" + className;
