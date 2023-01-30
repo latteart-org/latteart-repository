@@ -74,7 +74,8 @@ export class PageObjectElementFactoryImpl implements PageObjectElementFactory {
       tagname === "A" ||
       tagname === "BUTTON" ||
       tagname === "SPAN" ||
-      tagname === "IMG"
+      tagname === "IMG" ||
+      tagname === "I"
     ) {
       return ElementType.Link;
     }
