@@ -18,9 +18,13 @@ import { PageObjectMethodImpl, PageObjectMethod } from "./PageObjectMethod";
 import { PageObjectOperationFactory } from "./operation/PageObjectOperationFactory";
 import { Sequence } from "../../sequencePath/Sequence";
 import { OperationFilter } from "./operation/OperationFilter";
+import { IdentifierGenerator } from "@/lib/scriptGenerator/IdentifierGenerator";
 
 export interface PageObjectMethodFactory {
-  create(sequence: Sequence): PageObjectMethod;
+  create(
+    sequence: Sequence,
+    identifierGenerator: IdentifierGenerator
+  ): PageObjectMethod;
 }
 
 export class PageObjectMethodFactoryImpl implements PageObjectMethodFactory {
@@ -34,11 +38,15 @@ export class PageObjectMethodFactoryImpl implements PageObjectMethodFactory {
     this.operationFilters = operationFilters;
   }
 
-  public create(sequence: Sequence): PageObjectMethod {
+  public create(
+    sequence: Sequence,
+    identifierGenerator: IdentifierGenerator
+  ): PageObjectMethod {
     const operations = sequence.operations.map((operation) => {
       return this.operationFactory.createFrom(
         operation,
-        sequence.destinationUrl
+        sequence.destinationUrl,
+        identifierGenerator
       );
     });
 

@@ -3,6 +3,7 @@ import { PageObjectMethodFactory } from "@/lib/scriptGenerator/model/pageObject/
 import { PageObjectImpl } from "@/lib/scriptGenerator/model/pageObject/PageObject";
 import { PageObjectMethod } from "@/lib/scriptGenerator/model/pageObject/method/PageObjectMethod";
 import { TestScriptSourceOperation } from "@/lib/scriptGenerator/TestScriptSourceOperation";
+import { IdentifierGenerator } from "@/lib/scriptGenerator/IdentifierGenerator";
 
 const emptyOperation: TestScriptSourceOperation = {
   screenDef: "",
@@ -47,11 +48,13 @@ describe("PageObjectFactory", () => {
         imageUrl: "path/to/image1",
       };
 
+      const generator = new IdentifierGenerator();
       const pageObject = pageObjectFactory.createPageObject(
         sequence1.className,
         sequence1.url,
         sequence1.imageUrl,
-        [sequence1]
+        [sequence1],
+        generator
       );
 
       const expectedPageObject = new PageObjectImpl(
@@ -66,7 +69,7 @@ describe("PageObjectFactory", () => {
         }
       );
 
-      expect(methodFactory.create).toBeCalledWith(sequence1);
+      expect(methodFactory.create).toBeCalledWith(sequence1, generator);
 
       expect(pageObject).toEqual(expectedPageObject);
     });

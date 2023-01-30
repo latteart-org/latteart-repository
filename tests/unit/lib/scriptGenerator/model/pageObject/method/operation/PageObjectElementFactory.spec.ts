@@ -1,5 +1,6 @@
 import { ElementType } from "@/lib/scriptGenerator/model/pageObject/method/operation/PageObjectOperation";
 import { PageObjectElementFactoryImpl } from "@/lib/scriptGenerator/model/pageObject/method/operation/PageObjectElementFactory";
+import { IdentifierGenerator } from "@/lib/scriptGenerator/IdentifierGenerator";
 
 describe("PageObjectElementFactoryImpl", () => {
   describe("#createFrom", () => {
@@ -20,7 +21,9 @@ describe("PageObjectElementFactoryImpl", () => {
           locator: "locator",
         };
 
-        expect(factory.createFrom(targetElement, imageUrl)).toEqual({
+        expect(
+          factory.createFrom(targetElement, imageUrl, new IdentifierGenerator())
+        ).toEqual({
           identifier: expect.any(String),
           type: ElementType.RadioButton,
           locator: "locator",
@@ -38,7 +41,9 @@ describe("PageObjectElementFactoryImpl", () => {
           locator: "locator",
         };
 
-        expect(factory.createFrom(targetElement, imageUrl)).toEqual({
+        expect(
+          factory.createFrom(targetElement, imageUrl, new IdentifierGenerator())
+        ).toEqual({
           identifier: expect.any(String),
           type: ElementType.CheckBox,
           locator: "locator",
@@ -56,7 +61,9 @@ describe("PageObjectElementFactoryImpl", () => {
           locator: "locator",
         };
 
-        expect(factory.createFrom(targetElement, imageUrl)).toEqual({
+        expect(
+          factory.createFrom(targetElement, imageUrl, new IdentifierGenerator())
+        ).toEqual({
           identifier: expect.any(String),
           type: ElementType.SelectBox,
           locator: "locator",
@@ -74,7 +81,9 @@ describe("PageObjectElementFactoryImpl", () => {
           locator: "locator",
         };
 
-        expect(factory.createFrom(targetElement, imageUrl)).toEqual({
+        expect(
+          factory.createFrom(targetElement, imageUrl, new IdentifierGenerator())
+        ).toEqual({
           identifier: expect.any(String),
           type: ElementType.Link,
           locator: "locator",
@@ -92,7 +101,9 @@ describe("PageObjectElementFactoryImpl", () => {
           locator: "locator",
         };
 
-        expect(factory.createFrom(targetElement, imageUrl)).toEqual({
+        expect(
+          factory.createFrom(targetElement, imageUrl, new IdentifierGenerator())
+        ).toEqual({
           identifier: expect.any(String),
           type: ElementType.Other,
           locator: "locator",

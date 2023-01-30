@@ -18,6 +18,7 @@ import { MethodComparator, PageObject, PageObjectImpl } from "./PageObject";
 import { MethodFilter } from "./method/MethodFilter";
 import { PageObjectMethodFactory } from "./method/PageObjectMethodFactory";
 import { Sequence } from "../sequencePath/Sequence";
+import { IdentifierGenerator } from "../../IdentifierGenerator";
 
 export class PageObjectFactory {
   private option: {
@@ -45,10 +46,11 @@ export class PageObjectFactory {
     id: string,
     url: string,
     imageUrl: string,
-    sequences: Sequence[]
+    sequences: Sequence[],
+    identifierGenerator: IdentifierGenerator
   ): PageObject {
     const methods = sequences.map((sequence) =>
-      this.methodFactory.create(sequence)
+      this.methodFactory.create(sequence, identifierGenerator)
     );
 
     return new PageObjectImpl(

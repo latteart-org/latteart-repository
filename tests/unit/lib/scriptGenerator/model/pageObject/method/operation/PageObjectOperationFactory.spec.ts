@@ -5,6 +5,7 @@ import {
 import { ElementType } from "@/lib/scriptGenerator/model/pageObject/method/operation/PageObjectOperation";
 import { PageObjectElementFactory } from "@/lib/scriptGenerator/model/pageObject/method/operation/PageObjectElementFactory";
 import { TestScriptSourceOperation } from "@/lib/scriptGenerator/TestScriptSourceOperation";
+import { IdentifierGenerator } from "@/lib/scriptGenerator/IdentifierGenerator";
 
 const emptyOperation: TestScriptSourceOperation = {
   screenDef: "",
@@ -38,7 +39,8 @@ describe("PageObjectOperationFactoryImpl", () => {
       expect(
         factory.createFrom(
           { ...emptyOperation, type: "click", input: "input" },
-          ""
+          "",
+          new IdentifierGenerator()
         )
       ).toEqual({
         target,
@@ -49,7 +51,8 @@ describe("PageObjectOperationFactoryImpl", () => {
       expect(
         factory.createFrom(
           { ...emptyOperation, type: "change", input: "input" },
-          ""
+          "",
+          new IdentifierGenerator()
         )
       ).toEqual({
         target,
@@ -60,7 +63,8 @@ describe("PageObjectOperationFactoryImpl", () => {
       expect(
         factory.createFrom(
           { ...emptyOperation, type: "switch_window", input: "input" },
-          "destinationUrl"
+          "destinationUrl",
+          new IdentifierGenerator()
         )
       ).toEqual({
         target,
@@ -71,7 +75,8 @@ describe("PageObjectOperationFactoryImpl", () => {
       expect(
         factory.createFrom(
           { ...emptyOperation, type: "hogehoge", input: "input" },
-          ""
+          "",
+          new IdentifierGenerator()
         )
       ).toEqual({
         target,

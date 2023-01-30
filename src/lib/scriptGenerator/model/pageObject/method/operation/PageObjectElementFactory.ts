@@ -15,20 +15,22 @@
  */
 
 import { ElementType, PageObjectElement } from "./PageObjectOperation";
-import { IdentifierUtil } from "../../../../IdentifierUtil";
 import { TestScriptSourceElement } from "../../../../TestScriptSourceOperation";
+import { IdentifierGenerator } from "@/lib/scriptGenerator/IdentifierGenerator";
 
 export interface PageObjectElementFactory {
   createFrom(
     element: TestScriptSourceElement | null,
-    imageUrl: string
+    imageUrl: string,
+    identifierGenerator: IdentifierGenerator
   ): PageObjectElement;
 }
 
 export class PageObjectElementFactoryImpl implements PageObjectElementFactory {
   public createFrom(
     element: TestScriptSourceElement | null,
-    imageUrl: string
+    imageUrl: string,
+    identifierGenerator: IdentifierGenerator
   ): PageObjectElement {
     if (!element) {
       return {
@@ -40,8 +42,8 @@ export class PageObjectElementFactoryImpl implements PageObjectElementFactory {
         imageUrl,
       };
     }
-
-    const identifier = IdentifierUtil.generateIdentifierFromElement(element);
+    const identifier =
+      identifierGenerator.generateIdentifierFromElement(element);
 
     return {
       identifier,
