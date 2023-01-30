@@ -91,7 +91,7 @@ export class ElementLocatorGeneratorImpl implements ElementLocatorGenerator {
 
     const partialText = source.text.slice(0, this.maxTextLength).trim();
 
-    if (partialText.match(/\s/g)) {
+    if (partialText.match(/<|>|\/|\s/g)) {
       return "";
     }
 
