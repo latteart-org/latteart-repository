@@ -73,11 +73,20 @@ describe("PageObjectElementFactoryImpl", () => {
         });
       });
 
-      it("リンク", () => {
+      it.each`
+        tagname     | elementType
+        ${"INPUT"}  | ${"submit"}
+        ${"INPUT"}  | ${"button"}
+        ${"A"}      | ${""}
+        ${"BUTTON"} | ${""}
+        ${"SPAN"}   | ${""}
+        ${"IMG"}    | ${""}
+        ${"I"}      | ${""}
+      `("リンク $tagname $elementType", ({ tagname, elementType }) => {
         const targetElement = {
-          tagname: "A",
+          tagname,
           xpath: "",
-          attributes: { value: "", name: "", type: "" },
+          attributes: { value: "", name: "", type: elementType },
           locator: "locator",
         };
 
