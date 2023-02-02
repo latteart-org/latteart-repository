@@ -80,7 +80,8 @@ export class IssueReportServiceImpl implements IssueReportService {
                     return [
                       {
                         sessionName: (index + 1).toString(),
-                        testItem: session.testItem,
+                        tester: session.testerName,
+                        memo: session.memo,
                         testResultId: testResultFiles[0].id,
                         groupName: group.name,
                         testTargetName: testTarget.name,
@@ -116,7 +117,8 @@ export class IssueReportServiceImpl implements IssueReportService {
 
   private async extractRowsFromRowSource(rowSource: {
     sessionName: string;
-    testItem: string;
+    tester: string;
+    memo: string;
     testResultId: string;
     groupName: string;
     testTargetName: string;
@@ -158,7 +160,8 @@ export class IssueReportServiceImpl implements IssueReportService {
             testTargetName: rowSource.testTargetName,
             viewPointName: rowSource.viewPointName,
             sessionName: rowSource.sessionName,
-            testItem: rowSource.testItem,
+            tester: rowSource.tester,
+            memo: rowSource.memo,
           };
 
           const testPurposeId = testStep.intention ?? "";
@@ -182,6 +185,7 @@ export class IssueReportServiceImpl implements IssueReportService {
                       ...identifierAndTestPurpose,
                       noteValue: note?.value ?? "",
                       noteDetails: note?.details ?? "",
+                      tags: note?.tags ? note.tags.join(",") : "",
                     };
                   })
                 )
@@ -190,6 +194,7 @@ export class IssueReportServiceImpl implements IssueReportService {
                     ...identifierAndTestPurpose,
                     noteValue: "",
                     noteDetails: "",
+                    tags: "",
                   },
                 ];
 
