@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-import { ElementType, PageObjectElement } from "./PageObjectOperation";
+import { PageObjectElement } from "./PageObjectOperation";
 import { TestScriptSourceElement } from "../../../../TestScriptSourceOperation";
 import { IdentifierGenerator } from "@/lib/scriptGenerator/IdentifierGenerator";
+import { TestScriptGenerationOption } from "@/lib/scriptGenerator/TestScriptGenerator";
 
 export interface PageObjectElementFactory {
   createFrom(
@@ -27,6 +28,17 @@ export interface PageObjectElementFactory {
 }
 
 export class PageObjectElementFactoryImpl implements PageObjectElementFactory {
+  constructor(
+    private option: Pick<TestScriptGenerationOption, "buttonDefinitions"> = {
+      buttonDefinitions: [
+        { tagname: "INPUT", elementType: "submit" },
+        { tagname: "INPUT", elementType: "button" },
+        { tagname: "A" },
+        { tagname: "BUTTON" },
+      ],
+    }
+  ) {}
+
   public createFrom(
     element: TestScriptSourceElement | null,
     imageUrl: string,
@@ -35,7 +47,7 @@ export class PageObjectElementFactoryImpl implements PageObjectElementFactory {
     if (!element) {
       return {
         identifier: "",
-        type: ElementType.Other,
+        type: "Other",
         value: "",
         name: "",
         locator: "",
@@ -57,29 +69,33 @@ export class PageObjectElementFactoryImpl implements PageObjectElementFactory {
 
   private createElementType(tagname: string, elementType = "") {
     if (tagname === "INPUT" && elementType === "radio") {
-      return ElementType.RadioButton;
+      return "RadioButton";
     }
 
     if (tagname === "INPUT" && elementType === "checkbox") {
-      return ElementType.CheckBox;
+      return "CheckBox";
     }
 
     if (tagname === "SELECT") {
-      return ElementType.SelectBox;
+      return "SelectBox";
     }
 
-    if (
-      (tagname === "INPUT" && elementType === "submit") ||
-      (tagname === "INPUT" && elementType === "button") ||
-      tagname === "A" ||
-      tagname === "BUTTON" ||
-      tagname === "SPAN" ||
-      tagname === "IMG" ||
-      tagname === "I"
-    ) {
-      return ElementType.Link;
+    const isButton = this.option.buttonDefinitions.some((d) => {
+      if (d.tagname.toUpperCase() !== tagname) {
+        return false;
+      }
+
+      if (!d.elementType) {
+        return true;
+      }
+
+      return d.elementType === elementType;
+    });
+
+    if (isButton) {
+      return "Button";
     }
 
-    return ElementType.Other;
+    return "Other";
   }
 }

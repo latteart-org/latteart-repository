@@ -1,9 +1,5 @@
 import { JSPageObjectMethodNameGenerator } from "@/lib/scriptGenerator/codeGenerator/js/pageObject/JSPageObjectMethodNameGenerator";
 import { NameGenerator } from "@/lib/scriptGenerator/codeGenerator/NameGenerator";
-import {
-  ElementType,
-  OperationType,
-} from "@/lib/scriptGenerator/model/pageObject/method/operation/PageObjectOperation";
 
 describe("JSPageObjectMethodNameGenerator", () => {
   describe("#generate", () => {
@@ -24,12 +20,12 @@ describe("JSPageObjectMethodNameGenerator", () => {
           {
             target: {
               identifier: "linkOperation",
-              type: ElementType.Link,
+              type: "Button",
               locator: "",
             },
-            type: "other" as OperationType,
+            type: "other",
             input: "",
-          },
+          } as const,
         ],
         includes: jest.fn(),
       };
@@ -42,12 +38,12 @@ describe("JSPageObjectMethodNameGenerator", () => {
           {
             target: {
               identifier: "otherOperation",
-              type: ElementType.Other,
+              type: "Other",
               locator: "",
             },
-            type: "other" as OperationType,
+            type: "other",
             input: "",
-          },
+          } as const,
         ],
         includes: jest.fn(),
       };

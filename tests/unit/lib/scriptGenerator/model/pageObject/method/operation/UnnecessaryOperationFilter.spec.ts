@@ -1,8 +1,5 @@
 import { UnnecessaryOperationFilter } from "@/lib/scriptGenerator/model/pageObject/method/operation/UnnecessaryOperationFilter";
-import {
-  PageObjectOperation,
-  ElementType,
-} from "@/lib/scriptGenerator/model/pageObject/method/operation/PageObjectOperation";
+import { PageObjectOperation } from "@/lib/scriptGenerator/model/pageObject/method/operation/PageObjectOperation";
 
 describe("UnnecessaryOperationFilter", () => {
   describe("#filter", () => {
@@ -10,7 +7,7 @@ describe("UnnecessaryOperationFilter", () => {
       const operation1: PageObjectOperation = {
         target: {
           identifier: "",
-          type: ElementType.Other,
+          type: "Other",
           locator: "",
         },
         type: "switch_window",
@@ -26,7 +23,7 @@ describe("UnnecessaryOperationFilter", () => {
       const operation1: PageObjectOperation = {
         target: {
           identifier: "",
-          type: ElementType.Other,
+          type: "Other",
           locator: "",
         },
         type: "change",
@@ -42,7 +39,7 @@ describe("UnnecessaryOperationFilter", () => {
       const operation1: PageObjectOperation = {
         target: {
           identifier: "id",
-          type: ElementType.Other,
+          type: "Other",
           locator: "",
         },
         type: "change",
@@ -52,7 +49,7 @@ describe("UnnecessaryOperationFilter", () => {
       const operation2: PageObjectOperation = {
         target: {
           identifier: "id",
-          type: ElementType.Link,
+          type: "Button",
           locator: "",
         },
         type: "click",
@@ -62,7 +59,7 @@ describe("UnnecessaryOperationFilter", () => {
       const operation3: PageObjectOperation = {
         target: {
           identifier: "id",
-          type: ElementType.RadioButton,
+          type: "RadioButton",
           locator: "",
         },
         type: "click",
@@ -72,7 +69,7 @@ describe("UnnecessaryOperationFilter", () => {
       const operation4: PageObjectOperation = {
         target: {
           identifier: "id",
-          type: ElementType.CheckBox,
+          type: "CheckBox",
           locator: "",
         },
         type: "click",
@@ -83,7 +80,7 @@ describe("UnnecessaryOperationFilter", () => {
       const operation5: PageObjectOperation = {
         target: {
           identifier: "id",
-          type: ElementType.SelectBox,
+          type: "SelectBox",
           locator: "",
         },
         type: "click",
@@ -94,7 +91,7 @@ describe("UnnecessaryOperationFilter", () => {
       const operation6: PageObjectOperation = {
         target: {
           identifier: "id",
-          type: ElementType.Other,
+          type: "Other",
           locator: "",
         },
         type: "other",

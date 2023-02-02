@@ -249,6 +249,7 @@ export class TestScriptsService {
         useDataDriven: params.option.testData.useDataDriven,
         maxGeneration: params.option.testData.maxGeneration,
       },
+      buttonDefinitions: params.option.buttonDefinitions,
     };
     const testScriptGenerator = new TestScriptGeneratorImpl(
       testScriptGenerationOption

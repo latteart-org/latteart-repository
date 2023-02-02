@@ -1,8 +1,5 @@
 import { PageObjectMethodImpl } from "@/lib/scriptGenerator/model/pageObject/method/PageObjectMethod";
-import {
-  PageObjectOperation,
-  ElementType,
-} from "@/lib/scriptGenerator/model/pageObject/method/operation/PageObjectOperation";
+import { PageObjectOperation } from "@/lib/scriptGenerator/model/pageObject/method/operation/PageObjectOperation";
 
 describe("PageObjectMethodImpl", () => {
   describe("#includes", () => {
@@ -10,7 +7,7 @@ describe("PageObjectMethodImpl", () => {
       const operation1: PageObjectOperation = {
         target: {
           identifier: "id1",
-          type: ElementType.Other,
+          type: "Other",
           locator: "",
         },
         type: "other",
@@ -19,7 +16,7 @@ describe("PageObjectMethodImpl", () => {
       const operation2: PageObjectOperation = {
         target: {
           identifier: "id2",
-          type: ElementType.Other,
+          type: "Other",
           locator: "",
         },
         type: "other",
@@ -28,7 +25,7 @@ describe("PageObjectMethodImpl", () => {
       const operation3: PageObjectOperation = {
         target: {
           identifier: "id3",
-          type: ElementType.Other,
+          type: "Other",
           locator: "",
         },
         type: "other",

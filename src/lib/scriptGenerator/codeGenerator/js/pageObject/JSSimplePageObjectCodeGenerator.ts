@@ -17,7 +17,6 @@
 import { PageObject } from "../../../model/pageObject/PageObject";
 import {
   PageObjectElement,
-  ElementType,
   PageObjectOperation,
 } from "../../../model/pageObject/method/operation/PageObjectOperation";
 import { PageObjectMethod } from "../../../model/pageObject/method/PageObjectMethod";
@@ -104,7 +103,7 @@ export default ${pageObjectName};
 
     const radioButtonGenerator = new JSRadioButtonAccessorCodeGenerator(
       elements.reduce((radioNameToValues, element) => {
-        if (element.type === ElementType.RadioButton && element.value) {
+        if (element.type === "RadioButton" && element.value) {
           const identifier = element.identifier;
 
           if (!radioNameToValues.has(identifier)) {
@@ -122,7 +121,7 @@ export default ${pageObjectName};
 
     return Array.from(identifierToElement).map(
       ([identifier, elem]: [string, PageObjectElement]) => {
-        if (elem.type === ElementType.RadioButton && elem.name) {
+        if (elem.type === "RadioButton" && elem.name) {
           const identifier = elem.identifier;
 
           if (radioButtonNames.has(identifier)) {
@@ -137,7 +136,7 @@ export default ${pageObjectName};
           );
         }
 
-        if (elem.type === ElementType.CheckBox) {
+        if (elem.type === "CheckBox") {
           return JSSimplePageObjectCodeGenerator.generateCheckBoxAccessorString(
             identifier,
             elem.locator
@@ -245,7 +244,7 @@ ${CodeFormatter.indentToAllLines(
     const element = operation.target;
     const identifier = element.identifier;
 
-    if (element.type === ElementType.RadioButton) {
+    if (element.type === "RadioButton") {
       return `this.set_${identifier}('${operation.input}');`;
     }
 
@@ -260,7 +259,7 @@ ${CodeFormatter.indentToAllLines(
     const element = operation.target;
     const identifier = element.identifier;
 
-    if (element.type === ElementType.SelectBox) {
+    if (element.type === "SelectBox") {
       return `this.${identifier}.selectByAttribute('value', '${operation.input}');`;
     }
 

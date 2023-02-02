@@ -16,7 +16,6 @@
 
 import { NameGenerator } from "../../NameGenerator";
 import { PageObjectMethod } from "../../../model/pageObject/method/PageObjectMethod";
-import { ElementType } from "../../../model/pageObject/method/operation/PageObjectOperation";
 import { PageObject } from "../../../model/pageObject/PageObject";
 import { AliasGenerator } from "../../AliasGenerator";
 
@@ -59,7 +58,7 @@ export class JSPageObjectMethodNameGenerator implements NameGenerator {
 
     const methodNameCandidate = !lastOperatedElement
       ? `go${destination}Empty`
-      : lastOperatedElement.type === ElementType.Link
+      : lastOperatedElement.type === "Button"
       ? `go${destination}`
       : `do${lastOperatedElement.identifier}`;
 

@@ -1,15 +1,12 @@
 import { DuplicateElementOperationFilter } from "@/lib/scriptGenerator/model/pageObject/method/operation/DuplicateElementOperationFilter";
-import {
-  PageObjectOperation,
-  ElementType,
-} from "@/lib/scriptGenerator/model/pageObject/method/operation/PageObjectOperation";
+import { PageObjectOperation } from "@/lib/scriptGenerator/model/pageObject/method/operation/PageObjectOperation";
 describe("DuplicateElementOperationFilter", () => {
   describe("#filter", () => {
     it("操作種別がswitch_windowの操作は除外しない", () => {
       const operation1: PageObjectOperation = {
         target: {
           identifier: "",
-          type: ElementType.Other,
+          type: "Other",
           locator: "",
         },
         type: "switch_window",
@@ -27,7 +24,7 @@ describe("DuplicateElementOperationFilter", () => {
       const operation1: PageObjectOperation = {
         target: {
           identifier: "",
-          type: ElementType.Other,
+          type: "Other",
           locator: "",
         },
         type: "change",
@@ -44,9 +41,9 @@ describe("DuplicateElementOperationFilter", () => {
     it("画面遷移するまでに同一の要素への操作が複数ある場合は最後のもの以外を除外する", () => {
       const element = {
         identifier: "id",
-        type: ElementType.Other,
+        type: "Other",
         locator: "",
-      };
+      } as const;
 
       const operation1: PageObjectOperation = {
         target: element,

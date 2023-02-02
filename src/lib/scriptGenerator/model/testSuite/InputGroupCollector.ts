@@ -14,10 +14,7 @@
  * limitations under the License.
  */
 
-import {
-  PageObjectOperation,
-  ElementType,
-} from "../pageObject/method/operation/PageObjectOperation";
+import { PageObjectOperation } from "../pageObject/method/operation/PageObjectOperation";
 
 export class InputGroupCollector {
   public collectFrom(operations: PageObjectOperation[]): {
@@ -33,13 +30,13 @@ export class InputGroupCollector {
         return acc;
       }
 
-      if (elem.type === ElementType.RadioButton) {
+      if (elem.type === "RadioButton") {
         acc.set(elem.identifier, `${this.escapeNewlineCharacters(op.input)}`);
 
         return acc;
       }
 
-      if (elem.type === ElementType.CheckBox) {
+      if (elem.type === "CheckBox") {
         const value = op.input === "on" ? "true" : "false";
 
         acc.set(elem.identifier, value);

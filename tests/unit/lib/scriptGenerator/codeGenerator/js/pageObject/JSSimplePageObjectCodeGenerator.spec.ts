@@ -2,7 +2,6 @@ import { PageObject } from "@/lib/scriptGenerator/model/pageObject/PageObject";
 
 import {
   PageObjectElement,
-  ElementType,
   PageObjectOperation,
 } from "@/lib/scriptGenerator/model/pageObject/method/operation/PageObjectOperation";
 import { JSSimplePageObjectCodeGenerator } from "@/lib/scriptGenerator/codeGenerator/js/pageObject/JSSimplePageObjectCodeGenerator";
@@ -13,7 +12,7 @@ describe("JSSimplePageObjectCodeGenerator", () => {
       const element: PageObjectElement = {
         identifier: "param1",
         locator: "#param1",
-        type: ElementType.Other,
+        type: "Other",
       };
 
       const operation: PageObjectOperation = {
@@ -120,7 +119,7 @@ export default name_of_PageObject1;
       const element: PageObjectElement = {
         identifier: "param1",
         locator: "#param1",
-        type: ElementType.Other,
+        type: "Other",
       };
 
       const operation: PageObjectOperation = {

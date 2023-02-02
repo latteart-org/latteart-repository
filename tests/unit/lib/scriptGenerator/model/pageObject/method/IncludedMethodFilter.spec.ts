@@ -1,7 +1,4 @@
-import {
-  PageObjectOperation,
-  ElementType,
-} from "@/lib/scriptGenerator/model/pageObject/method/operation/PageObjectOperation";
+import { PageObjectOperation } from "@/lib/scriptGenerator/model/pageObject/method/operation/PageObjectOperation";
 import { IncludedMethodFilter } from "@/lib/scriptGenerator/model/pageObject/method/IncludedMethodFilter";
 import { PageObjectMethod } from "@/lib/scriptGenerator/model/pageObject/method/PageObjectMethod";
 
@@ -11,7 +8,7 @@ describe("IncludedMethodFilter", () => {
       const operation: PageObjectOperation = {
         target: {
           identifier: "",
-          type: ElementType.Other,
+          type: "Other",
           locator: "",
         },
         type: "other",

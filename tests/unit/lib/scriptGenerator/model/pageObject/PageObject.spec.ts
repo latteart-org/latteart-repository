@@ -1,8 +1,4 @@
 import { PageObjectImpl } from "@/lib/scriptGenerator/model/pageObject/PageObject";
-import {
-  ElementType,
-  OperationType,
-} from "@/lib/scriptGenerator/model/pageObject/method/operation/PageObjectOperation";
 import { PageObjectMethod } from "@/lib/scriptGenerator/model/pageObject/method/PageObjectMethod";
 
 describe("PageObjectImpl", () => {
@@ -10,15 +6,15 @@ describe("PageObjectImpl", () => {
     describe("ページオブジェクト内のメソッドのうち、包含関係にあるものは手前に登場したものの別入力値バリエーションとしてまとめて返す", () => {
       const element1 = {
         identifier: "element1",
-        type: ElementType.Other,
+        type: "Other",
         locator: "",
-      };
+      } as const;
 
       const element2 = {
         identifier: "element2",
-        type: ElementType.Other,
+        type: "Other",
         locator: "",
-      };
+      } as const;
 
       let method1: PageObjectMethod;
       let method2: PageObjectMethod;
@@ -95,29 +91,29 @@ describe("PageObjectImpl", () => {
         const operations1 = [
           {
             target: element1,
-            type: "change" as OperationType,
+            type: "change",
             input: "aaa",
           },
           {
             target: element2,
-            type: "change" as OperationType,
+            type: "change",
             input: "bbb",
           },
-        ];
+        ] as const;
 
         // 操作の順番は問わない
         const operations2 = [
           {
             target: element2,
-            type: "change" as OperationType,
+            type: "change",
             input: "bbb",
           },
           {
             target: element1,
-            type: "change" as OperationType,
+            type: "change",
             input: "aaa",
           },
-        ];
+        ] as const;
 
         method1.operations.push(...operations1);
         method2.operations.push(...operations2);

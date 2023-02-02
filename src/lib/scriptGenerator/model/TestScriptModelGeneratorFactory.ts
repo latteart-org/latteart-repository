@@ -31,6 +31,7 @@ import { SequencePathBuilder } from "./sequencePath/SequencePathBuilder";
 import { DuplicateElementOperationFilter } from "./pageObject/method/operation/DuplicateElementOperationFilter";
 import { UnnecessaryOperationFilter } from "./pageObject/method/operation/UnnecessaryOperationFilter";
 import { PageObjectMethod } from "./pageObject/method/PageObjectMethod";
+import { TestScriptGenerationOption } from "../TestScriptGenerator";
 
 export enum TestScriptModelGeneratorType {
   Simple,
@@ -38,6 +39,10 @@ export enum TestScriptModelGeneratorType {
 }
 
 export class TestScriptModelGeneratorFactory {
+  constructor(
+    private option: Pick<TestScriptGenerationOption, "buttonDefinitions">
+  ) {}
+
   public create(type: TestScriptModelGeneratorType): TestScriptModelGenerator {
     const sequencePathBuilder = new SequencePathBuilder();
 
@@ -48,7 +53,7 @@ export class TestScriptModelGeneratorFactory {
 
   private createOptimizeGenerator(sequencePathBuilder: SequencePathBuilder) {
     const operationFactory = new PageObjectOperationFactoryImpl(
-      new PageObjectElementFactoryImpl()
+      new PageObjectElementFactoryImpl(this.option)
     );
 
     const operationFilters = [
@@ -85,7 +90,7 @@ export class TestScriptModelGeneratorFactory {
 
   private createSimpleGenerator(sequencePathBuilder: SequencePathBuilder) {
     const operationFactory = new PageObjectOperationFactoryImpl(
-      new PageObjectElementFactoryImpl()
+      new PageObjectElementFactoryImpl(this.option)
     );
 
     const pageObjectFactory = new PageObjectFactory(

@@ -1,15 +1,8 @@
-import { ElementType } from "@/lib/scriptGenerator/model/pageObject/method/operation/PageObjectOperation";
 import { PageObjectElementFactoryImpl } from "@/lib/scriptGenerator/model/pageObject/method/operation/PageObjectElementFactory";
 import { IdentifierGenerator } from "@/lib/scriptGenerator/IdentifierGenerator";
 
 describe("PageObjectElementFactoryImpl", () => {
   describe("#createFrom", () => {
-    let factory: PageObjectElementFactoryImpl;
-
-    beforeEach(() => {
-      factory = new PageObjectElementFactoryImpl();
-    });
-
     describe("ElementInfoとimageUrlから操作対象画面要素を生成する", () => {
       const imageUrl = "imageUrl";
 
@@ -21,11 +14,13 @@ describe("PageObjectElementFactoryImpl", () => {
           locator: "locator",
         };
 
+        const factory = new PageObjectElementFactoryImpl();
+
         expect(
           factory.createFrom(targetElement, imageUrl, new IdentifierGenerator())
         ).toEqual({
           identifier: expect.any(String),
-          type: ElementType.RadioButton,
+          type: "RadioButton",
           locator: "locator",
           value: targetElement.attributes.value,
           name: targetElement.attributes.name,
@@ -41,11 +36,13 @@ describe("PageObjectElementFactoryImpl", () => {
           locator: "locator",
         };
 
+        const factory = new PageObjectElementFactoryImpl();
+
         expect(
           factory.createFrom(targetElement, imageUrl, new IdentifierGenerator())
         ).toEqual({
           identifier: expect.any(String),
-          type: ElementType.CheckBox,
+          type: "CheckBox",
           locator: "locator",
           value: targetElement.attributes.value,
           name: targetElement.attributes.name,
@@ -61,11 +58,13 @@ describe("PageObjectElementFactoryImpl", () => {
           locator: "locator",
         };
 
+        const factory = new PageObjectElementFactoryImpl();
+
         expect(
           factory.createFrom(targetElement, imageUrl, new IdentifierGenerator())
         ).toEqual({
           identifier: expect.any(String),
-          type: ElementType.SelectBox,
+          type: "SelectBox",
           locator: "locator",
           value: targetElement.attributes.value,
           name: targetElement.attributes.name,
@@ -73,32 +72,225 @@ describe("PageObjectElementFactoryImpl", () => {
         });
       });
 
-      it.each`
-        tagname     | elementType
-        ${"INPUT"}  | ${"submit"}
-        ${"INPUT"}  | ${"button"}
-        ${"A"}      | ${""}
-        ${"BUTTON"} | ${""}
-        ${"SPAN"}   | ${""}
-        ${"IMG"}    | ${""}
-        ${"I"}      | ${""}
-      `("リンク $tagname $elementType", ({ tagname, elementType }) => {
-        const targetElement = {
-          tagname,
-          xpath: "",
-          attributes: { value: "", name: "", type: elementType },
-          locator: "locator",
-        };
+      describe("ボタン", () => {
+        describe.each([undefined])("カスタムボタン定義: なし", (option) => {
+          it.each`
+            tagname     | elementType | expectedType
+            ${"INPUT"}  | ${"submit"} | ${"Button"}
+            ${"INPUT"}  | ${"button"} | ${"Button"}
+            ${"A"}      | ${""}       | ${"Button"}
+            ${"BUTTON"} | ${""}       | ${"Button"}
+            ${"SPAN"}   | ${""}       | ${"Other"}
+            ${"IMG"}    | ${""}       | ${"Other"}
+            ${"I"}      | ${""}       | ${"Other"}
+          `(
+            "$tagname $elementType => $expectedType",
+            ({ tagname, elementType, expectedType }) => {
+              const targetElement = {
+                tagname,
+                xpath: "",
+                attributes: { value: "", name: "", type: elementType },
+                locator: "locator",
+              };
 
-        expect(
-          factory.createFrom(targetElement, imageUrl, new IdentifierGenerator())
-        ).toEqual({
-          identifier: expect.any(String),
-          type: ElementType.Link,
-          locator: "locator",
-          value: targetElement.attributes.value,
-          name: targetElement.attributes.name,
-          imageUrl,
+              const factory = new PageObjectElementFactoryImpl(option);
+
+              expect(
+                factory.createFrom(
+                  targetElement,
+                  imageUrl,
+                  new IdentifierGenerator()
+                )
+              ).toEqual({
+                identifier: expect.any(String),
+                type: expectedType,
+                locator: "locator",
+                value: targetElement.attributes.value,
+                name: targetElement.attributes.name,
+                imageUrl,
+              });
+            }
+          );
+        });
+
+        describe.each([
+          {
+            buttonDefinitions: [],
+          },
+        ])("カスタムボタン定義: %j", (option) => {
+          it.each`
+            tagname     | elementType | expectedType
+            ${"INPUT"}  | ${"submit"} | ${"Other"}
+            ${"INPUT"}  | ${"button"} | ${"Other"}
+            ${"A"}      | ${""}       | ${"Other"}
+            ${"BUTTON"} | ${""}       | ${"Other"}
+            ${"SPAN"}   | ${""}       | ${"Other"}
+            ${"IMG"}    | ${""}       | ${"Other"}
+            ${"I"}      | ${""}       | ${"Other"}
+          `(
+            "$tagname $elementType => $expectedType",
+            ({ tagname, elementType, expectedType }) => {
+              const targetElement = {
+                tagname,
+                xpath: "",
+                attributes: { value: "", name: "", type: elementType },
+                locator: "locator",
+              };
+
+              const factory = new PageObjectElementFactoryImpl(option);
+
+              expect(
+                factory.createFrom(
+                  targetElement,
+                  imageUrl,
+                  new IdentifierGenerator()
+                )
+              ).toEqual({
+                identifier: expect.any(String),
+                type: expectedType,
+                locator: "locator",
+                value: targetElement.attributes.value,
+                name: targetElement.attributes.name,
+                imageUrl,
+              });
+            }
+          );
+        });
+
+        describe.each([
+          {
+            buttonDefinitions: [
+              { tagname: "SPAN" },
+              { tagname: "IMG" },
+              { tagname: "I" },
+            ],
+          },
+        ])("カスタムボタン定義: %j", (option) => {
+          it.each`
+            tagname     | elementType | expectedType
+            ${"INPUT"}  | ${"submit"} | ${"Other"}
+            ${"INPUT"}  | ${"button"} | ${"Other"}
+            ${"A"}      | ${""}       | ${"Other"}
+            ${"BUTTON"} | ${""}       | ${"Other"}
+            ${"SPAN"}   | ${""}       | ${"Button"}
+            ${"IMG"}    | ${""}       | ${"Button"}
+            ${"I"}      | ${""}       | ${"Button"}
+          `(
+            "$tagname $elementType => $expectedType",
+            ({ tagname, elementType, expectedType }) => {
+              const targetElement = {
+                tagname,
+                xpath: "",
+                attributes: { value: "", name: "", type: elementType },
+                locator: "locator",
+              };
+
+              const factory = new PageObjectElementFactoryImpl(option);
+
+              expect(
+                factory.createFrom(
+                  targetElement,
+                  imageUrl,
+                  new IdentifierGenerator()
+                )
+              ).toEqual({
+                identifier: expect.any(String),
+                type: expectedType,
+                locator: "locator",
+                value: targetElement.attributes.value,
+                name: targetElement.attributes.name,
+                imageUrl,
+              });
+            }
+          );
+        });
+
+        describe.each([
+          {
+            buttonDefinitions: [{ tagname: "INPUT" }],
+          },
+        ])("カスタムボタン定義: %j", (option) => {
+          it.each`
+            tagname     | elementType | expectedType
+            ${"INPUT"}  | ${"submit"} | ${"Button"}
+            ${"INPUT"}  | ${"button"} | ${"Button"}
+            ${"A"}      | ${""}       | ${"Other"}
+            ${"BUTTON"} | ${""}       | ${"Other"}
+            ${"SPAN"}   | ${""}       | ${"Other"}
+            ${"IMG"}    | ${""}       | ${"Other"}
+            ${"I"}      | ${""}       | ${"Other"}
+          `(
+            "$tagname $elementType => $expectedType",
+            ({ tagname, elementType, expectedType }) => {
+              const targetElement = {
+                tagname,
+                xpath: "",
+                attributes: { value: "", name: "", type: elementType },
+                locator: "locator",
+              };
+
+              const factory = new PageObjectElementFactoryImpl(option);
+
+              expect(
+                factory.createFrom(
+                  targetElement,
+                  imageUrl,
+                  new IdentifierGenerator()
+                )
+              ).toEqual({
+                identifier: expect.any(String),
+                type: expectedType,
+                locator: "locator",
+                value: targetElement.attributes.value,
+                name: targetElement.attributes.name,
+                imageUrl,
+              });
+            }
+          );
+        });
+
+        describe.each([
+          {
+            buttonDefinitions: [{ tagname: "INPUT", elementType: "submit" }],
+          },
+        ])("カスタムボタン定義: %j", (option) => {
+          it.each`
+            tagname     | elementType | expectedType
+            ${"INPUT"}  | ${"submit"} | ${"Button"}
+            ${"INPUT"}  | ${"button"} | ${"Other"}
+            ${"A"}      | ${""}       | ${"Other"}
+            ${"BUTTON"} | ${""}       | ${"Other"}
+            ${"SPAN"}   | ${""}       | ${"Other"}
+            ${"IMG"}    | ${""}       | ${"Other"}
+            ${"I"}      | ${""}       | ${"Other"}
+          `(
+            "$tagname $elementType => $expectedType",
+            ({ tagname, elementType, expectedType }) => {
+              const targetElement = {
+                tagname,
+                xpath: "",
+                attributes: { value: "", name: "", type: elementType },
+                locator: "locator",
+              };
+
+              const factory = new PageObjectElementFactoryImpl(option);
+
+              expect(
+                factory.createFrom(
+                  targetElement,
+                  imageUrl,
+                  new IdentifierGenerator()
+                )
+              ).toEqual({
+                identifier: expect.any(String),
+                type: expectedType,
+                locator: "locator",
+                value: targetElement.attributes.value,
+                name: targetElement.attributes.name,
+                imageUrl,
+              });
+            }
+          );
         });
       });
 
@@ -110,11 +302,13 @@ describe("PageObjectElementFactoryImpl", () => {
           locator: "locator",
         };
 
+        const factory = new PageObjectElementFactoryImpl();
+
         expect(
           factory.createFrom(targetElement, imageUrl, new IdentifierGenerator())
         ).toEqual({
           identifier: expect.any(String),
-          type: ElementType.Other,
+          type: "Other",
           locator: "locator",
           value: targetElement.attributes.value,
           name: targetElement.attributes.name,

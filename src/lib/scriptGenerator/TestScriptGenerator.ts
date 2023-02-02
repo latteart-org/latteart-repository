@@ -35,10 +35,8 @@ import { TestScriptSourceOperation } from "./TestScriptSourceOperation";
 
 export interface TestScriptGenerationOption {
   optimized: boolean;
-  testData: {
-    useDataDriven: boolean;
-    maxGeneration: number;
-  };
+  testData: { useDataDriven: boolean; maxGeneration: number };
+  buttonDefinitions: { tagname: string; elementType?: string }[];
 }
 
 export interface TestScriptGenerator {
@@ -57,9 +55,9 @@ export class TestScriptGeneratorImpl implements TestScriptGenerator {
       ? TestScriptModelGeneratorType.Optimized
       : TestScriptModelGeneratorType.Simple;
 
-    const modelGenerator = new TestScriptModelGeneratorFactory().create(
-      modelGeneratorType
-    );
+    const modelGenerator = new TestScriptModelGeneratorFactory(
+      this.option
+    ).create(modelGeneratorType);
 
     const model = modelGenerator.generate(sources);
 

@@ -1,8 +1,5 @@
 import { InputGroupCollector } from "@/lib/scriptGenerator/model/testSuite/InputGroupCollector";
-import {
-  ElementType,
-  PageObjectOperation,
-} from "@/lib/scriptGenerator/model/pageObject/method/operation/PageObjectOperation";
+import { PageObjectOperation } from "@/lib/scriptGenerator/model/pageObject/method/operation/PageObjectOperation";
 
 describe("InputGroupCollector", () => {
   describe("#collectFrom", () => {
@@ -10,22 +7,22 @@ describe("InputGroupCollector", () => {
       it("change操作と，radioのクリックの場合はinput, checkboxの場合はinputのon/offがtrue/falseとして得られ，それ以外の操作は入力値はない", () => {
         const radio = {
           identifier: "radio",
-          type: ElementType.RadioButton,
+          type: "RadioButton",
           locator: "",
           name: "radioName",
-        };
+        } as const;
 
         const checkbox = {
           identifier: "checkbox",
-          type: ElementType.CheckBox,
+          type: "CheckBox",
           locator: "",
-        };
+        } as const;
 
         const other = {
           identifier: "other",
-          type: ElementType.Other,
+          type: "Other",
           locator: "",
-        };
+        } as const;
 
         // type: changeの操作
         const operation1: PageObjectOperation = {

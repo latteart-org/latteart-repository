@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { PageObjectOperation, ElementType } from "./PageObjectOperation";
+import { PageObjectOperation } from "./PageObjectOperation";
 
 export class FormalArgumentCollector {
   /**
@@ -29,9 +29,9 @@ export class FormalArgumentCollector {
 
       if (op.type === "change") {
         args.add(identifier);
-      } else if (elem.type === ElementType.RadioButton) {
+      } else if (elem.type === "RadioButton") {
         args.add(elem.identifier);
-      } else if (elem.type === ElementType.CheckBox) {
+      } else if (elem.type === "CheckBox") {
         args.add(identifier);
       }
     });

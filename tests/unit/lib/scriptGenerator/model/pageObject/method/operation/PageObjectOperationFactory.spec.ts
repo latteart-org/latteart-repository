@@ -2,7 +2,6 @@ import {
   PageObjectOperationFactory,
   PageObjectOperationFactoryImpl,
 } from "@/lib/scriptGenerator/model/pageObject/method/operation/PageObjectOperationFactory";
-import { ElementType } from "@/lib/scriptGenerator/model/pageObject/method/operation/PageObjectOperation";
 import { PageObjectElementFactory } from "@/lib/scriptGenerator/model/pageObject/method/operation/PageObjectElementFactory";
 import { TestScriptSourceOperation } from "@/lib/scriptGenerator/TestScriptSourceOperation";
 import { IdentifierGenerator } from "@/lib/scriptGenerator/IdentifierGenerator";
@@ -23,7 +22,7 @@ describe("PageObjectOperationFactoryImpl", () => {
 
     const target = {
       identifier: "",
-      type: ElementType.Other,
+      type: "Other",
       locator: "",
     };
 

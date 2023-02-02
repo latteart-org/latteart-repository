@@ -15,7 +15,7 @@
  */
 
 import { OperationFilter } from "./OperationFilter";
-import { PageObjectOperation, ElementType } from "./PageObjectOperation";
+import { PageObjectOperation } from "./PageObjectOperation";
 
 export class UnnecessaryOperationFilter implements OperationFilter {
   public filter(operations: PageObjectOperation[]): PageObjectOperation[] {
@@ -54,11 +54,7 @@ export class UnnecessaryOperationFilter implements OperationFilter {
 
       return (
         operation.type === "click" &&
-        [
-          ElementType.RadioButton,
-          ElementType.CheckBox,
-          ElementType.Link,
-        ].includes(operation.target.type)
+        ["RadioButton", "CheckBox", "Button"].includes(operation.target.type)
       );
     });
   }
