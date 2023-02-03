@@ -22,17 +22,7 @@ export interface IssueReportOutputService {
     outputDirectoryPath: string,
     reportSource: {
       testMatrixName: string;
-      rows: {
-        testPurposeValue: string;
-        testPurposeDetails: string;
-        noteValue: string;
-        noteDetails: string;
-        groupName: string;
-        testTargetName: string;
-        viewPointName: string;
-        sessionName: string;
-        testItem: string;
-      }[];
+      rows: IssueReportRow[];
     }
   ): void;
 }
@@ -42,35 +32,17 @@ export class IssueReportOutputServiceImpl implements IssueReportOutputService {
     outputDirectoryPath: string,
     reportSource: {
       testMatrixName: string;
-      rows: {
-        testPurposeValue: string;
-        testPurposeDetails: string;
-        noteValue: string;
-        noteDetails: string;
-        groupName: string;
-        testTargetName: string;
-        viewPointName: string;
-        sessionName: string;
-        testItem: string;
-      }[];
+      rows: IssueReportRow[];
     }
   ): void {
     const report = new IssueReport(reportSource.testMatrixName);
-    for (const row of reportSource.rows) {
-      report.addRow(row);
-    }
-
     const workbook = XLSX.utils.book_new();
 
-    const ws = XLSX.utils.aoa_to_sheet([Object.values(report.header)]);
+    this.writeWorkSheet(reportSource.rows, report, workbook, "Findings");
 
-    report.rows.forEach((row, index) => {
-      XLSX.utils.sheet_add_aoa(ws, [Object.values(row)], {
-        origin: `A${index + 2}`,
-      });
-    });
+    const testPurposeRows = this.createtestPurposeRows(reportSource.rows);
 
-    XLSX.utils.book_append_sheet(workbook, ws, "Sheet");
+    this.writeWorkSheet(testPurposeRows, report, workbook, "TestPurposes");
 
     const filePath = path.join(
       outputDirectoryPath,
@@ -79,19 +51,114 @@ export class IssueReportOutputServiceImpl implements IssueReportOutputService {
 
     XLSX.writeFile(workbook, filePath);
   }
+
+  private writeWorkSheet(
+    rows: IssueReportRow[] | TestPurposeSheetRow[],
+    report: IssueReport,
+    workbook: XLSX.WorkBook,
+    sheetName: SheetName
+  ) {
+    for (const row of rows) {
+      report.addRow(row, sheetName);
+    }
+
+    const header =
+      sheetName === "Findings"
+        ? report.header
+        : {
+            groupName: report.header.groupName,
+            testTargetName: report.header.testTargetName,
+            viewPointName: report.header.viewPointName,
+            sessionName: report.header.sessionName,
+            testPurposeValue: report.header.testPurposeValue,
+            testPurposeDetails: report.header.testPurposeDetails,
+          };
+
+    const reportRows =
+      sheetName === "Findings" ? report.rows : report.testPurposeRows;
+
+    const ws = XLSX.utils.aoa_to_sheet([Object.values(header)]);
+
+    reportRows.forEach((row, index) => {
+      XLSX.utils.sheet_add_aoa(ws, [Object.values(row)], {
+        origin: `A${index + 2}`,
+      });
+    });
+
+    XLSX.utils.book_append_sheet(workbook, ws, sheetName);
+  }
+
+  private createtestPurposeRows(rows: IssueReportRow[]) {
+    return rows.reduce((acc: TestPurposeSheetRow[], row) => {
+      const lastItem = acc.at(-1);
+
+      if (!lastItem) {
+        acc.push({
+          groupName: row.groupName,
+          testTargetName: row.testTargetName,
+          viewPointName: row.viewPointName,
+          sessionName: row.sessionName,
+          testPurposeValue: row.testPurposeValue,
+          testPurposeDetails: row.testPurposeDetails,
+        });
+      } else if (
+        lastItem.groupName !== row.groupName ||
+        lastItem.testTargetName !== row.testTargetName ||
+        lastItem.viewPointName !== row.viewPointName ||
+        lastItem.sessionName !== row.sessionName
+      ) {
+        acc.push({
+          groupName: row.groupName,
+          testTargetName: row.testTargetName,
+          viewPointName: row.viewPointName,
+          sessionName: row.sessionName,
+          testPurposeValue: row.testPurposeValue,
+          testPurposeDetails: row.testPurposeDetails,
+        });
+      } else if (
+        lastItem.testPurposeValue !== row.testPurposeValue ||
+        lastItem.testPurposeDetails !== row.testPurposeDetails
+      ) {
+        acc.push({
+          groupName: row.groupName,
+          testTargetName: row.testTargetName,
+          viewPointName: row.viewPointName,
+          sessionName: row.sessionName,
+          testPurposeValue: row.testPurposeValue,
+          testPurposeDetails: row.testPurposeDetails,
+        });
+      }
+
+      return acc;
+    }, []);
+  }
 }
 
-interface IssueReportRow {
+type IssueReportRow = {
   groupName: string;
   testTargetName: string;
   viewPointName: string;
   sessionName: string;
-  testItem: string;
+  tester: string;
+  memo: string;
   testPurposeValue: string;
   testPurposeDetails: string;
   noteValue: string;
   noteDetails: string;
-}
+  tags: string;
+};
+
+type TestPurposeSheetRow = Pick<
+  IssueReportRow,
+  | "groupName"
+  | "testTargetName"
+  | "viewPointName"
+  | "sessionName"
+  | "testPurposeValue"
+  | "testPurposeDetails"
+>;
+
+type SheetName = "Findings" | "TestPurposes";
 
 class IssueReport {
   private _name: string;
@@ -101,13 +168,18 @@ class IssueReport {
     testTargetName: "TestTargetName",
     viewPointName: "ViewPointName",
     sessionName: "Session",
-    testItem: "TestItem",
+    tester: "Tester",
+    memo: "Memo",
     testPurposeValue: "TestPurpose",
-    testPurposeDetails: "TestPurposeDetails",
-    noteValue: "Note",
-    noteDetails: "NoteDetails",
+    testPurposeDetails: "TestPurposeDetail",
+    noteValue: "Finding",
+    noteDetails: "FindingDetail",
+    tags: "Tags",
   };
+
   private _rows: IssueReportRow[] = [];
+
+  private _testPurposeRows: TestPurposeSheetRow[] = [];
 
   get name(): string {
     return this._name;
@@ -138,11 +210,22 @@ class IssueReport {
     return this._rows;
   }
 
+  get testPurposeRows(): TestPurposeSheetRow[] {
+    return this._testPurposeRows;
+  }
+
   constructor(name: string) {
     this._name = name;
   }
 
-  public addRow(row: IssueReportRow): void {
-    this._rows.push(row);
+  public addRow(
+    row: IssueReportRow | TestPurposeSheetRow,
+    sheetName: SheetName
+  ): void {
+    if (sheetName === "Findings") {
+      this._rows.push(row as IssueReportRow);
+    } else {
+      this._testPurposeRows.push(row as TestPurposeSheetRow);
+    }
   }
 }

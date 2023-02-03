@@ -32,6 +32,7 @@ describe("IssueReportService", () => {
         id: "note1",
         value: "noteValue1",
         details: "noteDetails1",
+        tags: "",
       };
 
       const testResultService: TestResultService = {
@@ -157,6 +158,7 @@ describe("IssueReportService", () => {
             {
               noteValue: expectedNote1.value,
               noteDetails: expectedNote1.details,
+              tags: expectedNote1.tags,
               testPurposeValue: expectedTestPurpose1.value,
               testPurposeDetails: expectedTestPurpose1.details,
               groupName: project.testMatrices[0].groups[0].name,
@@ -164,7 +166,8 @@ describe("IssueReportService", () => {
                 project.testMatrices[0].groups[0].testTargets[0].name,
               viewPointName: project.testMatrices[0].viewPoints[0].name,
               sessionName: "1", // セッション名によらず通番になる
-              testItem: project.stories[0].sessions[0].testItem,
+              tester: project.stories[0].sessions[0].testerName,
+              memo: project.stories[0].sessions[0].memo,
             },
           ],
         },
