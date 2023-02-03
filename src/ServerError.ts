@@ -62,6 +62,7 @@ export type ServerErrorCode =
   | "no_test_cases_generated"
   | "get_test_progress_failed"
   | "patch_story_failed"
+  | "get_story_failed"
   | "export_config_failed"
   | "generate_sequence_view_failed";
 
