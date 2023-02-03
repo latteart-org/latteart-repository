@@ -129,6 +129,7 @@ describe("TestScriptsService", () => {
                 definitions: [],
               },
             },
+            buttonDefinitions: [],
           };
           const result = await new TestScriptsService(
             services
@@ -268,6 +269,7 @@ describe('TestSuite1', () => {
                 definitions: [],
               },
             },
+            buttonDefinitions: [],
           };
           const result = await new TestScriptsService(
             services
@@ -387,6 +389,7 @@ describe('TestSuite1', () => {
               definitions: [],
             },
           },
+          buttonDefinitions: [],
         };
         await expect(
           new TestScriptsService(services).createTestScriptByTestResult(

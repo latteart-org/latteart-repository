@@ -1036,6 +1036,17 @@ const models: TsoaRoute.Models = {
     type: {
       dataType: "nestedObjectLiteral",
       nestedProperties: {
+        buttonDefinitions: {
+          dataType: "array",
+          array: {
+            dataType: "nestedObjectLiteral",
+            nestedProperties: {
+              elementType: { dataType: "string" },
+              tagname: { dataType: "string", required: true },
+            },
+          },
+          required: true,
+        },
         view: { ref: "TestResultViewOption", required: true },
         testData: {
           dataType: "nestedObjectLiteral",

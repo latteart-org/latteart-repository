@@ -17,7 +17,6 @@
 import { PageObjectMethodCommentGenerator } from "../../PageObjectMethodCommentGenerator";
 import {
   PageObjectOperation,
-  ElementType,
   OperationType,
   invalidOperationTypeExists,
 } from "../../../model/pageObject/method/operation/PageObjectOperation";
@@ -35,9 +34,7 @@ export class JSPageObjectMethodCommentGenerator
   ): string {
     const operationLines = operations.map(({ type, target }) => {
       const name =
-        target.type === ElementType.RadioButton
-          ? target.name ?? ""
-          : target.identifier;
+        target.type === "RadioButton" ? target.name ?? "" : target.identifier;
 
       const targetName =
         target.imageUrl && name

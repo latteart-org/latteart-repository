@@ -15,10 +15,7 @@
  */
 
 import { PageObject } from "../../../model/pageObject/PageObject";
-import {
-  PageObjectElement,
-  ElementType,
-} from "../../../model/pageObject/method/operation/PageObjectOperation";
+import { PageObjectElement } from "../../../model/pageObject/method/operation/PageObjectOperation";
 import { PageObjectMethod } from "../../../model/pageObject/method/PageObjectMethod";
 import { JSRadioButtonAccessorCodeGenerator } from "./JSRadioButtonAccessorCodeGenerator";
 import { CodeFormatter } from "../../CodeFormatter";
@@ -102,7 +99,7 @@ export default ${pageObjectName};
 
     const radioButtonGenerator = new JSRadioButtonAccessorCodeGenerator(
       elements.reduce((radioNameToValues, element) => {
-        if (element.type === ElementType.RadioButton && element.value) {
+        if (element.type === "RadioButton" && element.value) {
           const identifier = element.identifier;
 
           if (!radioNameToValues.has(identifier)) {
@@ -120,7 +117,7 @@ export default ${pageObjectName};
 
     return Array.from(identifierToElement).map(
       ([identifier, elem]: [string, PageObjectElement]) => {
-        if (elem.type === ElementType.RadioButton && elem.name) {
+        if (elem.type === "RadioButton" && elem.name) {
           const identifier = elem.identifier;
 
           if (radioButtonNames.has(identifier)) {
@@ -135,7 +132,7 @@ export default ${pageObjectName};
           );
         }
 
-        if (elem.type === ElementType.CheckBox) {
+        if (elem.type === "CheckBox") {
           return JSPageObjectCodeGenerator.generateCheckBoxAccessorString(
             identifier,
             elem.locator
@@ -268,7 +265,7 @@ ${Array.from(args)
     element: PageObjectElement,
     radioButtons: Set<string>
   ) {
-    if (element.type === ElementType.RadioButton && element.identifier) {
+    if (element.type === "RadioButton" && element.identifier) {
       if (radioButtons.has(element.identifier)) {
         radioButtons.add(element.identifier);
 
@@ -280,7 +277,7 @@ ${Array.from(args)
 
     const identifier = element.identifier;
 
-    if (element.type === ElementType.CheckBox) {
+    if (element.type === "CheckBox") {
       return `this.set_${identifier}(${identifier});`;
     }
 
@@ -292,7 +289,7 @@ ${Array.from(args)
   ) {
     const identifier = element.identifier;
 
-    if (element.type === ElementType.SelectBox) {
+    if (element.type === "SelectBox") {
       return `this.${identifier}.selectByAttribute('value', ${identifier});`;
     }
 

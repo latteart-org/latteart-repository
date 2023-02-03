@@ -1,8 +1,5 @@
 import { deepStrictEqual } from "assert";
-import {
-  PageObjectOperation,
-  ElementType,
-} from "@/lib/scriptGenerator/model/pageObject/method/operation/PageObjectOperation";
+import { PageObjectOperation } from "@/lib/scriptGenerator/model/pageObject/method/operation/PageObjectOperation";
 import { FormalArgumentCollector } from "@/lib/scriptGenerator/model/pageObject/method/operation/FormalArgumentsCollector";
 
 describe("FormalArgumentsCollector", () => {
@@ -11,7 +8,7 @@ describe("FormalArgumentsCollector", () => {
       const operation1: PageObjectOperation = {
         target: {
           identifier: "id1",
-          type: ElementType.Other,
+          type: "Other",
           locator: "",
         },
         type: "click",
@@ -21,7 +18,7 @@ describe("FormalArgumentsCollector", () => {
       const operation4: PageObjectOperation = {
         target: {
           identifier: "id4",
-          type: ElementType.RadioButton,
+          type: "RadioButton",
           name: "name4",
           locator: "",
         },
@@ -32,7 +29,7 @@ describe("FormalArgumentsCollector", () => {
       const operation5: PageObjectOperation = {
         target: {
           identifier: "id5",
-          type: ElementType.Other,
+          type: "Other",
           locator: "",
         },
         type: "change",
@@ -42,7 +39,7 @@ describe("FormalArgumentsCollector", () => {
       const operation6: PageObjectOperation = {
         target: {
           identifier: "id6",
-          type: ElementType.CheckBox,
+          type: "CheckBox",
           locator: "",
         },
         type: "click",

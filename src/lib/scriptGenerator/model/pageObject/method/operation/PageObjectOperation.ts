@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-export enum ElementType {
-  RadioButton,
-  CheckBox,
-  SelectBox,
-  Link,
-  Other,
-}
+/**
+ * Element type
+ */
+export type ElementType =
+  | "RadioButton"
+  | "CheckBox"
+  | "SelectBox"
+  | "Button"
+  | "Other";
 
+/**
+ * Operation type
+ */
 export type OperationType =
   | "click"
   | "change"
@@ -33,6 +38,9 @@ export type OperationType =
   | "skipped_operations"
   | "other";
 
+/**
+ * Page object element
+ */
 export interface PageObjectElement {
   readonly identifier: string;
   readonly type: ElementType;
@@ -42,6 +50,9 @@ export interface PageObjectElement {
   readonly imageUrl?: string;
 }
 
+/**
+ * Page object operation
+ */
 export interface PageObjectOperation {
   readonly target: PageObjectElement;
   readonly type: OperationType;
