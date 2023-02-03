@@ -102,12 +102,22 @@ export class IssueReportOutputServiceImpl implements IssueReportOutputService {
           testPurposeDetails: row.testPurposeDetails,
         });
       } else if (
-        lastItem.groupName === row.groupName &&
-        lastItem.testTargetName === row.testTargetName &&
-        lastItem.viewPointName === row.viewPointName &&
-        lastItem.sessionName === row.sessionName &&
-        (lastItem.testPurposeValue !== row.testPurposeValue ||
-          lastItem.testPurposeDetails !== row.testPurposeDetails)
+        lastItem.groupName !== row.groupName ||
+        lastItem.testTargetName !== row.testTargetName ||
+        lastItem.viewPointName !== row.viewPointName ||
+        lastItem.sessionName !== row.sessionName
+      ) {
+        acc.push({
+          groupName: row.groupName,
+          testTargetName: row.testTargetName,
+          viewPointName: row.viewPointName,
+          sessionName: row.sessionName,
+          testPurposeValue: row.testPurposeValue,
+          testPurposeDetails: row.testPurposeDetails,
+        });
+      } else if (
+        lastItem.testPurposeValue !== row.testPurposeValue ||
+        lastItem.testPurposeDetails !== row.testPurposeDetails
       ) {
         acc.push({
           groupName: row.groupName,
