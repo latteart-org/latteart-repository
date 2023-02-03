@@ -22,19 +22,7 @@ export interface IssueReportOutputService {
     outputDirectoryPath: string,
     reportSource: {
       testMatrixName: string;
-      rows: {
-        testPurposeValue: string;
-        testPurposeDetails: string;
-        noteValue: string;
-        noteDetails: string;
-        tags: string;
-        groupName: string;
-        testTargetName: string;
-        viewPointName: string;
-        sessionName: string;
-        tester: string;
-        memo: string;
-      }[];
+      rows: IssueReportRow[];
     }
   ): void;
 }
@@ -44,89 +32,17 @@ export class IssueReportOutputServiceImpl implements IssueReportOutputService {
     outputDirectoryPath: string,
     reportSource: {
       testMatrixName: string;
-      rows: {
-        testPurposeValue: string;
-        testPurposeDetails: string;
-        noteValue: string;
-        noteDetails: string;
-        tags: string;
-        groupName: string;
-        testTargetName: string;
-        viewPointName: string;
-        sessionName: string;
-        tester: string;
-        memo: string;
-      }[];
+      rows: IssueReportRow[];
     }
   ): void {
     const report = new IssueReport(reportSource.testMatrixName);
-    for (const row of reportSource.rows) {
-      report.addRow(row);
-    }
-
     const workbook = XLSX.utils.book_new();
 
-    const ws = XLSX.utils.aoa_to_sheet([Object.values(report.header)]);
+    this.writeWorkSheet(reportSource.rows, report, workbook, "Findings");
 
-    report.rows.forEach((row, index) => {
-      XLSX.utils.sheet_add_aoa(ws, [Object.values(row)], {
-        origin: `A${index + 2}`,
-      });
-    });
+    const testPurposeRows = this.createtestPurposeRows(reportSource.rows);
 
-    XLSX.utils.book_append_sheet(workbook, ws, "Findings");
-
-    const testPurposeRows = reportSource.rows.reduce(
-      (acc: testPurposeSheetRow[], row) => {
-        const lastItem = acc.at(-1);
-
-        if (!lastItem) {
-          acc.push({
-            groupName: row.groupName,
-            testTargetName: row.testTargetName,
-            viewPointName: row.viewPointName,
-            sessionName: row.sessionName,
-            testPurposeValue: row.testPurposeValue,
-            testPurposeDetails: row.testPurposeDetails,
-          });
-        } else if (
-          lastItem.groupName === row.groupName &&
-          lastItem.testTargetName === row.testTargetName &&
-          lastItem.viewPointName === row.viewPointName &&
-          lastItem.sessionName === row.sessionName &&
-          (lastItem.testPurposeValue !== row.testPurposeValue ||
-            lastItem.testPurposeDetails !== row.testPurposeDetails)
-        ) {
-          acc.push({
-            groupName: row.groupName,
-            testTargetName: row.testTargetName,
-            viewPointName: row.viewPointName,
-            sessionName: row.sessionName,
-            testPurposeValue: row.testPurposeValue,
-            testPurposeDetails: row.testPurposeDetails,
-          });
-        }
-
-        return acc;
-      },
-      []
-    );
-
-    for (const testPurposeRow of testPurposeRows) {
-      report.addTestPurposeRow(testPurposeRow);
-    }
-
-    const ws2 = XLSX.utils.aoa_to_sheet([
-      Object.values(report.testPurposeHeader),
-    ]);
-
-    report.testPurposeRows.forEach((row, index) => {
-      XLSX.utils.sheet_add_aoa(ws2, [Object.values(row)], {
-        origin: `A${index + 2}`,
-      });
-    });
-
-    XLSX.utils.book_append_sheet(workbook, ws2, "TestPurposes");
+    this.writeWorkSheet(testPurposeRows, report, workbook, "TestPurposes");
 
     const filePath = path.join(
       outputDirectoryPath,
@@ -134,6 +50,77 @@ export class IssueReportOutputServiceImpl implements IssueReportOutputService {
     );
 
     XLSX.writeFile(workbook, filePath);
+  }
+
+  private writeWorkSheet(
+    rows: IssueReportRow[] | TestPurposeSheetRow[],
+    report: IssueReport,
+    workbook: XLSX.WorkBook,
+    sheetName: SheetName
+  ) {
+    for (const row of rows) {
+      report.addRow(row, sheetName);
+    }
+
+    const header =
+      sheetName === "Findings"
+        ? report.header
+        : {
+            groupName: report.header.groupName,
+            testTargetName: report.header.testTargetName,
+            viewPointName: report.header.viewPointName,
+            sessionName: report.header.sessionName,
+            testPurposeValue: report.header.testPurposeValue,
+            testPurposeDetails: report.header.testPurposeDetails,
+          };
+
+    const reportRows =
+      sheetName === "Findings" ? report.rows : report.testPurposeRows;
+
+    const ws = XLSX.utils.aoa_to_sheet([Object.values(header)]);
+
+    reportRows.forEach((row, index) => {
+      XLSX.utils.sheet_add_aoa(ws, [Object.values(row)], {
+        origin: `A${index + 2}`,
+      });
+    });
+
+    XLSX.utils.book_append_sheet(workbook, ws, sheetName);
+  }
+
+  private createtestPurposeRows(rows: IssueReportRow[]) {
+    return rows.reduce((acc: TestPurposeSheetRow[], row) => {
+      const lastItem = acc.at(-1);
+
+      if (!lastItem) {
+        acc.push({
+          groupName: row.groupName,
+          testTargetName: row.testTargetName,
+          viewPointName: row.viewPointName,
+          sessionName: row.sessionName,
+          testPurposeValue: row.testPurposeValue,
+          testPurposeDetails: row.testPurposeDetails,
+        });
+      } else if (
+        lastItem.groupName === row.groupName &&
+        lastItem.testTargetName === row.testTargetName &&
+        lastItem.viewPointName === row.viewPointName &&
+        lastItem.sessionName === row.sessionName &&
+        (lastItem.testPurposeValue !== row.testPurposeValue ||
+          lastItem.testPurposeDetails !== row.testPurposeDetails)
+      ) {
+        acc.push({
+          groupName: row.groupName,
+          testTargetName: row.testTargetName,
+          viewPointName: row.viewPointName,
+          sessionName: row.sessionName,
+          testPurposeValue: row.testPurposeValue,
+          testPurposeDetails: row.testPurposeDetails,
+        });
+      }
+
+      return acc;
+    }, []);
   }
 }
 
@@ -151,7 +138,7 @@ type IssueReportRow = {
   tags: string;
 };
 
-type testPurposeSheetRow = Pick<
+type TestPurposeSheetRow = Pick<
   IssueReportRow,
   | "groupName"
   | "testTargetName"
@@ -160,6 +147,8 @@ type testPurposeSheetRow = Pick<
   | "testPurposeValue"
   | "testPurposeDetails"
 >;
+
+type SheetName = "Findings" | "TestPurposes";
 
 class IssueReport {
   private _name: string;
@@ -178,17 +167,9 @@ class IssueReport {
     tags: "Tags",
   };
 
-  private _testPurposeHeader: testPurposeSheetRow = {
-    groupName: "GroupName",
-    testTargetName: "TestTargetName",
-    viewPointName: "ViewPointName",
-    sessionName: "Session",
-    testPurposeValue: "TestPurpose",
-    testPurposeDetails: "TestPurposeDetail",
-  };
   private _rows: IssueReportRow[] = [];
 
-  private _testPurposeRows: testPurposeSheetRow[] = [];
+  private _testPurposeRows: TestPurposeSheetRow[] = [];
 
   get name(): string {
     return this._name;
@@ -215,19 +196,11 @@ class IssueReport {
     this._header = value;
   }
 
-  get testPurposeHeader(): testPurposeSheetRow {
-    return this._testPurposeHeader;
-  }
-
-  set testPurposeHeader(value: testPurposeSheetRow) {
-    this._testPurposeHeader = value;
-  }
-
   get rows(): IssueReportRow[] {
     return this._rows;
   }
 
-  get testPurposeRows(): testPurposeSheetRow[] {
+  get testPurposeRows(): TestPurposeSheetRow[] {
     return this._testPurposeRows;
   }
 
@@ -235,11 +208,14 @@ class IssueReport {
     this._name = name;
   }
 
-  public addRow(row: IssueReportRow): void {
-    this._rows.push(row);
-  }
-
-  public addTestPurposeRow(row: testPurposeSheetRow): void {
-    this._testPurposeRows.push(row);
+  public addRow(
+    row: IssueReportRow | TestPurposeSheetRow,
+    sheetName: SheetName
+  ): void {
+    if (sheetName === "Findings") {
+      this._rows.push(row as IssueReportRow);
+    } else {
+      this._testPurposeRows.push(row as TestPurposeSheetRow);
+    }
   }
 }
