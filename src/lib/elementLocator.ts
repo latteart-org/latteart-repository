@@ -54,34 +54,82 @@ export interface ElementLocatorGenerator {
 }
 
 export class ElementLocatorGeneratorImpl implements ElementLocatorGenerator {
-  private _usedLocator: Set<string> = new Set<string>();
-
   constructor(
     private formatter: ElementLocatorFormatter,
+    private elementInfoList: {
+      tagname: string;
+      text?: string;
+      xpath: string;
+      value?: string;
+      checked?: boolean;
+      attributes?: {
+        [key: string]: string;
+      };
+    }[],
     private maxTextLength = 100
   ) {}
 
   public generateFrom(source: ElementLocatorSource): string {
     const locator = this.generateLocator(source);
+    return locator !== ""
+      ? locator
+      : this.formatter.formatXPathLocator(source.xpath);
+  }
+  private existsNameAndValueLocator(
+    xpath: string,
+    name: string,
+    value: string
+  ): boolean {
+    return this.elementInfoList.some(
+      (element) =>
+        element?.attributes?.name === name &&
+        element.value === value &&
+        element.xpath !== xpath
+    );
+  }
 
-    if (locator && !this._usedLocator.has(locator)) {
-      this._usedLocator.add(locator);
-      return locator;
-    }
+  private existsNameLocator(xpath: string, name: string): boolean {
+    return this.elementInfoList.some(
+      (element) => element?.attributes?.name === name && element.xpath !== xpath
+    );
+  }
 
-    return this.formatter.formatXPathLocator(source.xpath);
+  private existsTextAndTagnameLocator(
+    xpath: string,
+    text: string,
+    tagname?: string
+  ): boolean {
+    return this.elementInfoList.some((element) => {
+      if (text !== this.toPartialText(element.text ?? "")) {
+        return false;
+      }
+      if (!!tagname && tagname !== element.tagname) {
+        return false;
+      }
+      if (xpath !== element.xpath) {
+        return;
+      }
+      return true;
+    });
   }
 
   private generateLocator(source: ElementLocatorSource) {
     const { id, name, value } = source.attributes;
+    const xpath = source.xpath;
 
     if (id) {
       return this.formatter.formatIdLocator(id);
     }
 
+    if (name && value) {
+      return this.existsNameAndValueLocator(xpath, name, value)
+        ? ""
+        : this.formatter.formatNameAndValueLocator(name, value);
+    }
+
     if (name) {
-      return value
-        ? this.formatter.formatNameAndValueLocator(name, value)
+      return this.existsNameLocator(xpath, name)
+        ? ""
         : this.formatter.formatNameLocator(name);
     }
 
@@ -89,17 +137,27 @@ export class ElementLocatorGeneratorImpl implements ElementLocatorGenerator {
       return "";
     }
 
-    const partialText = source.text.slice(0, this.maxTextLength).trim();
+    const partialText = this.toPartialText(source.text);
 
     if (partialText.match(/<|>|\/|\s/g)) {
       return "";
     }
 
-    return source.tagname === "A"
-      ? this.formatter.formatTextAndTagnameLocator(partialText)
+    if (source.tagname === "A") {
+      return this.existsTextAndTagnameLocator(xpath, partialText)
+        ? ""
+        : this.formatter.formatTextAndTagnameLocator(partialText);
+    }
+
+    return this.existsTextAndTagnameLocator(xpath, partialText, source.tagname)
+      ? ""
       : this.formatter.formatTextAndTagnameLocator(
           partialText,
           source.tagname.toLowerCase()
         );
+  }
+
+  private toPartialText(text: string): string {
+    return text.slice(0, this.maxTextLength).trim();
   }
 }

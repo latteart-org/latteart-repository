@@ -8,7 +8,8 @@ describe("LocatorGeneratorImpl", () => {
   describe("#generateFrom", () => {
     describe("要素の情報からロケータを生成できる", () => {
       const generator = new ElementLocatorGeneratorImpl(
-        createWDIOLocatorFormatter()
+        createWDIOLocatorFormatter(),
+        []
       );
 
       it("idが最も優先的に用いられる", () => {
