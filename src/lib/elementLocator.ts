@@ -75,6 +75,13 @@ export class ElementLocatorGeneratorImpl implements ElementLocatorGenerator {
       ? locator
       : this.formatter.formatXPathLocator(source.xpath);
   }
+
+  private existsIdLocator(xpath: string, id: string): boolean {
+    return this.elementInfoList.some(
+      (element) => element?.attributes?.id === id && element.xpath !== xpath
+    );
+  }
+
   private existsNameAndValueLocator(
     xpath: string,
     name: string,
@@ -100,16 +107,17 @@ export class ElementLocatorGeneratorImpl implements ElementLocatorGenerator {
     tagname?: string
   ): boolean {
     return this.elementInfoList.some((element) => {
-      if (text !== this.toPartialText(element.text ?? "")) {
-        return false;
+      if (tagname) {
+        return (
+          text === this.toPartialText(element.text ?? "") &&
+          tagname === element.tagname &&
+          xpath !== element.xpath
+        );
       }
-      if (!!tagname && tagname !== element.tagname) {
-        return false;
-      }
-      if (xpath !== element.xpath) {
-        return;
-      }
-      return true;
+      return (
+        text === this.toPartialText(element.text ?? "") &&
+        xpath !== element.xpath
+      );
     });
   }
 
@@ -118,7 +126,9 @@ export class ElementLocatorGeneratorImpl implements ElementLocatorGenerator {
     const xpath = source.xpath;
 
     if (id) {
-      return this.formatter.formatIdLocator(id);
+      return this.existsIdLocator(xpath, id)
+        ? ""
+        : this.formatter.formatIdLocator(id);
     }
 
     if (name && value) {
@@ -141,12 +151,6 @@ export class ElementLocatorGeneratorImpl implements ElementLocatorGenerator {
 
     if (partialText.match(/<|>|\/|\s/g)) {
       return "";
-    }
-
-    if (source.tagname === "A") {
-      return this.existsTextAndTagnameLocator(xpath, partialText)
-        ? ""
-        : this.formatter.formatTextAndTagnameLocator(partialText);
     }
 
     return this.existsTextAndTagnameLocator(xpath, partialText, source.tagname)
