@@ -31,8 +31,8 @@ export class PageObjectElementFactoryImpl implements PageObjectElementFactory {
   constructor(
     private option: Pick<TestScriptGenerationOption, "buttonDefinitions"> = {
       buttonDefinitions: [
-        { tagname: "INPUT", elementType: "submit" },
-        { tagname: "INPUT", elementType: "button" },
+        { tagname: "INPUT", attribute: { name: "type", value: "submit" } },
+        { tagname: "INPUT", attribute: { name: "type", value: "button" } },
         { tagname: "A" },
         { tagname: "BUTTON" },
       ],
@@ -59,7 +59,7 @@ export class PageObjectElementFactoryImpl implements PageObjectElementFactory {
 
     return {
       identifier,
-      type: this.createElementType(element.tagname, element.attributes.type),
+      type: this.createElementType(element.tagname, element.attributes),
       value: element.attributes.value ?? "",
       name: element.attributes.name ?? "",
       locator: element.locator,
@@ -67,12 +67,15 @@ export class PageObjectElementFactoryImpl implements PageObjectElementFactory {
     };
   }
 
-  private createElementType(tagname: string, elementType = "") {
-    if (tagname === "INPUT" && elementType === "radio") {
+  private createElementType(
+    tagname: string,
+    attributes: { [key: string]: any }
+  ) {
+    if (tagname === "INPUT" && attributes.type === "radio") {
       return "RadioButton";
     }
 
-    if (tagname === "INPUT" && elementType === "checkbox") {
+    if (tagname === "INPUT" && attributes.type === "checkbox") {
       return "CheckBox";
     }
 
@@ -85,11 +88,18 @@ export class PageObjectElementFactoryImpl implements PageObjectElementFactory {
         return false;
       }
 
-      if (!d.elementType) {
+      if (!d.attribute) {
         return true;
       }
 
-      return d.elementType === elementType;
+      const definitionAttribute = d.attribute;
+
+      return Object.entries(attributes).some(([name, value]) => {
+        return (
+          definitionAttribute.name === name &&
+          definitionAttribute.value === value
+        );
+      });
     });
 
     if (isButton) {

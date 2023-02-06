@@ -36,7 +36,10 @@ import { TestScriptSourceOperation } from "./TestScriptSourceOperation";
 export interface TestScriptGenerationOption {
   optimized: boolean;
   testData: { useDataDriven: boolean; maxGeneration: number };
-  buttonDefinitions: { tagname: string; elementType?: string }[];
+  buttonDefinitions: {
+    tagname: string;
+    attribute?: { name: string; value: string };
+  }[];
 }
 
 export interface TestScriptGenerator {

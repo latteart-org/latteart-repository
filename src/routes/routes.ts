@@ -1041,7 +1041,13 @@ const models: TsoaRoute.Models = {
           array: {
             dataType: "nestedObjectLiteral",
             nestedProperties: {
-              elementType: { dataType: "string" },
+              attribute: {
+                dataType: "nestedObjectLiteral",
+                nestedProperties: {
+                  value: { dataType: "string", required: true },
+                  name: { dataType: "string", required: true },
+                },
+              },
               tagname: { dataType: "string", required: true },
             },
           },

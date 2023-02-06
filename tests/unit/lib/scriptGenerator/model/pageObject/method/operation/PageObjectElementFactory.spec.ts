@@ -251,7 +251,12 @@ describe("PageObjectElementFactoryImpl", () => {
 
         describe.each([
           {
-            buttonDefinitions: [{ tagname: "INPUT", elementType: "submit" }],
+            buttonDefinitions: [
+              {
+                tagname: "INPUT",
+                attribute: { name: "type", value: "submit" },
+              },
+            ],
           },
         ])("カスタムボタン定義: %j", (option) => {
           it.each`

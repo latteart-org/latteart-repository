@@ -23,7 +23,10 @@ export type TestScriptOption = {
   optimized: boolean;
   testData: { useDataDriven: boolean; maxGeneration: number };
   view: TestResultViewOption;
-  buttonDefinitions: { tagname: string; elementType?: string }[];
+  buttonDefinitions: {
+    tagname: string;
+    attribute?: { name: string; value: string };
+  }[];
 };
 
 /**
