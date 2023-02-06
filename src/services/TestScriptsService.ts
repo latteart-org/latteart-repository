@@ -159,7 +159,6 @@ export class TestScriptsService {
 
     const sources = testResults.map(
       ({ initialUrl, testSteps, coverageSources }) => {
-        // ScreenDef毎のelementInfo
         const elementInfoListMapByScreenDef =
           this.convElementInfoListByScreenDef(
             coverageSources,
