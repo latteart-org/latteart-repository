@@ -104,18 +104,12 @@ export class ElementLocatorGeneratorImpl implements ElementLocatorGenerator {
   private existsTextAndTagnameLocator(
     xpath: string,
     text: string,
-    tagname?: string
+    tagname: string
   ): boolean {
     return this.elementInfoList.some((element) => {
-      if (tagname) {
-        return (
-          text === this.toPartialText(element.text ?? "") &&
-          tagname === element.tagname &&
-          xpath !== element.xpath
-        );
-      }
       return (
         text === this.toPartialText(element.text ?? "") &&
+        tagname === element.tagname &&
         xpath !== element.xpath
       );
     });
@@ -151,6 +145,12 @@ export class ElementLocatorGeneratorImpl implements ElementLocatorGenerator {
 
     if (partialText.match(/<|>|\/|\s/g)) {
       return "";
+    }
+
+    if (source.tagname === "A") {
+      return this.existsTextAndTagnameLocator(xpath, partialText, "A")
+        ? ""
+        : this.formatter.formatTextAndTagnameLocator(partialText);
     }
 
     return this.existsTextAndTagnameLocator(xpath, partialText, source.tagname)

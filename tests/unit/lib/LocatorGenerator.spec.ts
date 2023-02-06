@@ -103,5 +103,149 @@ describe("LocatorGeneratorImpl", () => {
         expect(locator4).toBe("xpath4");
       });
     });
+    describe("重複するLocatorが存在する場合Locatorではなくxpathを返す", () => {
+      const elementInfoList: {
+        tagname: string;
+        text?: string;
+        xpath: string;
+        value?: string;
+        checked?: boolean;
+        attributes?: {
+          [key: string]: string;
+        };
+      }[] = [
+        {
+          tagname: "BUTTON",
+          text: "button",
+          xpath: "button1",
+          attributes: {
+            id: "id",
+          },
+        },
+        {
+          tagname: "BUTTON",
+          text: "button",
+          xpath: "button2",
+          attributes: {
+            id: "id",
+          },
+        },
+
+        {
+          tagname: "INPUT",
+          xpath: "input1",
+          value: "value",
+          attributes: {
+            name: "name",
+          },
+        },
+        {
+          tagname: "INPUT",
+          xpath: "input2",
+          value: "value",
+          attributes: {
+            name: "name",
+          },
+        },
+        {
+          tagname: "INPUT",
+          xpath: "input3",
+          attributes: {
+            name: "name",
+          },
+        },
+        {
+          tagname: "INPUT",
+          xpath: "input4",
+          attributes: {
+            name: "name",
+          },
+        },
+        {
+          tagname: "A",
+          xpath: "anchor1",
+          text: "anchor",
+        },
+        {
+          tagname: "A",
+          xpath: "anchor2",
+          text: "anchor",
+        },
+        {
+          tagname: "SPAN",
+          xpath: "span1",
+          text: "span",
+        },
+        {
+          tagname: "SPAN",
+          xpath: "span2",
+          text: "span",
+        },
+      ];
+      const generator = new ElementLocatorGeneratorImpl(
+        createWDIOLocatorFormatter(),
+        elementInfoList
+      );
+
+      it("idが存在する場合", () => {
+        const element: ElementLocatorSource = {
+          tagname: "BUTTON",
+          text: "button",
+          xpath: "button2",
+          attributes: {
+            id: "id",
+          },
+        };
+        const locator = generator.generateFrom(element);
+        expect(locator).toBe("button2");
+      });
+
+      it("nameとvalueが存在する場合", () => {
+        const element1: ElementLocatorSource = {
+          tagname: "INPUT",
+          xpath: "input2",
+          attributes: {
+            name: "name",
+            value: "value",
+          },
+        };
+        const locator1 = generator.generateFrom(element1);
+        expect(locator1).toBe("input2");
+      });
+
+      it("nameのみが存在する場合", () => {
+        const element3: ElementLocatorSource = {
+          tagname: "INPUT",
+          xpath: "input4",
+          attributes: {
+            name: "name",
+          },
+        };
+        const locator3 = generator.generateFrom(element3);
+        expect(locator3).toBe("input4");
+      });
+
+      it("Aタグの場合", () => {
+        const element: ElementLocatorSource = {
+          tagname: "A",
+          xpath: "anchor2",
+          text: "anchor",
+          attributes: {},
+        };
+        const locator = generator.generateFrom(element);
+        expect(locator).toBe("anchor2");
+      });
+
+      it("その他のタグの場合", () => {
+        const element: ElementLocatorSource = {
+          tagname: "SPAN",
+          xpath: "span2",
+          text: "span",
+          attributes: {},
+        };
+        const locator = generator.generateFrom(element);
+        expect(locator).toBe("span2");
+      });
+    });
   });
 });
