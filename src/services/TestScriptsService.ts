@@ -19,7 +19,7 @@ import { TestResult } from "@/interfaces/TestResults";
 import { TestScriptOption } from "@/interfaces/TestScripts";
 import {
   createWDIOLocatorFormatter,
-  ElementLocatorGeneratorImpl,
+  ScreenElementLocatorGenerator,
 } from "@/lib/elementLocator";
 import ScreenDefFactory, {
   ScreenDefinitionConfig,
@@ -167,7 +167,7 @@ export class TestScriptsService {
           );
         const locatorGeneratorMap = new Map<
           string,
-          ElementLocatorGeneratorImpl
+          ScreenElementLocatorGenerator
         >();
         return {
           initialUrl,
@@ -186,7 +186,7 @@ export class TestScriptsService {
 
               const locatorGenerator =
                 locatorGeneratorMap.get(screenDef) ??
-                new ElementLocatorGeneratorImpl(
+                new ScreenElementLocatorGenerator(
                   createWDIOLocatorFormatter(),
                   elementInfoListMapByScreenDef.get(screenDef) ?? ([] as any)
                 );
