@@ -15,10 +15,11 @@
  */
 
 import { ProjectEntity } from "@/entities/ProjectEntity";
+import { TestResult } from "@/interfaces/TestResults";
 import { TestScriptOption } from "@/interfaces/TestScripts";
 import {
   createWDIOLocatorFormatter,
-  ElementLocatorGeneratorImpl,
+  ScreenElementLocatorGenerator,
 } from "@/lib/elementLocator";
 import ScreenDefFactory, {
   ScreenDefinitionConfig,
@@ -154,47 +155,54 @@ export class TestScriptsService {
       }),
     };
 
-    const locatorGenerator = new ElementLocatorGeneratorImpl(
-      createWDIOLocatorFormatter()
-    );
-
     let isPauseCapturing = false;
 
-    const sources = testResults.map(({ initialUrl, testSteps }) => {
-      return {
-        initialUrl,
-        history: testSteps.reduce(
-          (acc: TestScriptSourceOperation[], { operation }, index) => {
-            const url = operation.url;
-            const title = operation.title;
-            const keywordTexts: string[] = operation.keywordTexts ?? [];
-            const screenDef = new ScreenDefFactory(
-              screenDefinitionConfig
-            ).create({
-              url,
-              title,
-              keywordSet: new Set(keywordTexts),
-            });
-            const elementInfo = operation.elementInfo
-              ? {
-                  ...operation.elementInfo,
-                  locator: locatorGenerator.generateFrom(operation.elementInfo),
-                }
-              : null;
-
-            if (operation.type === "pause_capturing") {
-              isPauseCapturing = true;
-              acc.push({
-                input: operation.input,
-                type: "skipped_operations",
-                elementInfo,
+    const sources = testResults.map(
+      ({ initialUrl, testSteps, coverageSources }) => {
+        const elementInfoListMapByScreenDef =
+          this.convElementInfoListByScreenDef(
+            coverageSources,
+            screenDefinitionConfig
+          );
+        const locatorGeneratorMap = new Map<
+          string,
+          ScreenElementLocatorGenerator
+        >();
+        return {
+          initialUrl,
+          history: testSteps.reduce(
+            (acc: TestScriptSourceOperation[], { operation }, index) => {
+              const url = operation.url;
+              const title = operation.title;
+              const keywordTexts: string[] = operation.keywordTexts ?? [];
+              const screenDef = new ScreenDefFactory(
+                screenDefinitionConfig
+              ).create({
                 url,
-                screenDef,
-                imageFilePath: operation.imageFileUrl,
+                title,
+                keywordSet: new Set(keywordTexts),
               });
-            } else if (operation.type === "resume_capturing") {
-              isPauseCapturing = false;
-              if (acc.at(-1)?.type !== "skipped_operations") {
+
+              const locatorGenerator =
+                locatorGeneratorMap.get(screenDef) ??
+                new ScreenElementLocatorGenerator(
+                  createWDIOLocatorFormatter(),
+                  elementInfoListMapByScreenDef.get(screenDef) ?? ([] as any)
+                );
+
+              const elementInfo = operation.elementInfo
+                ? {
+                    ...operation.elementInfo,
+                    locator: locatorGenerator.generateFrom(
+                      operation.elementInfo
+                    ),
+                  }
+                : null;
+
+              locatorGeneratorMap.set(screenDef, locatorGenerator);
+
+              if (operation.type === "pause_capturing") {
+                isPauseCapturing = true;
                 acc.push({
                   input: operation.input,
                   type: "skipped_operations",
@@ -203,45 +211,57 @@ export class TestScriptsService {
                   screenDef,
                   imageFilePath: operation.imageFileUrl,
                 });
+              } else if (operation.type === "resume_capturing") {
+                isPauseCapturing = false;
+                if (acc.at(-1)?.type !== "skipped_operations") {
+                  acc.push({
+                    input: operation.input,
+                    type: "skipped_operations",
+                    elementInfo,
+                    url,
+                    screenDef,
+                    imageFilePath: operation.imageFileUrl,
+                  });
+                }
+              } else if (
+                isPauseCapturing &&
+                operation.type === "screen_transition" &&
+                testSteps.at(index + 1) !== undefined &&
+                testSteps.at(index + 1)?.operation.type !== "resume_capturing"
+              ) {
+                acc.push({
+                  input: operation.input,
+                  type: operation.type,
+                  elementInfo,
+                  url,
+                  screenDef,
+                  imageFilePath: operation.imageFileUrl,
+                });
+                acc.push({
+                  input: operation.input,
+                  type: "skipped_operations",
+                  elementInfo,
+                  url,
+                  screenDef,
+                  imageFilePath: operation.imageFileUrl,
+                });
+              } else {
+                acc.push({
+                  input: operation.input,
+                  type: operation.type,
+                  elementInfo,
+                  url,
+                  screenDef,
+                  imageFilePath: operation.imageFileUrl,
+                });
               }
-            } else if (
-              isPauseCapturing &&
-              operation.type === "screen_transition" &&
-              testSteps.at(index + 1) !== undefined &&
-              testSteps.at(index + 1)?.operation.type !== "resume_capturing"
-            ) {
-              acc.push({
-                input: operation.input,
-                type: operation.type,
-                elementInfo,
-                url,
-                screenDef,
-                imageFilePath: operation.imageFileUrl,
-              });
-              acc.push({
-                input: operation.input,
-                type: "skipped_operations",
-                elementInfo,
-                url,
-                screenDef,
-                imageFilePath: operation.imageFileUrl,
-              });
-            } else {
-              acc.push({
-                input: operation.input,
-                type: operation.type,
-                elementInfo,
-                url,
-                screenDef,
-                imageFilePath: operation.imageFileUrl,
-              });
-            }
-            return acc;
-          },
-          []
-        ),
-      };
-    });
+              return acc;
+            },
+            []
+          ),
+        };
+      }
+    );
 
     const testScriptGenerationOption = {
       optimized: params.option.optimized,
@@ -267,5 +287,72 @@ export class TestScriptsService {
       testScript,
       invalidOperationTypeExists: invalidTypeExists,
     };
+  }
+
+  private convElementInfoListByScreenDef(
+    coverageSources: TestResult["coverageSources"],
+    screenDefinitionConfig: ScreenDefinitionConfig
+  ): Map<
+    string,
+    {
+      tagname: string;
+      text?: string;
+      xpath: string;
+      value?: string;
+      checked?: boolean;
+      attributes?: {
+        [key: string]: string;
+      };
+    }[]
+  > {
+    {
+      const duplicateCheckMap = new Map<string, Set<string>>();
+
+      return (coverageSources ?? []).reduce(
+        (map, source) => {
+          const keywordSet = source.screenElements.reduce((set, element) => {
+            set.add(element.text);
+            return set;
+          }, new Set<string>());
+          const url = source.url;
+          const title = source.title;
+          const keywordTexts: string[] = Array.from(keywordSet);
+          const screenDef = new ScreenDefFactory(screenDefinitionConfig).create(
+            {
+              url,
+              title,
+              keywordSet: new Set(keywordTexts),
+            }
+          );
+
+          const xpathList = map.get(screenDef) ?? [];
+
+          const xpathSet =
+            duplicateCheckMap.get(screenDef) ?? new Set<string>();
+          source.screenElements.forEach((element) => {
+            if (!xpathSet?.has(element.xpath)) {
+              xpathList.push(element);
+              xpathSet?.add(element.xpath);
+            }
+          });
+
+          map.set(screenDef, xpathList);
+          return map;
+        },
+        new Map<
+          string,
+          {
+            tagname: string;
+            text?: string;
+            xpath: string;
+            value?: string;
+            checked?: boolean;
+            attributes?: {
+              [key: string]: string;
+            };
+          }[]
+        >()
+      );
+    }
   }
 }
