@@ -97,6 +97,7 @@ interface StoryDetails {
       type: string;
       value: string;
       imageFilePath?: string;
+      tags?: string[];
     }[];
     memo: string;
     name: string;

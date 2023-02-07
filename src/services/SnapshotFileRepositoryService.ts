@@ -401,6 +401,7 @@ export class SnapshotFileRepositoryServiceImpl
                 index: number;
               };
               imageFilePath?: string;
+              tags?: string[];
             }[] = session.issues.map((issue) => {
               return {
                 type: issue.source.type,
@@ -417,6 +418,7 @@ export class SnapshotFileRepositoryServiceImpl
                 }/${sessionIdAlias}/testResult/${path.basename(
                   issue.imageFilePath ?? ""
                 )}`,
+                tags: issue.tags ?? [],
               };
             });
 
@@ -587,6 +589,7 @@ export class SnapshotFileRepositoryServiceImpl
             ticketId: string;
             source: { type: string; index: number };
             imageFilePath?: string;
+            tags?: string[];
           }[];
           intentions: {
             value: string;

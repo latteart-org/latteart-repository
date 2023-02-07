@@ -31,6 +31,7 @@ type issue = {
   type: string;
   value: string;
   imageFilePath?: string;
+  tags?: string[];
 };
 
 export const storyEntityToResponse = (story: StoryEntity): Story => {
@@ -71,6 +72,11 @@ const noteEntityToResponse = (note: NoteEntity): issue => {
     value: note.value,
     imageFilePath:
       note.screenshot?.fileUrl ?? testStep?.screenshot?.fileUrl ?? "",
+    tags: note.tags
+      ? note.tags.map((tag) => {
+          return tag.name;
+        })
+      : [],
   };
 };
 
