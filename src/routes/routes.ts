@@ -733,6 +733,7 @@ const models: TsoaRoute.Models = {
               array: {
                 dataType: "nestedObjectLiteral",
                 nestedProperties: {
+                  tags: { dataType: "array", array: { dataType: "string" } },
                   imageFilePath: { dataType: "string" },
                   value: { dataType: "string", required: true },
                   type: { dataType: "string", required: true },
