@@ -457,36 +457,31 @@ export class SnapshotFileRepositoryServiceImpl
               };
             });
 
-            const testPurposeIds = (
-              await Promise.all(
-                testResultFiles?.map(async ({ path: testResultId }) => {
-                  return this.service.testResult.collectAllTestPurposeIds(
-                    testResultId
-                  );
-                }) ?? []
-              )
-            ).flat();
+            const testResultFile = testResultFiles?.at(0);
+
+            const testResultId = testResultFile ? testResultFile.path : "";
+
+            const testResult = await this.service.testResult.getTestResult(
+              testResultId
+            );
 
             const intentions: {
               value: string;
               details: string;
             }[] = (
               await Promise.all(
-                testPurposeIds.map(async (testPurposeId) => {
-                  const testPurpose =
-                    await this.service.testPurpose.getTestPurpose(
-                      testPurposeId
-                    );
+                testResult
+                  ? testResult.testSteps.map(async ({ intention }) => {
+                      if (!intention) {
+                        return [];
+                      }
 
-                  return testPurpose
-                    ? [
-                        {
-                          value: testPurpose.value,
-                          details: testPurpose.details,
-                        },
-                      ]
-                    : [];
-                })
+                      return {
+                        value: intention.value,
+                        details: intention.details,
+                      };
+                    })
+                  : []
               )
             ).flat();
 
