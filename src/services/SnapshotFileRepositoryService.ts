@@ -314,6 +314,34 @@ export class SnapshotFileRepositoryServiceImpl
       testResultId
     );
 
+    const { config } = await this.service.config.getConfig("");
+    const viewOption = {
+      node: {
+        unit: config.screenDefinition.screenDefType,
+        definitions: config.screenDefinition.conditionGroups
+          .filter(({ isEnabled }) => isEnabled)
+          .map((group) => {
+            return {
+              name: group.screenName,
+              conditions: group.conditions
+                .filter(({ isEnabled }) => isEnabled)
+                .map((condition) => {
+                  return {
+                    target: condition.definitionType,
+                    method: condition.matchType,
+                    value: condition.word,
+                  };
+                }),
+            };
+          }),
+      },
+    };
+
+    const sequenceViewData = await this.service.testResult.generateSequenceView(
+      testResultId,
+      viewOption
+    );
+
     const historyLogData = {
       history,
       coverageSources: testResult?.coverageSources ?? [],
@@ -323,6 +351,13 @@ export class SnapshotFileRepositoryServiceImpl
     await fs.outputFile(
       path.join(destTestResultPath, "log.js"),
       `const historyLog = ${JSON.stringify(historyLogData)}`,
+      { encoding: "utf-8" }
+    );
+
+    // output sequence view file
+    await fs.outputFile(
+      path.join(destTestResultPath, "sequence-view.js"),
+      `const sequenceView = ${JSON.stringify(sequenceViewData)}`,
       { encoding: "utf-8" }
     );
 
@@ -422,36 +457,31 @@ export class SnapshotFileRepositoryServiceImpl
               };
             });
 
-            const testPurposeIds = (
-              await Promise.all(
-                testResultFiles?.map(async ({ path: testResultId }) => {
-                  return this.service.testResult.collectAllTestPurposeIds(
-                    testResultId
-                  );
-                }) ?? []
-              )
-            ).flat();
+            const testResultFile = testResultFiles?.at(0);
+
+            const testResultId = testResultFile ? testResultFile.path : "";
+
+            const testResult = await this.service.testResult.getTestResult(
+              testResultId
+            );
 
             const intentions: {
               value: string;
               details: string;
             }[] = (
               await Promise.all(
-                testPurposeIds.map(async (testPurposeId) => {
-                  const testPurpose =
-                    await this.service.testPurpose.getTestPurpose(
-                      testPurposeId
-                    );
+                testResult
+                  ? testResult.testSteps.map(async ({ intention }) => {
+                      if (!intention) {
+                        return [];
+                      }
 
-                  return testPurpose
-                    ? [
-                        {
-                          value: testPurpose.value,
-                          details: testPurpose.details,
-                        },
-                      ]
-                    : [];
-                })
+                      return {
+                        value: intention.value,
+                        details: intention.details,
+                      };
+                    })
+                  : []
               )
             ).flat();
 
