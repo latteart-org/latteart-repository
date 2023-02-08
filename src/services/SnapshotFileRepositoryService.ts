@@ -354,9 +354,9 @@ export class SnapshotFileRepositoryServiceImpl
       { encoding: "utf-8" }
     );
 
-    // output sequence file
+    // output sequence view file
     await fs.outputFile(
-      path.join(destTestResultPath, "sequence.js"),
+      path.join(destTestResultPath, "sequence-view.js"),
       `const sequenceView = ${JSON.stringify(sequenceViewData)}`,
       { encoding: "utf-8" }
     );
