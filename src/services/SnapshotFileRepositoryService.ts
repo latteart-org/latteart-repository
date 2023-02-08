@@ -314,6 +314,34 @@ export class SnapshotFileRepositoryServiceImpl
       testResultId
     );
 
+    const { config } = await this.service.config.getConfig("");
+    const viewOption = {
+      node: {
+        unit: config.screenDefinition.screenDefType,
+        definitions: config.screenDefinition.conditionGroups
+          .filter(({ isEnabled }) => isEnabled)
+          .map((group) => {
+            return {
+              name: group.screenName,
+              conditions: group.conditions
+                .filter(({ isEnabled }) => isEnabled)
+                .map((condition) => {
+                  return {
+                    target: condition.definitionType,
+                    method: condition.matchType,
+                    value: condition.word,
+                  };
+                }),
+            };
+          }),
+      },
+    };
+
+    const sequenceViewData = await this.service.testResult.generateSequenceView(
+      testResultId,
+      viewOption
+    );
+
     const historyLogData = {
       history,
       coverageSources: testResult?.coverageSources ?? [],
@@ -323,6 +351,13 @@ export class SnapshotFileRepositoryServiceImpl
     await fs.outputFile(
       path.join(destTestResultPath, "log.js"),
       `const historyLog = ${JSON.stringify(historyLogData)}`,
+      { encoding: "utf-8" }
+    );
+
+    // output sequence file
+    await fs.outputFile(
+      path.join(destTestResultPath, "sequence.js"),
+      `const sequenceView = ${JSON.stringify(sequenceViewData)}`,
       { encoding: "utf-8" }
     );
 
