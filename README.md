@@ -1,3 +1,7 @@
+# :warning: ARCHIVED
+
+This package has been moved into the [LatteArt monorepo](https://github.com/latteart-org/latteart/tree/main/packages/latteart-repository).
+
 # LatteArt Repository
 
 LatteArt Repository is a service that stores test information for LatteArt.
