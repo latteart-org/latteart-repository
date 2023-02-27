@@ -1,3 +1,7 @@
+# :warning: ARCHIVED
+
+このパッケージは [LatteArt monorepo](https://github.com/latteart-org/latteart/tree/main/packages/latteart-repository) に移動しました。
+
 # LatteArt Repository
 
 LatteArt で利用するテスト情報を保存するサービスです。
